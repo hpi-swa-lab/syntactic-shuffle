@@ -17,6 +17,7 @@ static func find_behavior_classes(callback: Callable):
 	var regex = RegEx.new()
 	regex.compile("#thumb\\(\"(.+)\"\\)")
 	for file in DirAccess.get_files_at("res://addons/cards/cards"):
+		if file.get_extension() != "gd": continue
 		var name = file.get_basename()
 		var icon = ""
 		var script = load("res://addons/cards/cards/" + file)

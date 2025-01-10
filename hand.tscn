@@ -1,0 +1,33 @@
+[gd_scene load_steps=2 format=3 uid="uid://clx5pustrmpx5"]
+
+[ext_resource type="Script" uid="uid://yqxgb8tfoag" path="res://addons/cards/cards/MoveCard.gd" id="1_u4p2i"]
+
+[node name="hand" type="Node2D"]
+
+[node name="MoveCard" type="Node2D" parent="."]
+position = Vector2(21, 29)
+script = ExtResource("1_u4p2i")
+disable = true
+connected_node = NodePath("../MoveCard2")
+metadata/_custom_type_script = ExtResource("1_u4p2i")
+
+[node name="MoveCard2" type="Node2D" parent="."]
+position = Vector2(62, 30)
+script = ExtResource("1_u4p2i")
+disable = true
+connected_node = NodePath("../MoveCard")
+metadata/_custom_type_script = ExtResource("1_u4p2i")
+
+[node name="MoveCard3" type="Node2D" parent="."]
+position = Vector2(95, 31)
+script = ExtResource("1_u4p2i")
+disable = true
+connected_node = NodePath("../MoveCard4")
+metadata/_custom_type_script = ExtResource("1_u4p2i")
+
+[node name="MoveCard4" type="Node2D" parent="."]
+position = Vector2(151, 28)
+script = ExtResource("1_u4p2i")
+disable = true
+connected_node = NodePath("../MoveCard")
+metadata/_custom_type_script = ExtResource("1_u4p2i")

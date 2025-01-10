@@ -1,13 +1,14 @@
-[gd_scene load_steps=11 format=3 uid="uid://bj4m20wd8ubfd"]
+[gd_scene load_steps=12 format=3 uid="uid://bj4m20wd8ubfd"]
 
 [ext_resource type="Texture2D" uid="uid://c52trtl0cac7l" path="res://icon.svg" id="1_1aexm"]
 [ext_resource type="Script" uid="uid://yqxgb8tfoag" path="res://addons/cards/cards/MoveCard.gd" id="4_3xm60"]
 [ext_resource type="Script" uid="uid://bquy0q8g4qvis" path="res://addons/cards/cards/CollisionCard.gd" id="4_gsmg4"]
 [ext_resource type="Script" uid="uid://01dkv5hgyym6" path="res://addons/cards/cards/AxisControlsCard.gd" id="4_i44ji"]
-[ext_resource type="Script" uid="uid://dn052hllxsryh" path="res://addons/cards/cards/DeleteCard.gd" id="5_hn7tb"]
+[ext_resource type="Script" uid="uid://bo08qvvq1e3aj" path="res://addons/cards/cards/DeleteCard.gd" id="5_hn7tb"]
 [ext_resource type="Script" uid="uid://7xm8qts85mxs" path="res://addons/cards/cards/MethodCard.gd" id="6_0y81v"]
 [ext_resource type="Script" uid="uid://qgdvy4mhoeps" path="res://addons/cards/cards/StoreCard.gd" id="7_q6sp3"]
 [ext_resource type="Script" uid="uid://cxldeg24krchn" path="res://camera_2d.gd" id="8_5vw27"]
+[ext_resource type="Script" path="res://addons/cards/cards/RandomAxisCard.gd" id="9_kek77"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2lsvt"]
 size = Vector2(128, 128)
@@ -27,12 +28,12 @@ texture = ExtResource("1_1aexm")
 shape = SubResource("RectangleShape2D_2lsvt")
 
 [node name="AxisControlsCard" type="Node2D" parent="."]
-position = Vector2(153, 166)
+position = Vector2(395, 186)
 script = ExtResource("4_i44ji")
-connected_node = NodePath("../MoveCard")
+connected_node = NodePath("../Area2D")
 
 [node name="MoveCard" type="Node2D" parent="."]
-position = Vector2(63, 210)
+position = Vector2(57, 200)
 script = ExtResource("4_3xm60")
 connected_node = NodePath("../CharacterBody2D")
 
@@ -66,7 +67,7 @@ method = "set_text"
 connected_node = NodePath("../Label")
 
 [node name="StoreCard" type="Node2D" parent="."]
-position = Vector2(370, 40)
+position = Vector2(375, 35)
 script = ExtResource("7_q6sp3")
 connected_node = NodePath("../MethodCard")
 
@@ -81,3 +82,9 @@ text = "Score"
 position = Vector2(574, 323)
 zoom = Vector2(0.51, 0.51)
 script = ExtResource("8_5vw27")
+
+[node name="RandomAxisCard" type="Node2D" parent="."]
+position = Vector2(175, 230)
+script = ExtResource("9_kek77")
+connected_node = NodePath("../MoveCard")
+metadata/_custom_type_script = ExtResource("9_kek77")

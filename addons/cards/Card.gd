@@ -3,8 +3,14 @@ extends Node2D
 class_name Card
 
 const SHOW_IN_GAME = true
-
 const DEFAULT_SCALE = Vector2(0.15, 0.15)
+
+@export var disable = false:
+	set(v):
+		disable = v
+		queue_redraw()
+	get:
+		return disable
 
 var visual: CardVisual
 var dragging:
@@ -50,7 +56,7 @@ func setup(name: String, description: String, type: Type):
 	visual.setup(name, description, get_icon_name(), type_icon)
 
 func connected():
-	get_node_or_null(connected_node)
+	return get_node_or_null(connected_node)
 
 func trigger0():
 	var node = connected()
@@ -79,17 +85,17 @@ func _forward_canvas_gui_input(event: InputEvent, undo_redo):
 	return false
 
 func _process(delta: float) -> void:
-	if not show_cards(): return
+	if not show_cards() or disable: return
 	if dragging:
 		connected_node = G.or_default(G.closest_node(self, func(n, d): return can_connect_to(n)), func(n): return get_path_to(n), NodePath())
 		arrows_offset += delta
 	
-	if should_redraw():
+	if should_redraw() and not disable:
 		queue_redraw()
 
 var arrows_offset = 0
 func _draw() -> void:
-	if not show_cards(): return
+	if not show_cards() or disable: return
 	
 	var target_node = get_node_or_null(connected_node)
 	if not target_node:

@@ -7,4 +7,7 @@ func _ready() -> void:
 	setup("Delete", "Delete a node.", Card.Type.Effect)
 
 func invoke0():
-	connected().queue_free()
+	if connected(): connected().queue_free()
+
+func invoke1(obj):
+	if connected(): connected().queue_free()

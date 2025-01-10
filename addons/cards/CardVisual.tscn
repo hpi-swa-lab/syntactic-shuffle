@@ -1,8 +1,8 @@
 [gd_scene load_steps=5 format=3 uid="uid://deh4uywqorec7"]
 
-[ext_resource type="Script" path="res://addons/cards/CardVisual.gd" id="1_7r0de"]
+[ext_resource type="Script" uid="uid://td86i40sy764" path="res://addons/cards/CardVisual.gd" id="1_7r0de"]
 [ext_resource type="Texture2D" uid="uid://c52trtl0cac7l" path="res://icon.svg" id="1_x38hd"]
-[ext_resource type="Script" path="res://addons/cards/ScalingIcon.gd" id="3_hogqd"]
+[ext_resource type="Script" uid="uid://cxk63c2k70ijb" path="res://addons/cards/ScalingIcon.gd" id="3_hogqd"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_i40e1"]
 border_width_top = 1
