@@ -2,6 +2,8 @@
 extends Node2D
 class_name Card
 
+const SHOW_IN_GAME = true
+
 const DEFAULT_SCALE = Vector2(0.15, 0.15)
 
 var visual: CardVisual
@@ -11,6 +13,7 @@ var dragging:
 		queue_redraw()
 	get:
 		return dragging
+
 @export var connected_node: NodePath = NodePath()
 
 enum Type {
@@ -19,20 +22,25 @@ enum Type {
 	Store
 }
 
+static func show_cards():
+	return not Engine.is_editor_hint() or SHOW_IN_GAME
+
 func can_connect_to(obj: Node):
-	return obj.owner == self.owner
+	return obj.owner == self.owner and not obj is Camera2D
+
+func _input_event(viewport: Viewport, event: InputEvent, shape_idx: int) -> void:
+	print(event)
 
 func _ready() -> void:
-	if not Engine.is_editor_hint():
-		return
+	if not show_cards(): return
 	
 	visual = preload("res://addons/cards/CardVisual.tscn").instantiate()
 	visual.scale = DEFAULT_SCALE
+	visual.dragging.connect(func (d): set_selected(d))
 	add_child(visual)
 
 func setup(name: String, description: String, type: Type):
-	if not Engine.is_editor_hint():
-		return
+	if not show_cards(): return
 	var type_icon
 	match type:
 		Type.Trigger: type_icon = "Signals"
@@ -71,8 +79,7 @@ func _forward_canvas_gui_input(event: InputEvent, undo_redo):
 	return false
 
 func _process(delta: float) -> void:
-	if not Engine.is_editor_hint():
-		return
+	if not show_cards(): return
 	if dragging:
 		connected_node = G.or_default(G.closest_node(self, func(n, d): return can_connect_to(n)), func(n): return get_path_to(n), NodePath())
 		arrows_offset += delta
@@ -82,8 +89,7 @@ func _process(delta: float) -> void:
 
 var arrows_offset = 0
 func _draw() -> void:
-	if not Engine.is_editor_hint():
-		return
+	if not show_cards(): return
 	
 	var target_node = get_node_or_null(connected_node)
 	if not target_node:

@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://bj4m20wd8ubfd"]
+[gd_scene load_steps=11 format=3 uid="uid://bj4m20wd8ubfd"]
 
 [ext_resource type="Texture2D" uid="uid://c52trtl0cac7l" path="res://icon.svg" id="1_1aexm"]
 [ext_resource type="Script" uid="uid://yqxgb8tfoag" path="res://addons/cards/cards/MoveCard.gd" id="4_3xm60"]
@@ -7,6 +7,7 @@
 [ext_resource type="Script" uid="uid://dn052hllxsryh" path="res://addons/cards/cards/DeleteCard.gd" id="5_hn7tb"]
 [ext_resource type="Script" uid="uid://7xm8qts85mxs" path="res://addons/cards/cards/MethodCard.gd" id="6_0y81v"]
 [ext_resource type="Script" uid="uid://qgdvy4mhoeps" path="res://addons/cards/cards/StoreCard.gd" id="7_q6sp3"]
+[ext_resource type="Script" uid="uid://cxldeg24krchn" path="res://camera_2d.gd" id="8_5vw27"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2lsvt"]
 size = Vector2(128, 128)
@@ -49,23 +50,23 @@ metadata/_edit_use_anchors_ = true
 shape = SubResource("RectangleShape2D_ch1m5")
 
 [node name="CollisionCard" type="Node2D" parent="."]
-position = Vector2(547, 130)
+position = Vector2(547, 133)
 script = ExtResource("4_gsmg4")
 connected_node = NodePath("../DeleteCard")
 
 [node name="DeleteCard" type="Node2D" parent="."]
-position = Vector2(502, 143)
+position = Vector2(488, 125)
 script = ExtResource("5_hn7tb")
-connected_node = NodePath("../Area2D/CollisionShape2D")
+connected_node = NodePath("../Area2D")
 
 [node name="MethodCard" type="Node2D" parent="."]
-position = Vector2(316, 18)
+position = Vector2(318, 21)
 script = ExtResource("6_0y81v")
 method = "set_text"
 connected_node = NodePath("../Label")
 
 [node name="StoreCard" type="Node2D" parent="."]
-position = Vector2(392, 56)
+position = Vector2(370, 40)
 script = ExtResource("7_q6sp3")
 connected_node = NodePath("../MethodCard")
 
@@ -75,3 +76,8 @@ offset_top = 55.0
 offset_right = 320.0
 offset_bottom = 77.3333
 text = "Score"
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(574, 323)
+zoom = Vector2(0.51, 0.51)
+script = ExtResource("8_5vw27")
