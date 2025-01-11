@@ -25,6 +25,9 @@ func get_input_slot() -> InputSlot:
 		if s is InputSlot: return s
 	return null
 
+func invoke_output(args):
+	get_output_slot().invoke(self, args)
+
 func get_object_input_slot() -> ObjectInputSlot:
 	for s in slots:
 		if s is ObjectInputSlot: return s
