@@ -11,6 +11,6 @@ func _ready() -> void:
 	on_invoke_input(invoke)
 
 func invoke(obj):
-	var input = get_object_input_slot().get_object(self)
+	var input = get_object_input()
 	if input: input.queue_free()
-	else: obj.queue_free()
+	elif "queue_free" in obj: obj.queue_free()
