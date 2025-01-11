@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://ckf6cf0sgvv8b"]
+[gd_scene load_steps=14 format=3 uid="uid://ckf6cf0sgvv8b"]
 
 [ext_resource type="Script" uid="uid://d23cwws3aqxp1" path="res://addons/cards/cards/MoveCard.gd" id="1_u78jb"]
 [ext_resource type="Script" uid="uid://dsn8t1oa5bses" path="res://addons/cards/slots/slot.gd" id="2_p1jwn"]
@@ -7,6 +7,7 @@
 [ext_resource type="Script" uid="uid://dkyx51jnk8cvd" path="res://addons/cards/cards/AxisControlsCard.gd" id="5_78uh7"]
 [ext_resource type="Script" uid="uid://b1hhj058mohfm" path="res://addons/cards/slots/output_slot.gd" id="6_bf2hh"]
 [ext_resource type="Script" uid="uid://b3nxhs2cf52ki" path="res://addons/cards/cards/DelayCard.gd" id="7_bf2hh"]
+[ext_resource type="PackedScene" uid="uid://clx5pustrmpx5" path="res://hand.tscn" id="8_ojfrw"]
 
 [sub_resource type="Resource" id="Resource_ojfrw"]
 script = ExtResource("3_78uh7")
@@ -57,3 +58,6 @@ position = Vector2(389, 204)
 script = ExtResource("7_bf2hh")
 slots = Array[ExtResource("2_p1jwn")]([SubResource("Resource_2ge25"), SubResource("Resource_kd8es")])
 metadata/_custom_type_script = ExtResource("7_bf2hh")
+
+[node name="hand" parent="." instance=ExtResource("8_ojfrw")]
+position = Vector2(251, 585)
