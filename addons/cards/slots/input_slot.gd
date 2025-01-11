@@ -11,7 +11,7 @@ static func create(num_args: int) -> InputSlot:
 	return i
 
 func can_connect_to(object):
-	return object is Card and not object.disabled and object.slots.any(func (s):
+	return object is Card and not object.disable and object.slots.any(func (s):
 		return s is OutputSlot and self.num_args == s.num_args)
 func connect_to(from: Node, object: Node):
 	var output = object.get_output_slot()
