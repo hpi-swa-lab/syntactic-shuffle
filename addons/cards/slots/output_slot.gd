@@ -1,3 +1,4 @@
+@tool
 extends Slot
 class_name OutputSlot
 
@@ -20,7 +21,7 @@ func invoke(card: Card, args: Array = []):
 	var i = get_connected_input(card)
 	if i: i.invoke(args)
 func can_connect_to(object):
-	return object is Card and object.slots.any(func (s):
+	return object is Card and not object.disable and object.slots.any(func (s):
 		return s is InputSlot and self.num_args == s.num_args)
 func connect_to(from: Node, object: Node):
 	connected_input_node_path = from.get_path_to(object)
