@@ -7,4 +7,8 @@ func _ready() -> void:
 	setup("Delete",
 		"Delete a node.",
 		Card.Type.Effect,
-		[Slot.InputSlot.new(func (obj): obj.queue_free())])
+		[InputSlot.create(1)])
+	get_input_slot().invoke_called.connect(func (args): invoke(args[0]))
+
+func invoke(obj):
+	obj.queue_free()

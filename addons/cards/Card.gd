@@ -15,12 +15,17 @@ const MAX_CONNECTION_DISTANCE = 300
 
 func get_input_slot():
 	for s in slots:
-		if s is Slot.InputSlot: return s
+		if s is InputSlot: return s
+	return null
+
+func get_object_input_slot():
+	for s in slots:
+		if s is ObjectInputSlot: return s
 	return null
 
 func get_output_slot():
 	for s in slots:
-		if s is Slot.OutputSlot: return s
+		if s is OutputSlot: return s
 	return null
 
 @export var slots: Array[Slot]
@@ -67,9 +72,11 @@ func setup(name: String, description: String, type: Type, slots: Array[Slot]):
 	
 	visual.setup(name, description, get_icon_name(), type_icon)
 	
-	self.slots = slots
-	assert(slots.filter(func (s): return s is Slot.InputSlot).size() <= 1)
-	assert(slots.filter(func (s): return s is Slot.OutputSlot).size() <= 1)
+	# do not override deserialized slots if they exist
+	if self.slots.is_empty():
+		self.slots = slots
+		assert(slots.filter(func (s): return s is InputSlot).size() <= 1)
+		assert(slots.filter(func (s): return s is OutputSlot).size() <= 1)
 
 func set_selected(selected: bool):
 	create_tween().tween_property(visual, "scale",

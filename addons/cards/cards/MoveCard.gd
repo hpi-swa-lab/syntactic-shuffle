@@ -2,14 +2,13 @@
 #thumb("ToolMove")
 extends Card
 
-var input = Slot.ObjectInputSlot.new()
-
 func _ready() -> void:
 	super._ready()
 	setup("Move", "Moves the parent around.", Card.Type.Effect, [
-		input,
-		Slot.InputSlot.new(func (direction): move_direction(direction))
+		ObjectInputSlot.new(),
+		InputSlot.create(1)
 	])
+	get_input_slot().invoke_called.connect(func (args): move_direction(args[0]))
 
 var _did_accelerate = false
 var velocity = Vector2.ZERO
@@ -24,7 +23,7 @@ func move_direction(direction: Vector2):
 	velocity = velocity.lerp(direction * max_velocity, min(1.0, _accel * get_process_delta_time()))
 
 func _physics_process(delta: float) -> void:
-	var node = input.get_object(self)
+	var node = get_object_input_slot().get_object(self)
 	if not node: return
 	
 	if not _did_accelerate:
