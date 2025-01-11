@@ -13,6 +13,7 @@ script = ExtResource("1_4gyqm")
 
 [node name="FoV" parent="." instance=ExtResource("2_4gyqm")]
 rotation = 1.5708
+degrees = 80
 
 [node name="Robot" type="Sprite2D" parent="."]
 rotation = 1.5708
