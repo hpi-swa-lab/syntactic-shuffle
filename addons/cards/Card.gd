@@ -90,9 +90,9 @@ func setup(name: String, description: String, type: Type, slots: Array[Slot], ex
 	if not show_cards(): return
 	var type_icon
 	match type:
-		Type.Trigger: type_icon = "Signals"
-		Type.Effect: type_icon = "PreviewSun"
-		Type.Store: type_icon = "CylinderMesh"
+		Type.Trigger: type_icon = "Signals.svg"
+		Type.Effect: type_icon = "PreviewSun.svg"
+		Type.Store: type_icon = "CylinderMesh.svg"
 	
 	visual.setup(name, description, get_icon_name(), type_icon, extra_ui)
 	

@@ -1,5 +1,5 @@
 @tool
-#thumb("ToolMove")
+#thumb("move.png")
 extends Card
 
 func _ready() -> void:

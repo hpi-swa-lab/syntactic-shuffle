@@ -1,5 +1,5 @@
 @tool
-#thumb("RandomNumberGenerator")
+#thumb("RandomNumberGenerator.svg")
 extends Card
 
 func _ready() -> void:

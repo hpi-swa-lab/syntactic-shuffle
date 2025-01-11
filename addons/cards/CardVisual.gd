@@ -7,8 +7,8 @@ signal dragging(d: bool)
 func setup(name: String, description: String, icon: String, type_icon: String, extra_ui: Control):
 	%Name.text = name
 	%Description.text = description
-	%Icon.path = "res://addons/cards/icons/" + icon + ".svg"
-	%TypeIcon.path = "res://addons/cards/icons/" + type_icon + ".svg"
+	%Icon.path = "res://addons/cards/icons/" + icon
+	%TypeIcon.path = "res://addons/cards/icons/" + type_icon
 	if extra_ui:
 		%MainColumn.add_child(extra_ui)
 

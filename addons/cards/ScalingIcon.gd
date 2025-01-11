@@ -7,9 +7,17 @@ var _data = ""
 	get: return path
 	set(value):
 		path = value
-		var file = FileAccess.open(path, FileAccess.READ)
-		_data = file.get_as_text()
+		if path == "":
+			_data = null
+		elif is_svg():
+			var file = FileAccess.open(path, FileAccess.READ)
+			_data = file.get_as_text()
+		else:
+			_data = load(path)
 		_update_texture()
+
+func is_svg() -> bool:
+	return path.ends_with(".svg")
 
 var _current_zoom = 1
 func _process(_dt):
@@ -20,16 +28,19 @@ func _process(_dt):
 	zoom = min(zoom, 10)
 	if _current_zoom != zoom:
 		_current_zoom = zoom
-		_update_texture()
+		if is_svg():
+			_update_texture()
 
 func _update_texture():
-	if _data.length() == 0: return
-	
-	var image = Image.new()
-	image.load_svg_from_string(_data, _current_zoom)
-	image.fix_alpha_edges()
+	if _data == null: return
 	
 	var texture = ImageTexture.new()
-	texture.set_image(image)
+	if is_svg():
+		var image = Image.new()
+		image.load_svg_from_string(_data, _current_zoom)
+		image.fix_alpha_edges()
+		texture.set_image(image)
+	else:
+		texture = _data
 	
 	self.texture = texture

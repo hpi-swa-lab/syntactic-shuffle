@@ -1,5 +1,5 @@
 @tool
-#thumb("PlayStart")
+#thumb("PlayStart.svg")
 extends Card
 
 func _ready() -> void:
