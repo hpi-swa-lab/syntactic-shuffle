@@ -8,7 +8,7 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_qi2p4"]
 size = Vector2(19, 14)
 
-[node name="Enemy" type="CharacterBody2D" groups=["enemy", "health"]]
+[node name="Enemy" type="CharacterBody2D" groups=["cards", "enemy", "health"]]
 script = ExtResource("1_4gyqm")
 
 [node name="FoV" parent="." instance=ExtResource("2_4gyqm")]

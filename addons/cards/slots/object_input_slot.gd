@@ -23,11 +23,7 @@ func _init(on_connect = null, on_disconnect = null) -> void:
 func get_object(card: Card):
 	return card.get_node_or_null(object_path)
 func can_connect_to(object: Node):
-	return (not object is Card
-		and object is Node2D
-		and not object is Camera2D
-		and object.get_parent().name == "main"
-		and (limit_to_group == "" or object.is_in_group(limit_to_group)))
+	return limit_to_group == "" or object.is_in_group(limit_to_group)
 func connect_to(from: Node, object: Node):
 	object_path = from.get_path_to(object)
 func check_disconnect(card: Card):

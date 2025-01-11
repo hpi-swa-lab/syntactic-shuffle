@@ -5,7 +5,7 @@ extends Card
 func _ready() -> void:
 	super._ready()
 	setup("Look At", "Turns the parent to look at the target.", Card.Type.Effect, [
-		ObjectInputSlot.create(),
+		ObjectInputSlot.create("cards"),
 		InputSlot.create(1)
 	])
 	on_invoke_input(turn)

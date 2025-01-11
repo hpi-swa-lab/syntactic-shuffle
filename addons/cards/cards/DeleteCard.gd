@@ -7,7 +7,7 @@ func _ready() -> void:
 	setup("Delete",
 		"Delete a node.",
 		Card.Type.Effect,
-		[ObjectInputSlot.new(), InputSlot.create(1)])
+		[ObjectInputSlot.create("cards"), InputSlot.create(1)])
 	on_invoke_input(invoke)
 
 func invoke(obj):
