@@ -29,7 +29,7 @@ func render_subviewport(subviewport: SubViewport) -> Image:
 	await RenderingServer.frame_post_draw
 	return subviewport.get_texture().get_image()
 
-func _physics_process(delta: float) -> void:
+func _physics_process(_delta: float) -> void:
 	var hit = {}
 	for offset in range(degrees * -0.5, degrees * 0.5):
 		$RayCast2D.rotation_degrees = 180 + offset
