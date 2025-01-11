@@ -23,6 +23,7 @@ size = Vector2(40, 40)
 [sub_resource type="Resource" id="Resource_w48qg"]
 script = ExtResource("5_4c57u")
 object_path = NodePath("../CharacterBody2D")
+limit_to_group = ""
 num_args = 0
 
 [sub_resource type="Resource" id="Resource_vivmo"]
@@ -37,6 +38,7 @@ num_args = 1
 [sub_resource type="Resource" id="Resource_dg77c"]
 script = ExtResource("5_4c57u")
 object_path = NodePath("../CharacterBody2D")
+limit_to_group = ""
 num_args = 0
 
 [sub_resource type="Resource" id="Resource_ycdy4"]
@@ -47,6 +49,7 @@ num_args = 1
 [sub_resource type="Resource" id="Resource_efxa6"]
 script = ExtResource("5_4c57u")
 object_path = NodePath("../CharacterBody2D")
+limit_to_group = ""
 num_args = 0
 
 [sub_resource type="Resource" id="Resource_2cqfq"]

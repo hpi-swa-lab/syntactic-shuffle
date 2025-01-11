@@ -5,7 +5,7 @@ extends Card
 func _ready() -> void:
 	super._ready()
 	setup("Move", "Moves the parent around.", Card.Type.Effect, [
-		ObjectInputSlot.new(),
+		ObjectInputSlot.create(),
 		InputSlot.create(1)
 	])
 	on_invoke_input(move_direction)
