@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://bj4m20wd8ubfd"]
+[gd_scene load_steps=16 format=3 uid="uid://bj4m20wd8ubfd"]
 
 [ext_resource type="Texture2D" uid="uid://c52trtl0cac7l" path="res://icon.svg" id="1_1aexm"]
 [ext_resource type="Script" uid="uid://d23cwws3aqxp1" path="res://addons/cards/cards/MoveCard.gd" id="3_5vw27"]
@@ -8,6 +8,7 @@
 [ext_resource type="Script" uid="uid://c8cfoeik47tv2" path="res://addons/cards/cards/RandomAxisCard.gd" id="7_dg77c"]
 [ext_resource type="Script" uid="uid://cxldeg24krchn" path="res://camera_2d.gd" id="8_5vw27"]
 [ext_resource type="Script" uid="uid://b1hhj058mohfm" path="res://addons/cards/slots/output_slot.gd" id="8_ycdy4"]
+[ext_resource type="Script" uid="uid://dkyx51jnk8cvd" path="res://addons/cards/cards/AxisControlsCard.gd" id="9_kek77"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2lsvt"]
 size = Vector2(128, 128)
@@ -25,6 +26,11 @@ script = ExtResource("6_efxa6")
 num_args = 1
 
 [sub_resource type="Resource" id="Resource_2cqfq"]
+script = ExtResource("8_ycdy4")
+connected_input_node_path = NodePath("../MoveCard")
+num_args = 1
+
+[sub_resource type="Resource" id="Resource_4c57u"]
 script = ExtResource("8_ycdy4")
 connected_input_node_path = NodePath("../MoveCard")
 num_args = 1
@@ -56,8 +62,8 @@ shape = SubResource("RectangleShape2D_ch1m5")
 [node name="Label" type="Label" parent="."]
 offset_left = 280.0
 offset_top = 55.0
-offset_right = 320.0
-offset_bottom = 77.3333
+offset_right = 323.0
+offset_bottom = 78.0
 text = "Score"
 
 [node name="Camera2D" type="Camera2D" parent="."]
@@ -66,12 +72,19 @@ zoom = Vector2(0.51, 0.51)
 script = ExtResource("8_5vw27")
 
 [node name="MoveCard" type="Node2D" parent="."]
+position = Vector2(21, 37)
 script = ExtResource("3_5vw27")
 slots = Array[ExtResource("4_kek77")]([SubResource("Resource_w48qg"), SubResource("Resource_vivmo")])
 metadata/_custom_type_script = ExtResource("3_5vw27")
 
 [node name="RandomAxisCard" type="Node2D" parent="."]
-position = Vector2(177, 146)
+position = Vector2(155, 86)
 script = ExtResource("7_dg77c")
 slots = Array[ExtResource("4_kek77")]([SubResource("Resource_2cqfq")])
 metadata/_custom_type_script = ExtResource("7_dg77c")
+
+[node name="AxisControlsCard" type="Node2D" parent="."]
+position = Vector2(120, -13)
+script = ExtResource("9_kek77")
+slots = Array[ExtResource("4_kek77")]([SubResource("Resource_4c57u")])
+metadata/_custom_type_script = ExtResource("9_kek77")

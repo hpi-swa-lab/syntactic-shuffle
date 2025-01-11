@@ -1,5 +1,5 @@
 @tool
-#thumb("Joypad")
+#thumb("RandomNumberGenerator")
 extends Card
 
 func _ready() -> void:

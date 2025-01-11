@@ -13,17 +13,17 @@ const MAX_CONNECTION_DISTANCE = 300
 	get:
 		return disable
 
-func get_input_slot():
+func get_input_slot() -> InputSlot:
 	for s in slots:
 		if s is InputSlot: return s
 	return null
 
-func get_object_input_slot():
+func get_object_input_slot() -> ObjectInputSlot:
 	for s in slots:
 		if s is ObjectInputSlot: return s
 	return null
 
-func get_output_slot():
+func get_output_slot() -> OutputSlot:
 	for s in slots:
 		if s is OutputSlot: return s
 	return null
