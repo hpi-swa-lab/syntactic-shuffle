@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bkosy7hfgbvfy"
-path="res://.godot/imported/pistol.png-872ae0616533aaf7275012807251ba6d.ctex"
+uid="uid://d3su7efaknupn"
+path="res://.godot/imported/left_click.png-ee22cce8f5687efbb3f243beba32b60e.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://resources/cards/pistol.png"
-dest_files=["res://.godot/imported/pistol.png-872ae0616533aaf7275012807251ba6d.ctex"]
+source_file="res://addons/cards/icons/left_click.png"
+dest_files=["res://.godot/imported/left_click.png-ee22cce8f5687efbb3f243beba32b60e.ctex"]
 
 [params]
 
