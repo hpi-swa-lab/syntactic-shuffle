@@ -33,7 +33,7 @@ func draw_connection(from, to, inverted, draw_node):
 func draw_arrow(node, pos, size = 10):
 	node.draw_polyline(
 		[pos + Vector2(-size, 0), pos + Vector2(0, size), pos + Vector2(size, 0)],
-		Color(Color.GRAY, 1.0 if true else 0.3),
+		Color(Color.WHITE.lerp(Color.RED, flash_value), 1.0 if false else 0.5),
 		size / 2,
 		true)
 
@@ -71,6 +71,21 @@ class FixedSlot extends Slot:
 		var object = node.get_node_or_null(object_path)
 		if object: draw_connection(node, object, true, draw_node)
 
-class NamedSlot extends Slot:
-	func _init(name: String) -> void:
-		self.name = name
+var _running_tween = null
+var flash_value = 0.0
+func on_activated(draw: Node2D):
+	# FIXME not scheduling well yet on fast repeats
+	var current = _running_tween
+	if current != null and not current.is_running(): current = null
+	if current != null:
+		if current.get_total_elapsed_time() < 0.1: return
+		else: current.kill()
+	var t = draw.create_tween()
+	_running_tween = t
+	if current == null:
+		t.tween_method(flash_line.bind(draw), 0.0, 1.0, 0.2)
+	t.tween_method(flash_line.bind(draw), 1.0, 0.0, 0.2)
+
+func flash_line(value: float, draw: Node2D):
+	flash_value = value
+	draw.queue_redraw()

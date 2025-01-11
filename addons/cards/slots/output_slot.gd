@@ -19,7 +19,9 @@ func get_connected_input(node):
 func invoke(card: Card, args: Array = []):
 	assert(self.num_args == args.size())
 	var i = get_connected_input(card)
-	if i: i.invoke(args)
+	if i:
+		i.invoke(args)
+		on_activated(card.connection_draw_node)
 func can_connect_to(object):
 	return object is Card and not object.disable and object.slots.any(func (s):
 		return s is InputSlot and self.num_args == s.num_args)
