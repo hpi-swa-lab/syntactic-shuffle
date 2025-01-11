@@ -6,6 +6,7 @@
 script = ExtResource("1_dx18s")
 
 [node name="PointLight2D" type="PointLight2D" parent="."]
+rotation = -1.5708
 energy = 0.2
 shadow_enabled = true
 

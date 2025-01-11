@@ -4,11 +4,13 @@ class_name CardVisual
 
 signal dragging(d: bool)
 
-func setup(name: String, description: String, icon: String, type_icon: String):
+func setup(name: String, description: String, icon: String, type_icon: String, extra_ui: Control):
 	%Name.text = name
 	%Description.text = description
 	%Icon.path = "res://addons/cards/icons/" + icon + ".svg"
 	%TypeIcon.path = "res://addons/cards/icons/" + type_icon + ".svg"
+	if extra_ui:
+		%MainColumn.add_child(extra_ui)
 
 func icon_from_theme(name: StringName):
 	if Engine.is_editor_hint():

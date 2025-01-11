@@ -9,7 +9,7 @@ const MAX_CONNECTION_DISTANCE = 300
 @export var disable = false:
 	set(v):
 		disable = v
-		queue_redraw()
+		if connection_draw_node: connection_draw_node.queue_redraw()
 	get:
 		return disable
 
@@ -67,7 +67,7 @@ var dragging:
 					hand.add_card(self)
 		#if disable and dragging:
 			#transition_from_hand()
-		queue_redraw()
+		connection_draw_node.queue_redraw()
 	get:
 		return dragging
 
@@ -100,15 +100,25 @@ func can_connect_to(obj: Node):
 func _input_event(viewport: Viewport, event: InputEvent, shape_idx: int) -> void:
 	print(event)
 
+var connection_draw_node: Node2D
+
 func _ready() -> void:
 	if not show_cards(): return
+	
+	# we draw connections in a separate node whose z-index is below all content,
+	# such that the connections appear under the cards
+	connection_draw_node = Node2D.new()
+	connection_draw_node.name = "ConnectionDraw"
+	connection_draw_node.z_index = -1
+	connection_draw_node.draw.connect(draw_connections)
+	add_child(connection_draw_node)
 	
 	visual = preload("res://addons/cards/CardVisual.tscn").instantiate()
 	visual.scale = DEFAULT_SCALE
 	visual.dragging.connect(func (d): set_selected(d))
 	add_child(visual)
 
-func setup(name: String, description: String, type: Type, slots: Array[Slot]):
+func setup(name: String, description: String, type: Type, slots: Array[Slot], extra_ui: Control = null):
 	if not show_cards(): return
 	var type_icon
 	match type:
@@ -116,7 +126,7 @@ func setup(name: String, description: String, type: Type, slots: Array[Slot]):
 		Type.Effect: type_icon = "PreviewSun"
 		Type.Store: type_icon = "CylinderMesh"
 	
-	visual.setup(name, description, get_icon_name(), type_icon)
+	visual.setup(name, description, get_icon_name(), type_icon, extra_ui)
 	
 	# do not override deserialized slots if they exist
 	if self.slots.is_empty():
@@ -160,12 +170,13 @@ func _process(delta: float) -> void:
 			slot.arrows_offset += delta
 	
 	if should_redraw() and not disable:
-		queue_redraw()
+		connection_draw_node.queue_redraw()
 
 var arrows_offset = 0
-func _draw() -> void:
+func draw_connections() -> void:
 	if not show_cards() or disable: return
-	for slot in slots: slot.draw(self)
+	for slot in slots:
+		slot.draw(self, connection_draw_node)
 
 var last_deps = null
 func should_redraw():

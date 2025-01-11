@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://d0asc0m6b4bix"]
+[gd_scene load_steps=23 format=3 uid="uid://d0asc0m6b4bix"]
 
 [ext_resource type="Script" uid="uid://b3nxhs2cf52ki" path="res://addons/cards/cards/DelayCard.gd" id="1_ua6av"]
 [ext_resource type="Script" uid="uid://dsn8t1oa5bses" path="res://addons/cards/slots/slot.gd" id="2_gplc3"]
@@ -10,6 +10,8 @@
 [ext_resource type="Script" uid="uid://d23cwws3aqxp1" path="res://addons/cards/cards/MoveCard.gd" id="8_gplc3"]
 [ext_resource type="Script" uid="uid://dkyx51jnk8cvd" path="res://addons/cards/cards/AxisControlsCard.gd" id="9_y81ca"]
 [ext_resource type="Script" uid="uid://bo08qvvq1e3aj" path="res://addons/cards/cards/DeleteCard.gd" id="10_fganm"]
+[ext_resource type="PackedScene" uid="uid://clx5pustrmpx5" path="res://hand.tscn" id="11_slbh4"]
+[ext_resource type="Script" uid="uid://cxldeg24krchn" path="res://camera_2d.gd" id="12_vb6k7"]
 
 [sub_resource type="Resource" id="Resource_2tjsu"]
 script = ExtResource("3_y81ca")
@@ -68,7 +70,7 @@ slots = Array[ExtResource("2_gplc3")]([SubResource("Resource_2tjsu"), SubResourc
 metadata/_custom_type_script = ExtResource("1_ua6av")
 
 [node name="CollisionCard" type="Node2D" parent="."]
-position = Vector2(320, 226)
+position = Vector2(339, 245)
 script = ExtResource("5_slbh4")
 slots = Array[ExtResource("2_gplc3")]([SubResource("Resource_i5pup"), SubResource("Resource_spnsi")])
 metadata/_custom_type_script = ExtResource("5_slbh4")
@@ -102,13 +104,13 @@ position = Vector2(0.0728798, 1)
 shape = SubResource("RectangleShape2D_ua6av")
 
 [node name="MoveCard" type="Node2D" parent="."]
-position = Vector2(497.073, 374)
+position = Vector2(469, 321)
 script = ExtResource("8_gplc3")
 slots = Array[ExtResource("2_gplc3")]([SubResource("Resource_y81ca"), SubResource("Resource_fganm")])
 metadata/_custom_type_script = ExtResource("8_gplc3")
 
 [node name="AxisControlsCard" type="Node2D" parent="."]
-position = Vector2(361, 402)
+position = Vector2(366, 306)
 script = ExtResource("9_y81ca")
 slots = Array[ExtResource("2_gplc3")]([SubResource("Resource_slbh4")])
 metadata/_custom_type_script = ExtResource("9_y81ca")
@@ -118,3 +120,30 @@ position = Vector2(468, 146)
 script = ExtResource("10_fganm")
 slots = Array[ExtResource("2_gplc3")]([SubResource("Resource_vb6k7"), SubResource("Resource_0bnr6")])
 metadata/_custom_type_script = ExtResource("10_fganm")
+
+[node name="hand" parent="." instance=ExtResource("11_slbh4")]
+position = Vector2(318, 579)
+
+[node name="Camera2D" type="Camera2D" parent="."]
+script = ExtResource("12_vb6k7")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+offset_right = 40.0
+offset_bottom = 40.0
+color = Color(0.729982, 0.559391, 0.859406, 1)
+
+[node name="ColorRect2" type="ColorRect" parent="."]
+offset_left = 33.0
+offset_top = -21.0
+offset_right = 73.0
+offset_bottom = 19.0
+color = Color(0.982981, 0.407369, 0.668772, 1)
+
+[node name="ColorRect3" type="ColorRect" parent="ColorRect2"]
+z_index = -1
+layout_mode = 0
+offset_left = -17.0
+offset_top = 11.0
+offset_right = 23.0
+offset_bottom = 51.0
+color = Color(0.940966, 0.516842, 0.0587301, 1)
