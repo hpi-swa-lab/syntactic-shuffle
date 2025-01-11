@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://eka4rhq30ure"
-path="res://.godot/imported/always.png-986367fd633b2871477da6f583eef009.ctex"
+path="res://.godot/imported/always.png-4678c2d4c9c8c720baf900788e5aac8d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://resources/cards/always.png"
-dest_files=["res://.godot/imported/always.png-986367fd633b2871477da6f583eef009.ctex"]
+source_file="res://addons/cards/icons/always.png"
+dest_files=["res://.godot/imported/always.png-4678c2d4c9c8c720baf900788e5aac8d.ctex"]
 
 [params]
 

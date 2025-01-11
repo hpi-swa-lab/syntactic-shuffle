@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://bo21jihradxtj"
-path="res://.godot/imported/collision.png-76943c6942dcc4a3002ebf6ea0040599.ctex"
+path="res://.godot/imported/collision.png-584664abad509443dcac8f07f5bf5ad8.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://resources/cards/collision.png"
-dest_files=["res://.godot/imported/collision.png-76943c6942dcc4a3002ebf6ea0040599.ctex"]
+source_file="res://addons/cards/icons/collision.png"
+dest_files=["res://.godot/imported/collision.png-584664abad509443dcac8f07f5bf5ad8.ctex"]
 
 [params]
 

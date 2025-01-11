@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://x24rinx7fclb"
-path="res://.godot/imported/noise.png-0b256cec0e7b139dfc6294fa30b46bc3.ctex"
+path="res://.godot/imported/noise.png-7066bd91a367d11a589827de51f955a2.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://resources/cards/noise.png"
-dest_files=["res://.godot/imported/noise.png-0b256cec0e7b139dfc6294fa30b46bc3.ctex"]
+source_file="res://addons/cards/icons/noise.png"
+dest_files=["res://.godot/imported/noise.png-7066bd91a367d11a589827de51f955a2.ctex"]
 
 [params]
 
