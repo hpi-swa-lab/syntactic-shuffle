@@ -70,7 +70,7 @@ slots = Array[ExtResource("2_gplc3")]([SubResource("Resource_2tjsu"), SubResourc
 metadata/_custom_type_script = ExtResource("1_ua6av")
 
 [node name="CollisionCard" type="Node2D" parent="."]
-position = Vector2(320, 226)
+position = Vector2(339, 245)
 script = ExtResource("5_slbh4")
 slots = Array[ExtResource("2_gplc3")]([SubResource("Resource_i5pup"), SubResource("Resource_spnsi")])
 metadata/_custom_type_script = ExtResource("5_slbh4")
@@ -104,13 +104,13 @@ position = Vector2(0.0728798, 1)
 shape = SubResource("RectangleShape2D_ua6av")
 
 [node name="MoveCard" type="Node2D" parent="."]
-position = Vector2(497.073, 374)
+position = Vector2(469, 321)
 script = ExtResource("8_gplc3")
 slots = Array[ExtResource("2_gplc3")]([SubResource("Resource_y81ca"), SubResource("Resource_fganm")])
 metadata/_custom_type_script = ExtResource("8_gplc3")
 
 [node name="AxisControlsCard" type="Node2D" parent="."]
-position = Vector2(361, 402)
+position = Vector2(366, 306)
 script = ExtResource("9_y81ca")
 slots = Array[ExtResource("2_gplc3")]([SubResource("Resource_slbh4")])
 metadata/_custom_type_script = ExtResource("9_y81ca")
@@ -126,3 +126,24 @@ position = Vector2(318, 579)
 
 [node name="Camera2D" type="Camera2D" parent="."]
 script = ExtResource("12_vb6k7")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+offset_right = 40.0
+offset_bottom = 40.0
+color = Color(0.729982, 0.559391, 0.859406, 1)
+
+[node name="ColorRect2" type="ColorRect" parent="."]
+offset_left = 33.0
+offset_top = -21.0
+offset_right = 73.0
+offset_bottom = 19.0
+color = Color(0.982981, 0.407369, 0.668772, 1)
+
+[node name="ColorRect3" type="ColorRect" parent="ColorRect2"]
+z_index = -1
+layout_mode = 0
+offset_left = -17.0
+offset_top = 11.0
+offset_right = 23.0
+offset_bottom = 51.0
+color = Color(0.940966, 0.516842, 0.0587301, 1)

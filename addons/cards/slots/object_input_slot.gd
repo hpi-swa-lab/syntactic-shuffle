@@ -32,9 +32,9 @@ func check_disconnect(card: Card):
 	var o = get_object(card)
 	if o and o.global_position.distance_to(card.global_position) > Card.MAX_CONNECTION_DISTANCE:
 		object_path = NodePath()
-func draw(node):
+func draw(node, draw_node):
 	var object = node.get_node_or_null(object_path)
-	if object: draw_connection(node, object, true)
+	if object: draw_connection(node, object, true, draw_node)
 func get_draw_dependencies(card: Card, deps: Array):
 	var object = card.get_node_or_null(object_path)
 	if object: deps.push_back(object.global_position)
