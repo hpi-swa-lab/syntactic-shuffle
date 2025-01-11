@@ -27,5 +27,7 @@ func _process(delta: float) -> void:
 		input_direction += Vector2.DOWN
 	
 	input_direction = input_direction.normalized()
+	
+	
 	if input_direction.length() > 0:
 		get_output_slot().invoke(self, [input_direction])
