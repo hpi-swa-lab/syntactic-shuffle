@@ -37,11 +37,6 @@ func draw_arrow(node, pos, size = 10):
 		size / 2,
 		true)
 
-## Output an object from your card, for example a CollisionInfo.
-#class ObjectOutputSlot extends OutputSlot:
-#	func _init() -> void:
-#		super._init(1)
-
 ## Create a fixed connection to some object.
 class FixedSlot extends Slot:
 	var connected_input_node_path: NodePath

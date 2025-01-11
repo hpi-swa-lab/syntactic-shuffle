@@ -23,6 +23,11 @@ func get_object_input_slot() -> ObjectInputSlot:
 		if s is ObjectInputSlot: return s
 	return null
 
+func get_object_output_slot() -> ObjectOutputSlot:
+	for s in slots:
+		if s is ObjectOutputSlot: return s
+	return null
+
 func get_output_slot() -> OutputSlot:
 	for s in slots:
 		if s is OutputSlot: return s
