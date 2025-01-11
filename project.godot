@@ -23,6 +23,14 @@ G="*res://addons/cards/G.gd"
 
 enabled=PackedStringArray("res://addons/cards/plugin.cfg")
 
+[global_group]
+
+gun="has shoot method"
+health="has take_damage method"
+player="won't be shot by players"
+enemy="won't be shot by enemies"
+cards="can be connected to cards"
+
 [gui]
 
 theme/default_font_multichannel_signed_distance_field=true
