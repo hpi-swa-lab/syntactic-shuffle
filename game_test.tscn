@@ -13,7 +13,7 @@
 [ext_resource type="Script" uid="uid://dmb2syao4idmy" path="res://addons/cards/cards/MousePositionCard.gd" id="11_bcc6e"]
 [ext_resource type="Script" uid="uid://c5ccmpcq05phf" path="res://addons/cards/cards/LookAtCard.gd" id="12_m211k"]
 [ext_resource type="Script" uid="uid://c1po5i7arfj1r" path="res://addons/cards/cards/ShootCard.gd" id="13_8l2j7"]
-[ext_resource type="Script" uid="uid://dve76ylj0x1xs" path="res://addons/cards/cards/MouseLeftClick.gd" id="14_7csfu"]
+[ext_resource type="Script" uid="uid://dve76ylj0x1xs" path="res://addons/cards/cards/MouseLeftClickCard.gd" id="14_8l2j7"]
 
 [sub_resource type="Resource" id="Resource_5jd2a"]
 script = ExtResource("7_m211k")
@@ -42,7 +42,7 @@ num_args = 1
 
 [sub_resource type="Resource" id="Resource_7csfu"]
 script = ExtResource("5_bcc6e")
-connected_input_node_path = NodePath("../ShootCard")
+connected_input_node_path = NodePath("../MoveCard2")
 num_args = 1
 
 [sub_resource type="Resource" id="Resource_in80x"]
@@ -62,31 +62,32 @@ num_args = 1
 
 [sub_resource type="Resource" id="Resource_e1q1d"]
 script = ExtResource("7_m211k")
-object_path = NodePath("")
+object_path = NodePath("../Player/Pistol")
 limit_to_group = "gun"
 num_args = 0
 
 [sub_resource type="Resource" id="Resource_pvvnr"]
 script = ExtResource("8_aegmx")
-num_args = 1
+num_args = 0
 
 [sub_resource type="Resource" id="Resource_dxshk"]
 script = ExtResource("5_bcc6e")
-connected_input_node_path = NodePath("")
+connected_input_node_path = NodePath("../ShootCard")
 num_args = 0
 
 [node name="main" type="CanvasModulate"]
 color = Color(0.931896, 0.931898, 0.931897, 1)
 
 [node name="ColorRect" type="ColorRect" parent="."]
-offset_left = -535.0
-offset_top = -412.0
-offset_right = 2254.0
-offset_bottom = 1455.0
+z_index = -2
+offset_left = -497.0
+offset_top = -502.0
+offset_right = 2292.0
+offset_bottom = 1365.0
 color = Color(0.798366, 0.798366, 0.798366, 1)
 
 [node name="Player" parent="." instance=ExtResource("1_m7b8h")]
-position = Vector2(446, 686)
+position = Vector2(442, 697)
 
 [node name="Enemy" parent="." instance=ExtResource("2_i8gei")]
 position = Vector2(475, 341)
@@ -133,13 +134,13 @@ slots = Array[ExtResource("4_5jd2a")]([SubResource("Resource_tp5xc"), SubResourc
 metadata/_custom_type_script = ExtResource("12_m211k")
 
 [node name="ShootCard" type="Node2D" parent="."]
-position = Vector2(421, 756)
+position = Vector2(415, 757)
 script = ExtResource("13_8l2j7")
 slots = Array[ExtResource("4_5jd2a")]([SubResource("Resource_e1q1d"), SubResource("Resource_pvvnr")])
 metadata/_custom_type_script = ExtResource("13_8l2j7")
 
-[node name="MouseLeftClick" type="Node2D" parent="."]
-position = Vector2(380, 825)
-script = ExtResource("14_7csfu")
+[node name="MouseLeftClickCard" type="Node2D" parent="."]
+position = Vector2(369, 838)
+script = ExtResource("14_8l2j7")
 slots = Array[ExtResource("4_5jd2a")]([SubResource("Resource_dxshk")])
-metadata/_custom_type_script = ExtResource("14_7csfu")
+metadata/_custom_type_script = ExtResource("14_8l2j7")
