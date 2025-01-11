@@ -11,25 +11,24 @@ func connect_to(from: Node, object: Node):
 	pass
 func check_disconnect(card: Card):
 	pass
-func draw(node):
+func draw(node, draw_node):
 	pass
 func get_draw_dependencies(card: Card, array: Array):
 	pass
-func draw_connection(from, to, inverted = false):
+func draw_connection(from, to, inverted, draw_node):
 	if not to: return
 	var target = to.global_position
 	var distance = target.distance_to(from.global_position)
 	var angle = from.global_position.angle_to_point(target) - from.get_global_transform().get_rotation()
-	from.draw_set_transform(Vector2.ZERO, angle - PI / 2)
+	draw_node.draw_set_transform(Vector2.ZERO, angle - PI / 2)
 	const SIZE = 3
 	const GAP = SIZE * 2.2
 	
 	var offset = arrows_offset * GAP
 	offset = offset - int(offset)
 	# TODO inverted
-	
 	for i in range(0, distance / GAP):
-		draw_arrow(from, Vector2(0, (i + offset) * GAP), SIZE)
+		draw_arrow(draw_node, Vector2(0, (i + offset) * GAP), SIZE)
 
 func draw_arrow(node, pos, size = 10):
 	node.draw_polyline(
@@ -68,9 +67,9 @@ class FixedSlot extends Slot:
 		var i = get_connected_input(card)
 		var object = card.get_node_or_null(object_path)
 		if i and object: i.invoke([object])
-	func draw(node):
+	func draw(node, draw_node):
 		var object = node.get_node_or_null(object_path)
-		if object: draw_connection(node, object, true)
+		if object: draw_connection(node, object, true, draw_node)
 
 class NamedSlot extends Slot:
 	func _init(name: String) -> void:
