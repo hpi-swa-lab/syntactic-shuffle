@@ -1,0 +1,15 @@
+[gd_scene load_steps=4 format=3 uid="uid://oar1f8wbrv40"]
+
+[ext_resource type="Script" uid="uid://b3k4t01qi5gj1" path="res://enemy.gd" id="1_4gyqm"]
+[ext_resource type="PackedScene" uid="uid://dtpl6e6yyux1m" path="res://fov.tscn" id="2_4gyqm"]
+[ext_resource type="Texture2D" uid="uid://dawn4qx1n8hbq" path="res://resources/Robot.png" id="3_qi2p4"]
+
+[node name="Enemy" type="Node2D"]
+script = ExtResource("1_4gyqm")
+
+[node name="FoV" parent="." instance=ExtResource("2_4gyqm")]
+
+[node name="Robot" type="Sprite2D" parent="."]
+texture = ExtResource("3_qi2p4")
+
+[connection signal="spots" from="FoV" to="." method="_on_fov_spots"]
