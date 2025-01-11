@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bvbo8g3xx0y1h"
-path="res://.godot/imported/mouse_position.png-a57e7b3fc40b69a720d0263f1e5a9387.ctex"
+uid="uid://it1psivr451e"
+path="res://.godot/imported/turn_by.png-d66242e346c0f5fa21a45b5d5373ebd8.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://addons/cards/icons/mouse_position.png"
-dest_files=["res://.godot/imported/mouse_position.png-a57e7b3fc40b69a720d0263f1e5a9387.ctex"]
+source_file="res://addons/cards/icons/turn_by.png"
+dest_files=["res://.godot/imported/turn_by.png-d66242e346c0f5fa21a45b5d5373ebd8.ctex"]
 
 [params]
 

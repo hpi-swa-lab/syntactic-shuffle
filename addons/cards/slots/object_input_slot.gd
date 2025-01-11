@@ -2,6 +2,9 @@
 extends Slot
 class_name ObjectInputSlot
 
+@export var object_path: NodePath
+@export var limit_to_group: String
+
 ## Provide an object as input, for example Collision triggers need to know
 ## which object to listen to collisions for.
 
@@ -12,8 +15,7 @@ static func create(limit_to_group = "") -> ObjectInputSlot:
 
 var on_connect
 var on_disconnect
-@export var object_path: NodePath
-@export var limit_to_group: String = ""
+
 
 func _init(on_connect = null, on_disconnect = null) -> void:
 	self.on_connect = on_connect
@@ -32,9 +34,9 @@ func check_disconnect(card: Card):
 	var o = get_object(card)
 	if o and o.global_position.distance_to(card.global_position) > Card.MAX_CONNECTION_DISTANCE:
 		object_path = NodePath()
-func draw(node):
+func draw(node, draw_node):
 	var object = node.get_node_or_null(object_path)
-	if object: draw_connection(node, object, true)
+	if object: draw_connection(node, object, true, draw_node)
 func get_draw_dependencies(card: Card, deps: Array):
 	var object = card.get_node_or_null(object_path)
 	if object: deps.push_back(object.global_position)

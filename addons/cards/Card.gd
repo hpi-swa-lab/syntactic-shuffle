@@ -9,7 +9,7 @@ const MAX_CONNECTION_DISTANCE = 300
 @export var disable = false:
 	set(v):
 		disable = v
-		queue_redraw()
+		if connection_draw_node: connection_draw_node.queue_redraw()
 	get:
 		return disable
 
@@ -49,11 +49,33 @@ var dragging:
 	set(v):
 		if v == dragging: return
 		dragging = v
-		if disable and dragging:
-			transition_from_hand()
-		queue_redraw()
+		if dragging:
+			visual.get_node("CardControl").grab_focus.call_deferred()
+		else:
+			if is_in_hand():
+				if visual.get_overlapping_hand() == null:
+					var root = get_tree().current_scene
+					current_hand().remove_card(self)
+					root.add_child(self)
+					position = get_viewport().get_mouse_position() # ;)
+				else:
+					current_hand()._relayout()
+			else:
+				if visual.get_overlapping_hand() != null:
+					var hand = visual.get_overlapping_hand()
+					get_parent().remove_child(self)
+					hand.add_card(self)
+		#if disable and dragging:
+			#transition_from_hand()
+		connection_draw_node.queue_redraw()
 	get:
 		return dragging
+
+func current_hand():
+	return G.closest_parent_that(self, func(node): return node.is_in_group(&"hand"))
+
+func is_in_hand():
+	return current_hand() != null
 
 @export var connected_node: NodePath = NodePath()
 
@@ -66,11 +88,11 @@ enum Type {
 static func show_cards():
 	return not Engine.is_editor_hint() or SHOW_IN_GAME
 
-func transition_from_hand():
-	disable = false
-	reparent(get_tree().current_scene)
-	global_position = get_viewport().get_camera_2d().get_global_mouse_position()
-	visual.get_node("CardControl").grab_focus.call_deferred()
+#func transition_from_hand():
+	#disable = false
+	#reparent(get_tree().current_scene)
+	#global_position = get_viewport().get_camera_2d().get_global_mouse_position()
+	#visual.get_node("CardControl").grab_focus.call_deferred()
 
 func can_connect_to(obj: Node):
 	return obj.owner == self.owner and not obj is Camera2D
@@ -78,8 +100,18 @@ func can_connect_to(obj: Node):
 func _input_event(viewport: Viewport, event: InputEvent, shape_idx: int) -> void:
 	print(event)
 
+var connection_draw_node: Node2D
+
 func _ready() -> void:
 	if not show_cards(): return
+	
+	# we draw connections in a separate node whose z-index is below all content,
+	# such that the connections appear under the cards
+	connection_draw_node = Node2D.new()
+	connection_draw_node.name = "ConnectionDraw"
+	connection_draw_node.z_index = -1
+	connection_draw_node.draw.connect(draw_connections)
+	add_child(connection_draw_node)
 	
 	visual = preload("res://addons/cards/CardVisual.tscn").instantiate()
 	visual.scale = DEFAULT_SCALE
@@ -138,12 +170,13 @@ func _process(delta: float) -> void:
 			slot.arrows_offset += delta
 	
 	if should_redraw() and not disable:
-		queue_redraw()
+		connection_draw_node.queue_redraw()
 
 var arrows_offset = 0
-func _draw() -> void:
+func draw_connections() -> void:
 	if not show_cards() or disable: return
-	for slot in slots: slot.draw(self)
+	for slot in slots:
+		slot.draw(self, connection_draw_node)
 
 var last_deps = null
 func should_redraw():
@@ -157,3 +190,6 @@ func should_redraw():
 		if comp_deps[i] != deps[i]:
 			return true
 	return false
+
+func get_extent() -> Vector2:
+	return visual.get_extent()

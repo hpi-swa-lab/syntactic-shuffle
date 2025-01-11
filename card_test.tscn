@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://ckf6cf0sgvv8b"]
+[gd_scene load_steps=20 format=3 uid="uid://ckf6cf0sgvv8b"]
 
 [ext_resource type="Script" uid="uid://d23cwws3aqxp1" path="res://addons/cards/cards/MoveCard.gd" id="1_u78jb"]
 [ext_resource type="Script" uid="uid://dsn8t1oa5bses" path="res://addons/cards/slots/slot.gd" id="2_p1jwn"]
@@ -8,6 +8,8 @@
 [ext_resource type="Script" uid="uid://b1hhj058mohfm" path="res://addons/cards/slots/output_slot.gd" id="6_bf2hh"]
 [ext_resource type="Script" uid="uid://b3nxhs2cf52ki" path="res://addons/cards/cards/DelayCard.gd" id="7_bf2hh"]
 [ext_resource type="PackedScene" uid="uid://clx5pustrmpx5" path="res://hand.tscn" id="8_ojfrw"]
+[ext_resource type="Script" uid="uid://bvoloc64pi1db" path="res://addons/cards/cards/CollisionCard.gd" id="9_xjrp1"]
+[ext_resource type="Script" uid="uid://mhsglqkwm7o7" path="res://addons/cards/slots/object_output_slot.gd" id="10_2ge25"]
 
 [sub_resource type="Resource" id="Resource_ojfrw"]
 script = ExtResource("3_78uh7")
@@ -31,6 +33,27 @@ num_args = 1
 
 [sub_resource type="Resource" id="Resource_kd8es"]
 script = ExtResource("4_bf2hh")
+num_args = 1
+
+[sub_resource type="Resource" id="Resource_xwava"]
+script = ExtResource("3_78uh7")
+object_path = NodePath("../hand")
+limit_to_group = ""
+num_args = 0
+
+[sub_resource type="Resource" id="Resource_3i0sp"]
+script = ExtResource("4_bf2hh")
+num_args = 1
+
+[sub_resource type="Resource" id="Resource_djtxf"]
+script = ExtResource("3_78uh7")
+object_path = NodePath("../hand")
+limit_to_group = ""
+num_args = 0
+
+[sub_resource type="Resource" id="Resource_0ou47"]
+script = ExtResource("10_2ge25")
+connected_input_node_path = NodePath("../MoveCard2")
 num_args = 1
 
 [node name="main" type="Node2D"]
@@ -59,5 +82,18 @@ script = ExtResource("7_bf2hh")
 slots = Array[ExtResource("2_p1jwn")]([SubResource("Resource_2ge25"), SubResource("Resource_kd8es")])
 metadata/_custom_type_script = ExtResource("7_bf2hh")
 
+[node name="MoveCard2" type="Node2D" parent="."]
+position = Vector2(268, 513)
+script = ExtResource("1_u78jb")
+slots = Array[ExtResource("2_p1jwn")]([SubResource("Resource_xwava"), SubResource("Resource_3i0sp")])
+metadata/_custom_type_script = ExtResource("1_u78jb")
+
+[node name="CollisionCard" type="Node2D" parent="."]
+position = Vector2(360, 519)
+script = ExtResource("9_xjrp1")
+slots = Array[ExtResource("2_p1jwn")]([SubResource("Resource_djtxf"), SubResource("Resource_0ou47")])
+metadata/_custom_type_script = ExtResource("9_xjrp1")
+
 [node name="hand" parent="." instance=ExtResource("8_ojfrw")]
+z_index = -1
 position = Vector2(251, 585)
