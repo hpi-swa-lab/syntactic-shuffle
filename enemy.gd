@@ -10,7 +10,9 @@ func take_damage(damage: float):
 	if health <= 0:
 		queue_free()
 
-func _on_fov_spots(object: Object) -> void:
+func _on_fov_spots(object: Node2D) -> void:
+	if not object.is_in_group("player"):
+		return
 	look_at(object.global_position)
 	$Pistol.shoot()
 
