@@ -2,13 +2,13 @@
 #thumb("ToolMove")
 extends Card
 
-var input = Card.ObjectInputSlot.new()
+var input = Slot.ObjectInputSlot.new()
 
 func _ready() -> void:
 	super._ready()
 	setup("Move", "Moves the parent around.", Card.Type.Effect, [
 		input,
-		Card.InputSlot.new(func (direction): move_direction(direction))
+		Slot.InputSlot.new(func (direction): move_direction(direction))
 	])
 
 var _did_accelerate = false

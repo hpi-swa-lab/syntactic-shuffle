@@ -2,8 +2,8 @@
 #thumb("GPUParticlesCollisionBox3D")
 extends Card
 
-var input = ObjectInputSlot.new()
-var output = ObjectOutputSlot.new()
+var input = Slot.ObjectInputSlot.new()
+var output = Slot.ObjectOutputSlot.new()
 
 func _ready() -> void:
 	super._ready()

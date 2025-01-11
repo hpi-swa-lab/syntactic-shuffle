@@ -2,7 +2,7 @@
 #thumb("Joypad")
 extends Card
 
-var output = Card.OutputSlot.new(1)
+var output = Slot.OutputSlot.new(1)
 
 func _ready() -> void:
 	super._ready()

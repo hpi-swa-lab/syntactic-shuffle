@@ -1,15 +1,32 @@
-[gd_scene load_steps=7 format=3 uid="uid://bj4m20wd8ubfd"]
+[gd_scene load_steps=14 format=3 uid="uid://bj4m20wd8ubfd"]
 
 [ext_resource type="Texture2D" uid="uid://c52trtl0cac7l" path="res://icon.svg" id="1_1aexm"]
-[ext_resource type="Script" uid="uid://d23cwws3aqxp1" path="res://addons/cards/cards/MoveCard.gd" id="4_3xm60"]
+[ext_resource type="Script" uid="uid://d1d0bpwrq74sg" path="res://addons/cards/cards/ReadyCard.gd" id="3_1bvp3"]
+[ext_resource type="Script" uid="uid://bo08qvvq1e3aj" path="res://addons/cards/cards/DeleteCard.gd" id="5_hn7tb"]
+[ext_resource type="Script" uid="uid://dsn8t1oa5bses" path="res://addons/cards/slot.gd" id="5_lquwl"]
 [ext_resource type="Script" uid="uid://cxldeg24krchn" path="res://camera_2d.gd" id="8_5vw27"]
-[ext_resource type="Script" uid="uid://c8cfoeik47tv2" path="res://addons/cards/cards/RandomAxisCard.gd" id="9_kek77"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2lsvt"]
 size = Vector2(128, 128)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ch1m5"]
 size = Vector2(40, 40)
+
+[sub_resource type="GDScript" id="GDScript_lquwl"]
+
+[sub_resource type="Resource" id="Resource_7mycd"]
+script = SubResource("GDScript_lquwl")
+object_path = NodePath("../CharacterBody2D")
+
+[sub_resource type="GDScript" id="GDScript_272bh"]
+
+[sub_resource type="Resource" id="Resource_5vw27"]
+script = SubResource("GDScript_272bh")
+
+[sub_resource type="GDScript" id="GDScript_kek77"]
+
+[sub_resource type="Resource" id="Resource_4c57u"]
+script = SubResource("GDScript_kek77")
 
 [node name="main" type="Node2D"]
 
@@ -21,11 +38,6 @@ texture = ExtResource("1_1aexm")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D"]
 shape = SubResource("RectangleShape2D_2lsvt")
-
-[node name="MoveCard" type="Node2D" parent="."]
-position = Vector2(80, 171)
-script = ExtResource("4_3xm60")
-connected_node = NodePath("../CharacterBody2D")
 
 [node name="Area2D" type="Area2D" parent="."]
 position = Vector2(447, 142)
@@ -52,8 +64,14 @@ position = Vector2(574, 323)
 zoom = Vector2(0.51, 0.51)
 script = ExtResource("8_5vw27")
 
-[node name="RandomAxisCard" type="Node2D" parent="."]
-position = Vector2(175, 230)
-script = ExtResource("9_kek77")
-connected_node = NodePath("../MoveCard")
-metadata/_custom_type_script = ExtResource("9_kek77")
+[node name="ReadyCard" type="Node2D" parent="."]
+position = Vector2(62, 48)
+script = ExtResource("3_1bvp3")
+slots = Array[ExtResource("5_lquwl")]([SubResource("Resource_7mycd"), SubResource("Resource_5vw27")])
+metadata/_custom_type_script = ExtResource("3_1bvp3")
+
+[node name="DeleteCard" type="Node2D" parent="."]
+position = Vector2(126, 147)
+script = ExtResource("5_hn7tb")
+slots = Array[ExtResource("5_lquwl")]([SubResource("Resource_4c57u")])
+metadata/_custom_type_script = ExtResource("5_hn7tb")

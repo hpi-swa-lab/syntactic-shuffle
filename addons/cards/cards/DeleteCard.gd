@@ -7,4 +7,4 @@ func _ready() -> void:
 	setup("Delete",
 		"Delete a node.",
 		Card.Type.Effect,
-		[Card.InputSlot.new(func (obj): obj.queue_free())])
+		[Slot.InputSlot.new(func (obj): obj.queue_free())])
