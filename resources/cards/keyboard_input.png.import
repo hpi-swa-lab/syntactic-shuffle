@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cilf0mkc6bhyj"
-path="res://.godot/imported/turret.png-c17de4a7711874711d10a8d84cf1058a.ctex"
+uid="uid://dtfabri0wcqes"
+path="res://.godot/imported/keyboard_input.png-33be08f78ea763bb313ddb21b20889d6.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://resources/characters/turret.png"
-dest_files=["res://.godot/imported/turret.png-c17de4a7711874711d10a8d84cf1058a.ctex"]
+source_file="res://resources/cards/keyboard_input.png"
+dest_files=["res://.godot/imported/keyboard_input.png-33be08f78ea763bb313ddb21b20889d6.ctex"]
 
 [params]
 

@@ -1,0 +1,130 @@
+[gd_scene load_steps=22 format=3 uid="uid://03gnfxdq4qls"]
+
+[ext_resource type="Script" uid="uid://b3nxhs2cf52ki" path="res://addons/cards/cards/DelayCard.gd" id="1_sgy2f"]
+[ext_resource type="Script" uid="uid://dsn8t1oa5bses" path="res://addons/cards/slots/slot.gd" id="2_cp4qc"]
+[ext_resource type="Script" uid="uid://b1hhj058mohfm" path="res://addons/cards/slots/output_slot.gd" id="3_xmy4m"]
+[ext_resource type="Script" uid="uid://cvwcl5iet0pyp" path="res://addons/cards/slots/input_slot.gd" id="4_y8syl"]
+[ext_resource type="Script" uid="uid://bvoloc64pi1db" path="res://addons/cards/cards/CollisionCard.gd" id="5_qrkr3"]
+[ext_resource type="Script" uid="uid://bu1higbimotmh" path="res://addons/cards/slots/object_input_slot.gd" id="6_7fxt6"]
+[ext_resource type="Script" uid="uid://mhsglqkwm7o7" path="res://addons/cards/slots/object_output_slot.gd" id="7_lsd6y"]
+[ext_resource type="Script" uid="uid://d23cwws3aqxp1" path="res://addons/cards/cards/MoveCard.gd" id="8_imadt"]
+[ext_resource type="Script" uid="uid://dkyx51jnk8cvd" path="res://addons/cards/cards/AxisControlsCard.gd" id="9_frxwl"]
+[ext_resource type="Script" uid="uid://c1po5i7arfj1r" path="res://addons/cards/cards/ShootCard.gd" id="11_cp4qc"]
+[ext_resource type="PackedScene" uid="uid://dj1levijtlio2" path="res://pistol.tscn" id="12_xmy4m"]
+
+[sub_resource type="Resource" id="Resource_2tjsu"]
+script = ExtResource("3_xmy4m")
+connected_input_node_path = NodePath("")
+num_args = 1
+
+[sub_resource type="Resource" id="Resource_15i05"]
+script = ExtResource("4_y8syl")
+num_args = 1
+
+[sub_resource type="Resource" id="Resource_i5pup"]
+script = ExtResource("6_7fxt6")
+object_path = NodePath("../StaticBody2D2")
+limit_to_group = ""
+num_args = 0
+
+[sub_resource type="Resource" id="Resource_spnsi"]
+script = ExtResource("7_lsd6y")
+connected_input_node_path = NodePath("../ShootCard")
+num_args = 1
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ua6av"]
+size = Vector2(40, 40)
+
+[sub_resource type="Resource" id="Resource_y81ca"]
+script = ExtResource("6_7fxt6")
+object_path = NodePath("../StaticBody2D")
+limit_to_group = ""
+num_args = 0
+
+[sub_resource type="Resource" id="Resource_fganm"]
+script = ExtResource("4_y8syl")
+num_args = 1
+
+[sub_resource type="Resource" id="Resource_slbh4"]
+script = ExtResource("3_xmy4m")
+connected_input_node_path = NodePath("../ShootCard")
+num_args = 1
+
+[sub_resource type="Resource" id="Resource_xmy4m"]
+script = ExtResource("6_7fxt6")
+object_path = NodePath("../StaticBody2D2")
+limit_to_group = ""
+num_args = 0
+
+[sub_resource type="Resource" id="Resource_y8syl"]
+script = ExtResource("4_y8syl")
+num_args = 1
+
+[node name="main" type="Node2D"]
+
+[node name="DelayCard" type="Node2D" parent="."]
+position = Vector2(378, 117)
+script = ExtResource("1_sgy2f")
+disable = null
+slots = Array[ExtResource("2_cp4qc")]([SubResource("Resource_2tjsu"), SubResource("Resource_15i05")])
+metadata/_custom_type_script = ExtResource("1_sgy2f")
+
+[node name="CollisionCard" type="Node2D" parent="."]
+position = Vector2(320, 226)
+script = ExtResource("5_qrkr3")
+disable = null
+slots = Array[ExtResource("2_cp4qc")]([SubResource("Resource_i5pup"), SubResource("Resource_spnsi")])
+metadata/_custom_type_script = ExtResource("5_qrkr3")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+position = Vector2(514.073, 244)
+
+[node name="ColorRect" type="ColorRect" parent="StaticBody2D"]
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+metadata/_edit_use_anchors_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+shape = SubResource("RectangleShape2D_ua6av")
+
+[node name="StaticBody2D2" type="CharacterBody2D" parent="."]
+position = Vector2(443, 247)
+
+[node name="ColorRect" type="ColorRect" parent="StaticBody2D2"]
+offset_left = -19.9271
+offset_top = -19.0
+offset_right = 20.0729
+offset_bottom = 21.0
+color = Color(1, 0.431373, 1, 1)
+metadata/_edit_use_anchors_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D2"]
+position = Vector2(0.0728798, 1)
+shape = SubResource("RectangleShape2D_ua6av")
+
+[node name="MoveCard" type="Node2D" parent="."]
+position = Vector2(497.073, 374)
+script = ExtResource("8_imadt")
+disable = null
+slots = Array[ExtResource("2_cp4qc")]([SubResource("Resource_y81ca"), SubResource("Resource_fganm")])
+metadata/_custom_type_script = ExtResource("8_imadt")
+
+[node name="AxisControlsCard" type="Node2D" parent="."]
+position = Vector2(361, 402)
+script = ExtResource("9_frxwl")
+disable = null
+slots = Array[ExtResource("2_cp4qc")]([SubResource("Resource_slbh4")])
+metadata/_custom_type_script = ExtResource("9_frxwl")
+
+[node name="ShootCard" type="Node2D" parent="."]
+position = Vector2(358, 329)
+script = ExtResource("11_cp4qc")
+disable = null
+slots = Array[ExtResource("2_cp4qc")]([SubResource("Resource_xmy4m"), SubResource("Resource_y8syl")])
+metadata/_custom_type_script = ExtResource("11_cp4qc")
+
+[node name="Pistol" parent="." groups=["gun"] instance=ExtResource("12_xmy4m")]
+position = Vector2(226, 231)
+scale = Vector2(5, 5)

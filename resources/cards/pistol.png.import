@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cilf0mkc6bhyj"
-path="res://.godot/imported/turret.png-c17de4a7711874711d10a8d84cf1058a.ctex"
+uid="uid://bkosy7hfgbvfy"
+path="res://.godot/imported/pistol.png-872ae0616533aaf7275012807251ba6d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://resources/characters/turret.png"
-dest_files=["res://.godot/imported/turret.png-c17de4a7711874711d10a8d84cf1058a.ctex"]
+source_file="res://resources/cards/pistol.png"
+dest_files=["res://.godot/imported/pistol.png-872ae0616533aaf7275012807251ba6d.ctex"]
 
 [params]
 

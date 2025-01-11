@@ -1,0 +1,59 @@
+[gd_scene load_steps=13 format=3 uid="uid://ckf6cf0sgvv8b"]
+
+[ext_resource type="Script" uid="uid://d23cwws3aqxp1" path="res://addons/cards/cards/MoveCard.gd" id="1_ohlmc"]
+[ext_resource type="Script" uid="uid://dsn8t1oa5bses" path="res://addons/cards/slots/slot.gd" id="2_fep88"]
+[ext_resource type="Script" uid="uid://bu1higbimotmh" path="res://addons/cards/slots/object_input_slot.gd" id="3_ghkng"]
+[ext_resource type="Script" uid="uid://cvwcl5iet0pyp" path="res://addons/cards/slots/input_slot.gd" id="4_3ip18"]
+[ext_resource type="Script" uid="uid://dkyx51jnk8cvd" path="res://addons/cards/cards/AxisControlsCard.gd" id="5_eg3ir"]
+[ext_resource type="Script" uid="uid://b1hhj058mohfm" path="res://addons/cards/slots/output_slot.gd" id="6_1yyan"]
+[ext_resource type="Script" uid="uid://b3nxhs2cf52ki" path="res://addons/cards/cards/DelayCard.gd" id="7_xpk2l"]
+
+[sub_resource type="Resource" id="Resource_ojfrw"]
+script = ExtResource("3_ghkng")
+object_path = NodePath("../ColorRect")
+limit_to_group = ""
+num_args = 0
+
+[sub_resource type="Resource" id="Resource_rox7l"]
+script = ExtResource("4_3ip18")
+num_args = 1
+
+[sub_resource type="Resource" id="Resource_xjrp1"]
+script = ExtResource("6_1yyan")
+connected_input_node_path = NodePath("../DelayCard")
+num_args = 1
+
+[sub_resource type="Resource" id="Resource_2ge25"]
+script = ExtResource("6_1yyan")
+connected_input_node_path = NodePath("../MoveCard")
+num_args = 1
+
+[sub_resource type="Resource" id="Resource_kd8es"]
+script = ExtResource("4_3ip18")
+num_args = 1
+
+[node name="main" type="Node2D"]
+
+[node name="MoveCard" type="Node2D" parent="."]
+position = Vector2(390, 281)
+script = ExtResource("1_ohlmc")
+slots = Array[ExtResource("2_fep88")]([SubResource("Resource_ojfrw"), SubResource("Resource_rox7l")])
+metadata/_custom_type_script = ExtResource("1_ohlmc")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+offset_left = 217.0
+offset_top = 391.0
+offset_right = 257.0
+offset_bottom = 431.0
+
+[node name="AxisControlsCard" type="Node2D" parent="."]
+position = Vector2(287, 205)
+script = ExtResource("5_eg3ir")
+slots = Array[ExtResource("2_fep88")]([SubResource("Resource_xjrp1")])
+metadata/_custom_type_script = ExtResource("5_eg3ir")
+
+[node name="DelayCard" type="Node2D" parent="."]
+position = Vector2(389, 204)
+script = ExtResource("7_xpk2l")
+slots = Array[ExtResource("2_fep88")]([SubResource("Resource_2ge25"), SubResource("Resource_kd8es")])
+metadata/_custom_type_script = ExtResource("7_xpk2l")

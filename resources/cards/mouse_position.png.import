@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cilf0mkc6bhyj"
-path="res://.godot/imported/turret.png-c17de4a7711874711d10a8d84cf1058a.ctex"
+uid="uid://c1pxcvc54rmbd"
+path="res://.godot/imported/mouse_position.png-aa3e40467ed04380cf9f5c61246254c2.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://resources/characters/turret.png"
-dest_files=["res://.godot/imported/turret.png-c17de4a7711874711d10a8d84cf1058a.ctex"]
+source_file="res://resources/cards/mouse_position.png"
+dest_files=["res://.godot/imported/mouse_position.png-aa3e40467ed04380cf9f5c61246254c2.ctex"]
 
 [params]
 
