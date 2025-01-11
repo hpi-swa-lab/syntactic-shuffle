@@ -1,5 +1,5 @@
 @tool
-#thumb("Joypad.svg")
+#thumb("keyboard_input.png")
 extends Card
 
 func _ready() -> void:

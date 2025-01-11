@@ -1,5 +1,5 @@
 @tool
-#thumb("GPUParticlesCollisionBox3D.svg")
+#thumb("collision.png")
 extends Card
 
 func _ready() -> void:

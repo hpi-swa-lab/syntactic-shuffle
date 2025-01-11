@@ -1,5 +1,5 @@
 @tool
-#thumb("Time.svg")
+#thumb("clock.png")
 extends Card
 
 var delay_seconds = SpinBox.new()
