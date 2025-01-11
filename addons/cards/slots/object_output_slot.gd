@@ -1,3 +1,4 @@
+@tool
 extends OutputSlot
 class_name ObjectOutputSlot
 

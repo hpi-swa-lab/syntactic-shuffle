@@ -1,3 +1,4 @@
+@tool
 extends Slot
 class_name InputSlot
 ## Provide an input from another card's output.
