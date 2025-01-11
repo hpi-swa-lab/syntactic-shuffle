@@ -29,7 +29,7 @@ num_args = 0
 
 [sub_resource type="Resource" id="Resource_spnsi"]
 script = ExtResource("7_lsd6y")
-connected_input_node_path = NodePath("../ShootCard")
+connected_input_node_path = NodePath("")
 num_args = 1
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ua6av"]
@@ -47,16 +47,16 @@ num_args = 1
 
 [sub_resource type="Resource" id="Resource_slbh4"]
 script = ExtResource("3_xmy4m")
-connected_input_node_path = NodePath("../ShootCard")
+connected_input_node_path = NodePath("")
 num_args = 1
 
-[sub_resource type="Resource" id="Resource_xmy4m"]
+[sub_resource type="Resource" id="Resource_cp4qc"]
 script = ExtResource("6_7fxt6")
-object_path = NodePath("../StaticBody2D2")
-limit_to_group = ""
+object_path = NodePath("")
+limit_to_group = "gun"
 num_args = 0
 
-[sub_resource type="Resource" id="Resource_y8syl"]
+[sub_resource type="Resource" id="Resource_xmy4m"]
 script = ExtResource("4_y8syl")
 num_args = 1
 
@@ -118,13 +118,11 @@ disable = null
 slots = Array[ExtResource("2_cp4qc")]([SubResource("Resource_slbh4")])
 metadata/_custom_type_script = ExtResource("9_frxwl")
 
-[node name="ShootCard" type="Node2D" parent="."]
-position = Vector2(358, 329)
-script = ExtResource("11_cp4qc")
-disable = null
-slots = Array[ExtResource("2_cp4qc")]([SubResource("Resource_xmy4m"), SubResource("Resource_y8syl")])
-metadata/_custom_type_script = ExtResource("11_cp4qc")
-
 [node name="Pistol" parent="." groups=["gun"] instance=ExtResource("12_xmy4m")]
 position = Vector2(226, 231)
 scale = Vector2(5, 5)
+
+[node name="ShootCard" type="Node2D" parent="."]
+script = ExtResource("11_cp4qc")
+slots = Array[ExtResource("2_cp4qc")]([SubResource("Resource_cp4qc"), SubResource("Resource_xmy4m")])
+metadata/_custom_type_script = ExtResource("11_cp4qc")

@@ -12,5 +12,4 @@ func _ready() -> void:
 
 func invoke(obj):
 	var input_gun = get_object_input_slot().get_object(self)
-	print(input_gun)
-	#if input_gun: input_gun.shoot()
+	if input_gun: input_gun.shoot()
