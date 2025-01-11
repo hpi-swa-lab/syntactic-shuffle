@@ -4,7 +4,7 @@ extends Node2D
 
 func shoot():
 	var bullet = preload("res://bullet.tscn").instantiate()
+	Spawn.spawn(bullet)
 	bullet.global_position = global_position
 	bullet.global_rotation = global_rotation
 	bullet.owner_group = owner_group
-	get_tree().root.add_child(bullet)
