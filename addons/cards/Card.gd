@@ -86,7 +86,7 @@ func _ready() -> void:
 	visual.dragging.connect(func (d): set_selected(d))
 	add_child(visual)
 
-func setup(name: String, description: String, type: Type, slots: Array[Slot]):
+func setup(name: String, description: String, type: Type, slots: Array[Slot], extra_ui: Control = null):
 	if not show_cards(): return
 	var type_icon
 	match type:
@@ -94,7 +94,7 @@ func setup(name: String, description: String, type: Type, slots: Array[Slot]):
 		Type.Effect: type_icon = "PreviewSun"
 		Type.Store: type_icon = "CylinderMesh"
 	
-	visual.setup(name, description, get_icon_name(), type_icon)
+	visual.setup(name, description, get_icon_name(), type_icon, extra_ui)
 	
 	# do not override deserialized slots if they exist
 	if self.slots.is_empty():
