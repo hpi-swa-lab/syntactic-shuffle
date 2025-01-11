@@ -49,11 +49,33 @@ var dragging:
 	set(v):
 		if v == dragging: return
 		dragging = v
-		if disable and dragging:
-			transition_from_hand()
+		if dragging:
+			visual.get_node("CardControl").grab_focus.call_deferred()
+		else:
+			if is_in_hand():
+				if visual.get_overlapping_hand() == null:
+					var root = get_tree().current_scene
+					current_hand().remove_card(self)
+					root.add_child(self)
+					position = get_viewport().get_mouse_position() # ;)
+				else:
+					current_hand()._relayout()
+			else:
+				if visual.get_overlapping_hand() != null:
+					var hand = visual.get_overlapping_hand()
+					get_parent().remove_child(self)
+					hand.add_card(self)
+		#if disable and dragging:
+			#transition_from_hand()
 		queue_redraw()
 	get:
 		return dragging
+
+func current_hand():
+	return G.closest_parent_that(self, func(node): return node.is_in_group(&"hand"))
+
+func is_in_hand():
+	return current_hand() != null
 
 @export var connected_node: NodePath = NodePath()
 
@@ -66,11 +88,11 @@ enum Type {
 static func show_cards():
 	return not Engine.is_editor_hint() or SHOW_IN_GAME
 
-func transition_from_hand():
-	disable = false
-	reparent(get_tree().current_scene)
-	global_position = get_viewport().get_camera_2d().get_global_mouse_position()
-	visual.get_node("CardControl").grab_focus.call_deferred()
+#func transition_from_hand():
+	#disable = false
+	#reparent(get_tree().current_scene)
+	#global_position = get_viewport().get_camera_2d().get_global_mouse_position()
+	#visual.get_node("CardControl").grab_focus.call_deferred()
 
 func can_connect_to(obj: Node):
 	return obj.owner == self.owner and not obj is Camera2D
@@ -157,3 +179,6 @@ func should_redraw():
 		if comp_deps[i] != deps[i]:
 			return true
 	return false
+
+func get_extent() -> Vector2:
+	return visual.get_extent()
