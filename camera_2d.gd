@@ -4,7 +4,12 @@ extends Camera2D
 
 var held = false
 
+func _zoom(factor: float) -> void:
+	zoom += Vector2(factor, factor)
+
 func _input(event: InputEvent) -> void:
+	if event is InputEventPanGesture:
+		_zoom(-1 * event.delta.y * zoom.x)
 	if event is InputEventMouseButton:
 		var factor = 0
 		match event.button_index:
@@ -12,7 +17,7 @@ func _input(event: InputEvent) -> void:
 			MOUSE_BUTTON_WHEEL_UP: factor = 1
 			_: factor = 0
 		factor *= event.factor * zoom_speed * zoom.x
-		zoom += Vector2(factor, factor)
+		_zoom(factor)
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT:
 		held = event.is_pressed()
 	if event is InputEventMouseMotion and held:
