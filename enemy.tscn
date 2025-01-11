@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://b3k4t01qi5gj1" path="res://enemy.gd" id="1_4gyqm"]
 [ext_resource type="PackedScene" uid="uid://dtpl6e6yyux1m" path="res://fov.tscn" id="2_4gyqm"]
-[ext_resource type="Texture2D" uid="uid://dawn4qx1n8hbq" path="res://resources/Robot.png" id="3_qi2p4"]
+[ext_resource type="Texture2D" uid="uid://7umswm7xf7he" path="res://resources/characters/Robot.png" id="3_qi2p4"]
 [ext_resource type="PackedScene" uid="uid://dj1levijtlio2" path="res://pistol.tscn" id="4_iifgy"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_qi2p4"]

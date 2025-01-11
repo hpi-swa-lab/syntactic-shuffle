@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://oongh3pntcs7"]
 
-[ext_resource type="Texture2D" uid="uid://dif708bl5enkh" path="res://resources/MainCharacter_2.png" id="1_4flbx"]
+[ext_resource type="Texture2D" uid="uid://c3tgd1tomusv6" path="res://resources/characters/MainCharacter_2.png" id="1_4flbx"]
 [ext_resource type="Script" uid="uid://2m0oir7hswyf" path="res://player.gd" id="1_i3pqv"]
 [ext_resource type="PackedScene" uid="uid://dj1levijtlio2" path="res://pistol.tscn" id="2_onrkg"]
 
