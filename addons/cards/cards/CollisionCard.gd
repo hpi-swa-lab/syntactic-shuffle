@@ -11,7 +11,7 @@ func _ready() -> void:
 
 func _physics_process(delta):
 	if Engine.is_editor_hint() or not get_object_input_slot(): return
-	var o = get_object_input_slot().get_object(self)
+	var o = get_object_input()
 	if o is CharacterBody2D:
 		for collision_index in o.get_slide_collision_count():
 			var collision = o.get_slide_collision(collision_index)

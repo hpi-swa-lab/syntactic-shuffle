@@ -19,6 +19,7 @@ func icon_from_theme(name: StringName):
 
 func _ready() -> void:
 	$CardControl.gui_input.connect(input_event)
+	$CardControl.focus_mode = Control.FocusMode.FOCUS_ALL
 
 var held = false
 func input_event(e: InputEvent):
@@ -27,3 +28,9 @@ func input_event(e: InputEvent):
 		dragging.emit(held)
 	if e is InputEventMouseMotion and held:
 		get_parent().position += e.screen_relative / get_viewport_transform().get_scale()
+
+# if we move from the hand to the main scene, we won't receive the mouse button up
+func _unhandled_input(e: InputEvent) -> void:
+	if e is InputEventMouseButton and e.button_index == MOUSE_BUTTON_LEFT and held and not e.is_pressed():
+		print("HELD GONE")
+		held = false

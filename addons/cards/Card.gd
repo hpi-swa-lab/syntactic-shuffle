@@ -13,6 +13,13 @@ const MAX_CONNECTION_DISTANCE = 300
 	get:
 		return disable
 
+func on_invoke_input(callable: Callable):
+	get_input_slot().invoke_called.connect(func (args):
+		callable.callv(args))
+
+func get_object_input():
+	return get_object_input_slot().get_object(self)
+
 func get_input_slot() -> InputSlot:
 	for s in slots:
 		if s is InputSlot: return s
@@ -37,7 +44,10 @@ func get_output_slot() -> OutputSlot:
 var visual: CardVisual
 var dragging:
 	set(v):
+		if v == dragging: return
 		dragging = v
+		if disable and dragging:
+			transition_from_hand()
 		queue_redraw()
 	get:
 		return dragging
@@ -52,6 +62,12 @@ enum Type {
 
 static func show_cards():
 	return not Engine.is_editor_hint() or SHOW_IN_GAME
+
+func transition_from_hand():
+	disable = false
+	reparent(get_tree().current_scene)
+	global_position = get_viewport().get_camera_2d().get_global_mouse_position()
+	visual.get_node("CardControl").grab_focus.call_deferred()
 
 func can_connect_to(obj: Node):
 	return obj.owner == self.owner and not obj is Camera2D

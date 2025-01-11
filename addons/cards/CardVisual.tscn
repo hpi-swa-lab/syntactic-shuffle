@@ -25,6 +25,7 @@ offset_left = -100.0
 offset_top = -141.0
 offset_right = 100.0
 offset_bottom = 141.0
+focus_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_i40e1")
 
 [node name="MainColumn" type="VBoxContainer" parent="CardControl"]
