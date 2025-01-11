@@ -11,6 +11,5 @@ func _ready() -> void:
 	on_invoke_input(invoke)
 
 func invoke(obj):
-	await get_tree().create_timer(1)
+	await get_tree().create_timer(1).timeout
 	invoke_output([obj])
-	
