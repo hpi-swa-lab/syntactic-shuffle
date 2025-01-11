@@ -2,13 +2,19 @@
 #thumb("GPUParticlesCollisionBox3D")
 extends Card
 
+var input = ObjectInputSlot.new()
+var output = ObjectOutputSlot.new()
+
 func _ready() -> void:
 	super._ready()
-	setup("Collision", "Emit signal when colliding.", Card.Type.Trigger)
+	setup("Collision", "Emit signal when colliding.", Card.Type.Trigger, [
+		input,
+		output
+	])
 
 func _physics_process(delta):
-	var c = connected()
-	if c is CharacterBody2D:
-		for collision_index in c.get_slide_collision_count():
-			var collision = c.get_slide_collision(collision_index)
-			trigger1(collision.get_collider())
+	var o = input.get_object(self)
+	if input.get_object(self) is CharacterBody2D:
+		for collision_index in o.get_slide_collision_count():
+			var collision = o.get_slide_collision(collision_index)
+			output.invoke(collision)

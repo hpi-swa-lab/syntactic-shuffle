@@ -4,7 +4,7 @@ extends Card
 
 func _ready() -> void:
 	super._ready()
-	setup("Axis Controls", "Emits signals for inputs on the four axes.", Card.Type.Trigger)
+	setup("Axis Controls", "Emits signals for inputs on the four axes.", Card.Type.Trigger, [])
 
 func _is_key_pressed(direction):
 	var action_string = "ui_{0}".format([direction])
@@ -28,4 +28,4 @@ func _process(delta: float) -> void:
 	
 	input_direction = input_direction.normalized()
 	if input_direction.length() > 0:
-		trigger1(input_direction)
+		pass#trigger1(input_direction)

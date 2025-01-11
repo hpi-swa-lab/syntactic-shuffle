@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://clx5pustrmpx5"]
 
-[ext_resource type="Script" uid="uid://yqxgb8tfoag" path="res://addons/cards/cards/MoveCard.gd" id="1_u4p2i"]
+[ext_resource type="Script" uid="uid://d23cwws3aqxp1" path="res://addons/cards/cards/MoveCard.gd" id="1_u4p2i"]
 
 [node name="hand" type="Node2D"]
 
