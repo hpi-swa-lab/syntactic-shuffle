@@ -9,6 +9,7 @@ func _ready() -> void:
 	delay_seconds.prefix = "Delay: "
 	delay_seconds.suffix = "s"
 	delay_seconds.value = 1
+	delay_seconds.step = 0.1
 	setup("Delay",
 		"Delay for a given time and then forward the inputs.",
 		Card.Type.Effect,
@@ -17,5 +18,5 @@ func _ready() -> void:
 	on_invoke_input(invoke)
 
 func invoke(obj):
-	await get_tree().create_timer(1).timeout
+	await get_tree().create_timer(delay_seconds.value).timeout
 	invoke_output([obj])
