@@ -1,17 +1,7 @@
-[gd_scene load_steps=24 format=3 uid="uid://bj4m20wd8ubfd"]
+[gd_scene load_steps=6 format=3 uid="uid://bj4m20wd8ubfd"]
 
 [ext_resource type="Texture2D" uid="uid://c52trtl0cac7l" path="res://icon.svg" id="1_1aexm"]
-[ext_resource type="Script" uid="uid://d23cwws3aqxp1" path="res://addons/cards/cards/MoveCard.gd" id="3_5vw27"]
-[ext_resource type="Script" uid="uid://dsn8t1oa5bses" path="res://addons/cards/slots/slot.gd" id="4_kek77"]
-[ext_resource type="Script" uid="uid://bu1higbimotmh" path="res://addons/cards/slots/object_input_slot.gd" id="5_4c57u"]
-[ext_resource type="Script" uid="uid://cvwcl5iet0pyp" path="res://addons/cards/slots/input_slot.gd" id="6_efxa6"]
-[ext_resource type="Script" uid="uid://c8cfoeik47tv2" path="res://addons/cards/cards/RandomAxisCard.gd" id="7_dg77c"]
 [ext_resource type="Script" uid="uid://cxldeg24krchn" path="res://camera_2d.gd" id="8_5vw27"]
-[ext_resource type="Script" uid="uid://b1hhj058mohfm" path="res://addons/cards/slots/output_slot.gd" id="8_ycdy4"]
-[ext_resource type="Script" uid="uid://bvoloc64pi1db" path="res://addons/cards/cards/CollisionCard.gd" id="9_4c57u"]
-[ext_resource type="Script" uid="uid://dkyx51jnk8cvd" path="res://addons/cards/cards/AxisControlsCard.gd" id="9_kek77"]
-[ext_resource type="Script" uid="uid://mhsglqkwm7o7" path="res://addons/cards/slots/object_output_slot.gd" id="10_efxa6"]
-[ext_resource type="Script" uid="uid://bo08qvvq1e3aj" path="res://addons/cards/cards/DeleteCard.gd" id="11_efxa6"]
 [ext_resource type="PackedScene" uid="uid://clx5pustrmpx5" path="res://hand.tscn" id="12_dg77c"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2lsvt"]
@@ -19,47 +9,6 @@ size = Vector2(128, 128)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ch1m5"]
 size = Vector2(40, 40)
-
-[sub_resource type="Resource" id="Resource_w48qg"]
-script = ExtResource("5_4c57u")
-object_path = NodePath("../CharacterBody2D")
-limit_to_group = ""
-num_args = 0
-
-[sub_resource type="Resource" id="Resource_vivmo"]
-script = ExtResource("6_efxa6")
-num_args = 1
-
-[sub_resource type="Resource" id="Resource_4c57u"]
-script = ExtResource("8_ycdy4")
-connected_input_node_path = NodePath("../MoveCard")
-num_args = 1
-
-[sub_resource type="Resource" id="Resource_dg77c"]
-script = ExtResource("5_4c57u")
-object_path = NodePath("../CharacterBody2D")
-limit_to_group = ""
-num_args = 0
-
-[sub_resource type="Resource" id="Resource_ycdy4"]
-script = ExtResource("10_efxa6")
-connected_input_node_path = NodePath("../DeleteCard")
-num_args = 1
-
-[sub_resource type="Resource" id="Resource_efxa6"]
-script = ExtResource("5_4c57u")
-object_path = NodePath("../CharacterBody2D")
-limit_to_group = ""
-num_args = 0
-
-[sub_resource type="Resource" id="Resource_2cqfq"]
-script = ExtResource("6_efxa6")
-num_args = 1
-
-[sub_resource type="Resource" id="Resource_yaehf"]
-script = ExtResource("8_ycdy4")
-connected_input_node_path = NodePath("")
-num_args = 1
 
 [node name="main" type="Node2D"]
 
@@ -97,37 +46,7 @@ position = Vector2(574, 323)
 zoom = Vector2(0.51, 0.51)
 script = ExtResource("8_5vw27")
 
-[node name="MoveCard" type="Node2D" parent="."]
-position = Vector2(21, 37)
-script = ExtResource("3_5vw27")
-slots = Array[ExtResource("4_kek77")]([SubResource("Resource_w48qg"), SubResource("Resource_vivmo")])
-metadata/_custom_type_script = ExtResource("3_5vw27")
-
-[node name="AxisControlsCard" type="Node2D" parent="."]
-position = Vector2(120, -13)
-script = ExtResource("9_kek77")
-slots = Array[ExtResource("4_kek77")]([SubResource("Resource_4c57u")])
-metadata/_custom_type_script = ExtResource("9_kek77")
-
-[node name="CollisionCard" type="Node2D" parent="."]
-position = Vector2(-130, 82)
-script = ExtResource("9_4c57u")
-slots = Array[ExtResource("4_kek77")]([SubResource("Resource_dg77c"), SubResource("Resource_ycdy4")])
-metadata/_custom_type_script = ExtResource("9_4c57u")
-
-[node name="DeleteCard" type="Node2D" parent="."]
-position = Vector2(-203, 104)
-script = ExtResource("11_efxa6")
-slots = Array[ExtResource("4_kek77")]([SubResource("Resource_efxa6"), SubResource("Resource_2cqfq")])
-metadata/_custom_type_script = ExtResource("11_efxa6")
-
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="hand" parent="CanvasLayer" instance=ExtResource("12_dg77c")]
 position = Vector2(150, 568)
-
-[node name="RandomAxisCard" type="Node2D" parent="."]
-position = Vector2(-168, -210)
-script = ExtResource("7_dg77c")
-slots = Array[ExtResource("4_kek77")]([SubResource("Resource_yaehf")])
-metadata/_custom_type_script = ExtResource("7_dg77c")
