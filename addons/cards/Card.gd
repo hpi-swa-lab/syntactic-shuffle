@@ -4,6 +4,7 @@ class_name Card
 
 const SHOW_IN_GAME = true
 const DEFAULT_SCALE = Vector2(0.15, 0.15)
+const MAX_CONNECTION_DISTANCE = 300
 
 @export var disable = false:
 	set(v):
@@ -12,10 +13,41 @@ const DEFAULT_SCALE = Vector2(0.15, 0.15)
 	get:
 		return disable
 
+func on_invoke_input(callable: Callable):
+	get_input_slot().invoke_called.connect(func (args):
+		callable.callv(args))
+
+func get_object_input():
+	return get_object_input_slot().get_object(self)
+
+func get_input_slot() -> InputSlot:
+	for s in slots:
+		if s is InputSlot: return s
+	return null
+
+func get_object_input_slot() -> ObjectInputSlot:
+	for s in slots:
+		if s is ObjectInputSlot: return s
+	return null
+
+func get_object_output_slot() -> ObjectOutputSlot:
+	for s in slots:
+		if s is ObjectOutputSlot: return s
+	return null
+
+func get_output_slot() -> OutputSlot:
+	for s in slots:
+		if s is OutputSlot: return s
+	return null
+
+@export var slots: Array[Slot]
 var visual: CardVisual
 var dragging:
 	set(v):
+		if v == dragging: return
 		dragging = v
+		if disable and dragging:
+			transition_from_hand()
 		queue_redraw()
 	get:
 		return dragging
@@ -31,6 +63,12 @@ enum Type {
 static func show_cards():
 	return not Engine.is_editor_hint() or SHOW_IN_GAME
 
+func transition_from_hand():
+	disable = false
+	reparent(get_tree().current_scene)
+	global_position = get_viewport().get_camera_2d().get_global_mouse_position()
+	visual.get_node("CardControl").grab_focus.call_deferred()
+
 func can_connect_to(obj: Node):
 	return obj.owner == self.owner and not obj is Camera2D
 
@@ -45,7 +83,7 @@ func _ready() -> void:
 	visual.dragging.connect(func (d): set_selected(d))
 	add_child(visual)
 
-func setup(name: String, description: String, type: Type):
+func setup(name: String, description: String, type: Type, slots: Array[Slot]):
 	if not show_cards(): return
 	var type_icon
 	match type:
@@ -54,17 +92,12 @@ func setup(name: String, description: String, type: Type):
 		Type.Store: type_icon = "CylinderMesh"
 	
 	visual.setup(name, description, get_icon_name(), type_icon)
-
-func connected():
-	return get_node_or_null(connected_node)
-
-func trigger0():
-	var node = connected()
-	if node and node.has_method("invoke0"): node.invoke0()
-
-func trigger1(arg):
-	var node = get_node_or_null(connected_node)
-	if node and node.has_method("invoke1"): node.invoke1(arg)
+	
+	# do not override deserialized slots if they exist
+	if self.slots.is_empty():
+		self.slots = slots
+		assert(slots.filter(func (s): return s is InputSlot).size() <= 1)
+		assert(slots.filter(func (s): return s is OutputSlot).size() <= 1)
 
 func set_selected(selected: bool):
 	create_tween().tween_property(visual, "scale",
@@ -87,8 +120,19 @@ func _forward_canvas_gui_input(event: InputEvent, undo_redo):
 func _process(delta: float) -> void:
 	if not show_cards() or disable: return
 	if dragging:
-		connected_node = G.or_default(G.closest_node(self, func(n, d): return can_connect_to(n)), func(n): return get_path_to(n), NodePath())
-		arrows_offset += delta
+		for slot in slots:
+			slot.check_disconnect(self)
+			var c = G.closest_node(self, func(n, d): return slot.can_connect_to(n))
+			if c:
+				var dist = c.global_position.distance_to(global_position)
+				if dist > MAX_CONNECTION_DISTANCE and c is Card:
+					var o = c.get_output_slot()
+					if o: o.check_disconnect(c)
+					var i = c.get_input_slot()
+					if i: i.check_disconnect(c)
+				elif dist < MAX_CONNECTION_DISTANCE:
+					slot.connect_to(self, c)
+			slot.arrows_offset += delta
 	
 	if should_redraw() and not disable:
 		queue_redraw()
@@ -96,41 +140,17 @@ func _process(delta: float) -> void:
 var arrows_offset = 0
 func _draw() -> void:
 	if not show_cards() or disable: return
-	
-	var target_node = get_node_or_null(connected_node)
-	if not target_node:
-		return
-	
-	var target = target_node.global_position
-	var distance = target.distance_to(global_position)
-	var angle = global_position.angle_to_point(target) - get_global_transform().get_rotation()
-	draw_set_transform(Vector2.ZERO, angle - PI / 2)
-	const SIZE = 3
-	const GAP = SIZE * 2.2
-	
-	var offset = arrows_offset * GAP
-	offset = offset - int(offset)
-	
-	for i in range(0, distance / GAP):
-		draw_arrow(Vector2(0, (i + offset) * GAP), SIZE)
+	for slot in slots: slot.draw(self)
 
 var last_deps = null
 func should_redraw():
-	var deps = [
-		G.or_default(get_node_or_null(connected_node), func(n): return n.global_position),
-		global_position
-	]
+	var deps = []
+	for s in slots: s.get_draw_dependencies(self, deps)
+	
 	var comp_deps = last_deps
 	last_deps = deps
-	if not comp_deps or dragging: return true
+	if not comp_deps or dragging or comp_deps.size() != deps.size(): return true
 	for i in range(deps.size()):
 		if comp_deps[i] != deps[i]:
 			return true
 	return false
-
-func draw_arrow(pos, size = 10):
-	draw_polyline(
-		[pos + Vector2(-size, 0), pos + Vector2(0, size), pos + Vector2(size, 0)],
-		Color(Color.GRAY, 1.0 if dragging else 0.3),
-		size / 2,
-		true)
