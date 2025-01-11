@@ -1,11 +1,62 @@
-[gd_scene load_steps=7 format=3 uid="uid://dsvutxw0ipnb0"]
+[gd_scene load_steps=22 format=3 uid="uid://dsvutxw0ipnb0"]
 
 [ext_resource type="PackedScene" uid="uid://oongh3pntcs7" path="res://player.tscn" id="1_m7b8h"]
 [ext_resource type="PackedScene" uid="uid://oar1f8wbrv40" path="res://enemy.tscn" id="2_i8gei"]
-[ext_resource type="Script" uid="uid://cxse863237tba" path="res://addons/cards/cards/AxisControlsCard.gd" id="3_x5rfb"]
-[ext_resource type="Script" uid="uid://b0sir21xj2sl8" path="res://addons/cards/cards/MoveCard.gd" id="4_vgmek"]
+[ext_resource type="Script" uid="uid://dkyx51jnk8cvd" path="res://addons/cards/cards/AxisControlsCard.gd" id="3_x5rfb"]
+[ext_resource type="Script" uid="uid://dsn8t1oa5bses" path="res://addons/cards/slots/slot.gd" id="4_5jd2a"]
+[ext_resource type="Script" uid="uid://d23cwws3aqxp1" path="res://addons/cards/cards/MoveCard.gd" id="4_vgmek"]
 [ext_resource type="Script" uid="uid://cxldeg24krchn" path="res://camera_2d.gd" id="5_5jd2a"]
-[ext_resource type="Script" uid="uid://c3gvfbohcqoyq" path="res://addons/cards/cards/RandomAxisCard.gd" id="6_bcc6e"]
+[ext_resource type="Script" uid="uid://b1hhj058mohfm" path="res://addons/cards/slots/output_slot.gd" id="5_bcc6e"]
+[ext_resource type="Script" uid="uid://c8cfoeik47tv2" path="res://addons/cards/cards/RandomAxisCard.gd" id="6_bcc6e"]
+[ext_resource type="Script" uid="uid://bu1higbimotmh" path="res://addons/cards/slots/object_input_slot.gd" id="7_m211k"]
+[ext_resource type="Script" uid="uid://cvwcl5iet0pyp" path="res://addons/cards/slots/input_slot.gd" id="8_aegmx"]
+[ext_resource type="Script" uid="uid://dmb2syao4idmy" path="res://addons/cards/cards/MousePositionCard.gd" id="11_bcc6e"]
+[ext_resource type="Script" uid="uid://c5ccmpcq05phf" path="res://addons/cards/cards/LookAtCard.gd" id="12_m211k"]
+
+[sub_resource type="Resource" id="Resource_5jd2a"]
+script = ExtResource("7_m211k")
+object_path = NodePath("../Enemy")
+limit_to_group = ""
+num_args = 0
+
+[sub_resource type="Resource" id="Resource_bcc6e"]
+script = ExtResource("8_aegmx")
+num_args = 1
+
+[sub_resource type="Resource" id="Resource_m211k"]
+script = ExtResource("5_bcc6e")
+connected_input_node_path = NodePath("../MoveCard")
+num_args = 1
+
+[sub_resource type="Resource" id="Resource_aegmx"]
+script = ExtResource("7_m211k")
+object_path = NodePath("../Player")
+limit_to_group = ""
+num_args = 0
+
+[sub_resource type="Resource" id="Resource_8l2j7"]
+script = ExtResource("8_aegmx")
+num_args = 1
+
+[sub_resource type="Resource" id="Resource_7csfu"]
+script = ExtResource("5_bcc6e")
+connected_input_node_path = NodePath("../MoveCard2")
+num_args = 1
+
+[sub_resource type="Resource" id="Resource_in80x"]
+script = ExtResource("5_bcc6e")
+connected_input_node_path = NodePath("../LookAtCard")
+num_args = 1
+
+[sub_resource type="Resource" id="Resource_tp5xc"]
+script = ExtResource("7_m211k")
+object_path = NodePath("../Player")
+limit_to_group = ""
+num_args = 0
+
+[sub_resource type="Resource" id="Resource_ke3nh"]
+script = ExtResource("8_aegmx")
+num_args = 1
 
 [node name="main" type="CanvasModulate"]
 color = Color(0.931896, 0.931898, 0.931897, 1)
@@ -23,28 +74,43 @@ position = Vector2(446, 686)
 [node name="Enemy" parent="." instance=ExtResource("2_i8gei")]
 position = Vector2(475, 341)
 
-[node name="AxisControlsCard" type="Node2D" parent="."]
-position = Vector2(718, 664)
-script = ExtResource("3_x5rfb")
-connected_node = NodePath("../MoveCard2")
-
-[node name="MoveCard" type="Node2D" parent="."]
-position = Vector2(522, 412)
-script = ExtResource("4_vgmek")
-connected_node = NodePath("../Enemy")
-
-[node name="MoveCard2" type="Node2D" parent="."]
-position = Vector2(573, 678)
-script = ExtResource("4_vgmek")
-connected_node = NodePath("../Player")
-
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(1092, 541)
 zoom = Vector2(0.51, 0.51)
 script = ExtResource("5_5jd2a")
 
+[node name="MoveCard" type="Node2D" parent="."]
+position = Vector2(581, 319)
+script = ExtResource("4_vgmek")
+slots = Array[ExtResource("4_5jd2a")]([SubResource("Resource_5jd2a"), SubResource("Resource_bcc6e")])
+metadata/_custom_type_script = ExtResource("4_vgmek")
+
 [node name="RandomAxisCard" type="Node2D" parent="."]
-position = Vector2(581, 444)
+position = Vector2(679, 317)
 script = ExtResource("6_bcc6e")
-connected_node = NodePath("../MoveCard")
+slots = Array[ExtResource("4_5jd2a")]([SubResource("Resource_m211k")])
 metadata/_custom_type_script = ExtResource("6_bcc6e")
+
+[node name="MoveCard2" type="Node2D" parent="."]
+position = Vector2(581, 688)
+script = ExtResource("4_vgmek")
+slots = Array[ExtResource("4_5jd2a")]([SubResource("Resource_aegmx"), SubResource("Resource_8l2j7")])
+metadata/_custom_type_script = ExtResource("4_vgmek")
+
+[node name="AxisControlsCard" type="Node2D" parent="."]
+position = Vector2(725, 679)
+script = ExtResource("3_x5rfb")
+slots = Array[ExtResource("4_5jd2a")]([SubResource("Resource_7csfu")])
+metadata/_custom_type_script = ExtResource("3_x5rfb")
+
+[node name="MousePositionCard" type="Node2D" parent="."]
+position = Vector2(279, 543)
+script = ExtResource("11_bcc6e")
+slots = Array[ExtResource("4_5jd2a")]([SubResource("Resource_in80x")])
+metadata/_custom_type_script = ExtResource("11_bcc6e")
+
+[node name="LookAtCard" type="Node2D" parent="."]
+position = Vector2(373, 602)
+script = ExtResource("12_m211k")
+slots = Array[ExtResource("4_5jd2a")]([SubResource("Resource_tp5xc"), SubResource("Resource_ke3nh")])
+metadata/_custom_type_script = ExtResource("12_m211k")
