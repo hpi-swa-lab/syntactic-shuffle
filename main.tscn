@@ -1,8 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://bj4m20wd8ubfd"]
+[gd_scene load_steps=5 format=3 uid="uid://bj4m20wd8ubfd"]
 
 [ext_resource type="Texture2D" uid="uid://c52trtl0cac7l" path="res://icon.svg" id="1_1aexm"]
 [ext_resource type="Script" uid="uid://cxldeg24krchn" path="res://camera_2d.gd" id="8_5vw27"]
-[ext_resource type="PackedScene" uid="uid://clx5pustrmpx5" path="res://hand.tscn" id="12_dg77c"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2lsvt"]
 size = Vector2(128, 128)
@@ -47,6 +46,3 @@ zoom = Vector2(0.51, 0.51)
 script = ExtResource("8_5vw27")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
-
-[node name="hand" parent="CanvasLayer" instance=ExtResource("12_dg77c")]
-position = Vector2(150, 568)
