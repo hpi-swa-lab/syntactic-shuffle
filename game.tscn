@@ -63,6 +63,7 @@ num_args = 1
 [node name="game" type="Node2D"]
 
 [node name="CardBoundary" type="Area2D" parent="."]
+z_index = 2
 script = ExtResource("11_mfdv2")
 layout_cards_in_row = null
 horizontal_spacing = null
