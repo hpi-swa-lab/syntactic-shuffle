@@ -40,7 +40,7 @@ static func boundary_at_card(card: Card):
 
 static func card_moved(card: Card):
 	var boundary = boundary_at_card(card)
-	if not G.has_parent(card, boundary):
+	if get_card_boundary(card) != boundary:
 		card.reparent(boundary)
 		card.global_position = boundary.get_global_mouse_position()
 		card.disable = boundary.disable_on_enter
