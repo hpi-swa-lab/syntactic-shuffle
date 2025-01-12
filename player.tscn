@@ -28,7 +28,7 @@ num_args = 0
 
 [sub_resource type="Resource" id="Resource_606se"]
 script = ExtResource("10_urp6f")
-connected_output_node_path = NodePath("")
+connected_output_node_path = NodePath("../AxisControlsCard")
 num_args = 1
 
 [sub_resource type="Resource" id="Resource_u1c27"]
@@ -124,7 +124,7 @@ slots = Array[ExtResource("8_nvl01")]([SubResource("Resource_bwjto"), SubResourc
 metadata/_custom_type_script = ExtResource("7_n7ghd")
 
 [node name="AxisControlsCard" type="Node2D" parent="brain/CardBoundary" index="4"]
-position = Vector2(1244, 361)
+position = Vector2(1253, 369)
 script = ExtResource("11_ivps1")
 slots = Array[ExtResource("8_nvl01")]([SubResource("Resource_u1c27")])
 metadata/_custom_type_script = ExtResource("11_ivps1")
@@ -145,13 +145,13 @@ slots = Array[ExtResource("8_nvl01")]([SubResource("Resource_pylmc")])
 metadata/_custom_type_script = ExtResource("15_606se")
 
 [node name="LookAtCard" type="Node2D" parent="brain/CardBoundary" index="8"]
-position = Vector2(1557, 423)
+position = Vector2(1533, 434)
 script = ExtResource("16_op7ga")
 slots = Array[ExtResource("8_nvl01")]([SubResource("Resource_pbfsw"), SubResource("Resource_5tmop")])
 metadata/_custom_type_script = ExtResource("16_op7ga")
 
 [node name="MousePositionCard" type="Node2D" parent="brain/CardBoundary" index="9"]
-position = Vector2(1626, 377)
+position = Vector2(1603, 393)
 script = ExtResource("17_q13i1")
 slots = Array[ExtResource("8_nvl01")]([SubResource("Resource_7ahtn")])
 metadata/_custom_type_script = ExtResource("17_q13i1")

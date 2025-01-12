@@ -1,8 +1,8 @@
-[gd_scene load_steps=41 format=4 uid="uid://cvjg22am007hc"]
+[gd_scene load_steps=38 format=4 uid="uid://cvjg22am007hc"]
 
 [ext_resource type="Texture2D" uid="uid://bywsq5hdhm8y2" path="res://resources/tiles/floor_tile.png" id="1_eow3j"]
 [ext_resource type="Texture2D" uid="uid://bmoymxtmm580w" path="res://resources/tiles/Road.png" id="2_j5wjh"]
-[ext_resource type="Script" path="res://addons/cards/cards/HackCard.gd" id="2_lc2xo"]
+[ext_resource type="Script" uid="uid://dx2dxcp6kfrdg" path="res://addons/cards/cards/HackCard.gd" id="2_lc2xo"]
 [ext_resource type="Texture2D" uid="uid://dbcr8ohxljwex" path="res://resources/tiles/terrace.png" id="3_vef74"]
 [ext_resource type="Texture2D" uid="uid://3cathg1jjdtk" path="res://resources/tiles/wall.png" id="4_hve3p"]
 [ext_resource type="PackedScene" uid="uid://dsbyqp8jcc106" path="res://items/LockableDoor.tscn" id="7_boyg6"]
@@ -12,19 +12,14 @@
 [ext_resource type="Script" uid="uid://d23cwws3aqxp1" path="res://addons/cards/cards/MoveCard.gd" id="11_215e1"]
 [ext_resource type="PackedScene" uid="uid://c5j3sipjk7ung" path="res://items/ExplodableBarrel.tscn" id="11_e8heu"]
 [ext_resource type="Script" uid="uid://cja8ehiirmcyt" path="res://addons/cards/CardBoundary.gd" id="11_mfdv2"]
-[ext_resource type="PackedScene" path="res://door.tscn" id="11_x5p1p"]
+[ext_resource type="PackedScene" uid="uid://bumpk2rwffvhf" path="res://door.tscn" id="11_x5p1p"]
 [ext_resource type="Script" uid="uid://dsn8t1oa5bses" path="res://addons/cards/slots/slot.gd" id="12_7sc4i"]
 [ext_resource type="PackedScene" uid="uid://dxn14s2nk8anx" path="res://spike.tscn" id="12_hb5m1"]
 [ext_resource type="PackedScene" uid="uid://bei1c37kub65d" path="res://spawn_marker.tscn" id="14_215e1"]
 [ext_resource type="Script" uid="uid://bu1higbimotmh" path="res://addons/cards/slots/object_input_slot.gd" id="16_x5p1p"]
 [ext_resource type="Script" uid="uid://bkudnvkfdf6jn" path="res://addons/cards/cards/UseItemCard.gd" id="17_boyg6"]
-<<<<<<< HEAD
-[ext_resource type="Script" uid="uid://nidj5211jj24" path="res://addons/cards/cards/ClockCard.gd" id="18_e36ub"]
-[ext_resource type="Script" path="res://addons/cards/cards/SlideVerticallyCard.gd" id="18_qhcbd"]
-=======
 [ext_resource type="Script" uid="uid://cvwcl5iet0pyp" path="res://addons/cards/slots/input_slot.gd" id="17_qhcbd"]
 [ext_resource type="Script" uid="uid://c1y5hmu8ve21k" path="res://addons/cards/cards/ClockCard.gd" id="18_e36ub"]
->>>>>>> 983ff2d9962abfb57923dd196c404aaf0f2b73d2
 [ext_resource type="Script" uid="uid://b1hhj058mohfm" path="res://addons/cards/slots/output_slot.gd" id="19_hb5m1"]
 [ext_resource type="Script" uid="uid://bff8ils3b0x3x" path="res://addons/cards/cards/UnlockDoorCard.gd" id="20_e36ub"]
 
@@ -62,37 +57,16 @@ sources/1 = SubResource("TileSetAtlasSource_i6cpi")
 sources/2 = SubResource("TileSetAtlasSource_s20o0")
 sources/3 = SubResource("TileSetAtlasSource_47trr")
 
-<<<<<<< HEAD
-[sub_resource type="Resource" id="Resource_x5p1p"]
-script = ExtResource("13_80cx4")
-=======
 [sub_resource type="Resource" id="Resource_vaj68"]
 script = ExtResource("16_x5p1p")
->>>>>>> 983ff2d9962abfb57923dd196c404aaf0f2b73d2
 object_path = NodePath("")
 limit_to_group = "door"
 num_args = 0
 
-<<<<<<< HEAD
-[sub_resource type="Resource" id="Resource_qhcbd"]
-script = ExtResource("14_e8heu")
-=======
 [sub_resource type="Resource" id="Resource_i2p71"]
 script = ExtResource("17_qhcbd")
->>>>>>> 983ff2d9962abfb57923dd196c404aaf0f2b73d2
 connected_output_node_path = NodePath("")
 num_args = 0
-
-[sub_resource type="Resource" id="Resource_5b14r"]
-script = ExtResource("13_80cx4")
-object_path = NodePath("")
-limit_to_group = "slide"
-num_args = 0
-
-[sub_resource type="Resource" id="Resource_bnpwn"]
-script = ExtResource("14_e8heu")
-connected_output_node_path = NodePath("")
-num_args = 1
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_3q536"]
 size = Vector2(537, 59)
@@ -108,40 +82,25 @@ script = ExtResource("17_qhcbd")
 connected_output_node_path = NodePath("")
 num_args = 1
 
-<<<<<<< HEAD
-[sub_resource type="Resource" id="Resource_f1jbl"]
-script = ExtResource("13_80cx4")
-=======
 [sub_resource type="Resource" id="Resource_bnpwn"]
 script = ExtResource("16_x5p1p")
->>>>>>> 983ff2d9962abfb57923dd196c404aaf0f2b73d2
 object_path = NodePath("")
 limit_to_group = "hackable"
 num_args = 0
 
-[sub_resource type="Resource" id="Resource_vaj68"]
+[sub_resource type="Resource" id="Resource_f1jbl"]
 script = ExtResource("19_hb5m1")
-connected_input_node_path = NodePath("")
+connected_input_node_path = NodePath("../../../CardBoundary/objects/Room2/UnlockDoorCard")
 num_args = 0
 
-<<<<<<< HEAD
-[sub_resource type="Resource" id="Resource_i2p71"]
-script = ExtResource("13_80cx4")
-=======
 [sub_resource type="Resource" id="Resource_36jdj"]
 script = ExtResource("16_x5p1p")
->>>>>>> 983ff2d9962abfb57923dd196c404aaf0f2b73d2
 object_path = NodePath("")
 limit_to_group = "useable_item"
 num_args = 0
 
-<<<<<<< HEAD
-[sub_resource type="Resource" id="Resource_xa8c5"]
-script = ExtResource("14_e8heu")
-=======
 [sub_resource type="Resource" id="Resource_xfvwf"]
 script = ExtResource("17_qhcbd")
->>>>>>> 983ff2d9962abfb57923dd196c404aaf0f2b73d2
 connected_output_node_path = NodePath("")
 num_args = 0
 
@@ -243,23 +202,12 @@ position = Vector2(-1505, 810)
 scale = Vector2(4.4, 4.4)
 
 [node name="UnlockDoorCard" type="Node2D" parent="CardBoundary/objects/Room2"]
-position = Vector2(-1030, 867)
+position = Vector2(-992, 867)
 script = ExtResource("20_e36ub")
 locked = null
-<<<<<<< HEAD
-disable = Array[ExtResource("12_7sc4i")]([SubResource("Resource_x5p1p"), SubResource("Resource_qhcbd")])
-slots = Array[ExtResource("12_7sc4i")]([SubResource("Resource_x5p1p"), SubResource("Resource_qhcbd")])
-=======
 disable = null
 slots = Array[ExtResource("12_7sc4i")]([SubResource("Resource_vaj68"), SubResource("Resource_i2p71")])
->>>>>>> 983ff2d9962abfb57923dd196c404aaf0f2b73d2
 metadata/_custom_type_script = ExtResource("20_e36ub")
-
-[node name="SlideVerticallyCard" type="Node2D" parent="CardBoundary/objects/Room2"]
-position = Vector2(-982, 868)
-script = ExtResource("18_qhcbd")
-slots = Array[ExtResource("12_7sc4i")]([SubResource("Resource_5b14r"), SubResource("Resource_bnpwn")])
-metadata/_custom_type_script = ExtResource("18_qhcbd")
 
 [node name="characters#Enemy" parent="." instance=ExtResource("8_iotsf")]
 position = Vector2(-617.454, 543.577)
@@ -302,37 +250,21 @@ metadata/_custom_type_script = ExtResource("11_215e1")
 position = Vector2(762.9, 1008.5)
 script = ExtResource("2_lc2xo")
 locked = null
-<<<<<<< HEAD
-disable = Array[ExtResource("12_7sc4i")]([SubResource("Resource_f1jbl")])
-slots = Array[ExtResource("12_7sc4i")]([SubResource("Resource_f1jbl")])
-=======
 disable = null
 slots = Array[ExtResource("12_7sc4i")]([SubResource("Resource_bnpwn")])
->>>>>>> 983ff2d9962abfb57923dd196c404aaf0f2b73d2
 metadata/_custom_type_script = ExtResource("2_lc2xo")
 
 [node name="ClockCard" type="Node2D" parent="hand/CardBoundary"]
 position = Vector2(803.5, 1008.5)
 script = ExtResource("18_e36ub")
 locked = null
-<<<<<<< HEAD
-disable = Array[ExtResource("12_7sc4i")]([SubResource("Resource_vaj68")])
-slots = Array[ExtResource("12_7sc4i")]([SubResource("Resource_vaj68")])
-=======
 disable = null
 slots = Array[ExtResource("12_7sc4i")]([SubResource("Resource_f1jbl")])
->>>>>>> 983ff2d9962abfb57923dd196c404aaf0f2b73d2
 metadata/_custom_type_script = ExtResource("18_e36ub")
 
 [node name="UseItemCard" type="Node2D" parent="hand/CardBoundary"]
 position = Vector2(845.33, 1008.5)
 script = ExtResource("17_boyg6")
-<<<<<<< HEAD
-locked = null
-disable = Array[ExtResource("12_7sc4i")]([SubResource("Resource_i2p71"), SubResource("Resource_xa8c5")])
-slots = Array[ExtResource("12_7sc4i")]([SubResource("Resource_i2p71"), SubResource("Resource_xa8c5")])
-=======
 disable = true
 slots = Array[ExtResource("12_7sc4i")]([SubResource("Resource_36jdj"), SubResource("Resource_xfvwf")])
->>>>>>> 983ff2d9962abfb57923dd196c404aaf0f2b73d2
 metadata/_custom_type_script = ExtResource("17_boyg6")
