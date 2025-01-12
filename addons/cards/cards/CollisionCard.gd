@@ -5,7 +5,7 @@ extends Card
 func _ready() -> void:
 	super._ready()
 	setup("Collision", "Emit signal when colliding.", Card.Type.Trigger, [
-		ObjectInputSlot.new(),
+		ObjectInputSlot.new("cards"),
 		ObjectOutputSlot.create(1)
 	])
 

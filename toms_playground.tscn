@@ -64,12 +64,14 @@ num_args = 1
 [node name="main" type="Node2D"]
 
 [node name="DelayCard" type="Node2D" parent="."]
+z_index = 2
 position = Vector2(378, 117)
 script = ExtResource("1_ua6av")
 slots = Array[ExtResource("2_gplc3")]([SubResource("Resource_2tjsu"), SubResource("Resource_15i05")])
 metadata/_custom_type_script = ExtResource("1_ua6av")
 
 [node name="CollisionCard" type="Node2D" parent="."]
+z_index = 2
 position = Vector2(303, 217)
 script = ExtResource("5_slbh4")
 slots = Array[ExtResource("2_gplc3")]([SubResource("Resource_i5pup"), SubResource("Resource_spnsi")])
@@ -104,18 +106,21 @@ position = Vector2(0.0728798, 1)
 shape = SubResource("RectangleShape2D_ua6av")
 
 [node name="MoveCard" type="Node2D" parent="."]
+z_index = 2
 position = Vector2(469, 321)
 script = ExtResource("8_gplc3")
 slots = Array[ExtResource("2_gplc3")]([SubResource("Resource_y81ca"), SubResource("Resource_fganm")])
 metadata/_custom_type_script = ExtResource("8_gplc3")
 
 [node name="AxisControlsCard" type="Node2D" parent="."]
+z_index = 2
 position = Vector2(366, 306)
 script = ExtResource("9_y81ca")
 slots = Array[ExtResource("2_gplc3")]([SubResource("Resource_slbh4")])
 metadata/_custom_type_script = ExtResource("9_y81ca")
 
 [node name="DeleteCard" type="Node2D" parent="."]
+z_index = 2
 position = Vector2(468, 146)
 script = ExtResource("10_fganm")
 slots = Array[ExtResource("2_gplc3")]([SubResource("Resource_vb6k7"), SubResource("Resource_0bnr6")])

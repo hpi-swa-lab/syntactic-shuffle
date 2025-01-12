@@ -21,6 +21,7 @@ anti_aliasing_size = 0.1
 script = ExtResource("1_7r0de")
 
 [node name="CardControl" type="Panel" parent="."]
+z_index = 2
 offset_left = -100.0
 offset_top = -141.0
 offset_right = 100.0

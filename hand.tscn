@@ -20,7 +20,6 @@ num_args = 1
 size = Vector2(537, 59)
 
 [node name="CanvasLayer" type="CanvasLayer"]
-layer = -1
 
 [node name="hand" type="Node2D" parent="." groups=["hand"]]
 position = Vector2(340, 566)
@@ -39,7 +38,6 @@ position = Vector2(31.5, 29.5)
 script = ExtResource("2_3q536")
 disable = true
 slots = Array[ExtResource("3_6wjrw")]([SubResource("Resource_3i0sp"), SubResource("Resource_djtxf")])
-connected_node = NodePath("")
 metadata/_custom_type_script = ExtResource("2_3q536")
 
 [node name="Area2D" type="Area2D" parent="hand"]

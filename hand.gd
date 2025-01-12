@@ -17,7 +17,6 @@ func remove_card(card):
 	card.disable = false
 	card.reparent(get_tree().current_scene)
 	card.global_position = get_viewport().get_camera_2d().get_global_mouse_position()
-	card.visual.get_node("CardControl").grab_focus.call_deferred()
 	_relayout()
 
 func background_size() -> Vector2:

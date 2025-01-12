@@ -95,7 +95,7 @@ func _ready() -> void:
 	# such that the connections appear under the cards
 	connection_draw_node = Node2D.new()
 	connection_draw_node.name = "ConnectionDraw"
-	connection_draw_node.z_index = -1
+	connection_draw_node.z_index = 1
 	connection_draw_node.draw.connect(draw_connections)
 	add_child(connection_draw_node)
 	
