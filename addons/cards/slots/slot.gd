@@ -89,3 +89,5 @@ func on_activated(draw: Node2D):
 func flash_line(value: float, draw: Node2D):
 	flash_value = value
 	draw.queue_redraw()
+func ready(card: Card):
+	pass
