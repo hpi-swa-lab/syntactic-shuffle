@@ -7,8 +7,10 @@ var magic_number_chooser = SpinBox.new()
 func _ready() -> void:
 	super._ready()
 	magic_number_chooser.prefix = "Magic Number: "
+	magic_number_chooser.min_value = -1000
+	magic_number_chooser.max_value = 1000
 	magic_number_chooser.value = 21
-	magic_number_chooser.step = 2
+	magic_number_chooser.step = 1
 	
 	setup("Magic Number",
 		"On ",
