@@ -1,6 +1,6 @@
 [gd_scene load_steps=29 format=3 uid="uid://dsvutxw0ipnb0"]
 
-[ext_resource type="PackedScene" uid="uid://xhkg2haui8ak" path="res://tile_map.tscn" id="1_7csfu"]
+[ext_resource type="PackedScene" path="res://tile_map.tscn" id="1_7csfu"]
 [ext_resource type="PackedScene" uid="uid://oongh3pntcs7" path="res://player.tscn" id="1_m7b8h"]
 [ext_resource type="PackedScene" uid="uid://oar1f8wbrv40" path="res://enemy.tscn" id="2_i8gei"]
 [ext_resource type="Script" uid="uid://dkyx51jnk8cvd" path="res://addons/cards/cards/AxisControlsCard.gd" id="3_x5rfb"]
@@ -11,11 +11,11 @@
 [ext_resource type="Script" uid="uid://c8cfoeik47tv2" path="res://addons/cards/cards/RandomAxisCard.gd" id="6_bcc6e"]
 [ext_resource type="Script" uid="uid://bu1higbimotmh" path="res://addons/cards/slots/object_input_slot.gd" id="7_m211k"]
 [ext_resource type="Script" uid="uid://cvwcl5iet0pyp" path="res://addons/cards/slots/input_slot.gd" id="8_aegmx"]
-[ext_resource type="Script" uid="uid://dmb2syao4idmy" path="res://addons/cards/cards/MousePositionCard.gd" id="11_bcc6e"]
-[ext_resource type="Script" uid="uid://c5ccmpcq05phf" path="res://addons/cards/cards/LookAtCard.gd" id="12_m211k"]
+[ext_resource type="Script" path="res://addons/cards/cards/MousePositionCard.gd" id="11_bcc6e"]
+[ext_resource type="Script" path="res://addons/cards/cards/LookAtCard.gd" id="12_m211k"]
 [ext_resource type="Script" uid="uid://c1po5i7arfj1r" path="res://addons/cards/cards/ShootCard.gd" id="13_8l2j7"]
 [ext_resource type="Script" uid="uid://dve76ylj0x1xs" path="res://addons/cards/cards/MouseLeftClickCard.gd" id="14_8l2j7"]
-[ext_resource type="PackedScene" uid="uid://tn54ygnn110y" path="res://spawn_marker.tscn" id="16_in80x"]
+[ext_resource type="PackedScene" uid="uid://bei1c37kub65d" path="res://spawn_marker.tscn" id="16_in80x"]
 
 [sub_resource type="Resource" id="Resource_5jd2a"]
 script = ExtResource("7_m211k")
@@ -98,9 +98,10 @@ position = Vector2(297, 562)
 position = Vector2(454.431, 705.64)
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
-zoom = Vector2(0.51, 0.51)
+zoom = Vector2(1.5, 1.5)
 position_smoothing_enabled = true
 script = ExtResource("5_5jd2a")
+pan = false
 
 [node name="Enemy" parent="." instance=ExtResource("2_i8gei")]
 position = Vector2(475, 341)
