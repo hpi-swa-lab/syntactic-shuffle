@@ -25,10 +25,13 @@ func move_direction(direction: Vector2):
 
 func _physics_process(delta: float) -> void:
 	var node = get_object_input()
-	if not node: return
 	
 	if not _did_accelerate:
 		velocity = velocity.lerp(Vector2.ZERO, min(1.0, friction * delta))
+	
+	if not node:
+		_did_accelerate = false
+		return
 	
 	if node is CharacterBody2D:
 		node.velocity = velocity
