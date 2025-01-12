@@ -1,0 +1,20 @@
+@tool
+#thumb("look_at.png")
+extends Card
+
+func _ready() -> void:
+	super._ready()
+	setup("Object Sensor", "Emits a signal when detecting an object that has health.", Card.Type.Trigger, [
+		ObjectInputSlot.create("object_sensor"),
+		OutputSlot.create(1)
+	])
+	var current_object = get_object_input()
+	if current_object:
+		current_object.detected.connect(on_detected)
+	get_object_input_slot().on_connect = func(object: Node):
+		object.detected.connect(on_detected)
+	get_object_input_slot().on_disconnect = func(object: Node):
+		object.detected.disconnect(on_detected)
+
+func on_detected(object):
+	get_output_slot().invoke(self, [object.global_position])
