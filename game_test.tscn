@@ -15,7 +15,7 @@
 [ext_resource type="Script" path="res://addons/cards/cards/LookAtCard.gd" id="12_m211k"]
 [ext_resource type="Script" uid="uid://c1po5i7arfj1r" path="res://addons/cards/cards/ShootCard.gd" id="13_8l2j7"]
 [ext_resource type="Script" path="res://addons/cards/cards/MouseLeftClickCard.gd" id="14_8l2j7"]
-[ext_resource type="PackedScene" uid="uid://tn54ygnn110y" path="res://spawn_marker.tscn" id="16_in80x"]
+[ext_resource type="PackedScene" uid="uid://bei1c37kub65d" path="res://spawn_marker.tscn" id="16_in80x"]
 [ext_resource type="PackedScene" uid="uid://c5j3sipjk7ung" path="res://items/ExplodableBarrel.tscn" id="17_tp5xc"]
 
 [sub_resource type="Resource" id="Resource_m211k"]
