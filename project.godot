@@ -41,6 +41,7 @@ cards="can be connected to cards"
 slide="can slide (AnimatableBody2D)"
 door="Used for opening and closing doors"
 hackable="can be hacked"
+object_sensor="emits \"detected\" signal with objects"
 
 [gui]
 
