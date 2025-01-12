@@ -247,6 +247,7 @@ metadata/_custom_type_script = ExtResource("22_kdav3")
 [node name="NoiseCard" type="Node2D" parent="brain/CardBoundary" index="13"]
 position = Vector2(1525, 383)
 script = ExtResource("23_jpbtr")
+default_factor = 0.1
 slots = Array[ExtResource("7_n0g06")]([SubResource("Resource_jnl6c")])
 metadata/_custom_type_script = ExtResource("23_jpbtr")
 

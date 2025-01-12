@@ -261,7 +261,7 @@ shape = SubResource("RectangleShape2D_3q536")
 
 [node name="MoveCard" type="Node2D" parent="hand/CardBoundary"]
 z_index = 1
-position = Vector2(722.3, 1008.5)
+position = Vector2(751, 1008.5)
 script = ExtResource("11_215e1")
 locked = null
 disable = null
@@ -269,7 +269,7 @@ slots = Array[ExtResource("12_7sc4i")]([SubResource("Resource_xa8c5"), SubResour
 metadata/_custom_type_script = ExtResource("11_215e1")
 
 [node name="HackCard" type="Node2D" parent="hand/CardBoundary"]
-position = Vector2(762.9, 1008.5)
+position = Vector2(849, 1008.5)
 script = ExtResource("2_lc2xo")
 locked = null
 disable = null
@@ -277,7 +277,7 @@ slots = Array[ExtResource("12_7sc4i")]([SubResource("Resource_bnpwn")])
 metadata/_custom_type_script = ExtResource("2_lc2xo")
 
 [node name="ClockCard" type="Node2D" parent="hand/CardBoundary"]
-position = Vector2(803.5, 1008.5)
+position = Vector2(947, 1008.5)
 script = ExtResource("18_e36ub")
 locked = null
 disable = null
@@ -285,7 +285,7 @@ slots = Array[ExtResource("12_7sc4i")]([SubResource("Resource_f1jbl")])
 metadata/_custom_type_script = ExtResource("18_e36ub")
 
 [node name="UseItemCard" type="Node2D" parent="hand/CardBoundary"]
-position = Vector2(845.33, 1008.5)
+position = Vector2(1049.1, 1008.5)
 script = ExtResource("17_boyg6")
 disable = true
 slots = Array[ExtResource("12_7sc4i")]([SubResource("Resource_36jdj"), SubResource("Resource_xfvwf")])

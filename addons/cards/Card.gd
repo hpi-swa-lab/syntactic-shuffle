@@ -3,7 +3,7 @@ extends Node2D
 class_name Card
 
 const SHOW_IN_GAME = true
-const DEFAULT_SCALE = Vector2(0.15, 0.15)
+const DEFAULT_SCALE = Vector2(0.4, 0.4)
 const MAX_CONNECTION_DISTANCE = 100
 
 @export var locked = false:
