@@ -20,95 +20,111 @@
 [ext_resource type="Script" uid="uid://bsbt40cnohegj" path="res://addons/cards/cards/ObjectSensorCard.gd" id="18_epc7x"]
 [ext_resource type="Script" uid="uid://c1po5i7arfj1r" path="res://addons/cards/cards/ShootCard.gd" id="19_o7rgc"]
 [ext_resource type="Script" uid="uid://b3nxhs2cf52ki" path="res://addons/cards/cards/DelayCard.gd" id="20_kdav3"]
-[ext_resource type="Script" path="res://addons/cards/cards/DropArguments.gd" id="21_epc7x"]
+[ext_resource type="Script" uid="uid://db6goifw6kxxy" path="res://addons/cards/cards/DropArguments.gd" id="21_epc7x"]
 [ext_resource type="Script" uid="uid://ciwr6t8y6q0qb" path="res://addons/cards/cards/TurnByCard.gd" id="22_kdav3"]
 [ext_resource type="Script" uid="uid://7pr4nfslttos" path="res://addons/cards/cards/NoiseCard.gd" id="23_jpbtr"]
-[ext_resource type="Script" path="res://addons/cards/cards/PressF.gd" id="24_jpbtr"]
+[ext_resource type="Script" uid="uid://bj3mg0r52bnkb" path="res://addons/cards/cards/PressF.gd" id="24_jpbtr"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_qi2p4"]
 size = Vector2(19, 14)
 
-[sub_resource type="Resource" id="Resource_nnovl"]
-script = ExtResource("10_doop2")
-object_path = NodePath("../CardProxyEnemy")
-limit_to_group = "cards"
-num_args = 0
-
-[sub_resource type="Resource" id="Resource_g2u8i"]
-script = ExtResource("11_5hcft")
-connected_output_node_path = NodePath("../RandomAxisCard")
-num_args = 1
-
-[sub_resource type="Resource" id="Resource_ar8e5"]
-script = ExtResource("8_ar8e5")
-connected_input_node_path = NodePath("")
-num_args = 1
-
 [sub_resource type="Resource" id="Resource_jpbtr"]
+resource_local_to_scene = true
 script = ExtResource("10_doop2")
 object_path = NodePath("../CardProxyEnemy")
 limit_to_group = "cards"
 num_args = 0
 
 [sub_resource type="Resource" id="Resource_qgdfx"]
+resource_local_to_scene = true
 script = ExtResource("11_5hcft")
-connected_output_node_path = NodePath("../ObjectSensorCard")
+connected_output_node_path = NodePath("../RandomAxisCard")
 num_args = 1
 
 [sub_resource type="Resource" id="Resource_qku5p"]
-script = ExtResource("10_doop2")
-object_path = NodePath("../CardProxyFoV")
-limit_to_group = "object_sensor"
-num_args = 0
+resource_local_to_scene = true
+script = ExtResource("8_ar8e5")
+connected_input_node_path = NodePath("")
+num_args = 1
 
 [sub_resource type="Resource" id="Resource_l1fjw"]
-script = ExtResource("8_ar8e5")
-connected_input_node_path = NodePath("")
-num_args = 1
-
-[sub_resource type="Resource" id="Resource_b5wqg"]
-script = ExtResource("10_doop2")
-object_path = NodePath("../CardProxyPistol")
-limit_to_group = "gun"
-num_args = 0
-
-[sub_resource type="Resource" id="Resource_hgro5"]
-script = ExtResource("11_5hcft")
-connected_output_node_path = NodePath("../DropArguments")
-num_args = 0
-
-[sub_resource type="Resource" id="Resource_18rq2"]
-script = ExtResource("8_ar8e5")
-connected_input_node_path = NodePath("")
-num_args = 1
-
-[sub_resource type="Resource" id="Resource_ccdwq"]
-script = ExtResource("11_5hcft")
-connected_output_node_path = NodePath("../ObjectSensorCard")
-num_args = 1
-
-[sub_resource type="Resource" id="Resource_o7rgc"]
-script = ExtResource("8_ar8e5")
-connected_input_node_path = NodePath("")
-num_args = 0
-
-[sub_resource type="Resource" id="Resource_kdav3"]
-script = ExtResource("11_5hcft")
-connected_output_node_path = NodePath("../DelayCard")
-num_args = 1
-
-[sub_resource type="Resource" id="Resource_0jgdh"]
+resource_local_to_scene = true
 script = ExtResource("10_doop2")
 object_path = NodePath("../CardProxyEnemy")
 limit_to_group = "cards"
 num_args = 0
 
+[sub_resource type="Resource" id="Resource_b5wqg"]
+resource_local_to_scene = true
+script = ExtResource("11_5hcft")
+connected_output_node_path = NodePath("../ObjectSensorCard")
+num_args = 1
+
+[sub_resource type="Resource" id="Resource_hgro5"]
+resource_local_to_scene = true
+script = ExtResource("10_doop2")
+object_path = NodePath("../CardProxyFoV")
+limit_to_group = "object_sensor"
+num_args = 0
+
+[sub_resource type="Resource" id="Resource_18rq2"]
+resource_local_to_scene = true
+script = ExtResource("8_ar8e5")
+connected_input_node_path = NodePath("")
+num_args = 1
+
+[sub_resource type="Resource" id="Resource_ccdwq"]
+resource_local_to_scene = true
+script = ExtResource("10_doop2")
+object_path = NodePath("../CardProxyPistol")
+limit_to_group = "gun"
+num_args = 0
+
+[sub_resource type="Resource" id="Resource_0jgdh"]
+resource_local_to_scene = true
+script = ExtResource("11_5hcft")
+connected_output_node_path = NodePath("../DropArguments")
+num_args = 0
+
 [sub_resource type="Resource" id="Resource_6wg26"]
+resource_local_to_scene = true
+script = ExtResource("8_ar8e5")
+connected_input_node_path = NodePath("")
+num_args = 1
+
+[sub_resource type="Resource" id="Resource_qskgw"]
+resource_local_to_scene = true
+script = ExtResource("11_5hcft")
+connected_output_node_path = NodePath("../ObjectSensorCard")
+num_args = 1
+
+[sub_resource type="Resource" id="Resource_g3onx"]
+resource_local_to_scene = true
+script = ExtResource("8_ar8e5")
+connected_input_node_path = NodePath("")
+num_args = 0
+
+[sub_resource type="Resource" id="Resource_o707m"]
+resource_local_to_scene = true
+script = ExtResource("11_5hcft")
+connected_output_node_path = NodePath("../DelayCard")
+num_args = 1
+
+[sub_resource type="Resource" id="Resource_difxq"]
+resource_local_to_scene = true
+script = ExtResource("10_doop2")
+object_path = NodePath("../CardProxyEnemy")
+limit_to_group = "cards"
+num_args = 0
+
+[sub_resource type="Resource" id="Resource_5tv8x"]
+resource_local_to_scene = true
 script = ExtResource("11_5hcft")
 connected_output_node_path = NodePath("../NoiseCard")
 num_args = 1
 
-[sub_resource type="Resource" id="Resource_qskgw"]
+[sub_resource type="Resource" id="Resource_jnl6c"]
+resource_local_to_scene = true
 script = ExtResource("8_ar8e5")
 connected_input_node_path = NodePath("")
 num_args = 1
@@ -144,7 +160,7 @@ position = Vector2(1441, 504)
 [node name="MoveCard" type="Node2D" parent="brain/CardBoundary" index="2"]
 position = Vector2(1603, 478)
 script = ExtResource("9_doop2")
-slots = Array[ExtResource("7_n0g06")]([SubResource("Resource_nnovl"), SubResource("Resource_g2u8i")])
+slots = Array[ExtResource("7_n0g06")]([SubResource("Resource_jpbtr"), SubResource("Resource_qgdfx")])
 metadata/_custom_type_script = ExtResource("9_doop2")
 
 [node name="CardProxyEnemy" type="Sprite2D" parent="brain/CardBoundary" index="3" node_paths=PackedStringArray("proxy_target")]
@@ -189,53 +205,53 @@ texture = ExtResource("14_jmwgi")
 [node name="RandomAxisCard" type="Node2D" parent="brain/CardBoundary" index="6"]
 position = Vector2(1672, 438)
 script = ExtResource("6_pwjut")
-slots = Array[ExtResource("7_n0g06")]([SubResource("Resource_ar8e5")])
+slots = Array[ExtResource("7_n0g06")]([SubResource("Resource_qku5p")])
 metadata/_custom_type_script = ExtResource("6_pwjut")
 
 [node name="LookAtCard" type="Node2D" parent="brain/CardBoundary" index="7"]
 position = Vector2(1550, 614)
 script = ExtResource("17_8q82m")
-slots = Array[ExtResource("7_n0g06")]([SubResource("Resource_jpbtr"), SubResource("Resource_qgdfx")])
+slots = Array[ExtResource("7_n0g06")]([SubResource("Resource_l1fjw"), SubResource("Resource_b5wqg")])
 metadata/_custom_type_script = ExtResource("17_8q82m")
 
 [node name="ObjectSensorCard" type="Node2D" parent="brain/CardBoundary" index="8"]
 position = Vector2(1485, 613)
 script = ExtResource("18_epc7x")
-slots = Array[ExtResource("7_n0g06")]([SubResource("Resource_qku5p"), SubResource("Resource_l1fjw")])
+slots = Array[ExtResource("7_n0g06")]([SubResource("Resource_hgro5"), SubResource("Resource_18rq2")])
 metadata/_custom_type_script = ExtResource("18_epc7x")
 
 [node name="ShootCard" type="Node2D" parent="brain/CardBoundary" index="9"]
 position = Vector2(1362, 528)
 script = ExtResource("19_o7rgc")
-slots = Array[ExtResource("7_n0g06")]([SubResource("Resource_b5wqg"), SubResource("Resource_hgro5")])
+slots = Array[ExtResource("7_n0g06")]([SubResource("Resource_ccdwq"), SubResource("Resource_0jgdh")])
 metadata/_custom_type_script = ExtResource("19_o7rgc")
 
 [node name="DelayCard" type="Node2D" parent="brain/CardBoundary" index="10"]
 position = Vector2(1441, 590)
 script = ExtResource("20_kdav3")
-slots = Array[ExtResource("7_n0g06")]([SubResource("Resource_18rq2"), SubResource("Resource_ccdwq")])
+slots = Array[ExtResource("7_n0g06")]([SubResource("Resource_6wg26"), SubResource("Resource_qskgw")])
 metadata/_custom_type_script = ExtResource("20_kdav3")
 
 [node name="DropArguments" type="Node2D" parent="brain/CardBoundary" index="11"]
 position = Vector2(1402, 568)
 script = ExtResource("21_epc7x")
-slots = Array[ExtResource("7_n0g06")]([SubResource("Resource_o7rgc"), SubResource("Resource_kdav3")])
+slots = Array[ExtResource("7_n0g06")]([SubResource("Resource_g3onx"), SubResource("Resource_o707m")])
 metadata/_custom_type_script = ExtResource("21_epc7x")
 
 [node name="TurnByCard" type="Node2D" parent="brain/CardBoundary" index="12"]
 position = Vector2(1527, 457)
 script = ExtResource("22_kdav3")
-slots = Array[ExtResource("7_n0g06")]([SubResource("Resource_0jgdh"), SubResource("Resource_6wg26")])
+slots = Array[ExtResource("7_n0g06")]([SubResource("Resource_difxq"), SubResource("Resource_5tv8x")])
 metadata/_custom_type_script = ExtResource("22_kdav3")
 
 [node name="NoiseCard" type="Node2D" parent="brain/CardBoundary" index="13"]
 position = Vector2(1525, 383)
 script = ExtResource("23_jpbtr")
-slots = Array[ExtResource("7_n0g06")]([SubResource("Resource_qskgw")])
+slots = Array[ExtResource("7_n0g06")]([SubResource("Resource_jnl6c")])
 metadata/_custom_type_script = ExtResource("23_jpbtr")
 
 [node name="PressF" type="Node2D" parent="brain/CardBoundary" index="14"]
-position = Vector2(1182, 337)
+position = Vector2(1184, 344)
 script = ExtResource("24_jpbtr")
 metadata/_custom_type_script = ExtResource("24_jpbtr")
 
