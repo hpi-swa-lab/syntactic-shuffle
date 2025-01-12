@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://2m0oir7hswyf" path="res://player.gd" id="1_i3pqv"]
 [ext_resource type="PackedScene" uid="uid://dj1levijtlio2" path="res://pistol.tscn" id="2_onrkg"]
 [ext_resource type="PackedScene" uid="uid://dycnp1nhlvrnu" path="res://brain.tscn" id="4_hqtel"]
-[ext_resource type="Texture2D" uid="uid://oaqik3b3vabe" path="res://resources/effects/shieldSciFi.png" id="5_2hs0m"]
+[ext_resource type="Texture2D" uid="uid://bvdu3vtx5xk7e" path="res://addons/cards/icons/brain.png" id="5_ivps1"]
 [ext_resource type="Script" uid="uid://lf6acu6i0abm" path="res://addons/cards/CardProxy.gd" id="6_1jxqw"]
 [ext_resource type="Script" uid="uid://d23cwws3aqxp1" path="res://addons/cards/cards/MoveCard.gd" id="7_n7ghd"]
 [ext_resource type="Script" uid="uid://dsn8t1oa5bses" path="res://addons/cards/slots/slot.gd" id="8_nvl01"]
@@ -30,7 +30,7 @@ script = ExtResource("12_urp6f")
 connected_input_node_path = NodePath("../MoveCard")
 num_args = 1
 
-[node name="Player" type="CharacterBody2D" groups=["cards", "health", "player"]]
+[node name="Player" type="CharacterBody2D" groups=["cards", "hackable", "health", "player"]]
 script = ExtResource("1_i3pqv")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
@@ -47,14 +47,9 @@ owner_group = "player"
 
 [node name="brain" parent="." instance=ExtResource("4_hqtel")]
 
-[node name="CardBoundary" parent="brain" index="0"]
-disable_on_enter = null
-layout_cards_in_row = null
-horizontal_spacing = null
-
 [node name="CardProxy" type="Sprite2D" parent="brain/CardBoundary" index="1" node_paths=PackedStringArray("proxy_target")]
 position = Vector2(1450, 468)
-texture = ExtResource("5_2hs0m")
+texture = ExtResource("5_ivps1")
 script = ExtResource("6_1jxqw")
 proxy_target = NodePath("../../..")
 metadata/_custom_type_script = ExtResource("6_1jxqw")

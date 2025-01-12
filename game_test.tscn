@@ -1,7 +1,7 @@
 [gd_scene load_steps=30 format=3 uid="uid://dsvutxw0ipnb0"]
 
 [ext_resource type="PackedScene" uid="uid://xhkg2haui8ak" path="res://tile_map.tscn" id="1_7csfu"]
-[ext_resource type="PackedScene" path="res://player.tscn" id="1_m7b8h"]
+[ext_resource type="PackedScene" uid="uid://oongh3pntcs7" path="res://player.tscn" id="1_m7b8h"]
 [ext_resource type="PackedScene" uid="uid://oar1f8wbrv40" path="res://enemy.tscn" id="2_i8gei"]
 [ext_resource type="Script" uid="uid://dkyx51jnk8cvd" path="res://addons/cards/cards/AxisControlsCard.gd" id="3_x5rfb"]
 [ext_resource type="Script" uid="uid://dsn8t1oa5bses" path="res://addons/cards/slots/slot.gd" id="4_5jd2a"]
@@ -15,7 +15,7 @@
 [ext_resource type="Script" path="res://addons/cards/cards/LookAtCard.gd" id="12_m211k"]
 [ext_resource type="Script" uid="uid://c1po5i7arfj1r" path="res://addons/cards/cards/ShootCard.gd" id="13_8l2j7"]
 [ext_resource type="Script" path="res://addons/cards/cards/MouseLeftClickCard.gd" id="14_8l2j7"]
-[ext_resource type="PackedScene" uid="uid://tn54ygnn110y" path="res://spawn_marker.tscn" id="16_in80x"]
+[ext_resource type="PackedScene" uid="uid://bei1c37kub65d" path="res://spawn_marker.tscn" id="16_in80x"]
 [ext_resource type="PackedScene" uid="uid://c5j3sipjk7ung" path="res://items/ExplodableBarrel.tscn" id="17_tp5xc"]
 
 [sub_resource type="Resource" id="Resource_m211k"]

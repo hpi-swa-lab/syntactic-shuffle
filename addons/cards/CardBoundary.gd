@@ -9,6 +9,14 @@ class_name CardBoundary
 func _ready() -> void:
 	add_to_group("card_boundary")
 
+static func get_closest_card(card: Card, slot: Slot):
+	var boundary = get_card_boundary(card)
+	var exclude = card.get_tree().get_nodes_in_group("card_boundary")
+	exclude.erase(boundary)
+	exclude.push_back(card)
+	return G.closest_node(boundary,
+		card, func(n, d): return slot.can_connect_to(n), exclude)
+
 static func get_card_boundary(card: Card):
 	var b = G.closest_parent_that(card, func (n): return n is CardBoundary)
 	if not b:
@@ -18,7 +26,7 @@ static func get_card_boundary(card: Card):
 static func boundary_at_card(card: Card):
 	var pos = card.get_canvas_transform() * card.global_position
 	var fallback = null
-	for boundary in card.get_tree().get_nodes_in_group("card_boundary"):
+	for boundary in card.get_tree().get_nodes_in_group("card_boundary").filter(func (c): return c.is_visible_in_tree()):
 		if boundary.get_shape_owners().is_empty():
 			assert(fallback == null, "cannot have multiple fallback card boundaries")
 			fallback = boundary
@@ -32,7 +40,7 @@ static func boundary_at_card(card: Card):
 
 static func card_moved(card: Card):
 	var boundary = boundary_at_card(card)
-	if not G.has_parent(card, boundary):
+	if get_card_boundary(card) != boundary:
 		card.reparent(boundary)
 		card.global_position = boundary.get_global_mouse_position()
 		card.disable = boundary.disable_on_enter

@@ -13,4 +13,4 @@ class_name CardProxy
 			add_to_group(group)
 
 func _ready() -> void:
-	texture = preload("res://resources/effects/shieldSciFi.png")
+	texture = preload("res://addons/cards/icons/brain.png")

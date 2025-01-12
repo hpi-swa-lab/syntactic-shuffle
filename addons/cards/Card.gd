@@ -47,9 +47,10 @@ func get_output_slot() -> OutputSlot:
 var visual: CardVisual
 var dragging:
 	set(v):
+		var was_dragging = dragging != null
 		if v == dragging: return
 		dragging = v
-		if not dragging:
+		if was_dragging and not dragging:
 			CardBoundary.get_card_boundary(self).card_dropped(self)
 		connection_draw_node.queue_redraw()
 	get:
@@ -136,14 +137,14 @@ func _forward_canvas_gui_input(event: InputEvent, undo_redo):
 
 func _process(delta: float) -> void:
 	if not show_cards(): return
-	if dragging: CardBoundary.card_moved(self)
+	if dragging and not Engine.is_editor_hint(): CardBoundary.card_moved(self)
 	
 	if disable: return
 	
 	if dragging:
 		for slot in slots:
 			slot.check_disconnect(self, self)
-			var c = G.closest_node(self, func(n, d): return slot.can_connect_to(n))
+			var c = CardBoundary.get_closest_card(self, slot)
 			if c:
 				var dist = c.global_position.distance_to(global_position)
 				if dist > MAX_CONNECTION_DISTANCE and c is Card:
