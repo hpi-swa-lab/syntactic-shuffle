@@ -30,7 +30,7 @@ script = ExtResource("12_urp6f")
 connected_input_node_path = NodePath("../MoveCard")
 num_args = 1
 
-[node name="Player" type="CharacterBody2D" groups=["cards", "health", "player"]]
+[node name="Player" type="CharacterBody2D" groups=["cards", "hackable", "health", "player"]]
 script = ExtResource("1_i3pqv")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
@@ -46,11 +46,6 @@ rotation = 1.5708
 owner_group = "player"
 
 [node name="brain" parent="." instance=ExtResource("4_hqtel")]
-
-[node name="CardBoundary" parent="brain" index="0"]
-disable_on_enter = null
-layout_cards_in_row = null
-horizontal_spacing = null
 
 [node name="CardProxy" type="Sprite2D" parent="brain/CardBoundary" index="1" node_paths=PackedStringArray("proxy_target")]
 position = Vector2(1450, 468)

@@ -47,9 +47,10 @@ func get_output_slot() -> OutputSlot:
 var visual: CardVisual
 var dragging:
 	set(v):
+		var was_dragging = dragging != null
 		if v == dragging: return
 		dragging = v
-		if not dragging:
+		if was_dragging and not dragging:
 			CardBoundary.get_card_boundary(self).card_dropped(self)
 		connection_draw_node.queue_redraw()
 	get:
@@ -136,7 +137,7 @@ func _forward_canvas_gui_input(event: InputEvent, undo_redo):
 
 func _process(delta: float) -> void:
 	if not show_cards(): return
-	if dragging: CardBoundary.card_moved(self)
+	if dragging and not Engine.is_editor_hint(): CardBoundary.card_moved(self)
 	
 	if disable: return
 	
