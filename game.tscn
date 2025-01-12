@@ -227,12 +227,6 @@ script = ExtResource("18_qhcbd")
 slots = Array[ExtResource("12_7sc4i")]([SubResource("Resource_qhcbd"), SubResource("Resource_dhpj7")])
 metadata/_custom_type_script = ExtResource("18_qhcbd")
 
-[node name="characters#Enemy" parent="." instance=ExtResource("8_iotsf")]
-position = Vector2(-617.454, 543.577)
-
-[node name="characters#ExplodableBarrel" parent="." instance=ExtResource("11_e8heu")]
-position = Vector2(-539, 524)
-
 [node name="hand" type="CanvasLayer" parent="."]
 
 [node name="CardBoundary" type="Area2D" parent="hand"]
