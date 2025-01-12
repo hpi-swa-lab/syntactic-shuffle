@@ -19,6 +19,7 @@ config/icon="res://icon.svg"
 
 G="*res://addons/cards/G.gd"
 Spawn="*res://spawn.gd"
+Globals="*res://Globals.gd"
 
 [editor_plugins]
 
