@@ -19,20 +19,22 @@ num_args = 0
 
 [sub_resource type="Resource" id="Resource_rox7l"]
 script = ExtResource("4_bf2hh")
+connected_output_node_path = NodePath("")
 num_args = 1
 
 [sub_resource type="Resource" id="Resource_xjrp1"]
 script = ExtResource("6_bf2hh")
-connected_input_node_path = NodePath("../DelayCard")
+connected_input_node_path = NodePath("")
 num_args = 1
 
 [sub_resource type="Resource" id="Resource_2ge25"]
 script = ExtResource("6_bf2hh")
-connected_input_node_path = NodePath("../MoveCard")
+connected_input_node_path = NodePath("")
 num_args = 1
 
 [sub_resource type="Resource" id="Resource_kd8es"]
 script = ExtResource("4_bf2hh")
+connected_output_node_path = NodePath("")
 num_args = 1
 
 [sub_resource type="Resource" id="Resource_xwava"]
@@ -43,20 +45,21 @@ num_args = 0
 
 [sub_resource type="Resource" id="Resource_3i0sp"]
 script = ExtResource("4_bf2hh")
+connected_output_node_path = NodePath("")
 num_args = 1
 
-[sub_resource type="Resource" id="Resource_djtxf"]
+[sub_resource type="Resource" id="Resource_v6g0a"]
 script = ExtResource("3_78uh7")
-object_path = NodePath("../hand")
+object_path = NodePath("")
 limit_to_group = ""
 num_args = 0
 
-[sub_resource type="Resource" id="Resource_0ou47"]
+[sub_resource type="Resource" id="Resource_rrteg"]
 script = ExtResource("10_2ge25")
-connected_input_node_path = NodePath("../MoveCard2")
+connected_input_node_path = NodePath("")
 num_args = 1
 
-[node name="main" type="Node2D"]
+[node name="main2" type="Node2D"]
 
 [node name="MoveCard" type="Node2D" parent="."]
 position = Vector2(390, 281)
@@ -73,12 +76,16 @@ offset_bottom = 431.0
 [node name="AxisControlsCard" type="Node2D" parent="."]
 position = Vector2(287, 205)
 script = ExtResource("5_78uh7")
+locked = null
+disable = Array[ExtResource("2_p1jwn")]([SubResource("Resource_xjrp1")])
 slots = Array[ExtResource("2_p1jwn")]([SubResource("Resource_xjrp1")])
 metadata/_custom_type_script = ExtResource("5_78uh7")
 
 [node name="DelayCard" type="Node2D" parent="."]
 position = Vector2(389, 204)
 script = ExtResource("7_bf2hh")
+locked = null
+disable = Array[ExtResource("2_p1jwn")]([SubResource("Resource_2ge25"), SubResource("Resource_kd8es")])
 slots = Array[ExtResource("2_p1jwn")]([SubResource("Resource_2ge25"), SubResource("Resource_kd8es")])
 metadata/_custom_type_script = ExtResource("7_bf2hh")
 
@@ -91,7 +98,9 @@ metadata/_custom_type_script = ExtResource("1_u78jb")
 [node name="CollisionCard" type="Node2D" parent="."]
 position = Vector2(360, 519)
 script = ExtResource("9_xjrp1")
-slots = Array[ExtResource("2_p1jwn")]([SubResource("Resource_djtxf"), SubResource("Resource_0ou47")])
+locked = null
+disable = Array[ExtResource("2_p1jwn")]([SubResource("Resource_v6g0a"), SubResource("Resource_rrteg")])
+slots = Array[ExtResource("2_p1jwn")]([SubResource("Resource_v6g0a"), SubResource("Resource_rrteg")])
 metadata/_custom_type_script = ExtResource("9_xjrp1")
 
 [node name="hand" parent="." instance=ExtResource("8_ojfrw")]

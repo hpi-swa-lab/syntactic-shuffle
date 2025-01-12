@@ -11,6 +11,8 @@ func connect_to(from: Node, object: Node):
 	pass
 func check_disconnect(me: Card, card: Card):
 	pass
+func disconnect_all(card: Card):
+	pass
 func draw(node, draw_node):
 	pass
 func get_draw_dependencies(card: Card, array: Array):

@@ -4,7 +4,7 @@ class_name Card
 
 const SHOW_IN_GAME = true
 const DEFAULT_SCALE = Vector2(0.15, 0.15)
-const MAX_CONNECTION_DISTANCE = 150
+const MAX_CONNECTION_DISTANCE = 100
 
 @export var locked = false:
 	get: return locked
@@ -16,6 +16,8 @@ const MAX_CONNECTION_DISTANCE = 150
 	set(v):
 		disable = v
 		if connection_draw_node: connection_draw_node.queue_redraw()
+		if disable:
+			for s in slots: s.disconnect_all(self)
 	get:
 		return disable
 
