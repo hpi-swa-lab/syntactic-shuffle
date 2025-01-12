@@ -1,4 +1,4 @@
-[gd_scene load_steps=41 format=3 uid="uid://oar1f8wbrv40"]
+[gd_scene load_steps=42 format=3 uid="uid://oar1f8wbrv40"]
 
 [ext_resource type="Script" uid="uid://c4kqmfv54176" path="res://enemy.gd" id="1_iifgy"]
 [ext_resource type="PackedScene" uid="uid://dtpl6e6yyux1m" path="res://fov.tscn" id="2_4gyqm"]
@@ -20,9 +20,10 @@
 [ext_resource type="Script" uid="uid://bsbt40cnohegj" path="res://addons/cards/cards/ObjectSensorCard.gd" id="18_epc7x"]
 [ext_resource type="Script" uid="uid://c1po5i7arfj1r" path="res://addons/cards/cards/ShootCard.gd" id="19_o7rgc"]
 [ext_resource type="Script" uid="uid://b3nxhs2cf52ki" path="res://addons/cards/cards/DelayCard.gd" id="20_kdav3"]
-[ext_resource type="Script" uid="uid://db6goifw6kxxy" path="res://addons/cards/cards/DropArguments.gd" id="21_epc7x"]
+[ext_resource type="Script" path="res://addons/cards/cards/DropArguments.gd" id="21_epc7x"]
 [ext_resource type="Script" uid="uid://ciwr6t8y6q0qb" path="res://addons/cards/cards/TurnByCard.gd" id="22_kdav3"]
 [ext_resource type="Script" uid="uid://7pr4nfslttos" path="res://addons/cards/cards/NoiseCard.gd" id="23_jpbtr"]
+[ext_resource type="Script" path="res://addons/cards/cards/PressF.gd" id="24_jpbtr"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_qi2p4"]
 size = Vector2(19, 14)
@@ -231,5 +232,10 @@ position = Vector2(1525, 383)
 script = ExtResource("23_jpbtr")
 slots = Array[ExtResource("7_n0g06")]([SubResource("Resource_qskgw")])
 metadata/_custom_type_script = ExtResource("23_jpbtr")
+
+[node name="PressF" type="Node2D" parent="brain/CardBoundary" index="14"]
+position = Vector2(1182, 337)
+script = ExtResource("24_jpbtr")
+metadata/_custom_type_script = ExtResource("24_jpbtr")
 
 [editable path="brain"]
