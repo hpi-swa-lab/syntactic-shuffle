@@ -31,6 +31,7 @@ health="has take_damage method"
 player="won't be shot by players"
 enemy="won't be shot by enemies"
 cards="can be connected to cards"
+slide="can slide (AnimatableBody2D)"
 
 [gui]
 

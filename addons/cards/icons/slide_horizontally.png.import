@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b3hdsknkwxpb7"
-path="res://.godot/imported/rooftilesUp.png-8b3b65b311cd5d0d233c585158b7f19c.ctex"
+uid="uid://dlqqat1kk7qes"
+path="res://.godot/imported/slide_horizontally.png-cc37e839ac3e16169b1f9425ee011cd7.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://resources/tiles/rooftilesUp.png"
-dest_files=["res://.godot/imported/rooftilesUp.png-8b3b65b311cd5d0d233c585158b7f19c.ctex"]
+source_file="res://addons/cards/icons/slide_horizontally.png"
+dest_files=["res://.godot/imported/slide_horizontally.png-cc37e839ac3e16169b1f9425ee011cd7.ctex"]
 
 [params]
 
