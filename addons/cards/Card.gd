@@ -6,6 +6,12 @@ const SHOW_IN_GAME = true
 const DEFAULT_SCALE = Vector2(0.15, 0.15)
 const MAX_CONNECTION_DISTANCE = 150
 
+@export var locked = false:
+	get: return locked
+	set(v):
+		locked = v
+		if visual: visual.locked = v
+
 @export var disable = false:
 	set(v):
 		disable = v
@@ -47,29 +53,18 @@ func get_output_slot() -> OutputSlot:
 var visual: CardVisual
 var dragging:
 	set(v):
+		if locked: v = false
+		
 		var was_dragging = dragging != null
 		if v == dragging: return
 		dragging = v
 		if was_dragging and not dragging:
 			CardBoundary.get_card_boundary(self).card_dropped(self)
+		if dragging:
+			CardBoundary.get_card_boundary(self).card_picked_up(self)
 		connection_draw_node.queue_redraw()
 	get:
 		return dragging
-
-func maybe_add_to_hand():
-	var pos = PhysicsPointQueryParameters2D.new()
-	pos.position = global_position
-	pos.collide_with_areas = true
-	pos.collide_with_bodies = true
-	for h in get_tree().get_nodes_in_group("hand"):
-		if h.includes_screen_point(get_viewport().canvas_transform * global_position):
-			h.add_card(self)
-
-func current_hand():
-	return G.closest_parent_that(self, func(node): return node.is_in_group(&"hand"))
-
-func is_in_hand():
-	return current_hand() != null
 
 enum Type {
 	Trigger,
@@ -99,6 +94,7 @@ func _ready() -> void:
 	visual = preload("res://addons/cards/CardVisual.tscn").instantiate()
 	visual.scale = DEFAULT_SCALE
 	visual.dragging.connect(func (d): set_selected(d))
+	visual.locked = locked
 	add_child(visual)
 
 func setup(name: String, description: String, type: Type, slots: Array[Slot], extra_ui: Control = null):
@@ -137,10 +133,10 @@ func _forward_canvas_gui_input(event: InputEvent, undo_redo):
 
 func _process(delta: float) -> void:
 	if not show_cards(): return
+	
 	if dragging and not Engine.is_editor_hint(): CardBoundary.card_moved(self)
 	
 	if disable: return
-	
 	if dragging:
 		for slot in slots:
 			slot.check_disconnect(self, self)

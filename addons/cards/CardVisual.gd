@@ -4,6 +4,13 @@ class_name CardVisual
 
 signal dragging(d: bool)
 
+@export var locked = false:
+	get: return locked
+	set(v):
+		if typeof(v) != TYPE_BOOL: v = false
+		locked = v
+		%locked.visible = v
+
 func setup(name: String, description: String, icon: String, type_icon: String, extra_ui: Control):
 	%Name.text = name
 	%Description.text = description
@@ -21,9 +28,11 @@ func icon_from_theme(name: StringName):
 
 func _ready() -> void:
 	$CardControl.gui_input.connect(input_event)
+	locked = locked
 
 var held = false
 func input_event(e: InputEvent):
+	if locked: return
 	if e is InputEventMouseButton and e.button_index == MOUSE_BUTTON_LEFT:
 		held = e.is_pressed()
 		dragging.emit(held)
