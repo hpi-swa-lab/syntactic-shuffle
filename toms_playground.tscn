@@ -124,8 +124,4 @@ metadata/_custom_type_script = ExtResource("10_fganm")
 [node name="Camera2D" type="Camera2D" parent="."]
 script = ExtResource("12_vb6k7")
 
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
-layer = -1
-
-[node name="hand" parent="CanvasLayer" instance=ExtResource("11_slbh4")]
-position = Vector2(318, 579)
+[node name="hand" parent="." instance=ExtResource("11_slbh4")]

@@ -74,8 +74,6 @@ func current_hand():
 func is_in_hand():
 	return current_hand() != null
 
-@export var connected_node: NodePath = NodePath()
-
 enum Type {
 	Trigger,
 	Effect,
