@@ -1,7 +1,7 @@
 [gd_scene load_steps=30 format=3 uid="uid://dsvutxw0ipnb0"]
 
 [ext_resource type="PackedScene" uid="uid://xhkg2haui8ak" path="res://tile_map.tscn" id="1_7csfu"]
-[ext_resource type="PackedScene" path="res://player.tscn" id="1_m7b8h"]
+[ext_resource type="PackedScene" uid="uid://oongh3pntcs7" path="res://player.tscn" id="1_m7b8h"]
 [ext_resource type="PackedScene" uid="uid://oar1f8wbrv40" path="res://enemy.tscn" id="2_i8gei"]
 [ext_resource type="Script" uid="uid://dkyx51jnk8cvd" path="res://addons/cards/cards/AxisControlsCard.gd" id="3_x5rfb"]
 [ext_resource type="Script" uid="uid://dsn8t1oa5bses" path="res://addons/cards/slots/slot.gd" id="4_5jd2a"]

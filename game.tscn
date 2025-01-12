@@ -1,15 +1,16 @@
-[gd_scene load_steps=24 format=4 uid="uid://0lfrvsq2dq2q"]
+[gd_scene load_steps=25 format=4 uid="uid://cvjg22am007hc"]
 
+[ext_resource type="PackedScene" uid="uid://bei1c37kub65d" path="res://spawn_marker.tscn" id="1_215e1"]
 [ext_resource type="Texture2D" uid="uid://bywsq5hdhm8y2" path="res://resources/tiles/floor_tile.png" id="1_eow3j"]
 [ext_resource type="Texture2D" uid="uid://bmoymxtmm580w" path="res://resources/tiles/Road.png" id="2_j5wjh"]
-[ext_resource type="Script" uid="uid://dx2dxcp6kfrdg" path="res://addons/cards/cards/HackCard.gd" id="2_lc2xo"]
+[ext_resource type="Script" path="res://addons/cards/cards/HackCard.gd" id="2_lc2xo"]
 [ext_resource type="Texture2D" uid="uid://dbcr8ohxljwex" path="res://resources/tiles/terrace.png" id="3_vef74"]
 [ext_resource type="Texture2D" uid="uid://3cathg1jjdtk" path="res://resources/tiles/wall.png" id="4_hve3p"]
 [ext_resource type="PackedScene" uid="uid://oar1f8wbrv40" path="res://enemy.tscn" id="8_iotsf"]
 [ext_resource type="PackedScene" uid="uid://oongh3pntcs7" path="res://player.tscn" id="8_vef74"]
 [ext_resource type="Script" uid="uid://cxldeg24krchn" path="res://camera_2d.gd" id="9_hve3p"]
 [ext_resource type="Script" uid="uid://d23cwws3aqxp1" path="res://addons/cards/cards/MoveCard.gd" id="11_215e1"]
-[ext_resource type="Script" uid="uid://cja8ehiirmcyt" path="res://addons/cards/CardBoundary.gd" id="11_mfdv2"]
+[ext_resource type="Script" path="res://addons/cards/CardBoundary.gd" id="11_mfdv2"]
 [ext_resource type="Script" uid="uid://dsn8t1oa5bses" path="res://addons/cards/slots/slot.gd" id="12_7sc4i"]
 [ext_resource type="Script" uid="uid://bu1higbimotmh" path="res://addons/cards/slots/object_input_slot.gd" id="13_80cx4"]
 [ext_resource type="Script" uid="uid://cvwcl5iet0pyp" path="res://addons/cards/slots/input_slot.gd" id="14_e8heu"]
@@ -68,6 +69,8 @@ limit_to_group = "hackable"
 num_args = 0
 
 [node name="game" type="Node2D"]
+
+[node name="SpawnMarker" parent="." instance=ExtResource("1_215e1")]
 
 [node name="CardBoundary" type="Area2D" parent="."]
 z_index = 2
