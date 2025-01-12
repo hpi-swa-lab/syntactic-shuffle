@@ -3,7 +3,7 @@
 extends Card
 
 @export var default_speed: float = 1
-@export var default_factor: float = 0.1
+@export var default_factor: float = 0.03
 
 var elapsed_time = 0.0
 var noise = FastNoiseLite.new()
@@ -16,6 +16,8 @@ func _ready() -> void:
 	speed.value = 1
 	elapsed_time = randf() * 100
 	
+	speed.step = 0.1
+	factor.step = 0.01
 	speed.value = default_speed
 	factor.value = default_factor
 	vbox.add_child(speed)
