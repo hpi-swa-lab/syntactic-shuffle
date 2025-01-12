@@ -19,6 +19,7 @@ func _ready() -> void:
 		delay_seconds)
 
 func _process(delta: float) -> void:
+	super._process(delta)
 	if Engine.is_editor_hint():
 		return
 	

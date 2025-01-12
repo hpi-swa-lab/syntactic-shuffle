@@ -18,6 +18,7 @@
 [ext_resource type="PackedScene" uid="uid://dsbyqp8jcc106" path="res://items/LockableDoor.tscn" id="16_imadt"]
 [ext_resource type="Script" path="res://addons/cards/cards/UnlockDoorCard.gd" id="17_frxwl"]
 
+
 [sub_resource type="Resource" id="Resource_2tjsu"]
 script = ExtResource("3_xmy4m")
 connected_input_node_path = NodePath("../TurnByCard")
