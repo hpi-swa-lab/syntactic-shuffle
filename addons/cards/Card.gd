@@ -114,7 +114,9 @@ func setup(name: String, description: String, type: Type, slots: Array[Slot], ex
 		self.slots = slots
 		assert(slots.filter(func (s): return s is InputSlot).size() <= 1)
 		assert(slots.filter(func (s): return s is OutputSlot).size() <= 1)
-	for s in self.slots: s.ready(self)
+	for s in self.slots:
+		s.ready(self)
+		s.resource_local_to_scene = true
 
 func set_selected(selected: bool):
 	create_tween().tween_property(visual, "scale",

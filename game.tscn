@@ -59,23 +59,27 @@ sources/2 = SubResource("TileSetAtlasSource_s20o0")
 sources/3 = SubResource("TileSetAtlasSource_47trr")
 
 [sub_resource type="Resource" id="Resource_vaj68"]
+resource_local_to_scene = true
 script = ExtResource("16_x5p1p")
 object_path = NodePath("")
 limit_to_group = "door"
 num_args = 0
 
 [sub_resource type="Resource" id="Resource_i2p71"]
+resource_local_to_scene = true
 script = ExtResource("17_qhcbd")
 connected_output_node_path = NodePath("")
 num_args = 0
 
 [sub_resource type="Resource" id="Resource_qhcbd"]
+resource_local_to_scene = true
 script = ExtResource("16_x5p1p")
 object_path = NodePath("")
 limit_to_group = "slide"
 num_args = 0
 
 [sub_resource type="Resource" id="Resource_dhpj7"]
+resource_local_to_scene = true
 script = ExtResource("17_qhcbd")
 connected_output_node_path = NodePath("")
 num_args = 1
@@ -84,34 +88,40 @@ num_args = 1
 size = Vector2(537, 59)
 
 [sub_resource type="Resource" id="Resource_xa8c5"]
+resource_local_to_scene = true
 script = ExtResource("16_x5p1p")
 object_path = NodePath("")
 limit_to_group = "cards"
 num_args = 0
 
 [sub_resource type="Resource" id="Resource_5b14r"]
+resource_local_to_scene = true
 script = ExtResource("17_qhcbd")
 connected_output_node_path = NodePath("")
 num_args = 1
 
 [sub_resource type="Resource" id="Resource_bnpwn"]
+resource_local_to_scene = true
 script = ExtResource("16_x5p1p")
 object_path = NodePath("")
 limit_to_group = "hackable"
 num_args = 0
 
 [sub_resource type="Resource" id="Resource_f1jbl"]
+resource_local_to_scene = true
 script = ExtResource("19_hb5m1")
 connected_input_node_path = NodePath("../../../CardBoundary/objects/Room2/UnlockDoorCard")
 num_args = 0
 
 [sub_resource type="Resource" id="Resource_36jdj"]
+resource_local_to_scene = true
 script = ExtResource("16_x5p1p")
 object_path = NodePath("")
 limit_to_group = "useable_item"
 num_args = 0
 
 [sub_resource type="Resource" id="Resource_xfvwf"]
+resource_local_to_scene = true
 script = ExtResource("17_qhcbd")
 connected_output_node_path = NodePath("")
 num_args = 0
