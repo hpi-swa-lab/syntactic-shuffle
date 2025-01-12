@@ -95,5 +95,3 @@ slots = Array[ExtResource("2_p1jwn")]([SubResource("Resource_djtxf"), SubResourc
 metadata/_custom_type_script = ExtResource("9_xjrp1")
 
 [node name="hand" parent="." instance=ExtResource("8_ojfrw")]
-z_index = -1
-position = Vector2(251, 585)

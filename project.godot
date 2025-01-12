@@ -19,6 +19,7 @@ config/icon="res://icon.svg"
 
 G="*res://addons/cards/G.gd"
 Spawn="*res://spawn.gd"
+Globals="*res://Globals.gd"
 
 [display]
 
@@ -37,6 +38,8 @@ health="has take_damage method"
 player="won't be shot by players"
 enemy="won't be shot by enemies"
 cards="can be connected to cards"
+slide="can slide (AnimatableBody2D)"
+door="Used for opening and closing doors"
 
 [gui]
 

@@ -10,7 +10,7 @@ func setup(name: String, description: String, icon: String, type_icon: String, e
 	%Icon.path = "res://addons/cards/icons/" + icon
 	%TypeIcon.path = "res://addons/cards/icons/" + type_icon
 	if extra_ui:
-		%MainColumn.add_child(extra_ui)
+		%InfoColumn.add_child(extra_ui)
 
 func icon_from_theme(name: StringName):
 	if Engine.is_editor_hint():
