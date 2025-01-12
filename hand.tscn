@@ -22,7 +22,7 @@ size = Vector2(537, 59)
 [node name="CanvasLayer" type="CanvasLayer"]
 
 [node name="hand" type="Node2D" parent="." groups=["hand"]]
-position = Vector2(340, 566)
+position = Vector2(694, 979)
 script = ExtResource("1_u4p2i")
 
 [node name="Background" type="ColorRect" parent="hand"]

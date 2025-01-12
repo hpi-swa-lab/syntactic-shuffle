@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=4 uid="uid://0lfrvsq2dq2q"]
+[gd_scene load_steps=24 format=4 uid="uid://0lfrvsq2dq2q"]
 
 [ext_resource type="Texture2D" uid="uid://bywsq5hdhm8y2" path="res://resources/tiles/floor_tile.png" id="1_eow3j"]
 [ext_resource type="Texture2D" uid="uid://bmoymxtmm580w" path="res://resources/tiles/Road.png" id="2_j5wjh"]
@@ -9,6 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://bu1naeu0q866x" path="res://resources/tiles/rooftilesTop.png" id="7_lc2xo"]
 [ext_resource type="PackedScene" uid="uid://oongh3pntcs7" path="res://player.tscn" id="8_vef74"]
 [ext_resource type="Script" uid="uid://cxldeg24krchn" path="res://camera_2d.gd" id="9_hve3p"]
+[ext_resource type="PackedScene" uid="uid://clx5pustrmpx5" path="res://hand.tscn" id="10_hve3p"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_c81vo"]
 texture = ExtResource("1_eow3j")
@@ -103,3 +104,5 @@ zoom = Vector2(1.5, 1.5)
 position_smoothing_enabled = true
 script = ExtResource("9_hve3p")
 pan = false
+
+[node name="hand" parent="." instance=ExtResource("10_hve3p")]

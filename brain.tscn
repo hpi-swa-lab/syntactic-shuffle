@@ -1,0 +1,16 @@
+[gd_scene load_steps=2 format=3 uid="uid://dycnp1nhlvrnu"]
+
+[ext_resource type="Script" uid="uid://cja8ehiirmcyt" path="res://addons/cards/CardBoundary.gd" id="1_42xjx"]
+
+[node name="brain" type="CanvasLayer"]
+
+[node name="CardBoundary" type="Node" parent="."]
+script = ExtResource("1_42xjx")
+metadata/_custom_type_script = ExtResource("1_42xjx")
+
+[node name="ColorRect" type="ColorRect" parent="CardBoundary"]
+offset_left = 1023.0
+offset_top = 54.0
+offset_right = 1841.0
+offset_bottom = 950.0
+color = Color(0.133196, 0.133196, 0.133196, 1)
