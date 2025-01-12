@@ -133,6 +133,7 @@ shape = SubResource("RectangleShape2D_qi2p4")
 position = Vector2(14, 6)
 rotation = 1.5708
 owner_group = "enemy"
+cooldown_msec = 100
 
 [node name="brain" parent="." instance=ExtResource("5_3yqyl")]
 

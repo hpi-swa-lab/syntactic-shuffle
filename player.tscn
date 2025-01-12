@@ -83,6 +83,7 @@ texture = ExtResource("1_4flbx")
 position = Vector2(13, 5)
 rotation = 1.5708
 owner_group = "player"
+cooldown_msec = 300
 
 [node name="brain" parent="." instance=ExtResource("4_hqtel")]
 
