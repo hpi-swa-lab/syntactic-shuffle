@@ -14,7 +14,10 @@ gun = NodePath("Pistol")
 
 [node name="FoV" parent="." instance=ExtResource("2_4gyqm")]
 rotation = 1.5708
+included_groups = Array[String](["health"])
+excluded_groups = Array[String](["enemy"])
 degrees = 80
+distance = 512
 
 [node name="Robot" type="Sprite2D" parent="."]
 rotation = 1.5708
@@ -28,5 +31,3 @@ shape = SubResource("RectangleShape2D_qi2p4")
 position = Vector2(14, 6)
 rotation = 1.5708
 owner_group = "enemy"
-
-[connection signal="spots" from="FoV" to="." method="_on_fov_spots"]

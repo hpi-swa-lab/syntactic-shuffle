@@ -1,7 +1,9 @@
 extends Node2D
 
-signal spots(object: Object)
+signal detected(object: Node2D)
 
+@export var included_groups: Array[String] = []
+@export var excluded_groups: Array[String] = []
 @export var degrees = 30
 @export var distance = 256:
 	set(v):
@@ -50,4 +52,7 @@ func _physics_process(_delta: float) -> void:
 			var collider = $RayCast2D.get_collider()
 			if not hit.get(collider):
 				hit[collider] = true
-				spots.emit(collider)
+				if collider is Node2D \
+						and included_groups.any(func(group): collider.is_in_group(group)) \
+						and excluded_groups.all(func(group): not collider.is_in_group(group)):
+					detected.emit(collider)
