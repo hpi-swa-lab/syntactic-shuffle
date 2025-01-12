@@ -142,15 +142,15 @@ func _process(delta: float) -> void:
 	if not show_cards() or disable: return
 	if dragging:
 		for slot in slots:
-			slot.check_disconnect(self)
+			slot.check_disconnect(self, self)
 			var c = G.closest_node(self, func(n, d): return slot.can_connect_to(n))
 			if c:
 				var dist = c.global_position.distance_to(global_position)
 				if dist > MAX_CONNECTION_DISTANCE and c is Card:
 					var o = c.get_output_slot()
-					if o: o.check_disconnect(c)
+					if o: o.check_disconnect(self, c)
 					var i = c.get_input_slot()
-					if i: i.check_disconnect(c)
+					if i: i.check_disconnect(self, c)
 				elif dist < MAX_CONNECTION_DISTANCE:
 					slot.connect_to(self, c)
 			slot.arrows_offset += delta

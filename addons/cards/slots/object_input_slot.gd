@@ -23,11 +23,19 @@ func get_object(card: Card):
 	return card.get_node_or_null(object_path)
 func can_connect_to(object: Node):
 	return object.is_in_group(limit_to_group)
+func _disconnect(me: Card):
+	var object = get_object(me)
+	if object and on_disconnect:
+		on_disconnect.call(object)
 func connect_to(from: Node, object: Node):
+	_disconnect(from)
 	object_path = from.get_path_to(object)
-func check_disconnect(card: Card):
-	var o = get_object(card)
+	if on_connect:
+		on_connect.call(object)
+func check_disconnect(me: Card, card: Card):
+	var o = get_object(me)
 	if o and o.global_position.distance_to(card.global_position) > Card.MAX_CONNECTION_DISTANCE:
+		_disconnect(me)
 		object_path = NodePath()
 func draw(node, draw_node):
 	var object = node.get_node_or_null(object_path)
