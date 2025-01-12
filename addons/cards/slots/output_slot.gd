@@ -32,3 +32,8 @@ func can_connect_to(object):
 func connect_to(from: Node, object: Node):
 	var input = object.get_input_slot()
 	input.connect_to(object, from)
+
+func disconnect_all(card: Card):
+	for i in connected_inputs:
+		if is_instance_valid(i[0]):
+			i[1].disconnect_all(i[0])

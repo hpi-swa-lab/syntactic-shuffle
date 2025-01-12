@@ -40,10 +40,14 @@ static func boundary_at_card(card: Card):
 
 static func card_moved(card: Card):
 	var boundary = boundary_at_card(card)
-	if get_card_boundary(card) != boundary:
+	var old_boundary = get_card_boundary(card)
+	if old_boundary != boundary:
 		card.reparent(boundary)
 		card.global_position = boundary.get_global_mouse_position()
 		card.disable = boundary.disable_on_enter
+		
+		if old_boundary.layout_cards_in_row:
+			old_boundary._relayout()
 
 func card_picked_up(card: Card):
 	Globals.play_sound(preload("res://resources/sounds/pick up.wav"))
