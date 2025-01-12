@@ -21,3 +21,4 @@ func die():
 			Spawn.spawn(child)
 			child.global_position = global_position + Vector2(randf() - 0.5, randf() - 0.5) * 200
 			child.locked = false
+			child.disconnect_all()

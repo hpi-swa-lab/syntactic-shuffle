@@ -17,7 +17,7 @@ const MAX_CONNECTION_DISTANCE = 100
 		disable = v
 		if connection_draw_node: connection_draw_node.queue_redraw()
 		if disable:
-			for s in slots: s.disconnect_all(self)
+			disconnect_all()
 	get:
 		return disable
 
@@ -163,6 +163,10 @@ func draw_connections() -> void:
 	if not show_cards() or disable: return
 	for slot in slots:
 		slot.draw(self, connection_draw_node)
+
+func disconnect_all():
+	for s in slots:
+		s.disconnect_all(self)
 
 var last_deps = null
 func should_redraw():
