@@ -16,8 +16,7 @@
 [ext_resource type="Script" uid="uid://cgxwcavtwifex" path="res://addons/cards/cards/TurnByCard.gd" id="14_qrkr3"]
 [ext_resource type="Script" uid="uid://bvparh51ojgmt" path="res://addons/cards/cards/StaticNumberCard.gd" id="15_7fxt6"]
 [ext_resource type="PackedScene" uid="uid://dsbyqp8jcc106" path="res://items/LockableDoor.tscn" id="16_imadt"]
-[ext_resource type="Script" path="res://addons/cards/cards/UnlockDoorCard.gd" id="17_frxwl"]
-
+[ext_resource type="Script" uid="uid://bff8ils3b0x3x" path="res://addons/cards/cards/UnlockDoorCard.gd" id="17_frxwl"]
 
 [sub_resource type="Resource" id="Resource_2tjsu"]
 script = ExtResource("3_xmy4m")
