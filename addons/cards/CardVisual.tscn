@@ -1,12 +1,14 @@
-[gd_scene load_steps=5 format=3 uid="uid://deh4uywqorec7"]
+[gd_scene load_steps=6 format=3 uid="uid://deh4uywqorec7"]
 
 [ext_resource type="Script" uid="uid://td86i40sy764" path="res://addons/cards/CardVisual.gd" id="1_7r0de"]
 [ext_resource type="Texture2D" uid="uid://c52trtl0cac7l" path="res://icon.svg" id="1_x38hd"]
 [ext_resource type="Texture2D" uid="uid://do8vk67up2y8c" path="res://addons/cards/icons/card_template.png" id="2_odv1r"]
 [ext_resource type="Script" uid="uid://cxk63c2k70ijb" path="res://addons/cards/ScalingIcon.gd" id="3_hogqd"]
+[ext_resource type="Texture2D" uid="uid://cun1w3bnt4h5e" path="res://addons/cards/icons/padlock.png" id="5_xtshy"]
 
 [node name="Card" type="Node2D"]
 light_mask = 2
+z_index = 2
 script = ExtResource("1_7r0de")
 
 [node name="CardTemplate" type="Sprite2D" parent="."]
@@ -107,3 +109,10 @@ theme_override_constants/line_spacing = 0
 theme_override_font_sizes/font_size = 9
 text = "Card Details come here, in all their detailed detail."
 autowrap_mode = 3
+
+[node name="locked" type="Sprite2D" parent="."]
+unique_name_in_owner = true
+visible = false
+rotation = 0.365738
+scale = Vector2(9.07829, 9.07829)
+texture = ExtResource("5_xtshy")

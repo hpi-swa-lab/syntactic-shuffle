@@ -45,6 +45,9 @@ static func card_moved(card: Card):
 		card.global_position = boundary.get_global_mouse_position()
 		card.disable = boundary.disable_on_enter
 
+func card_picked_up(card: Card):
+	pass
+
 func card_dropped(card: Card):
 	if layout_cards_in_row:
 		_relayout()
