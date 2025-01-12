@@ -25,7 +25,7 @@ func _process(_dt):
 	zoom *= get_screen_transform().get_scale().x
 	# FIXME hard-coded SVG viewport width
 	zoom *= get_rect().size.x / 16
-	zoom = min(zoom, 10)
+	zoom = clamp(zoom, 0.1, 10)
 	if _current_zoom != zoom:
 		_current_zoom = zoom
 		if is_svg():

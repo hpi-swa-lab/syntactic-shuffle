@@ -30,11 +30,11 @@ func draw_connection(from, to, inverted, draw_node):
 	offset = offset - int(offset)
 	# TODO inverted
 	for i in range(0, distance / GAP):
-		draw_arrow(draw_node, Vector2(0, (i + offset) * GAP), SIZE)
+		draw_arrow(draw_node, Vector2(0, (i + offset) * GAP), SIZE, inverted)
 
-func draw_arrow(node, pos, size = 10):
+func draw_arrow(node, pos, size = 10, inverted = false):
 	node.draw_polyline(
-		[pos + Vector2(-size, 0), pos + Vector2(0, size), pos + Vector2(size, 0)],
+		[pos + Vector2(-size, 0), pos + Vector2(0, -size if inverted else size), pos + Vector2(size, 0)],
 		Color(Color.WHITE.lerp(Color.RED, flash_value), 1.0 if false else 0.5),
 		size / 2,
 		true)
