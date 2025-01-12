@@ -16,20 +16,22 @@ num_args = 0
 
 [sub_resource type="Resource" id="Resource_rox7l"]
 script = ExtResource("4_3ip18")
+connected_output_node_path = NodePath("")
 num_args = 1
 
-[sub_resource type="Resource" id="Resource_xjrp1"]
+[sub_resource type="Resource" id="Resource_ohlmc"]
 script = ExtResource("6_1yyan")
-connected_input_node_path = NodePath("../DelayCard")
+connected_input_node_path = NodePath("")
 num_args = 1
 
-[sub_resource type="Resource" id="Resource_2ge25"]
+[sub_resource type="Resource" id="Resource_fep88"]
 script = ExtResource("6_1yyan")
-connected_input_node_path = NodePath("../MoveCard")
+connected_input_node_path = NodePath("")
 num_args = 1
 
-[sub_resource type="Resource" id="Resource_kd8es"]
+[sub_resource type="Resource" id="Resource_ghkng"]
 script = ExtResource("4_3ip18")
+connected_output_node_path = NodePath("")
 num_args = 1
 
 [node name="main" type="Node2D"]
@@ -49,11 +51,15 @@ offset_bottom = 431.0
 [node name="AxisControlsCard" type="Node2D" parent="."]
 position = Vector2(287, 205)
 script = ExtResource("5_eg3ir")
-slots = Array[ExtResource("2_fep88")]([SubResource("Resource_xjrp1")])
+locked = null
+disable = Array[ExtResource("2_fep88")]([SubResource("Resource_ohlmc")])
+slots = Array[ExtResource("2_fep88")]([SubResource("Resource_ohlmc")])
 metadata/_custom_type_script = ExtResource("5_eg3ir")
 
 [node name="DelayCard" type="Node2D" parent="."]
 position = Vector2(389, 204)
 script = ExtResource("7_xpk2l")
-slots = Array[ExtResource("2_fep88")]([SubResource("Resource_2ge25"), SubResource("Resource_kd8es")])
+locked = null
+disable = Array[ExtResource("2_fep88")]([SubResource("Resource_fep88"), SubResource("Resource_ghkng")])
+slots = Array[ExtResource("2_fep88")]([SubResource("Resource_fep88"), SubResource("Resource_ghkng")])
 metadata/_custom_type_script = ExtResource("7_xpk2l")

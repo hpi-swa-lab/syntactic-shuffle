@@ -18,24 +18,25 @@
 [ext_resource type="PackedScene" uid="uid://dsbyqp8jcc106" path="res://items/LockableDoor.tscn" id="16_imadt"]
 [ext_resource type="Script" uid="uid://bff8ils3b0x3x" path="res://addons/cards/cards/UnlockDoorCard.gd" id="17_frxwl"]
 
-[sub_resource type="Resource" id="Resource_2tjsu"]
+[sub_resource type="Resource" id="Resource_imadt"]
 script = ExtResource("3_xmy4m")
-connected_input_node_path = NodePath("../TurnByCard")
+connected_input_node_path = NodePath("")
 num_args = 1
 
-[sub_resource type="Resource" id="Resource_15i05"]
+[sub_resource type="Resource" id="Resource_frxwl"]
 script = ExtResource("4_y8syl")
+connected_output_node_path = NodePath("")
 num_args = 1
 
-[sub_resource type="Resource" id="Resource_i5pup"]
+[sub_resource type="Resource" id="Resource_28c3j"]
 script = ExtResource("6_7fxt6")
-object_path = NodePath("../StaticBody2D2")
+object_path = NodePath("")
 limit_to_group = ""
 num_args = 0
 
-[sub_resource type="Resource" id="Resource_spnsi"]
+[sub_resource type="Resource" id="Resource_ejmq8"]
 script = ExtResource("7_lsd6y")
-connected_input_node_path = NodePath("../DelayCard")
+connected_input_node_path = NodePath("")
 num_args = 1
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ua6av"]
@@ -49,75 +50,82 @@ num_args = 0
 
 [sub_resource type="Resource" id="Resource_fganm"]
 script = ExtResource("4_y8syl")
+connected_output_node_path = NodePath("")
 num_args = 1
 
-[sub_resource type="Resource" id="Resource_slbh4"]
+[sub_resource type="Resource" id="Resource_utxj7"]
 script = ExtResource("3_xmy4m")
-connected_input_node_path = NodePath("../TurnByCard")
+connected_input_node_path = NodePath("")
 num_args = 1
 
-[sub_resource type="Resource" id="Resource_y8syl"]
+[sub_resource type="Resource" id="Resource_vhq16"]
 script = ExtResource("3_xmy4m")
-connected_input_node_path = NodePath("../UnlockDoorCard")
+connected_input_node_path = NodePath("")
 num_args = 0
 
-[sub_resource type="Resource" id="Resource_qrkr3"]
+[sub_resource type="Resource" id="Resource_bufb0"]
 script = ExtResource("6_7fxt6")
-object_path = NodePath("../Pistol")
+object_path = NodePath("")
 limit_to_group = "gun"
 num_args = 0
 
-[sub_resource type="Resource" id="Resource_7fxt6"]
+[sub_resource type="Resource" id="Resource_m41pf"]
 script = ExtResource("4_y8syl")
+connected_output_node_path = NodePath("")
 num_args = 0
 
-[sub_resource type="Resource" id="Resource_lsd6y"]
+[sub_resource type="Resource" id="Resource_iejvk"]
 script = ExtResource("6_7fxt6")
-object_path = NodePath("../StaticBody2D2")
+object_path = NodePath("")
 limit_to_group = "cards"
 num_args = 0
 
-[sub_resource type="Resource" id="Resource_imadt"]
+[sub_resource type="Resource" id="Resource_tlmx8"]
 script = ExtResource("4_y8syl")
+connected_output_node_path = NodePath("")
 num_args = 1
 
-[sub_resource type="Resource" id="Resource_frxwl"]
+[sub_resource type="Resource" id="Resource_gc7jb"]
 script = ExtResource("4_y8syl")
+connected_output_node_path = NodePath("")
 num_args = 0
 
-[sub_resource type="Resource" id="Resource_28c3j"]
+[sub_resource type="Resource" id="Resource_fcihv"]
 script = ExtResource("3_xmy4m")
-connected_input_node_path = NodePath("../TurnByCard")
+connected_input_node_path = NodePath("")
 num_args = 1
 
-[sub_resource type="Resource" id="Resource_ejmq8"]
+[sub_resource type="Resource" id="Resource_ujwjy"]
 script = ExtResource("6_7fxt6")
-object_path = NodePath("../LockableDoor")
+object_path = NodePath("")
 limit_to_group = "door"
 num_args = 0
 
-[sub_resource type="Resource" id="Resource_utxj7"]
+[sub_resource type="Resource" id="Resource_86bx4"]
 script = ExtResource("4_y8syl")
+connected_output_node_path = NodePath("")
 num_args = 0
 
-[node name="main" type="Node2D"]
+[node name="main3" type="Node2D"]
 
 [node name="DelayCard" type="Node2D" parent="."]
 position = Vector2(53, -32)
 script = ExtResource("1_sgy2f")
-disable = null
-slots = Array[ExtResource("2_cp4qc")]([SubResource("Resource_2tjsu"), SubResource("Resource_15i05")])
+locked = null
+disable = Array[ExtResource("2_cp4qc")]([SubResource("Resource_imadt"), SubResource("Resource_frxwl")])
+slots = Array[ExtResource("2_cp4qc")]([SubResource("Resource_imadt"), SubResource("Resource_frxwl")])
 metadata/_custom_type_script = ExtResource("1_sgy2f")
 
 [node name="CollisionCard" type="Node2D" parent="."]
 position = Vector2(-5, 77)
 script = ExtResource("5_qrkr3")
-disable = null
-slots = Array[ExtResource("2_cp4qc")]([SubResource("Resource_i5pup"), SubResource("Resource_spnsi")])
+locked = null
+disable = Array[ExtResource("2_cp4qc")]([SubResource("Resource_28c3j"), SubResource("Resource_ejmq8")])
+slots = Array[ExtResource("2_cp4qc")]([SubResource("Resource_28c3j"), SubResource("Resource_ejmq8")])
 metadata/_custom_type_script = ExtResource("5_qrkr3")
 
 [node name="StaticBody2D" type="StaticBody2D" parent="."]
-position = Vector2(189.073, 95)
+position = Vector2(179.141, 105.448)
 
 [node name="ColorRect" type="ColorRect" parent="StaticBody2D"]
 offset_left = -20.0
@@ -154,8 +162,9 @@ metadata/_custom_type_script = ExtResource("8_imadt")
 [node name="AxisControlsCard" type="Node2D" parent="."]
 position = Vector2(36, 253)
 script = ExtResource("9_frxwl")
-disable = null
-slots = Array[ExtResource("2_cp4qc")]([SubResource("Resource_slbh4")])
+locked = null
+disable = Array[ExtResource("2_cp4qc")]([SubResource("Resource_utxj7")])
+slots = Array[ExtResource("2_cp4qc")]([SubResource("Resource_utxj7")])
 metadata/_custom_type_script = ExtResource("9_frxwl")
 
 [node name="Pistol" parent="." instance=ExtResource("12_xmy4m")]
@@ -168,25 +177,33 @@ script = ExtResource("12_y8syl")
 [node name="ClockCard" type="Node2D" parent="."]
 position = Vector2(-12, -94)
 script = ExtResource("13_y8syl")
-slots = Array[ExtResource("2_cp4qc")]([SubResource("Resource_y8syl")])
+locked = null
+disable = Array[ExtResource("2_cp4qc")]([SubResource("Resource_vhq16")])
+slots = Array[ExtResource("2_cp4qc")]([SubResource("Resource_vhq16")])
 metadata/_custom_type_script = ExtResource("13_y8syl")
 
 [node name="ShootCard" type="Node2D" parent="."]
 position = Vector2(-80, -25)
 script = ExtResource("11_cp4qc")
-slots = Array[ExtResource("2_cp4qc")]([SubResource("Resource_qrkr3"), SubResource("Resource_7fxt6")])
+locked = null
+disable = Array[ExtResource("2_cp4qc")]([SubResource("Resource_bufb0"), SubResource("Resource_m41pf")])
+slots = Array[ExtResource("2_cp4qc")]([SubResource("Resource_bufb0"), SubResource("Resource_m41pf")])
 metadata/_custom_type_script = ExtResource("11_cp4qc")
 
 [node name="TurnByCard" type="Node2D" parent="."]
 position = Vector2(-95, 216)
 script = ExtResource("14_qrkr3")
-slots = Array[ExtResource("2_cp4qc")]([SubResource("Resource_lsd6y"), SubResource("Resource_imadt")])
+locked = null
+disable = Array[ExtResource("2_cp4qc")]([SubResource("Resource_iejvk"), SubResource("Resource_tlmx8")])
+slots = Array[ExtResource("2_cp4qc")]([SubResource("Resource_iejvk"), SubResource("Resource_tlmx8")])
 metadata/_custom_type_script = ExtResource("14_qrkr3")
 
 [node name="StaticNumberCard" type="Node2D" parent="."]
 position = Vector2(-151, 300)
 script = ExtResource("15_7fxt6")
-slots = Array[ExtResource("2_cp4qc")]([SubResource("Resource_frxwl"), SubResource("Resource_28c3j")])
+locked = null
+disable = Array[ExtResource("2_cp4qc")]([SubResource("Resource_gc7jb"), SubResource("Resource_fcihv")])
+slots = Array[ExtResource("2_cp4qc")]([SubResource("Resource_gc7jb"), SubResource("Resource_fcihv")])
 metadata/_custom_type_script = ExtResource("15_7fxt6")
 
 [node name="LockableDoor" parent="." instance=ExtResource("16_imadt")]
@@ -195,7 +212,9 @@ position = Vector2(89, 19)
 [node name="UnlockDoorCard" type="Node2D" parent="."]
 position = Vector2(-17, -7)
 script = ExtResource("17_frxwl")
-slots = Array[ExtResource("2_cp4qc")]([SubResource("Resource_ejmq8"), SubResource("Resource_utxj7")])
+locked = null
+disable = Array[ExtResource("2_cp4qc")]([SubResource("Resource_ujwjy"), SubResource("Resource_86bx4")])
+slots = Array[ExtResource("2_cp4qc")]([SubResource("Resource_ujwjy"), SubResource("Resource_86bx4")])
 metadata/_custom_type_script = ExtResource("17_frxwl")
 
 [node name="LineEdit" type="LineEdit" parent="."]
