@@ -33,6 +33,7 @@ func connect_to(from: Node, object: Node):
 
 func check_disconnect(me: Card, other):
 	var o = get_connected(me)
+	if not o: return
 	var output = o.get_output_slot()
 	output.connected_inputs = output.connected_inputs.filter(func(s): return s[1] != self)
 	if o and o.global_position.distance_to(me.global_position) > Card.MAX_CONNECTION_DISTANCE:
