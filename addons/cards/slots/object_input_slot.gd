@@ -35,7 +35,7 @@ func connect_to(from: Node, object: Node):
 	_disconnect(from)
 	object_path = from.get_path_to(object)
 	if on_connect:
-		on_connect.call(object)
+		on_connect.call(get_object(from))
 func check_disconnect(me: Card, card: Card):
 	var o = get_object(me)
 	if o and o.global_position.distance_to(card.global_position) > Card.MAX_CONNECTION_DISTANCE:

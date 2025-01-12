@@ -20,3 +20,9 @@ func _on_fov_spots(object: Node2D) -> void:
 func _process(delta: float) -> void:
 	rotation += noise.get_noise_1d(time_alive) * 0.5
 	time_alive += delta
+
+func _ready() -> void:
+	$brain.visible = false
+
+func show_brain(show: bool):
+	$brain.visible = show
