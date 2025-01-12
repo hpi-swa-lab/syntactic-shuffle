@@ -46,11 +46,14 @@ static func card_moved(card: Card):
 		card.disable = boundary.disable_on_enter
 
 func card_picked_up(card: Card):
-	pass
+	Globals.play_sound(preload("res://resources/sounds/pick up.wav"))
 
 func card_dropped(card: Card):
 	if layout_cards_in_row:
 		_relayout()
+		Globals.play_sound(preload("res://resources/sounds/Coin.wav"))
+	else:
+		Globals.play_sound(preload("res://resources/sounds/put down.wav"))
 
 func background_rect() -> Rect2:
 	for id in get_shape_owners():

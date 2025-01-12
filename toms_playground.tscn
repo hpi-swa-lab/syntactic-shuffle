@@ -1,64 +1,42 @@
-[gd_scene load_steps=23 format=3 uid="uid://d0asc0m6b4bix"]
+[gd_scene load_steps=15 format=3 uid="uid://d0asc0m6b4bix"]
 
-[ext_resource type="Script" uid="uid://b3nxhs2cf52ki" path="res://addons/cards/cards/DelayCard.gd" id="1_ua6av"]
 [ext_resource type="Script" uid="uid://cja8ehiirmcyt" path="res://addons/cards/CardBoundary.gd" id="1_vb6k7"]
 [ext_resource type="Script" uid="uid://dsn8t1oa5bses" path="res://addons/cards/slots/slot.gd" id="2_gplc3"]
 [ext_resource type="Script" uid="uid://b1hhj058mohfm" path="res://addons/cards/slots/output_slot.gd" id="3_y81ca"]
 [ext_resource type="Script" uid="uid://cvwcl5iet0pyp" path="res://addons/cards/slots/input_slot.gd" id="4_fganm"]
-[ext_resource type="Script" uid="uid://bvoloc64pi1db" path="res://addons/cards/cards/CollisionCard.gd" id="5_slbh4"]
 [ext_resource type="Script" uid="uid://bu1higbimotmh" path="res://addons/cards/slots/object_input_slot.gd" id="6_vb6k7"]
-[ext_resource type="Script" uid="uid://mhsglqkwm7o7" path="res://addons/cards/slots/object_output_slot.gd" id="7_0bnr6"]
 [ext_resource type="Script" uid="uid://d23cwws3aqxp1" path="res://addons/cards/cards/MoveCard.gd" id="8_gplc3"]
 [ext_resource type="Script" uid="uid://dkyx51jnk8cvd" path="res://addons/cards/cards/AxisControlsCard.gd" id="9_y81ca"]
-[ext_resource type="Script" uid="uid://bo08qvvq1e3aj" path="res://addons/cards/cards/DeleteCard.gd" id="10_fganm"]
 [ext_resource type="Script" uid="uid://cxldeg24krchn" path="res://camera_2d.gd" id="12_vb6k7"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ua6av"]
 size = Vector2(40, 40)
 
-[sub_resource type="Resource" id="Resource_y81ca"]
+[sub_resource type="Resource" id="Resource_gplc3"]
 script = ExtResource("6_vb6k7")
 object_path = NodePath("../StaticBody2D2")
-limit_to_group = ""
-num_args = 0
-
-[sub_resource type="Resource" id="Resource_fganm"]
-script = ExtResource("4_fganm")
-num_args = 1
-
-[sub_resource type="Resource" id="Resource_g71xt"]
-script = ExtResource("3_y81ca")
-connected_input_node_path = NodePath("../MoveCard")
-num_args = 1
-
-[sub_resource type="Resource" id="Resource_vb6k7"]
-script = ExtResource("6_vb6k7")
-object_path = NodePath("")
 limit_to_group = "cards"
 num_args = 0
 
-[sub_resource type="Resource" id="Resource_0bnr6"]
+[sub_resource type="Resource" id="Resource_y81ca"]
 script = ExtResource("4_fganm")
+connected_output_node_path = NodePath("../AxisControlsCard")
 num_args = 1
 
-[sub_resource type="Resource" id="Resource_2tjsu"]
+[sub_resource type="Resource" id="Resource_fganm"]
 script = ExtResource("3_y81ca")
-connected_input_node_path = NodePath("../DeleteCard")
+connected_input_node_path = NodePath("")
 num_args = 1
 
-[sub_resource type="Resource" id="Resource_15i05"]
-script = ExtResource("4_fganm")
-num_args = 1
-
-[sub_resource type="Resource" id="Resource_i5pup"]
+[sub_resource type="Resource" id="Resource_slbh4"]
 script = ExtResource("6_vb6k7")
-object_path = NodePath("")
-limit_to_group = ""
+object_path = NodePath("../StaticBody2D")
+limit_to_group = "cards"
 num_args = 0
 
-[sub_resource type="Resource" id="Resource_spnsi"]
-script = ExtResource("7_0bnr6")
-connected_input_node_path = NodePath("../DelayCard")
+[sub_resource type="Resource" id="Resource_vb6k7"]
+script = ExtResource("4_fganm")
+connected_output_node_path = NodePath("../AxisControlsCard")
 num_args = 1
 
 [node name="main" type="Area2D"]
@@ -93,39 +71,23 @@ metadata/_edit_use_anchors_ = true
 position = Vector2(0.0728798, 1)
 shape = SubResource("RectangleShape2D_ua6av")
 
-[node name="MoveCard" type="Node2D" parent="."]
-z_index = 2
-position = Vector2(149, 185)
-script = ExtResource("8_gplc3")
-locked = null
-slots = Array[ExtResource("2_gplc3")]([SubResource("Resource_y81ca"), SubResource("Resource_fganm")])
-metadata/_custom_type_script = ExtResource("8_gplc3")
-
 [node name="Camera2D" type="Camera2D" parent="."]
 script = ExtResource("12_vb6k7")
 
+[node name="MoveCard" type="Node2D" parent="."]
+position = Vector2(107, 193)
+script = ExtResource("8_gplc3")
+slots = Array[ExtResource("2_gplc3")]([SubResource("Resource_gplc3"), SubResource("Resource_y81ca")])
+metadata/_custom_type_script = ExtResource("8_gplc3")
+
 [node name="AxisControlsCard" type="Node2D" parent="."]
-position = Vector2(218, 216)
+position = Vector2(215, 213)
 script = ExtResource("9_y81ca")
-locked = null
-slots = Array[ExtResource("2_gplc3")]([SubResource("Resource_g71xt")])
+slots = Array[ExtResource("2_gplc3")]([SubResource("Resource_fganm")])
 metadata/_custom_type_script = ExtResource("9_y81ca")
 
-[node name="DeleteCard" type="Node2D" parent="."]
-position = Vector2(147, -21)
-script = ExtResource("10_fganm")
-slots = Array[ExtResource("2_gplc3")]([SubResource("Resource_vb6k7"), SubResource("Resource_0bnr6")])
-metadata/_custom_type_script = ExtResource("10_fganm")
-
-[node name="DelayCard" type="Node2D" parent="."]
-position = Vector2(58, -5)
-script = ExtResource("1_ua6av")
-locked = true
-slots = Array[ExtResource("2_gplc3")]([SubResource("Resource_2tjsu"), SubResource("Resource_15i05")])
-metadata/_custom_type_script = ExtResource("1_ua6av")
-
-[node name="CollisionCard" type="Node2D" parent="."]
-position = Vector2(19, 56)
-script = ExtResource("5_slbh4")
-slots = Array[ExtResource("2_gplc3")]([SubResource("Resource_i5pup"), SubResource("Resource_spnsi")])
-metadata/_custom_type_script = ExtResource("5_slbh4")
+[node name="MoveCard2" type="Node2D" parent="."]
+position = Vector2(284, 178)
+script = ExtResource("8_gplc3")
+slots = Array[ExtResource("2_gplc3")]([SubResource("Resource_slbh4"), SubResource("Resource_vb6k7")])
+metadata/_custom_type_script = ExtResource("8_gplc3")

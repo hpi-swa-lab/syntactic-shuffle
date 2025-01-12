@@ -2,6 +2,9 @@ extends Node2D
 
 @export var health = 20
 
+func _ready() -> void:
+	$brain.visible = false
+
 func take_damage(damage: float):
 	health -= damage
 	if health <= 0:

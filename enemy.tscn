@@ -31,6 +31,7 @@ num_args = 0
 
 [sub_resource type="Resource" id="Resource_otto8"]
 script = ExtResource("11_nnovl")
+connected_output_node_path = NodePath("../RandomAxisCard")
 num_args = 1
 
 [sub_resource type="Resource" id="Resource_5hcft"]
@@ -38,9 +39,8 @@ script = ExtResource("8_ar8e5")
 connected_input_node_path = NodePath("")
 num_args = 1
 
-[node name="Enemy" type="CharacterBody2D" node_paths=PackedStringArray("gun") groups=["cards", "enemy", "hackable", "health"]]
+[node name="Enemy" type="CharacterBody2D" groups=["cards", "enemy", "hackable", "health"]]
 script = ExtResource("1_iifgy")
-gun = NodePath("Pistol")
 
 [node name="FoV" parent="." instance=ExtResource("2_4gyqm")]
 rotation = 1.5708
@@ -62,13 +62,13 @@ owner_group = "enemy"
 [node name="brain" parent="." instance=ExtResource("5_3yqyl")]
 
 [node name="RandomAxisCard" type="Node2D" parent="brain/CardBoundary" index="2"]
-position = Vector2(1531, 435)
+position = Vector2(1543, 443)
 script = ExtResource("6_pwjut")
 slots = Array[ExtResource("7_n0g06")]([SubResource("Resource_jmwgi")])
 metadata/_custom_type_script = ExtResource("6_pwjut")
 
 [node name="MoveCard" type="Node2D" parent="brain/CardBoundary" index="3"]
-position = Vector2(1605, 475)
+position = Vector2(1604, 475)
 script = ExtResource("9_doop2")
 slots = Array[ExtResource("7_n0g06")]([SubResource("Resource_g2u8i"), SubResource("Resource_otto8")])
 metadata/_custom_type_script = ExtResource("9_doop2")
@@ -81,11 +81,9 @@ proxy_target = NodePath("../../..")
 metadata/_custom_type_script = ExtResource("6_wujgv")
 
 [node name="AxisControlsCard" type="Node2D" parent="brain/CardBoundary" index="5"]
-position = Vector2(1597, 412)
+position = Vector2(1597, 414)
 script = ExtResource("14_doop2")
 slots = Array[ExtResource("7_n0g06")]([SubResource("Resource_5hcft")])
 metadata/_custom_type_script = ExtResource("14_doop2")
-
-[connection signal="spots" from="FoV" to="." method="_on_fov_spots"]
 
 [editable path="brain"]
