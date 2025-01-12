@@ -34,17 +34,7 @@ func input_event(e: InputEvent):
 # if we move from the hand to the main scene, we won't receive the mouse button up
 func _unhandled_input(e: InputEvent) -> void:
 	if e is InputEventMouseButton and e.button_index == MOUSE_BUTTON_LEFT and held and not e.is_pressed():
-		print("HELD GONE")
 		held = false
-
-func get_overlapping_areas() -> Array:
-	return $Area2D.get_overlapping_areas()
-
-func get_overlapping_hand() -> Node:
-	for area in get_overlapping_areas():
-		if area.is_in_group(&"hand_area"):
-			return area.get_hand()
-	return null
 
 func get_extent() -> Vector2:
 	return $CardControl.size * scale

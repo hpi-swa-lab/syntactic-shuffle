@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://deh4uywqorec7"]
+[gd_scene load_steps=5 format=3 uid="uid://deh4uywqorec7"]
 
 [ext_resource type="Script" uid="uid://td86i40sy764" path="res://addons/cards/CardVisual.gd" id="1_7r0de"]
 [ext_resource type="Texture2D" uid="uid://c52trtl0cac7l" path="res://icon.svg" id="1_x38hd"]
@@ -16,9 +16,6 @@ shadow_color = Color(0, 0, 0, 0.0823529)
 shadow_size = 3
 shadow_offset = Vector2(0, 1.43)
 anti_aliasing_size = 0.1
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_tbdv3"]
-size = Vector2(200, 282)
 
 [node name="Card" type="Node2D"]
 script = ExtResource("1_7r0de")
@@ -96,8 +93,3 @@ theme_override_constants/line_spacing = 0
 theme_override_font_sizes/font_size = 11
 text = "Card Details come here, in all their detailed detail."
 autowrap_mode = 3
-
-[node name="Area2D" type="Area2D" parent="."]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
-shape = SubResource("RectangleShape2D_tbdv3")
