@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://03gnfxdq4qls"]
+[gd_scene load_steps=31 format=3 uid="uid://03gnfxdq4qls"]
 
 [ext_resource type="Script" uid="uid://b3nxhs2cf52ki" path="res://addons/cards/cards/DelayCard.gd" id="1_sgy2f"]
 [ext_resource type="Script" uid="uid://dsn8t1oa5bses" path="res://addons/cards/slots/slot.gd" id="2_cp4qc"]
@@ -11,10 +11,14 @@
 [ext_resource type="Script" uid="uid://dkyx51jnk8cvd" path="res://addons/cards/cards/AxisControlsCard.gd" id="9_frxwl"]
 [ext_resource type="Script" uid="uid://c1po5i7arfj1r" path="res://addons/cards/cards/ShootCard.gd" id="11_cp4qc"]
 [ext_resource type="PackedScene" uid="uid://dj1levijtlio2" path="res://pistol.tscn" id="12_xmy4m"]
+[ext_resource type="Script" uid="uid://cxldeg24krchn" path="res://camera_2d.gd" id="12_y8syl"]
+[ext_resource type="Script" uid="uid://c1y5hmu8ve21k" path="res://addons/cards/cards/ClockCard.gd" id="13_y8syl"]
+[ext_resource type="Script" uid="uid://ciwr6t8y6q0qb" path="res://addons/cards/cards/TurnByCard.gd" id="14_qrkr3"]
+[ext_resource type="Script" uid="uid://cqbys1q8ged8e" path="res://addons/cards/cards/StaticNumberCard.gd" id="15_7fxt6"]
 
 [sub_resource type="Resource" id="Resource_2tjsu"]
 script = ExtResource("3_xmy4m")
-connected_input_node_path = NodePath("")
+connected_input_node_path = NodePath("../TurnByCard")
 num_args = 1
 
 [sub_resource type="Resource" id="Resource_15i05"]
@@ -29,7 +33,7 @@ num_args = 0
 
 [sub_resource type="Resource" id="Resource_spnsi"]
 script = ExtResource("7_lsd6y")
-connected_input_node_path = NodePath("")
+connected_input_node_path = NodePath("../TurnByCard")
 num_args = 1
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ua6av"]
@@ -47,37 +51,61 @@ num_args = 1
 
 [sub_resource type="Resource" id="Resource_slbh4"]
 script = ExtResource("3_xmy4m")
-connected_input_node_path = NodePath("")
+connected_input_node_path = NodePath("../TurnByCard")
 num_args = 1
 
-[sub_resource type="Resource" id="Resource_cp4qc"]
+[sub_resource type="Resource" id="Resource_y8syl"]
+script = ExtResource("3_xmy4m")
+connected_input_node_path = NodePath("")
+num_args = 0
+
+[sub_resource type="Resource" id="Resource_qrkr3"]
 script = ExtResource("6_7fxt6")
-object_path = NodePath("")
+object_path = NodePath("../Pistol")
 limit_to_group = "gun"
 num_args = 0
 
-[sub_resource type="Resource" id="Resource_xmy4m"]
+[sub_resource type="Resource" id="Resource_7fxt6"]
 script = ExtResource("4_y8syl")
+num_args = 0
+
+[sub_resource type="Resource" id="Resource_lsd6y"]
+script = ExtResource("6_7fxt6")
+object_path = NodePath("../StaticBody2D2")
+limit_to_group = "cards"
+num_args = 0
+
+[sub_resource type="Resource" id="Resource_imadt"]
+script = ExtResource("4_y8syl")
+num_args = 1
+
+[sub_resource type="Resource" id="Resource_frxwl"]
+script = ExtResource("4_y8syl")
+num_args = 0
+
+[sub_resource type="Resource" id="Resource_28c3j"]
+script = ExtResource("3_xmy4m")
+connected_input_node_path = NodePath("../TurnByCard")
 num_args = 1
 
 [node name="main" type="Node2D"]
 
 [node name="DelayCard" type="Node2D" parent="."]
-position = Vector2(378, 117)
+position = Vector2(53, -32)
 script = ExtResource("1_sgy2f")
 disable = null
 slots = Array[ExtResource("2_cp4qc")]([SubResource("Resource_2tjsu"), SubResource("Resource_15i05")])
 metadata/_custom_type_script = ExtResource("1_sgy2f")
 
 [node name="CollisionCard" type="Node2D" parent="."]
-position = Vector2(320, 226)
+position = Vector2(-5, 77)
 script = ExtResource("5_qrkr3")
 disable = null
 slots = Array[ExtResource("2_cp4qc")]([SubResource("Resource_i5pup"), SubResource("Resource_spnsi")])
 metadata/_custom_type_script = ExtResource("5_qrkr3")
 
 [node name="StaticBody2D" type="StaticBody2D" parent="."]
-position = Vector2(514.073, 244)
+position = Vector2(189.073, 95)
 
 [node name="ColorRect" type="ColorRect" parent="StaticBody2D"]
 offset_left = -20.0
@@ -89,8 +117,8 @@ metadata/_edit_use_anchors_ = true
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
 shape = SubResource("RectangleShape2D_ua6av")
 
-[node name="StaticBody2D2" type="CharacterBody2D" parent="."]
-position = Vector2(443, 247)
+[node name="StaticBody2D2" type="CharacterBody2D" parent="." groups=["cards"]]
+position = Vector2(113, 71)
 
 [node name="ColorRect" type="ColorRect" parent="StaticBody2D2"]
 offset_left = -19.9271
@@ -105,24 +133,46 @@ position = Vector2(0.0728798, 1)
 shape = SubResource("RectangleShape2D_ua6av")
 
 [node name="MoveCard" type="Node2D" parent="."]
-position = Vector2(497.073, 374)
+position = Vector2(172.073, 225)
 script = ExtResource("8_imadt")
 disable = null
 slots = Array[ExtResource("2_cp4qc")]([SubResource("Resource_y81ca"), SubResource("Resource_fganm")])
 metadata/_custom_type_script = ExtResource("8_imadt")
 
 [node name="AxisControlsCard" type="Node2D" parent="."]
-position = Vector2(361, 402)
+position = Vector2(36, 253)
 script = ExtResource("9_frxwl")
 disable = null
 slots = Array[ExtResource("2_cp4qc")]([SubResource("Resource_slbh4")])
 metadata/_custom_type_script = ExtResource("9_frxwl")
 
-[node name="Pistol" parent="." groups=["gun"] instance=ExtResource("12_xmy4m")]
-position = Vector2(226, 231)
+[node name="Pistol" parent="." instance=ExtResource("12_xmy4m")]
+position = Vector2(-99, 82)
 scale = Vector2(5, 5)
 
+[node name="Camera2D" type="Camera2D" parent="."]
+script = ExtResource("12_y8syl")
+
+[node name="ClockCard" type="Node2D" parent="."]
+position = Vector2(-12, -94)
+script = ExtResource("13_y8syl")
+slots = Array[ExtResource("2_cp4qc")]([SubResource("Resource_y8syl")])
+metadata/_custom_type_script = ExtResource("13_y8syl")
+
 [node name="ShootCard" type="Node2D" parent="."]
+position = Vector2(-80, -25)
 script = ExtResource("11_cp4qc")
-slots = Array[ExtResource("2_cp4qc")]([SubResource("Resource_cp4qc"), SubResource("Resource_xmy4m")])
+slots = Array[ExtResource("2_cp4qc")]([SubResource("Resource_qrkr3"), SubResource("Resource_7fxt6")])
 metadata/_custom_type_script = ExtResource("11_cp4qc")
+
+[node name="TurnByCard" type="Node2D" parent="."]
+position = Vector2(-95, 216)
+script = ExtResource("14_qrkr3")
+slots = Array[ExtResource("2_cp4qc")]([SubResource("Resource_lsd6y"), SubResource("Resource_imadt")])
+metadata/_custom_type_script = ExtResource("14_qrkr3")
+
+[node name="StaticNumberCard" type="Node2D" parent="."]
+position = Vector2(-151, 300)
+script = ExtResource("15_7fxt6")
+slots = Array[ExtResource("2_cp4qc")]([SubResource("Resource_frxwl"), SubResource("Resource_28c3j")])
+metadata/_custom_type_script = ExtResource("15_7fxt6")

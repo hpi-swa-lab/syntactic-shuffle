@@ -4,7 +4,7 @@ class_name Card
 
 const SHOW_IN_GAME = true
 const DEFAULT_SCALE = Vector2(0.15, 0.15)
-const MAX_CONNECTION_DISTANCE = 300
+const MAX_CONNECTION_DISTANCE = 150
 
 @export var disable = false:
 	set(v):
@@ -49,35 +49,30 @@ var dragging:
 	set(v):
 		if v == dragging: return
 		dragging = v
-		if dragging:
-			visual.get_node("CardControl").grab_focus.call_deferred()
-		else:
-			if is_in_hand():
-				if visual.get_overlapping_hand() == null:
-					var root = get_tree().current_scene
-					current_hand().remove_card(self)
-					root.add_child(self)
-					position = get_viewport().get_mouse_position() # ;)
-				else:
-					current_hand()._relayout()
-			else:
-				if visual.get_overlapping_hand() != null:
-					var hand = visual.get_overlapping_hand()
-					get_parent().remove_child(self)
-					hand.add_card(self)
-		#if disable and dragging:
-			#transition_from_hand()
+		if disable and dragging:
+			# FIXME
+			get_parent().get_parent().remove_card(self)
+		elif not dragging and not disable:
+			maybe_add_to_hand()
+		
 		connection_draw_node.queue_redraw()
 	get:
 		return dragging
+
+func maybe_add_to_hand():
+	var pos = PhysicsPointQueryParameters2D.new()
+	pos.position = global_position
+	pos.collide_with_areas = true
+	pos.collide_with_bodies = true
+	for h in get_tree().get_nodes_in_group("hand"):
+		if h.includes_screen_point(get_viewport().canvas_transform * global_position):
+			h.add_card(self)
 
 func current_hand():
 	return G.closest_parent_that(self, func(node): return node.is_in_group(&"hand"))
 
 func is_in_hand():
 	return current_hand() != null
-
-@export var connected_node: NodePath = NodePath()
 
 enum Type {
 	Trigger,
@@ -88,17 +83,8 @@ enum Type {
 static func show_cards():
 	return not Engine.is_editor_hint() or SHOW_IN_GAME
 
-#func transition_from_hand():
-	#disable = false
-	#reparent(get_tree().current_scene)
-	#global_position = get_viewport().get_camera_2d().get_global_mouse_position()
-	#visual.get_node("CardControl").grab_focus.call_deferred()
-
 func can_connect_to(obj: Node):
 	return obj.owner == self.owner and not obj is Camera2D
-
-func _input_event(viewport: Viewport, event: InputEvent, shape_idx: int) -> void:
-	print(event)
 
 var connection_draw_node: Node2D
 
@@ -109,7 +95,7 @@ func _ready() -> void:
 	# such that the connections appear under the cards
 	connection_draw_node = Node2D.new()
 	connection_draw_node.name = "ConnectionDraw"
-	connection_draw_node.z_index = -1
+	connection_draw_node.z_index = 1
 	connection_draw_node.draw.connect(draw_connections)
 	add_child(connection_draw_node)
 	

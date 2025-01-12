@@ -9,4 +9,4 @@ func register_marker(node: Node2D):
 	marker = node
 
 func spawn(node: Node2D):
-	marker.get_parent().add_child(node)
+	if marker: marker.get_parent().add_child(node)
