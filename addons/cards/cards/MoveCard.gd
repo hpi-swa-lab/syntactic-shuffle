@@ -21,6 +21,7 @@ func move_direction(direction: Vector2):
 	if false: # rotated
 		direction = direction.rotated(get_parent().rotation)
 	velocity = velocity.lerp(direction * max_velocity, min(1.0, _accel * get_process_delta_time()))
+	get_object_input_slot().on_activated(self)
 
 func _physics_process(delta: float) -> void:
 	var node = get_object_input()

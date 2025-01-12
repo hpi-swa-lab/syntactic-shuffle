@@ -4,7 +4,7 @@ class_name Card
 
 const SHOW_IN_GAME = true
 const DEFAULT_SCALE = Vector2(0.15, 0.15)
-const MAX_CONNECTION_DISTANCE = 300
+const MAX_CONNECTION_DISTANCE = 150
 
 @export var disable = false:
 	set(v):
