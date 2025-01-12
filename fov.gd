@@ -18,19 +18,7 @@ func _ready() -> void:
 	distance = distance
 
 func update_texture() -> void:
-	print(distance)
-	var viewport = SubViewport.new()
-	RenderingServer.viewport_set_active(viewport.get_viewport_rid(), true)
-	add_child(viewport)
-	viewport.size = Vector2i(distance * 2, distance * 2)
-	var circle_sector = preload("res://circle_sector.tscn").instantiate()
-	circle_sector.radius = viewport.size.x / 2
-	circle_sector.position = viewport.size / 2
-	circle_sector.degrees = degrees
-	viewport.add_child(circle_sector)
-	var image = await render_subviewport(viewport)
-	$PointLight2D.texture = ImageTexture.create_from_image(image)
-	viewport.queue_free()
+	$PointLight2D.texture = load("res://resources/circle_sector/radius_{radius}_degrees_{degrees}.png".format({"radius": distance, "degrees": degrees}))
 
 func render_subviewport(subviewport: SubViewport) -> Image:
 	var scene_tree = Engine.get_main_loop() as SceneTree
