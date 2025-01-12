@@ -36,4 +36,6 @@ func draw(node, draw_node):
 	if to: draw_connection(node, to, false, draw_node)
 func get_draw_dependencies(card: Card, deps: Array):
 	var object = card.get_node_or_null(connected_input_node_path)
-	if object: deps.push_back(object.global_position)
+	if object:
+		deps.push_back(object.global_position)
+		deps.push_back(card.global_position)

@@ -12,9 +12,9 @@
 [ext_resource type="Script" uid="uid://c1po5i7arfj1r" path="res://addons/cards/cards/ShootCard.gd" id="11_cp4qc"]
 [ext_resource type="PackedScene" uid="uid://dj1levijtlio2" path="res://pistol.tscn" id="12_xmy4m"]
 [ext_resource type="Script" uid="uid://cxldeg24krchn" path="res://camera_2d.gd" id="12_y8syl"]
-[ext_resource type="Script" path="res://addons/cards/cards/ClockCard.gd" id="13_y8syl"]
-[ext_resource type="Script" path="res://addons/cards/cards/TurnByCard.gd" id="14_qrkr3"]
-[ext_resource type="Script" path="res://addons/cards/cards/StaticNumberCard.gd" id="15_7fxt6"]
+[ext_resource type="Script" uid="uid://c1y5hmu8ve21k" path="res://addons/cards/cards/ClockCard.gd" id="13_y8syl"]
+[ext_resource type="Script" uid="uid://ciwr6t8y6q0qb" path="res://addons/cards/cards/TurnByCard.gd" id="14_qrkr3"]
+[ext_resource type="Script" uid="uid://cqbys1q8ged8e" path="res://addons/cards/cards/StaticNumberCard.gd" id="15_7fxt6"]
 
 [sub_resource type="Resource" id="Resource_2tjsu"]
 script = ExtResource("3_xmy4m")
