@@ -22,7 +22,8 @@ func get_connected_input(node):
 
 func invoke(card: Card, args: Array = []):
 	for i in connected_inputs:
-		i[1].invoke(i[0], args)
+		if is_instance_valid(i[0]):
+			i[1].invoke(i[0], args)
 
 func can_connect_to(object):
 	return object is Card and not object.disable and object.slots.any(func (s):
