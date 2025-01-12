@@ -37,8 +37,9 @@ func _update_texture():
 	var texture = ImageTexture.new()
 	if is_svg():
 		var image = Image.new()
-		image.load_svg_from_string(_data, _current_zoom)
-		image.fix_alpha_edges()
+		if _current_zoom != 0:
+			image.load_svg_from_string(_data, _current_zoom)
+			image.fix_alpha_edges()
 		texture.set_image(image)
 	else:
 		texture = _data
