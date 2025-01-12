@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://c5j3sipjk7ung"]
+[gd_scene load_steps=6 format=3 uid="uid://c5j3sipjk7ung"]
 
 [ext_resource type="Script" uid="uid://p1mml5oskmy8" path="res://items/explodable_barrel.gd" id="1_rckkv"]
 [ext_resource type="Texture2D" uid="uid://dy4iicf26x4nr" path="res://resources/characters/ExplosiveBarrel.png" id="2_yo5ra"]
+[ext_resource type="AudioStream" uid="uid://c0k2kckpl02x1" path="res://resources/sounds/Explosion.wav" id="3_yo5ra"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_rckkv"]
 radius = 15.0
@@ -24,3 +25,6 @@ shape = SubResource("CircleShape2D_rckkv")
 
 [node name="ExplosionRadiusCollisionShape2D" type="CollisionShape2D" parent="ExplosionArea2D"]
 shape = SubResource("CircleShape2D_tdqde")
+
+[node name="ExplosionAudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_yo5ra")
