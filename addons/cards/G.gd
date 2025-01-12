@@ -18,6 +18,13 @@ func put(name: String, value: Variant):
 func at(name: String):
 	return values[name]
 
+static func has_parent(node: Node, parent: Node):
+	while node:
+		node = node.get_parent()
+		if node == parent:
+			return true
+	return false
+
 static func closest_node(node: Node, filter: Callable):
 	var data = { "best_distance": INF }
 	var pos = node.global_position

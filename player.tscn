@@ -47,6 +47,11 @@ owner_group = "player"
 
 [node name="brain" parent="." instance=ExtResource("4_hqtel")]
 
+[node name="CardBoundary" parent="brain" index="0"]
+disable_on_enter = null
+layout_cards_in_row = null
+horizontal_spacing = null
+
 [node name="CardProxy" type="Sprite2D" parent="brain/CardBoundary" index="1" node_paths=PackedStringArray("proxy_target")]
 position = Vector2(1450, 468)
 texture = ExtResource("5_2hs0m")

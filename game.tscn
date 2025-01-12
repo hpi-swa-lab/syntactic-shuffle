@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=4 uid="uid://0lfrvsq2dq2q"]
+[gd_scene load_steps=31 format=4 uid="uid://0lfrvsq2dq2q"]
 
 [ext_resource type="Texture2D" uid="uid://bywsq5hdhm8y2" path="res://resources/tiles/floor_tile.png" id="1_eow3j"]
 [ext_resource type="Texture2D" uid="uid://bmoymxtmm580w" path="res://resources/tiles/Road.png" id="2_j5wjh"]
@@ -9,7 +9,11 @@
 [ext_resource type="Texture2D" uid="uid://bu1naeu0q866x" path="res://resources/tiles/rooftilesTop.png" id="7_lc2xo"]
 [ext_resource type="PackedScene" uid="uid://oongh3pntcs7" path="res://player.tscn" id="8_vef74"]
 [ext_resource type="Script" uid="uid://cxldeg24krchn" path="res://camera_2d.gd" id="9_hve3p"]
-[ext_resource type="PackedScene" uid="uid://clx5pustrmpx5" path="res://hand.tscn" id="10_hve3p"]
+[ext_resource type="Script" uid="uid://d23cwws3aqxp1" path="res://addons/cards/cards/MoveCard.gd" id="11_215e1"]
+[ext_resource type="Script" uid="uid://cja8ehiirmcyt" path="res://addons/cards/CardBoundary.gd" id="11_mfdv2"]
+[ext_resource type="Script" uid="uid://dsn8t1oa5bses" path="res://addons/cards/slots/slot.gd" id="12_7sc4i"]
+[ext_resource type="Script" uid="uid://bu1higbimotmh" path="res://addons/cards/slots/object_input_slot.gd" id="13_80cx4"]
+[ext_resource type="Script" uid="uid://cvwcl5iet0pyp" path="res://addons/cards/slots/input_slot.gd" id="14_e8heu"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_c81vo"]
 texture = ExtResource("1_eow3j")
@@ -83,7 +87,26 @@ sources/1 = SubResource("TileSetAtlasSource_gkke7")
 sources/2 = SubResource("TileSetAtlasSource_4snpw")
 sources/3 = SubResource("TileSetAtlasSource_l1e5b")
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_3q536"]
+size = Vector2(537, 59)
+
+[sub_resource type="Resource" id="Resource_3i0sp"]
+script = ExtResource("13_80cx4")
+object_path = NodePath("")
+limit_to_group = "cards"
+num_args = 0
+
+[sub_resource type="Resource" id="Resource_djtxf"]
+script = ExtResource("14_e8heu")
+num_args = 1
+
 [node name="game" type="Node2D"]
+
+[node name="CardBoundary" type="Area2D" parent="."]
+script = ExtResource("11_mfdv2")
+layout_cards_in_row = null
+horizontal_spacing = null
+metadata/_custom_type_script = ExtResource("11_mfdv2")
 
 [node name="tilemaps" type="Node" parent="."]
 
@@ -105,4 +128,31 @@ position_smoothing_enabled = true
 script = ExtResource("9_hve3p")
 pan = false
 
-[node name="hand" parent="." instance=ExtResource("10_hve3p")]
+[node name="hand" type="CanvasLayer" parent="."]
+
+[node name="CardBoundary" type="Area2D" parent="hand"]
+script = ExtResource("11_mfdv2")
+disable_on_enter = true
+layout_cards_in_row = true
+horizontal_spacing = 16
+metadata/_custom_type_script = ExtResource("11_mfdv2")
+
+[node name="Background" type="ColorRect" parent="hand/CardBoundary"]
+offset_left = 694.0
+offset_top = 979.0
+offset_right = 1231.0
+offset_bottom = 1038.0
+mouse_filter = 2
+
+[node name="shape" type="CollisionShape2D" parent="hand/CardBoundary"]
+unique_name_in_owner = true
+position = Vector2(962.5, 1008.5)
+shape = SubResource("RectangleShape2D_3q536")
+
+[node name="MoveCard" type="Node2D" parent="hand/CardBoundary"]
+z_index = 1
+position = Vector2(726.5, 1008.5)
+script = ExtResource("11_215e1")
+disable = true
+slots = Array[ExtResource("12_7sc4i")]([SubResource("Resource_3i0sp"), SubResource("Resource_djtxf")])
+metadata/_custom_type_script = ExtResource("11_215e1")

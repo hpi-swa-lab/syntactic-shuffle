@@ -1,6 +1,5 @@
-[gd_scene load_steps=10 format=3 uid="uid://clx5pustrmpx5"]
+[gd_scene load_steps=9 format=3 uid="uid://clx5pustrmpx5"]
 
-[ext_resource type="Script" uid="uid://b84o7u6cy5fn" path="res://hand.gd" id="1_u4p2i"]
 [ext_resource type="Script" uid="uid://d23cwws3aqxp1" path="res://addons/cards/cards/MoveCard.gd" id="2_3q536"]
 [ext_resource type="Script" uid="uid://cja8ehiirmcyt" path="res://addons/cards/CardBoundary.gd" id="2_6wjrw"]
 [ext_resource type="Script" uid="uid://dsn8t1oa5bses" path="res://addons/cards/slots/slot.gd" id="3_6wjrw"]
@@ -20,21 +19,26 @@ num_args = 1
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_3q536"]
 size = Vector2(537, 59)
 
-[node name="CanvasLayer" type="CanvasLayer"]
+[node name="hand" type="CanvasLayer"]
 
-[node name="hand" type="Area2D" parent="." groups=["hand"]]
-position = Vector2(694, 979)
-script = ExtResource("1_u4p2i")
+[node name="CardBoundary" type="Area2D" parent="."]
+script = ExtResource("2_6wjrw")
+disable_on_enter = null
+layout_cards_in_row = null
+horizontal_spacing = null
 metadata/_custom_type_script = ExtResource("2_6wjrw")
 
-[node name="Background" type="ColorRect" parent="hand"]
-offset_right = 537.0
-offset_bottom = 59.0
+[node name="Background" type="ColorRect" parent="CardBoundary"]
+offset_left = 694.0
+offset_top = 979.0
+offset_right = 1231.0
+offset_bottom = 1038.0
 mouse_filter = 2
 
-[node name="Cards" type="Node2D" parent="hand"]
+[node name="Cards" type="Node2D" parent="CardBoundary"]
+position = Vector2(694, 979)
 
-[node name="MoveCard" type="Node2D" parent="hand/Cards"]
+[node name="MoveCard" type="Node2D" parent="CardBoundary/Cards"]
 z_index = 1
 position = Vector2(31.5, 29.5)
 script = ExtResource("2_3q536")
@@ -42,7 +46,7 @@ disable = true
 slots = Array[ExtResource("3_6wjrw")]([SubResource("Resource_3i0sp"), SubResource("Resource_djtxf")])
 metadata/_custom_type_script = ExtResource("2_3q536")
 
-[node name="shape" type="CollisionShape2D" parent="hand"]
+[node name="shape" type="CollisionShape2D" parent="CardBoundary"]
 unique_name_in_owner = true
-position = Vector2(268.5, 29.5)
+position = Vector2(962.5, 1008.5)
 shape = SubResource("RectangleShape2D_3q536")

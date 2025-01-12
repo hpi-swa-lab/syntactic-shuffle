@@ -9,6 +9,9 @@ size = Vector2(822, 900)
 
 [node name="CardBoundary" type="Area2D" parent="."]
 script = ExtResource("1_42xjx")
+disable_on_enter = null
+layout_cards_in_row = null
+horizontal_spacing = null
 metadata/_custom_type_script = ExtResource("1_42xjx")
 
 [node name="ColorRect" type="ColorRect" parent="CardBoundary"]
