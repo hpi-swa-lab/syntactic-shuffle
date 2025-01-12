@@ -23,6 +23,7 @@ num_args = 0
 
 [sub_resource type="Resource" id="Resource_606se"]
 script = ExtResource("10_urp6f")
+connected_output_node_path = NodePath("../AxisControlsCard")
 num_args = 1
 
 [sub_resource type="Resource" id="Resource_u1c27"]
@@ -55,7 +56,7 @@ proxy_target = NodePath("../../..")
 metadata/_custom_type_script = ExtResource("6_1jxqw")
 
 [node name="MoveCard" type="Node2D" parent="brain/CardBoundary" index="2"]
-position = Vector2(1324, 411)
+position = Vector2(1326, 404)
 script = ExtResource("7_n7ghd")
 slots = Array[ExtResource("8_nvl01")]([SubResource("Resource_bwjto"), SubResource("Resource_606se")])
 metadata/_custom_type_script = ExtResource("7_n7ghd")

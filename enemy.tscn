@@ -4,9 +4,9 @@
 [ext_resource type="PackedScene" uid="uid://dtpl6e6yyux1m" path="res://fov.tscn" id="2_4gyqm"]
 [ext_resource type="Texture2D" uid="uid://7umswm7xf7he" path="res://resources/characters/Robot.png" id="3_qi2p4"]
 [ext_resource type="PackedScene" uid="uid://dj1levijtlio2" path="res://pistol.tscn" id="4_iifgy"]
-[ext_resource type="PackedScene" path="res://brain.tscn" id="5_3yqyl"]
+[ext_resource type="PackedScene" uid="uid://dycnp1nhlvrnu" path="res://brain.tscn" id="5_3yqyl"]
 [ext_resource type="Script" uid="uid://c8cfoeik47tv2" path="res://addons/cards/cards/RandomAxisCard.gd" id="6_pwjut"]
-[ext_resource type="Script" path="res://addons/cards/CardProxy.gd" id="6_wujgv"]
+[ext_resource type="Script" uid="uid://lf6acu6i0abm" path="res://addons/cards/CardProxy.gd" id="6_wujgv"]
 [ext_resource type="Script" uid="uid://dsn8t1oa5bses" path="res://addons/cards/slots/slot.gd" id="7_n0g06"]
 [ext_resource type="Script" uid="uid://b1hhj058mohfm" path="res://addons/cards/slots/output_slot.gd" id="8_ar8e5"]
 [ext_resource type="Script" uid="uid://d23cwws3aqxp1" path="res://addons/cards/cards/MoveCard.gd" id="9_doop2"]
@@ -31,6 +31,7 @@ num_args = 0
 
 [sub_resource type="Resource" id="Resource_otto8"]
 script = ExtResource("11_nnovl")
+connected_output_node_path = NodePath("")
 num_args = 1
 
 [sub_resource type="Resource" id="Resource_5hcft"]
@@ -38,9 +39,8 @@ script = ExtResource("8_ar8e5")
 connected_input_node_path = NodePath("")
 num_args = 1
 
-[node name="Enemy" type="CharacterBody2D" node_paths=PackedStringArray("gun") groups=["cards", "enemy", "hackable", "health"]]
+[node name="Enemy" type="CharacterBody2D" groups=["cards", "enemy", "hackable", "health"]]
 script = ExtResource("1_iifgy")
-gun = NodePath("Pistol")
 
 [node name="FoV" parent="." instance=ExtResource("2_4gyqm")]
 rotation = 1.5708
