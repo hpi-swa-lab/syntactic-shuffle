@@ -8,8 +8,6 @@ func _on_body_entered(node: Node2D) -> void:
 	
 	var knockback = (node.global_position - global_position).normalized() * 200
 	
-	print(node, knockback)
-	
 	if node is CharacterBody2D:
 		node.velocity = knockback
 		node.move_and_slide()

@@ -9,7 +9,6 @@ func _ready() -> void:
 		InputSlot.create(1)
 	])
 	on_invoke_input(turn)
-	print("Turn ready")
 
 func turn(turn_radians: float):
 	var node = get_object_input()
