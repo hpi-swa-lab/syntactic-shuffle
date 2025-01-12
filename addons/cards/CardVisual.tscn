@@ -25,6 +25,7 @@ offset_bottom = 128.0
 
 [node name="TypeIconMargin" type="MarginContainer" parent="CardControl"]
 light_mask = 2
+layout_mode = 0
 offset_left = 12.0
 offset_top = 12.0
 offset_right = 44.0
@@ -44,6 +45,7 @@ script = ExtResource("3_hogqd")
 
 [node name="NameMargin" type="MarginContainer" parent="CardControl"]
 light_mask = 2
+layout_mode = 0
 offset_left = 44.0
 offset_top = 12.0
 offset_right = 152.0
@@ -61,6 +63,7 @@ vertical_alignment = 1
 
 [node name="IconMargin" type="MarginContainer" parent="CardControl"]
 light_mask = 2
+layout_mode = 0
 offset_left = 20.0
 offset_top = 56.0
 offset_right = 144.0
@@ -80,6 +83,7 @@ script = ExtResource("3_hogqd")
 
 [node name="InfoMargin" type="MarginContainer" parent="CardControl"]
 light_mask = 2
+layout_mode = 0
 offset_left = 16.0
 offset_top = 196.0
 offset_right = 148.0
@@ -90,6 +94,7 @@ theme_override_constants/margin_right = 2
 theme_override_constants/margin_bottom = 2
 
 [node name="InfoColumn" type="VBoxContainer" parent="CardControl/InfoMargin"]
+unique_name_in_owner = true
 light_mask = 2
 layout_mode = 2
 
