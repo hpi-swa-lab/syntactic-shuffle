@@ -10,11 +10,11 @@ func _ready() -> void:
 	])
 	var current_object = get_object_input()
 	if current_object:
-		current_object.detected.connect(on_detected)
+		current_object.connect("detected", on_detected)
 	get_object_input_slot().on_connect = func(object: Node):
-		object.detected.connect(on_detected)
+		object.connect("detected", on_detected)
 	get_object_input_slot().on_disconnect = func(object: Node):
-		object.detected.disconnect(on_detected)
+		object.disconnect("detected", on_detected)
 
 func on_detected(object):
 	get_output_slot().invoke(self, [object.global_position])
