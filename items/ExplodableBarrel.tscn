@@ -10,7 +10,7 @@ radius = 15.0
 [sub_resource type="CircleShape2D" id="CircleShape2D_tdqde"]
 radius = 117.017
 
-[node name="ExplodableBarrel" type="Node2D"]
+[node name="ExplodableBarrel" type="Node2D" groups=["health", "useable_item"]]
 script = ExtResource("1_rckkv")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]

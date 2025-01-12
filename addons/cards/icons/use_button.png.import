@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://nf875nia2sti"
-path="res://.godot/imported/padlock.png-7985b238719d373f1eb0611d5eeb0268.ctex"
+uid="uid://rubt6ecaaspx"
+path="res://.godot/imported/use_button.png-f133a83e4865d63ca6868846ea84ead9.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://addons/cards/icons/padlock.png"
-dest_files=["res://.godot/imported/padlock.png-7985b238719d373f1eb0611d5eeb0268.ctex"]
+source_file="res://addons/cards/icons/use_button.png"
+dest_files=["res://.godot/imported/use_button.png-f133a83e4865d63ca6868846ea84ead9.ctex"]
 
 [params]
 

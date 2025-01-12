@@ -1,12 +1,13 @@
-[gd_scene load_steps=3 format=3 uid="uid://tml1sp4x57rl"]
+[gd_scene load_steps=4 format=3 uid="uid://n1dwwthvai40"]
 
+[ext_resource type="Script" path="res://proximity_sensor.gd" id="1_74mfk"]
 [ext_resource type="PackedScene" uid="uid://dtpl6e6yyux1m" path="res://fov.tscn" id="2_mn7qc"]
 [ext_resource type="Texture2D" uid="uid://baco0icotx2ul" path="res://resources/items/movement_sensor.png" id="3_mn7qc"]
 
 [node name="ProximitySensor" type="Node2D" groups=["object_sensor"]]
+script = ExtResource("1_74mfk")
 
 [node name="FoV" parent="." instance=ExtResource("2_mn7qc")]
-included_groups = Array[String](["health"])
 degrees = 60
 
 [node name="MovementSensor" type="Sprite2D" parent="."]

@@ -42,6 +42,7 @@ slide="can slide (AnimatableBody2D)"
 door="Used for opening and closing doors"
 hackable="can be hacked"
 object_sensor="emits \"detected\" signal with objects"
+useable_item="Implements the interface use()"
 
 [gui]
 
