@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=3 uid="uid://03gnfxdq4qls"]
+[gd_scene load_steps=35 format=3 uid="uid://03gnfxdq4qls"]
 
 [ext_resource type="Script" uid="uid://b3nxhs2cf52ki" path="res://addons/cards/cards/DelayCard.gd" id="1_sgy2f"]
 [ext_resource type="Script" uid="uid://dsn8t1oa5bses" path="res://addons/cards/slots/slot.gd" id="2_cp4qc"]
@@ -12,9 +12,11 @@
 [ext_resource type="Script" uid="uid://c1po5i7arfj1r" path="res://addons/cards/cards/ShootCard.gd" id="11_cp4qc"]
 [ext_resource type="PackedScene" uid="uid://dj1levijtlio2" path="res://pistol.tscn" id="12_xmy4m"]
 [ext_resource type="Script" uid="uid://cxldeg24krchn" path="res://camera_2d.gd" id="12_y8syl"]
-[ext_resource type="Script" uid="uid://c1y5hmu8ve21k" path="res://addons/cards/cards/ClockCard.gd" id="13_y8syl"]
-[ext_resource type="Script" uid="uid://ciwr6t8y6q0qb" path="res://addons/cards/cards/TurnByCard.gd" id="14_qrkr3"]
-[ext_resource type="Script" uid="uid://cqbys1q8ged8e" path="res://addons/cards/cards/StaticNumberCard.gd" id="15_7fxt6"]
+[ext_resource type="Script" uid="uid://nidj5211jj24" path="res://addons/cards/cards/ClockCard.gd" id="13_y8syl"]
+[ext_resource type="Script" uid="uid://cgxwcavtwifex" path="res://addons/cards/cards/TurnByCard.gd" id="14_qrkr3"]
+[ext_resource type="Script" uid="uid://bvparh51ojgmt" path="res://addons/cards/cards/StaticNumberCard.gd" id="15_7fxt6"]
+[ext_resource type="PackedScene" uid="uid://dsbyqp8jcc106" path="res://items/LockableDoor.tscn" id="16_imadt"]
+[ext_resource type="Script" uid="uid://bff8ils3b0x3x" path="res://addons/cards/cards/UnlockDoorCard.gd" id="17_frxwl"]
 
 [sub_resource type="Resource" id="Resource_2tjsu"]
 script = ExtResource("3_xmy4m")
@@ -56,7 +58,7 @@ num_args = 1
 
 [sub_resource type="Resource" id="Resource_y8syl"]
 script = ExtResource("3_xmy4m")
-connected_input_node_path = NodePath("")
+connected_input_node_path = NodePath("../UnlockDoorCard")
 num_args = 0
 
 [sub_resource type="Resource" id="Resource_qrkr3"]
@@ -87,6 +89,16 @@ num_args = 0
 script = ExtResource("3_xmy4m")
 connected_input_node_path = NodePath("../TurnByCard")
 num_args = 1
+
+[sub_resource type="Resource" id="Resource_ejmq8"]
+script = ExtResource("6_7fxt6")
+object_path = NodePath("../LockableDoor")
+limit_to_group = "door"
+num_args = 0
+
+[sub_resource type="Resource" id="Resource_utxj7"]
+script = ExtResource("4_y8syl")
+num_args = 0
 
 [node name="main" type="Node2D"]
 
@@ -176,3 +188,12 @@ position = Vector2(-151, 300)
 script = ExtResource("15_7fxt6")
 slots = Array[ExtResource("2_cp4qc")]([SubResource("Resource_frxwl"), SubResource("Resource_28c3j")])
 metadata/_custom_type_script = ExtResource("15_7fxt6")
+
+[node name="LockableDoor" parent="." instance=ExtResource("16_imadt")]
+position = Vector2(89, 19)
+
+[node name="UnlockDoorCard" type="Node2D" parent="."]
+position = Vector2(-17, -7)
+script = ExtResource("17_frxwl")
+slots = Array[ExtResource("2_cp4qc")]([SubResource("Resource_ejmq8"), SubResource("Resource_utxj7")])
+metadata/_custom_type_script = ExtResource("17_frxwl")
