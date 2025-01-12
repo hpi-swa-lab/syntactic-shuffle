@@ -16,7 +16,6 @@ static func create(limit_to_group) -> ObjectInputSlot:
 var on_connect
 var on_disconnect
 
-
 func _init(on_connect = null, on_disconnect = null) -> void:
 	self.on_connect = on_connect
 	self.on_disconnect = on_disconnect

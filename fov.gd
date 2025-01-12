@@ -3,12 +3,24 @@ extends Node2D
 signal spots(object: Object)
 
 @export var degrees = 30
+@export var distance = 256:
+	set(v):
+		distance = v
+		$RayCast2D.target_position = Vector2(0, distance)
+		update_texture()
+	get:
+		return distance
 
 func _ready() -> void:
+	# cause one update
+	distance = distance
+
+func update_texture() -> void:
+	print(distance)
 	var viewport = SubViewport.new()
 	RenderingServer.viewport_set_active(viewport.get_viewport_rid(), true)
 	add_child(viewport)
-	viewport.size = Vector2i(1024, 1024)
+	viewport.size = Vector2i(distance * 2, distance * 2)
 	var circle_sector = preload("res://circle_sector.tscn").instantiate()
 	circle_sector.radius = viewport.size.x / 2
 	circle_sector.position = viewport.size / 2
