@@ -13,4 +13,4 @@ func _process(delta: float) -> void:
 	if Engine.is_editor_hint():
 		return
 	
-	get_output_slot().invoke(self, [get_global_mouse_position()])
+	get_output_slot().invoke(self, [Spawn.marker.get_global_mouse_position()])
