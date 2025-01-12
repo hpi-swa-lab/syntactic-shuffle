@@ -17,16 +17,6 @@
 [ext_resource type="Script" uid="uid://dve76ylj0x1xs" path="res://addons/cards/cards/MouseLeftClickCard.gd" id="14_8l2j7"]
 [ext_resource type="PackedScene" uid="uid://bei1c37kub65d" path="res://spawn_marker.tscn" id="16_in80x"]
 
-[sub_resource type="Resource" id="Resource_5jd2a"]
-script = ExtResource("7_m211k")
-object_path = NodePath("../Enemy/CollisionShape2D")
-limit_to_group = ""
-num_args = 0
-
-[sub_resource type="Resource" id="Resource_bcc6e"]
-script = ExtResource("8_aegmx")
-num_args = 1
-
 [sub_resource type="Resource" id="Resource_m211k"]
 script = ExtResource("5_bcc6e")
 connected_input_node_path = NodePath("../MoveCard")
@@ -77,6 +67,16 @@ script = ExtResource("5_bcc6e")
 connected_input_node_path = NodePath("../ShootCard")
 num_args = 0
 
+[sub_resource type="Resource" id="Resource_ubem8"]
+script = ExtResource("7_m211k")
+object_path = NodePath("../Enemy")
+limit_to_group = "cards"
+num_args = 0
+
+[sub_resource type="Resource" id="Resource_xpqcl"]
+script = ExtResource("8_aegmx")
+num_args = 1
+
 [node name="main" type="Node2D"]
 
 [node name="CanvasModulate" type="CanvasModulate" parent="."]
@@ -105,12 +105,6 @@ pan = false
 
 [node name="Enemy" parent="." instance=ExtResource("2_i8gei")]
 position = Vector2(475, 341)
-
-[node name="MoveCard" type="Node2D" parent="."]
-position = Vector2(555, 336)
-script = ExtResource("4_vgmek")
-slots = Array[ExtResource("4_5jd2a")]([SubResource("Resource_5jd2a"), SubResource("Resource_bcc6e")])
-metadata/_custom_type_script = ExtResource("4_vgmek")
 
 [node name="RandomAxisCard" type="Node2D" parent="."]
 position = Vector2(647, 324)
@@ -155,3 +149,9 @@ slots = Array[ExtResource("4_5jd2a")]([SubResource("Resource_dxshk")])
 metadata/_custom_type_script = ExtResource("14_8l2j7")
 
 [node name="SpawnMarker" parent="." instance=ExtResource("16_in80x")]
+
+[node name="MoveCard" type="Node2D" parent="."]
+position = Vector2(564, 324)
+script = ExtResource("4_vgmek")
+slots = Array[ExtResource("4_5jd2a")]([SubResource("Resource_ubem8"), SubResource("Resource_xpqcl")])
+metadata/_custom_type_script = ExtResource("4_vgmek")
