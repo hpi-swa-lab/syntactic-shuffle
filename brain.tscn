@@ -1,10 +1,13 @@
-[gd_scene load_steps=2 format=3 uid="uid://dycnp1nhlvrnu"]
+[gd_scene load_steps=3 format=3 uid="uid://dycnp1nhlvrnu"]
 
 [ext_resource type="Script" uid="uid://cja8ehiirmcyt" path="res://addons/cards/CardBoundary.gd" id="1_42xjx"]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_42xjx"]
+size = Vector2(822, 900)
+
 [node name="brain" type="CanvasLayer"]
 
-[node name="CardBoundary" type="Node" parent="."]
+[node name="CardBoundary" type="Area2D" parent="."]
 script = ExtResource("1_42xjx")
 metadata/_custom_type_script = ExtResource("1_42xjx")
 
@@ -14,3 +17,7 @@ offset_top = 54.0
 offset_right = 1841.0
 offset_bottom = 950.0
 color = Color(0.133196, 0.133196, 0.133196, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CardBoundary"]
+position = Vector2(1433, 504)
+shape = SubResource("RectangleShape2D_42xjx")

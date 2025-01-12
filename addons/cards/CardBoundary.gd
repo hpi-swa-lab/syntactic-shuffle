@@ -1,5 +1,5 @@
 @tool
-extends Node
+extends Area2D
 class_name CardBoundary
 
 static func get_card_boundary(card: Card):

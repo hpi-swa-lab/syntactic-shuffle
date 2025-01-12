@@ -1,7 +1,8 @@
-[gd_scene load_steps=9 format=3 uid="uid://clx5pustrmpx5"]
+[gd_scene load_steps=10 format=3 uid="uid://clx5pustrmpx5"]
 
 [ext_resource type="Script" uid="uid://b84o7u6cy5fn" path="res://hand.gd" id="1_u4p2i"]
 [ext_resource type="Script" uid="uid://d23cwws3aqxp1" path="res://addons/cards/cards/MoveCard.gd" id="2_3q536"]
+[ext_resource type="Script" uid="uid://cja8ehiirmcyt" path="res://addons/cards/CardBoundary.gd" id="2_6wjrw"]
 [ext_resource type="Script" uid="uid://dsn8t1oa5bses" path="res://addons/cards/slots/slot.gd" id="3_6wjrw"]
 [ext_resource type="Script" uid="uid://bu1higbimotmh" path="res://addons/cards/slots/object_input_slot.gd" id="4_bgjit"]
 [ext_resource type="Script" uid="uid://cvwcl5iet0pyp" path="res://addons/cards/slots/input_slot.gd" id="5_xwava"]
@@ -21,9 +22,10 @@ size = Vector2(537, 59)
 
 [node name="CanvasLayer" type="CanvasLayer"]
 
-[node name="hand" type="Node2D" parent="." groups=["hand"]]
+[node name="hand" type="Area2D" parent="." groups=["hand"]]
 position = Vector2(694, 979)
 script = ExtResource("1_u4p2i")
+metadata/_custom_type_script = ExtResource("2_6wjrw")
 
 [node name="Background" type="ColorRect" parent="hand"]
 offset_right = 537.0
@@ -40,9 +42,7 @@ disable = true
 slots = Array[ExtResource("3_6wjrw")]([SubResource("Resource_3i0sp"), SubResource("Resource_djtxf")])
 metadata/_custom_type_script = ExtResource("2_3q536")
 
-[node name="Area2D" type="Area2D" parent="hand"]
-
-[node name="shape" type="CollisionShape2D" parent="hand/Area2D"]
+[node name="shape" type="CollisionShape2D" parent="hand"]
 unique_name_in_owner = true
 position = Vector2(268.5, 29.5)
 shape = SubResource("RectangleShape2D_3q536")
