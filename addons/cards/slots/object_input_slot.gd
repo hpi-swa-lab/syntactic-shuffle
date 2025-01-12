@@ -49,3 +49,6 @@ func get_draw_dependencies(card: Card, deps: Array):
 	if object:
 		deps.push_back(object.global_position)
 		deps.push_back(card.global_position)
+func disconnect_all(card: Card):
+	_disconnect(card)
+	object_path = NodePath()

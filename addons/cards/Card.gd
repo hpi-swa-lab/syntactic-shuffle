@@ -16,6 +16,8 @@ const MAX_CONNECTION_DISTANCE = 150
 	set(v):
 		disable = v
 		if connection_draw_node: connection_draw_node.queue_redraw()
+		if disable:
+			for s in slots: s.disconnect_all(self)
 	get:
 		return disable
 
