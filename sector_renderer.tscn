@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="uid://cpq362jooifwf"]
+
+[ext_resource type="Script" uid="uid://cvu3q5gpc6iq2" path="res://sector_renderer.gd" id="1_mr3q6"]
+[ext_resource type="PackedScene" uid="uid://djiwcyfv14o2q" path="res://circle_sector.tscn" id="2_7jmmj"]
+
+[node name="SectorRenderer" type="Node2D"]
+script = ExtResource("1_mr3q6")
+
+[node name="SubViewport" type="SubViewport" parent="."]
+
+[node name="CircleSector" parent="SubViewport" instance=ExtResource("2_7jmmj")]
+radius = 256
+degrees = 80
