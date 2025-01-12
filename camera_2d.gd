@@ -1,6 +1,7 @@
 extends Camera2D
 
 @export var zoom_speed = 0.05
+@export var pan = true
 
 var held = false
 
@@ -18,7 +19,7 @@ func _input(event: InputEvent) -> void:
 			_: factor = 0
 		factor *= event.factor * zoom_speed * zoom.x
 		_zoom(factor)
-	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT:
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and pan:
 		held = event.is_pressed()
 	if event is InputEventMouseMotion and held:
 		position -= event.screen_relative / zoom
