@@ -6,5 +6,5 @@ func _ready() -> void:
 func take_damage(_damage: float):
 	queue_free()
 
-func show_brain(show: bool):
-	$brain.visible = show
+func show_brain(_show: bool):
+	$brain.visible = _show

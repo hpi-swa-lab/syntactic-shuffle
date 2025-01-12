@@ -25,10 +25,10 @@ static func has_parent(node: Node, parent: Node):
 			return true
 	return false
 
-static func closest_node(node: Node, filter: Callable):
+static func closest_node(root: Node, node: Node, filter: Callable, exclude: Array[Node]):
 	var data = { "best_distance": INF }
 	var pos = node.global_position
-	var candidate = all_nodes_reduce(null, node.get_viewport(), [node], func(current, test):
+	var candidate = all_nodes_reduce(null, root, exclude, func(current, test):
 		var distance = G.distance_to_node(pos, test)
 		if filter.call(test, distance) and (not current or distance < data["best_distance"]):
 			data["best_distance"] = distance

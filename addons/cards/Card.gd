@@ -144,7 +144,7 @@ func _process(delta: float) -> void:
 	if dragging:
 		for slot in slots:
 			slot.check_disconnect(self, self)
-			var c = G.closest_node(self, func(n, d): return slot.can_connect_to(n))
+			var c = CardBoundary.get_closest_card(self, slot)
 			if c:
 				var dist = c.global_position.distance_to(global_position)
 				if dist > MAX_CONNECTION_DISTANCE and c is Card:

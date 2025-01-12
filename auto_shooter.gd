@@ -24,5 +24,5 @@ func _process(delta: float) -> void:
 func _ready() -> void:
 	$brain.visible = false
 
-func show_brain(show: bool):
-	$brain.visible = show
+func show_brain(_show: bool):
+	$brain.visible = _show
