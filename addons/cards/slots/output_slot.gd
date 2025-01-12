@@ -27,9 +27,9 @@ func can_connect_to(object):
 		return s is InputSlot and self.num_args == s.num_args)
 func connect_to(from: Node, object: Node):
 	connected_input_node_path = from.get_path_to(object)
-func check_disconnect(card: Card):
-	var o = get_connected(card)
-	if o and o.global_position.distance_to(card.global_position) > Card.MAX_CONNECTION_DISTANCE:
+func check_disconnect(me: Card, other):
+	var o = get_connected(me)
+	if o and o.global_position.distance_to(me.global_position) > Card.MAX_CONNECTION_DISTANCE:
 		connected_input_node_path = NodePath()
 func draw(node, draw_node):
 	var to = get_connected(node)

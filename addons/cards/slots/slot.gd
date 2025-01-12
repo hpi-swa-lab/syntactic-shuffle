@@ -9,7 +9,7 @@ func can_connect_to(object):
 	return false
 func connect_to(from: Node, object: Node):
 	pass
-func check_disconnect(card: Card):
+func check_disconnect(me: Card, card: Card):
 	pass
 func draw(node, draw_node):
 	pass
@@ -58,7 +58,7 @@ class FixedSlot extends Slot:
 		else:
 			var output = object.get_output_slot()
 			output.connect_to(object, from)
-	func check_disconnect(card: Card):
+	func check_disconnect(me: Card, card: Card):
 		var o = get_connected(card)
 		if o and o.global_position.distance_to(card.global_position) > Card.MAX_CONNECTION_DISTANCE:
 			connected_input_node_path = NodePath()

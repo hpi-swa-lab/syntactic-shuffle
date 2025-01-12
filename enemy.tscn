@@ -1,14 +1,44 @@
-[gd_scene load_steps=6 format=3 uid="uid://oar1f8wbrv40"]
+[gd_scene load_steps=20 format=3 uid="uid://oar1f8wbrv40"]
 
 [ext_resource type="Script" uid="uid://c4kqmfv54176" path="res://auto_shooter.gd" id="1_iifgy"]
 [ext_resource type="PackedScene" uid="uid://dtpl6e6yyux1m" path="res://fov.tscn" id="2_4gyqm"]
 [ext_resource type="Texture2D" uid="uid://7umswm7xf7he" path="res://resources/characters/Robot.png" id="3_qi2p4"]
 [ext_resource type="PackedScene" uid="uid://dj1levijtlio2" path="res://pistol.tscn" id="4_iifgy"]
+[ext_resource type="PackedScene" uid="uid://dycnp1nhlvrnu" path="res://brain.tscn" id="5_3yqyl"]
+[ext_resource type="Script" uid="uid://c8cfoeik47tv2" path="res://addons/cards/cards/RandomAxisCard.gd" id="6_pwjut"]
+[ext_resource type="Script" uid="uid://lf6acu6i0abm" path="res://addons/cards/CardProxy.gd" id="6_wujgv"]
+[ext_resource type="Script" uid="uid://dsn8t1oa5bses" path="res://addons/cards/slots/slot.gd" id="7_n0g06"]
+[ext_resource type="Script" uid="uid://b1hhj058mohfm" path="res://addons/cards/slots/output_slot.gd" id="8_ar8e5"]
+[ext_resource type="Script" uid="uid://d23cwws3aqxp1" path="res://addons/cards/cards/MoveCard.gd" id="9_doop2"]
+[ext_resource type="Script" uid="uid://bu1higbimotmh" path="res://addons/cards/slots/object_input_slot.gd" id="10_5hcft"]
+[ext_resource type="Script" uid="uid://cvwcl5iet0pyp" path="res://addons/cards/slots/input_slot.gd" id="11_nnovl"]
+[ext_resource type="Texture2D" uid="uid://bvdu3vtx5xk7e" path="res://addons/cards/icons/brain.png" id="12_ar8e5"]
+[ext_resource type="Script" uid="uid://dkyx51jnk8cvd" path="res://addons/cards/cards/AxisControlsCard.gd" id="14_doop2"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_qi2p4"]
 size = Vector2(19, 14)
 
-[node name="Enemy" type="CharacterBody2D" node_paths=PackedStringArray("gun") groups=["cards", "enemy", "health"]]
+[sub_resource type="Resource" id="Resource_jmwgi"]
+script = ExtResource("8_ar8e5")
+connected_input_node_path = NodePath("")
+num_args = 1
+
+[sub_resource type="Resource" id="Resource_g2u8i"]
+script = ExtResource("10_5hcft")
+object_path = NodePath("../CardProxy")
+limit_to_group = "cards"
+num_args = 0
+
+[sub_resource type="Resource" id="Resource_otto8"]
+script = ExtResource("11_nnovl")
+num_args = 1
+
+[sub_resource type="Resource" id="Resource_5hcft"]
+script = ExtResource("8_ar8e5")
+connected_input_node_path = NodePath("")
+num_args = 1
+
+[node name="Enemy" type="CharacterBody2D" node_paths=PackedStringArray("gun") groups=["cards", "enemy", "hackable", "health"]]
 script = ExtResource("1_iifgy")
 gun = NodePath("Pistol")
 
@@ -29,4 +59,33 @@ position = Vector2(14, 6)
 rotation = 1.5708
 owner_group = "enemy"
 
+[node name="brain" parent="." instance=ExtResource("5_3yqyl")]
+
+[node name="RandomAxisCard" type="Node2D" parent="brain/CardBoundary" index="2"]
+position = Vector2(1531, 435)
+script = ExtResource("6_pwjut")
+slots = Array[ExtResource("7_n0g06")]([SubResource("Resource_jmwgi")])
+metadata/_custom_type_script = ExtResource("6_pwjut")
+
+[node name="MoveCard" type="Node2D" parent="brain/CardBoundary" index="3"]
+position = Vector2(1605, 475)
+script = ExtResource("9_doop2")
+slots = Array[ExtResource("7_n0g06")]([SubResource("Resource_g2u8i"), SubResource("Resource_otto8")])
+metadata/_custom_type_script = ExtResource("9_doop2")
+
+[node name="CardProxy" type="Sprite2D" parent="brain/CardBoundary" index="4" node_paths=PackedStringArray("proxy_target")]
+position = Vector2(1532, 528)
+texture = ExtResource("12_ar8e5")
+script = ExtResource("6_wujgv")
+proxy_target = NodePath("../../..")
+metadata/_custom_type_script = ExtResource("6_wujgv")
+
+[node name="AxisControlsCard" type="Node2D" parent="brain/CardBoundary" index="5"]
+position = Vector2(1597, 412)
+script = ExtResource("14_doop2")
+slots = Array[ExtResource("7_n0g06")]([SubResource("Resource_5hcft")])
+metadata/_custom_type_script = ExtResource("14_doop2")
+
 [connection signal="spots" from="FoV" to="." method="_on_fov_spots"]
+
+[editable path="brain"]
