@@ -1,4 +1,4 @@
-[gd_scene load_steps=38 format=4 uid="uid://cvjg22am007hc"]
+[gd_scene load_steps=41 format=4 uid="uid://cvjg22am007hc"]
 
 [ext_resource type="Texture2D" uid="uid://bywsq5hdhm8y2" path="res://resources/tiles/floor_tile.png" id="1_eow3j"]
 [ext_resource type="Texture2D" uid="uid://bmoymxtmm580w" path="res://resources/tiles/Road.png" id="2_j5wjh"]
@@ -20,6 +20,7 @@
 [ext_resource type="Script" uid="uid://bkudnvkfdf6jn" path="res://addons/cards/cards/UseItemCard.gd" id="17_boyg6"]
 [ext_resource type="Script" uid="uid://cvwcl5iet0pyp" path="res://addons/cards/slots/input_slot.gd" id="17_qhcbd"]
 [ext_resource type="Script" uid="uid://c1y5hmu8ve21k" path="res://addons/cards/cards/ClockCard.gd" id="18_e36ub"]
+[ext_resource type="Script" uid="uid://bxickpvjsjtcj" path="res://addons/cards/cards/SlideVerticallyCard.gd" id="18_qhcbd"]
 [ext_resource type="Script" uid="uid://b1hhj058mohfm" path="res://addons/cards/slots/output_slot.gd" id="19_hb5m1"]
 [ext_resource type="Script" uid="uid://bff8ils3b0x3x" path="res://addons/cards/cards/UnlockDoorCard.gd" id="20_e36ub"]
 
@@ -67,6 +68,17 @@ num_args = 0
 script = ExtResource("17_qhcbd")
 connected_output_node_path = NodePath("")
 num_args = 0
+
+[sub_resource type="Resource" id="Resource_qhcbd"]
+script = ExtResource("16_x5p1p")
+object_path = NodePath("")
+limit_to_group = "slide"
+num_args = 0
+
+[sub_resource type="Resource" id="Resource_dhpj7"]
+script = ExtResource("17_qhcbd")
+connected_output_node_path = NodePath("")
+num_args = 1
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_3q536"]
 size = Vector2(537, 59)
@@ -209,11 +221,11 @@ disable = null
 slots = Array[ExtResource("12_7sc4i")]([SubResource("Resource_vaj68"), SubResource("Resource_i2p71")])
 metadata/_custom_type_script = ExtResource("20_e36ub")
 
-[node name="characters#Enemy" parent="." instance=ExtResource("8_iotsf")]
-position = Vector2(-617.454, 543.577)
-
-[node name="characters#ExplodableBarrel" parent="." instance=ExtResource("11_e8heu")]
-position = Vector2(-539, 524)
+[node name="SlideVerticallyCard" type="Node2D" parent="CardBoundary/objects/Room2"]
+position = Vector2(-1036, 866)
+script = ExtResource("18_qhcbd")
+slots = Array[ExtResource("12_7sc4i")]([SubResource("Resource_qhcbd"), SubResource("Resource_dhpj7")])
+metadata/_custom_type_script = ExtResource("18_qhcbd")
 
 [node name="hand" type="CanvasLayer" parent="."]
 

@@ -81,7 +81,7 @@ slots = Array[ExtResource("2_gplc3")]([SubResource("Resource_gplc3"), SubResourc
 metadata/_custom_type_script = ExtResource("8_gplc3")
 
 [node name="AxisControlsCard" type="Node2D" parent="."]
-position = Vector2(215, 213)
+position = Vector2(209, 239)
 script = ExtResource("9_y81ca")
 slots = Array[ExtResource("2_gplc3")]([SubResource("Resource_fganm")])
 metadata/_custom_type_script = ExtResource("9_y81ca")

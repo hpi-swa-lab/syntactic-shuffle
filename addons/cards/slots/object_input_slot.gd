@@ -43,7 +43,7 @@ func check_disconnect(me: Card, card: Card):
 		object_path = NodePath()
 func draw(node, draw_node):
 	var object = node.get_node_or_null(object_path)
-	if object: draw_connection(node, object, true, draw_node)
+	if object: draw_connection(node, object, false, draw_node)
 func get_draw_dependencies(card: Card, deps: Array):
 	var object = card.get_node_or_null(object_path)
 	if object:
