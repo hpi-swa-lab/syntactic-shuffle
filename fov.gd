@@ -41,6 +41,6 @@ func _physics_process(_delta: float) -> void:
 			if not hit.get(collider):
 				hit[collider] = true
 				if collider is Node2D \
-						and included_groups.any(func(group): collider.is_in_group(group)) \
-						and excluded_groups.all(func(group): not collider.is_in_group(group)):
+						and included_groups.any(func(group): return collider.is_in_group(group)) \
+						and excluded_groups.all(func(group): return not collider.is_in_group(group)):
 					detected.emit(collider)
