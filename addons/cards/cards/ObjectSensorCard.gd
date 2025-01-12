@@ -17,4 +17,5 @@ func _ready() -> void:
 		object.disconnect("detected", on_detected)
 
 func on_detected(object):
+	print("detected")
 	get_output_slot().invoke(self, [object.global_position])

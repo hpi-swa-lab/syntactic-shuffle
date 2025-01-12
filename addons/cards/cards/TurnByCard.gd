@@ -12,7 +12,6 @@ func _ready() -> void:
 	print("Turn ready")
 
 func turn(turn_radians: float):
-	print("turn bitch", turn_radians)
 	var node = get_object_input()
 	if not node or not node is Node2D: return
 	(node as Node2D).rotate(turn_radians)

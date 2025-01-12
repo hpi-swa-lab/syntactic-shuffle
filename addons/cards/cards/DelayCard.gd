@@ -2,13 +2,14 @@
 #thumb("clock.png")
 extends Card
 
+@export var default_delay = 0.1
 var delay_seconds = SpinBox.new()
 
 func _ready() -> void:
 	super._ready()
 	delay_seconds.prefix = "Delay: "
 	delay_seconds.suffix = "s"
-	delay_seconds.value = 1
+	delay_seconds.value = default_delay
 	delay_seconds.step = 0.1
 	setup("Delay",
 		"Delay for a given time and then forward the inputs.",
