@@ -20,7 +20,11 @@ func _init(on_connect = null, on_disconnect = null) -> void:
 	self.on_connect = on_connect
 	self.on_disconnect = on_disconnect
 func get_object(card: Card):
-	return card.get_node_or_null(object_path)
+	var o = card.get_node_or_null(object_path)
+	if o is CardProxy:
+		return o.proxy_target
+	else:
+		return o
 func can_connect_to(object: Node):
 	return object.is_in_group(limit_to_group)
 func _disconnect(me: Card):

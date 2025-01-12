@@ -49,12 +49,8 @@ var dragging:
 	set(v):
 		if v == dragging: return
 		dragging = v
-		if disable and dragging:
-			# FIXME
-			get_parent().get_parent().remove_card(self)
-		elif not dragging and not disable:
-			maybe_add_to_hand()
-		
+		if not dragging:
+			CardBoundary.get_card_boundary(self).card_dropped(self)
 		connection_draw_node.queue_redraw()
 	get:
 		return dragging
@@ -139,7 +135,11 @@ func _forward_canvas_gui_input(event: InputEvent, undo_redo):
 	return false
 
 func _process(delta: float) -> void:
-	if not show_cards() or disable: return
+	if not show_cards(): return
+	if dragging: CardBoundary.card_moved(self)
+	
+	if disable: return
+	
 	if dragging:
 		for slot in slots:
 			slot.check_disconnect(self, self)
