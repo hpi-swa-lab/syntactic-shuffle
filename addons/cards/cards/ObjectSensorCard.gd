@@ -1,5 +1,5 @@
 @tool
-#thumb("look_at.png")
+#thumb("sensor_entered.png")
 extends Card
 
 func _ready() -> void:
