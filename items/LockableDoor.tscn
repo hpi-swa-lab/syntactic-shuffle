@@ -1,0 +1,12 @@
+[gd_scene load_steps=2 format=3 uid="uid://dsbyqp8jcc106"]
+
+[ext_resource type="Script" uid="uid://djoesxun878q3" path="res://items/lockable_door.gd" id="1_cjwh7"]
+
+[node name="LockableDoor" type="Node2D" groups=["door"]]
+script = ExtResource("1_cjwh7")
+
+[node name="Door" type="ColorRect" parent="."]
+offset_right = 30.0
+offset_bottom = 5.0
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
