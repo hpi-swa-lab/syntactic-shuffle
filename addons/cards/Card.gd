@@ -111,20 +111,21 @@ func _process(delta: float) -> void:
 		var boundary = get_card_boundary()
 		# check for disconnects
 		for slot_name in connections:
-			for info in connections[slot_name].duplicate():
-				var them = get_node_or_null(info[0])
+			var connections_iter = connections[slot_name].duplicate()
+			for i in range(0, connections_iter.size()):
+				var them = get_node_or_null(connections_iter[i][0])
 				if not (them != null
 						and global_position.distance_to(them.global_position) <= MAX_CONNECTION_DISTANCE
 						and boundary == CardBoundary.get_card_boundary(them)):
 					var my_slot = get_slot_by_name(slot_name)
-					var their_slot = node_get_slot_by_name(them, info[1])
-					disconnect_slot(my_slot, them, their_slot)
-					node_disconnect_slot(them, their_slot, self, my_slot)
+					var their_slot = node_get_slot_by_name(them, connections_iter[i][1])
+					disconnect_slot(my_slot, them, their_slot, i)
+					if them: node_disconnect_slot(them, their_slot, self, my_slot)
 		
 		# check for connects
 		for my_slot in slots:
 			CardBoundary.traverse_connection_candidates(self, func (obj):
-				if global_position.distance_to(obj.global_position) > MAX_CONNECTION_DISTANCE:
+				if not obj is CanvasItem or global_position.distance_to(obj.global_position) > MAX_CONNECTION_DISTANCE:
 					return
 				for their_slot in Card.node_get_slots(obj):
 					if my_slot.can_connect_to(obj, their_slot):
@@ -140,13 +141,18 @@ func connect_slot(my_slot: Slot, them: Node, their_slot: Slot):
 		list.push_back(pair)
 		my_slot.on_connect(them, their_slot)
 
-func disconnect_slot(my_slot: Slot, them: Node, their_slot: Slot):
-	var path = get_path_to(them)
-	connections[my_slot.get_slot_name()].erase([path, their_slot.get_slot_name()])
-	my_slot.on_disconnect(them, their_slot)
+func disconnect_slot(my_slot: Slot, them: Node, their_slot: Slot, index: int = -1):
+	var list = connections[my_slot.get_slot_name()]
+	if not them and index >= 0:
+		list.remove_at(index)
+	else:
+		var path = get_path_to(them)
+		list.erase([path, their_slot.get_slot_name()])
+		my_slot.on_disconnect(them, their_slot)
 
 func disconnect_all():
-	connections = {}
+	for list in connections:
+		connections[list].clear()
 
 func get_extent() -> Vector2:
 	return visual.get_extent()

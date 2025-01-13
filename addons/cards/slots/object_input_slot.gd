@@ -31,6 +31,7 @@ func get_object():
 func can_connect_to(object: Node, slot: Slot):
 	return (slot is ObjectOutputSlot
 		and (limit_to_group == "" or object.is_in_group(limit_to_group))
+		and not object is Camera2D
 		and object.get_parent() == card.get_parent())
 
 func on_connect(object: Node, slot: Slot):

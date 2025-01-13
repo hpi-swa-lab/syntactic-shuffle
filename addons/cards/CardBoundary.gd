@@ -23,7 +23,7 @@ static func get_card_boundary(node: Node):
 	return b
 
 static func boundary_at_card(card: Card):
-	var pos = card.get_canvas_transform() * card.global_position
+	var pos = card.get_viewport().get_mouse_position()
 	var fallback = null
 	for boundary in card.get_tree().get_nodes_in_group("card_boundary").filter(func (c): return c.is_visible_in_tree()):
 		if boundary.get_shape_owners().is_empty():
@@ -32,7 +32,7 @@ static func boundary_at_card(card: Card):
 		for id in boundary.get_shape_owners():
 			var shape = boundary.shape_owner_get_shape(id, 0)
 			var rect = boundary.shape_owner_get_transform(id) * shape.get_rect()
-			rect = boundary.get_canvas_transform() * rect
+			rect = boundary.get_canvas_transform() * boundary.get_global_transform() * rect
 			if rect.has_point(pos):
 				return boundary
 	return fallback

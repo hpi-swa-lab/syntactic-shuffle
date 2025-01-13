@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://dcjpymb1evgp4"]
+[gd_scene load_steps=14 format=3 uid="uid://dcjpymb1evgp4"]
 
 [ext_resource type="Script" uid="uid://cxldeg24krchn" path="res://camera_2d.gd" id="1_37kl0"]
 [ext_resource type="Script" uid="uid://cja8ehiirmcyt" path="res://addons/cards/CardBoundary.gd" id="1_g14j6"]
@@ -7,31 +7,55 @@
 [ext_resource type="Script" uid="uid://c8cfoeik47tv2" path="res://addons/cards/cards/RandomAxisCard.gd" id="5_ykrsh"]
 [ext_resource type="Script" uid="uid://c1y5hmu8ve21k" path="res://addons/cards/cards/ClockCard.gd" id="6_vbegm"]
 [ext_resource type="Script" uid="uid://by84b3jta1gov" path="res://addons/cards/cards/Vector2Card.gd" id="7_ehkex"]
+[ext_resource type="Script" uid="uid://bvoloc64pi1db" path="res://addons/cards/cards/CollisionCard.gd" id="8_ehkex"]
+[ext_resource type="Script" uid="uid://bo08qvvq1e3aj" path="res://addons/cards/cards/DeleteCard.gd" id="9_xersf"]
+[ext_resource type="Script" uid="uid://ciwr6t8y6q0qb" path="res://addons/cards/cards/TurnByCard.gd" id="10_00tp4"]
+[ext_resource type="Script" path="res://addons/cards/cards/NumberCard.gd" id="11_77dp3"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_37kl0"]
 size = Vector2(40, 40)
 
-[node name="test" type="Area2D"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_77dp3"]
+size = Vector2(500, 40)
+
+[node name="test" type="Node2D"]
+
+[node name="main" type="Area2D" parent="."]
 script = ExtResource("1_g14j6")
 metadata/_custom_type_script = ExtResource("1_g14j6")
 
-[node name="Camera2D" type="Camera2D" parent="."]
+[node name="Camera2D" type="Camera2D" parent="main"]
 script = ExtResource("1_37kl0")
 
-[node name="CharacterBody2D" type="CharacterBody2D" parent="."]
-position = Vector2(164, 112)
+[node name="StaticBody2D" type="StaticBody2D" parent="main"]
+position = Vector2(243, 254)
 
-[node name="ColorRect" type="ColorRect" parent="CharacterBody2D"]
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="main/StaticBody2D"]
+shape = SubResource("RectangleShape2D_37kl0")
+
+[node name="ColorRect2" type="ColorRect" parent="main/StaticBody2D"]
 offset_left = -20.0
 offset_top = -20.0
 offset_right = 20.0
 offset_bottom = 20.0
+color = Color(1, 0, 0, 1)
+metadata/_edit_use_anchors_ = true
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D"]
+[node name="CharacterBody2D" type="CharacterBody2D" parent="main"]
+position = Vector2(373, 272)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="main/CharacterBody2D"]
 shape = SubResource("RectangleShape2D_37kl0")
 
-[node name="MoveCard" type="Node2D" parent="."]
-position = Vector2(280, 128)
+[node name="ColorRect" type="ColorRect" parent="main/CharacterBody2D"]
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+metadata/_edit_use_anchors_ = true
+
+[node name="MoveCard" type="Node2D" parent="main"]
+position = Vector2(489, 288)
 script = ExtResource("3_6uqi0")
 connections = Dictionary[String, Array]({
 "__input": [[NodePath("../AxisControlsCard"), "__output"], [NodePath("../Vector2Card"), "__output"]],
@@ -39,8 +63,8 @@ connections = Dictionary[String, Array]({
 })
 metadata/_custom_type_script = ExtResource("3_6uqi0")
 
-[node name="AxisControlsCard" type="Node2D" parent="."]
-position = Vector2(388, 69)
+[node name="AxisControlsCard" type="Node2D" parent="main"]
+position = Vector2(597, 229)
 script = ExtResource("4_ppyta")
 connections = Dictionary[String, Array]({
 "__output": [[NodePath("../MoveCard"), "__input"]]
@@ -49,8 +73,8 @@ locked = null
 disable = null
 metadata/_custom_type_script = ExtResource("4_ppyta")
 
-[node name="RandomAxisCard" type="Node2D" parent="."]
-position = Vector2(492, 213)
+[node name="RandomAxisCard" type="Node2D" parent="main"]
+position = Vector2(701, 373)
 script = ExtResource("5_ykrsh")
 connections = Dictionary[String, Array]({
 "__output": []
@@ -59,8 +83,8 @@ locked = null
 disable = null
 metadata/_custom_type_script = ExtResource("5_ykrsh")
 
-[node name="ClockCard" type="Node2D" parent="."]
-position = Vector2(301, 301)
+[node name="ClockCard" type="Node2D" parent="main"]
+position = Vector2(510, 461)
 script = ExtResource("6_vbegm")
 delay_seconds = 0.1
 connections = Dictionary[String, Array]({
@@ -68,8 +92,8 @@ connections = Dictionary[String, Array]({
 })
 metadata/_custom_type_script = ExtResource("6_vbegm")
 
-[node name="Vector2Card" type="Node2D" parent="."]
-position = Vector2(240, 239)
+[node name="Vector2Card" type="Node2D" parent="main"]
+position = Vector2(449, 399)
 script = ExtResource("7_ehkex")
 vector = Vector2(0.3, 0)
 connections = Dictionary[String, Array]({
@@ -77,3 +101,58 @@ connections = Dictionary[String, Array]({
 "__output": [[NodePath("../MoveCard"), "__input"]]
 })
 metadata/_custom_type_script = ExtResource("7_ehkex")
+
+[node name="CollisionCard" type="Node2D" parent="main"]
+position = Vector2(404, 187)
+script = ExtResource("8_ehkex")
+connections = Dictionary[String, Array]({
+"__object": [[NodePath("../CharacterBody2D"), "__object"]],
+"__output": [[NodePath("../DeleteCard"), "__input"], [NodePath("../NumberCard"), "__input"]]
+})
+metadata/_custom_type_script = ExtResource("8_ehkex")
+
+[node name="DeleteCard" type="Node2D" parent="main"]
+position = Vector2(497, 169)
+script = ExtResource("9_xersf")
+connections = Dictionary[String, Array]({
+"__input": [[NodePath("../CollisionCard"), "__output"]],
+"__object": []
+})
+metadata/_custom_type_script = ExtResource("9_xersf")
+
+[node name="TurnByCard" type="Node2D" parent="main"]
+position = Vector2(222, 171)
+script = ExtResource("10_00tp4")
+connections = Dictionary[String, Array]({
+"__input": [[NodePath("../NumberCard"), "__output"]],
+"__object": [[NodePath("../StaticBody2D"), "__object"]]
+})
+metadata/_custom_type_script = ExtResource("10_00tp4")
+
+[node name="NumberCard" type="Node2D" parent="main"]
+position = Vector2(297, 122)
+script = ExtResource("11_77dp3")
+number = 2.0
+connections = Dictionary[String, Array]({
+"__input": [[NodePath("../CollisionCard"), "__output"]],
+"__output": [[NodePath("../TurnByCard"), "__input"]]
+})
+metadata/_custom_type_script = ExtResource("11_77dp3")
+
+[node name="hand" type="CanvasLayer" parent="."]
+
+[node name="CardBoundary" type="Area2D" parent="hand"]
+position = Vector2(727, 1008)
+script = ExtResource("1_g14j6")
+disable_on_enter = true
+layout_cards_in_row = true
+metadata/_custom_type_script = ExtResource("1_g14j6")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="hand/CardBoundary"]
+position = Vector2(250, 20)
+shape = SubResource("RectangleShape2D_77dp3")
+
+[node name="ColorRect2" type="ColorRect" parent="hand/CardBoundary"]
+offset_right = 500.0
+offset_bottom = 40.0
+metadata/_edit_use_anchors_ = true
