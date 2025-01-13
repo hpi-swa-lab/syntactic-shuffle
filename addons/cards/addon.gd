@@ -44,8 +44,8 @@ func _handles(object: Object) -> bool:
 
 func _edit(object: Object) -> void:
 	if selected_card:
-		selected_card.set_selected(false)
+		selected_card.dragging = false
 		selected_card = null
 	if object is Card:
 		selected_card = object
-		object.set_selected(true)
+		object.dragging = true

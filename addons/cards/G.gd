@@ -25,28 +25,16 @@ static func has_parent(node: Node, parent: Node):
 			return true
 	return false
 
-static func closest_node(root: Node, node: Node, filter: Callable, exclude: Array[Node]):
-	var data = { "best_distance": INF }
-	var pos = node.global_position
-	var candidate = all_nodes_reduce(null, root, exclude, func(current, test):
-		var distance = G.distance_to_node(pos, test)
-		if filter.call(test, distance) and (not current or distance < data["best_distance"]):
-			data["best_distance"] = distance
-			return test
-		else: return current)
-	return candidate
-
 static func or_default(value: Variant, cb: Callable, default = null):
 	if value: return cb.call(value)
 	return default
 
-static func all_nodes_reduce(init: Variant, parent: Node, exclude: Array[Node], cb: Callable):
+static func traverse_nodes(parent: Node, exclude: Array[Node], cb: Callable):
 	if exclude.has(parent):
-		return init
-	init = cb.call(init, parent)
+		return
+	cb.call(parent)
 	for child in parent.get_children():
-		init = all_nodes_reduce(init, child, exclude, cb)
-	return init
+		traverse_nodes(child, exclude, cb)
 
 static func distance_to_node(point: Vector2, node: Node):
 	if node is CanvasItem:

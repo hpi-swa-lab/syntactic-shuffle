@@ -11,13 +11,13 @@ signal dragging(d: bool)
 		locked = v
 		%locked.visible = v
 
-func setup(name: String, description: String, icon: String, type_icon: String, extra_ui: Control):
+func setup(name: String, description: String, icon: String, type_icon: String, extra_ui: Array[Control]):
 	%Name.text = name
 	%Description.text = description
 	%Icon.path = "res://addons/cards/icons/" + icon
 	%TypeIcon.path = "res://addons/cards/icons/" + type_icon
-	if extra_ui:
-		%InfoColumn.add_child(extra_ui)
+	for c in extra_ui:
+		%MainColumn.add_child(c)
 
 func icon_from_theme(name: StringName):
 	if Engine.is_editor_hint():

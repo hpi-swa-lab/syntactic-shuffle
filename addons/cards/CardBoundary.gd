@@ -9,18 +9,17 @@ class_name CardBoundary
 func _ready() -> void:
 	add_to_group("card_boundary")
 
-static func get_closest_card(card: Card, slot: Slot):
+static func traverse_connection_candidates(card: Card, cb: Callable):
 	var boundary = get_card_boundary(card)
 	var exclude = card.get_tree().get_nodes_in_group("card_boundary")
 	exclude.erase(boundary)
 	exclude.push_back(card)
-	return G.closest_node(boundary,
-		card, func(n, d): return slot.can_connect_to(n), exclude)
+	return G.traverse_nodes(boundary, exclude, cb)
 
-static func get_card_boundary(card: Card):
-	var b = G.closest_parent_that(card, func (n): return n is CardBoundary)
+static func get_card_boundary(node: Node):
+	var b = G.closest_parent_that(node, func (n): return n is CardBoundary)
 	if not b:
-		return card.get_tree().root
+		return node.get_tree().root
 	return b
 
 static func boundary_at_card(card: Card):
@@ -50,14 +49,11 @@ static func card_moved(card: Card):
 			old_boundary._relayout()
 
 func card_picked_up(card: Card):
-	Globals.play_sound(preload("res://resources/sounds/pick up.wav"))
+	pass
 
 func card_dropped(card: Card):
 	if layout_cards_in_row:
 		_relayout()
-		Globals.play_sound(preload("res://resources/sounds/Coin.wav"))
-	else:
-		Globals.play_sound(preload("res://resources/sounds/put down.wav"))
 
 func background_rect() -> Rect2:
 	for id in get_shape_owners():

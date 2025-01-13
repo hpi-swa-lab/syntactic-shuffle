@@ -4,7 +4,9 @@ extends Card
 
 func _ready() -> void:
 	super._ready()
-	setup("Axis Controls", "Emits signals for inputs on the four axes.", Card.Type.Trigger, [OutputSlot.create(1)])
+	setup("Axis Controls", "Emits signals for inputs on the four axes.", Card.Type.Trigger, [
+		OutputSlot.new({"vector": ["Vector2"]})
+	])
 
 func _is_key_pressed(direction):
 	var action_string = "ui_{0}".format([direction])
@@ -30,4 +32,4 @@ func _process(delta: float) -> void:
 	
 	
 	if input_direction.length() > 0:
-		get_output_slot().invoke(self, [input_direction])
+		invoke_output("vector", [input_direction])

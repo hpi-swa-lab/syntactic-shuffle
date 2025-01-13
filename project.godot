@@ -11,15 +11,13 @@ config_version=5
 [application]
 
 config/name="cards"
-run/main_scene="uid://cvjg22am007hc"
+run/main_scene="uid://dcjpymb1evgp4"
 config/features=PackedStringArray("4.4", "Forward Plus")
 config/icon="res://icon.svg"
 
 [autoload]
 
 G="*res://addons/cards/G.gd"
-Spawn="*res://spawn.gd"
-Globals="*res://Globals.gd"
 
 [display]
 

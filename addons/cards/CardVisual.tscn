@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://deh4uywqorec7"]
+[gd_scene load_steps=7 format=3 uid="uid://deh4uywqorec7"]
 
 [ext_resource type="Script" uid="uid://td86i40sy764" path="res://addons/cards/CardVisual.gd" id="1_7r0de"]
 [ext_resource type="Texture2D" uid="uid://c52trtl0cac7l" path="res://icon.svg" id="1_x38hd"]
 [ext_resource type="Script" uid="uid://cxk63c2k70ijb" path="res://addons/cards/ScalingIcon.gd" id="3_hogqd"]
+[ext_resource type="Texture2D" uid="uid://nf875nia2sti" path="res://addons/cards/icons/padlock.png" id="4_odv1r"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_i40e1"]
 border_width_top = 1
@@ -21,6 +22,7 @@ anti_aliasing_size = 0.1
 size = Vector2(200, 282)
 
 [node name="Card" type="Node2D"]
+z_index = 2
 script = ExtResource("1_7r0de")
 
 [node name="CardControl" type="Panel" parent="."]
@@ -101,3 +103,11 @@ autowrap_mode = 3
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 shape = SubResource("RectangleShape2D_tbdv3")
+
+[node name="locked" type="Sprite2D" parent="."]
+unique_name_in_owner = true
+visible = false
+position = Vector2(-6, -31)
+rotation = 0.382793
+scale = Vector2(9.91112, 9.91112)
+texture = ExtResource("4_odv1r")

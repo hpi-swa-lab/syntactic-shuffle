@@ -1,0 +1,79 @@
+[gd_scene load_steps=9 format=3 uid="uid://dcjpymb1evgp4"]
+
+[ext_resource type="Script" uid="uid://cxldeg24krchn" path="res://camera_2d.gd" id="1_37kl0"]
+[ext_resource type="Script" uid="uid://cja8ehiirmcyt" path="res://addons/cards/CardBoundary.gd" id="1_g14j6"]
+[ext_resource type="Script" uid="uid://d23cwws3aqxp1" path="res://addons/cards/cards/MoveCard.gd" id="3_6uqi0"]
+[ext_resource type="Script" uid="uid://dkyx51jnk8cvd" path="res://addons/cards/cards/AxisControlsCard.gd" id="4_ppyta"]
+[ext_resource type="Script" uid="uid://c8cfoeik47tv2" path="res://addons/cards/cards/RandomAxisCard.gd" id="5_ykrsh"]
+[ext_resource type="Script" uid="uid://c1y5hmu8ve21k" path="res://addons/cards/cards/ClockCard.gd" id="6_vbegm"]
+[ext_resource type="Script" uid="uid://by84b3jta1gov" path="res://addons/cards/cards/Vector2Card.gd" id="7_ehkex"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_37kl0"]
+size = Vector2(40, 40)
+
+[node name="test" type="Area2D"]
+script = ExtResource("1_g14j6")
+metadata/_custom_type_script = ExtResource("1_g14j6")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+script = ExtResource("1_37kl0")
+
+[node name="CharacterBody2D" type="CharacterBody2D" parent="."]
+position = Vector2(164, 112)
+
+[node name="ColorRect" type="ColorRect" parent="CharacterBody2D"]
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D"]
+shape = SubResource("RectangleShape2D_37kl0")
+
+[node name="MoveCard" type="Node2D" parent="."]
+position = Vector2(280, 128)
+script = ExtResource("3_6uqi0")
+connections = Dictionary[String, Array]({
+"__input": [[NodePath("../AxisControlsCard"), "__output"], [NodePath("../Vector2Card"), "__output"]],
+"__object": [[NodePath("../CharacterBody2D"), "__object"]]
+})
+metadata/_custom_type_script = ExtResource("3_6uqi0")
+
+[node name="AxisControlsCard" type="Node2D" parent="."]
+position = Vector2(388, 69)
+script = ExtResource("4_ppyta")
+connections = Dictionary[String, Array]({
+"__output": [[NodePath("../MoveCard"), "__input"]]
+})
+locked = null
+disable = null
+metadata/_custom_type_script = ExtResource("4_ppyta")
+
+[node name="RandomAxisCard" type="Node2D" parent="."]
+position = Vector2(492, 213)
+script = ExtResource("5_ykrsh")
+connections = Dictionary[String, Array]({
+"__output": []
+})
+locked = null
+disable = null
+metadata/_custom_type_script = ExtResource("5_ykrsh")
+
+[node name="ClockCard" type="Node2D" parent="."]
+position = Vector2(301, 301)
+script = ExtResource("6_vbegm")
+delay_seconds = 0.1
+connections = Dictionary[String, Array]({
+"__output": [[NodePath("../Vector2Card"), "__input"]]
+})
+metadata/_custom_type_script = ExtResource("6_vbegm")
+
+[node name="Vector2Card" type="Node2D" parent="."]
+position = Vector2(240, 239)
+script = ExtResource("7_ehkex")
+vector = Vector2(0.3, 0)
+connections = Dictionary[String, Array]({
+"__input": [[NodePath("../ClockCard"), "__output"]],
+"__output": [[NodePath("../MoveCard"), "__input"]]
+})
+metadata/_custom_type_script = ExtResource("7_ehkex")

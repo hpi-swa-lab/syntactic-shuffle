@@ -4,36 +4,37 @@ class_name OutputSlot
 
 ## Provide an output from a card, to be used by an [InputSlot].
 
-@export var connected_input_node_path: NodePath
+var signatures: Dictionary[String, Array]
 
-var connected_inputs = []
+func get_slot_name():
+	return "__output"
 
-static func create(num_args: int) -> OutputSlot:
-	var o = OutputSlot.new()
-	o.num_args = num_args
-	return o
+func _init(signatures: Dictionary[String, Array]):
+	self.signatures = signatures
 
-func get_connected(node):
-	return node.get_node_or_null(connected_input_node_path)
+func can_connect_to(object: Node, slot: Slot):
+	if not slot is InputSlot: return false
+	for my_signature_name in signatures:
+		for their_signature_name in slot.signatures:
+			if signatures[my_signature_name] == slot.signatures[their_signature_name]:
+				return true
+	return false
 
-func get_connected_input(node):
-	var c = get_connected(node)
-	return c.get_input_slot() if c else null
+func invoke(signature_name: String, args: Array):
+	var signature = signatures[signature_name]
+	for connected in card.connections[get_slot_name()]:
+		var them = card.get_node_or_null(connected[0])
+		var slot_name = connected[1]
+		var their_slot = them.get_slot_by_name(slot_name)
+		their_slot.invoke(signature, args)
+		card.connection_draw_node.on_activated(them)
 
-func invoke(card: Card, args: Array = []):
-	for i in connected_inputs:
-		if is_instance_valid(i[0]):
-			i[1].invoke(i[0], args)
+func draw(draw_node):
+	draw_connections(draw_node, false)
 
-func can_connect_to(object):
-	return object is Card and not object.disable and object.slots.any(func (s):
-		return s is InputSlot and self.num_args == s.num_args)
-
-func connect_to(from: Node, object: Node):
-	var input = object.get_input_slot()
-	input.connect_to(object, from)
-
-func disconnect_all(card: Card):
-	for i in connected_inputs:
-		if is_instance_valid(i[0]):
-			i[1].disconnect_all(i[0])
+func get_draw_dependencies(deps: Array):
+	var connections = card.connections[get_slot_name()]
+	deps.push_back(card.global_position)
+	for info in connections:
+		var to = card.get_node_or_null(info[0])
+		if to: deps.push_back(to.global_position)

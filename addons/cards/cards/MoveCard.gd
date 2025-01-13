@@ -4,26 +4,29 @@ extends Card
 
 func _ready() -> void:
 	super._ready()
-	setup("Move", "Moves the parent around.", Card.Type.Effect, [
-		ObjectInputSlot.create("cards"),
-		InputSlot.create(1)
+	setup("Move", "Moves an object around.", Card.Type.Effect, [
+		ObjectInputSlot.new(),
+		InputSlot.new({"move_direction": ["Vector2"]})
 	])
-	on_invoke_input(move_direction)
 
 var _did_accelerate = false
 var velocity = Vector2.ZERO
 var friction = 20
 
 func move_direction(direction: Vector2):
+	if direction.length() <= 0: return
+	
 	var _accel = 10
 	var max_velocity = 500
 	_did_accelerate = true
 	if false: # rotated
 		direction = direction.rotated(get_parent().rotation)
 	velocity = velocity.lerp(direction * max_velocity, min(1.0, _accel * get_process_delta_time()))
-	get_object_input_slot().on_activated(self)
+	activate_object_input()
 
 func _physics_process(delta: float) -> void:
+	if Engine.is_editor_hint(): return
+	
 	var node = get_object_input()
 	
 	if not _did_accelerate:

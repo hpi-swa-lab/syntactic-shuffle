@@ -1,10 +1,9 @@
 @tool
-extends OutputSlot
+extends Slot
 class_name ObjectOutputSlot
 
-## Output an object from your card, for example a CollisionInfo.
+## Slot that each [Node] that is not a [Card] implicitly exposes.
 
-static func create(num_args: int) -> ObjectOutputSlot:
-	var o = ObjectOutputSlot.new()
-	o.num_args = num_args
-	return o
+func get_slot_name():
+	return "__object"
+

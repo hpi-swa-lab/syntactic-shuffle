@@ -2,53 +2,49 @@
 extends Slot
 class_name ObjectInputSlot
 
-@export var object_path: NodePath
-@export var limit_to_group: String
-
 ## Provide an object as input, for example Collision triggers need to know
 ## which object to listen to collisions for.
 
-static func create(limit_to_group) -> ObjectInputSlot:
-	var o = ObjectInputSlot.new()
-	o.limit_to_group = limit_to_group
-	return o
+var limit_to_group: String
+var _on_connect
+var _on_disconnect
 
-var on_connect
-var on_disconnect
+func get_slot_name():
+	return "__object"
 
-func _init(on_connect = null, on_disconnect = null) -> void:
-	self.on_connect = on_connect
-	self.on_disconnect = on_disconnect
-func get_object(card: Card):
-	var o = card.get_node_or_null(object_path)
-	if o is CardProxy:
-		return o.proxy_target
-	else:
-		return o
-func can_connect_to(object: Node):
-	return object.is_in_group(limit_to_group)
-func _disconnect(me: Card):
-	var object = get_object(me)
-	if object and on_disconnect:
-		on_disconnect.call(object)
-func connect_to(from: Node, object: Node):
-	_disconnect(from)
-	object_path = from.get_path_to(object)
-	if on_connect:
-		on_connect.call(get_object(from))
-func check_disconnect(me: Card, card: Card):
-	var o = get_object(me)
-	if o and o.global_position.distance_to(card.global_position) > Card.MAX_CONNECTION_DISTANCE:
-		_disconnect(me)
-		object_path = NodePath()
-func draw(node, draw_node):
-	var object = node.get_node_or_null(object_path)
-	if object: draw_connection(node, object, false, draw_node)
-func get_draw_dependencies(card: Card, deps: Array):
-	var object = card.get_node_or_null(object_path)
-	if object:
-		deps.push_back(object.global_position)
-		deps.push_back(card.global_position)
-func disconnect_all(card: Card):
-	_disconnect(card)
-	object_path = NodePath()
+func _init(limit_to_group = "", on_connect = null, on_disconnect = null):
+	self.limit_to_group = limit_to_group
+	self._on_connect = on_connect
+	self._on_disconnect = on_disconnect
+
+func get_object():
+	# FIXME single vs multiple
+	for info in card.connections[get_slot_name()]:
+		var path = info[0]
+		var o = card.get_node_or_null(path)
+		if o is CardProxy:
+			return o.proxy_target
+		else:
+			return o
+	return null
+
+func can_connect_to(object: Node, slot: Slot):
+	return (slot is ObjectOutputSlot
+		and (limit_to_group == "" or object.is_in_group(limit_to_group))
+		and object.get_parent() == card.get_parent())
+
+func on_connect(object: Node, slot: Slot):
+	if _on_connect: _on_connect.call(object)
+
+func on_disconnect(object: Node, slot: Slot):
+	if _on_disconnect: _on_disconnect.call(object)
+
+func draw(draw_node):
+	draw_connections(draw_node, false)
+
+func get_draw_dependencies(deps: Array):
+	var connections = card.connections[get_slot_name()]
+	deps.push_back(card.global_position)
+	for info in connections:
+		var to = card.get_node_or_null(info[0])
+		if to: deps.push_back(to.global_position)

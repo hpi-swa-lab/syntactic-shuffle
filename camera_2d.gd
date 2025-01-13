@@ -10,9 +10,6 @@ var rng = RandomNumberGenerator.new()
 
 var held = false
 
-func _ready() -> void:
-	Globals.camera = self
-	
 func _zoom(factor: float) -> void:
 	zoom += Vector2(factor, factor)
 
