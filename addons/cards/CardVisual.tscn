@@ -2,117 +2,102 @@
 
 [ext_resource type="Script" uid="uid://td86i40sy764" path="res://addons/cards/CardVisual.gd" id="1_7r0de"]
 [ext_resource type="Texture2D" uid="uid://c52trtl0cac7l" path="res://icon.svg" id="1_x38hd"]
-[ext_resource type="Texture2D" uid="uid://do8vk67up2y8c" path="res://addons/cards/icons/card_template.png" id="2_odv1r"]
 [ext_resource type="Script" uid="uid://cxk63c2k70ijb" path="res://addons/cards/ScalingIcon.gd" id="3_hogqd"]
-[ext_resource type="Texture2D" uid="uid://cun1w3bnt4h5e" path="res://addons/cards/icons/padlock.png" id="5_xtshy"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_i40e1"]
+border_width_top = 1
+border_color = Color(0.996078, 0.996078, 0.996078, 0.490196)
+border_blend = true
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+shadow_color = Color(0, 0, 0, 0.0823529)
+shadow_size = 3
+shadow_offset = Vector2(0, 1.43)
+anti_aliasing_size = 0.1
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tbdv3"]
+size = Vector2(200, 282)
 
 [node name="Card" type="Node2D"]
-light_mask = 2
-z_index = 2
 script = ExtResource("1_7r0de")
 
-[node name="CardTemplate" type="Sprite2D" parent="."]
-light_mask = 2
-scale = Vector2(4, 4)
-texture = ExtResource("2_odv1r")
+[node name="CardControl" type="Panel" parent="."]
+offset_left = -100.0
+offset_top = -141.0
+offset_right = 100.0
+offset_bottom = 141.0
+focus_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_i40e1")
 
-[node name="CardControl" type="Control" parent="."]
-light_mask = 2
-layout_mode = 3
-anchors_preset = 0
-offset_left = -82.0
-offset_top = -128.0
-offset_right = 82.0
-offset_bottom = 128.0
-
-[node name="TypeIconMargin" type="MarginContainer" parent="CardControl"]
-light_mask = 2
-layout_mode = 0
-offset_left = 12.0
-offset_top = 12.0
-offset_right = 44.0
-offset_bottom = 44.0
-theme_override_constants/margin_left = 2
-theme_override_constants/margin_top = 2
-theme_override_constants/margin_right = 2
-theme_override_constants/margin_bottom = 2
-
-[node name="TypeIcon" type="TextureRect" parent="CardControl/TypeIconMargin"]
+[node name="MainColumn" type="VBoxContainer" parent="CardControl"]
 unique_name_in_owner = true
-light_mask = 2
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 9
+
+[node name="HeaderRow" type="HBoxContainer" parent="CardControl/MainColumn"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="TypeIconMargin" type="MarginContainer" parent="CardControl/MainColumn/HeaderRow"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 0
+
+[node name="TypeIcon" type="TextureRect" parent="CardControl/MainColumn/HeaderRow/TypeIconMargin"]
+unique_name_in_owner = true
 layout_mode = 2
 texture = ExtResource("1_x38hd")
 expand_mode = 3
 script = ExtResource("3_hogqd")
 
-[node name="NameMargin" type="MarginContainer" parent="CardControl"]
-light_mask = 2
-layout_mode = 0
-offset_left = 44.0
-offset_top = 12.0
-offset_right = 152.0
-offset_bottom = 44.0
-theme_override_constants/margin_left = 4
-theme_override_constants/margin_right = 4
+[node name="NameMargin" type="MarginContainer" parent="CardControl/MainColumn/HeaderRow"]
+layout_mode = 2
+theme_override_constants/margin_left = 0
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_bottom = 1
 
-[node name="Name" type="Label" parent="CardControl/NameMargin"]
+[node name="Name" type="Label" parent="CardControl/MainColumn/HeaderRow/NameMargin"]
 unique_name_in_owner = true
-light_mask = 2
 layout_mode = 2
 theme_override_font_sizes/font_size = 15
 text = "Card Name"
-vertical_alignment = 1
 
-[node name="IconMargin" type="MarginContainer" parent="CardControl"]
-light_mask = 2
-layout_mode = 0
-offset_left = 20.0
-offset_top = 56.0
-offset_right = 144.0
-offset_bottom = 180.0
-theme_override_constants/margin_left = 4
-theme_override_constants/margin_top = 4
-theme_override_constants/margin_right = 4
-theme_override_constants/margin_bottom = 4
+[node name="IconMargin" type="MarginContainer" parent="CardControl/MainColumn"]
+layout_mode = 2
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_right = 32
 
-[node name="Icon" type="TextureRect" parent="CardControl/IconMargin"]
+[node name="Icon" type="TextureRect" parent="CardControl/MainColumn/IconMargin"]
 unique_name_in_owner = true
-light_mask = 2
 layout_mode = 2
 texture = ExtResource("1_x38hd")
 expand_mode = 5
 script = ExtResource("3_hogqd")
 
-[node name="InfoMargin" type="MarginContainer" parent="CardControl"]
-light_mask = 2
-layout_mode = 0
-offset_left = 16.0
-offset_top = 196.0
-offset_right = 148.0
-offset_bottom = 240.0
-theme_override_constants/margin_left = 2
-theme_override_constants/margin_top = 2
-theme_override_constants/margin_right = 2
-theme_override_constants/margin_bottom = 2
-
-[node name="InfoColumn" type="VBoxContainer" parent="CardControl/InfoMargin"]
-unique_name_in_owner = true
-light_mask = 2
+[node name="DescriptionMargin" type="MarginContainer" parent="CardControl/MainColumn"]
 layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
 
-[node name="Description" type="Label" parent="CardControl/InfoMargin/InfoColumn"]
+[node name="Description" type="Label" parent="CardControl/MainColumn/DescriptionMargin"]
 unique_name_in_owner = true
-light_mask = 2
 layout_mode = 2
-size_flags_vertical = 0
 theme_override_constants/line_spacing = 0
-theme_override_font_sizes/font_size = 9
+theme_override_font_sizes/font_size = 11
 text = "Card Details come here, in all their detailed detail."
 autowrap_mode = 3
 
-[node name="locked" type="Sprite2D" parent="."]
-unique_name_in_owner = true
-visible = false
-rotation = 0.365738
-scale = Vector2(9.07829, 9.07829)
-texture = ExtResource("5_xtshy")
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("RectangleShape2D_tbdv3")
