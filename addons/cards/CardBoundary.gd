@@ -5,6 +5,7 @@ class_name CardBoundary
 @export var disable_on_enter = false
 @export var layout_cards_in_row = false
 @export var horizontal_spacing = 15
+@export var card_scale = 0.2
 
 func _ready() -> void:
 	add_to_group("card_boundary")

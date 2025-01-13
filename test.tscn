@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://dcjpymb1evgp4"]
+[gd_scene load_steps=18 format=3 uid="uid://dcjpymb1evgp4"]
 
 [ext_resource type="Script" uid="uid://cxldeg24krchn" path="res://camera_2d.gd" id="1_37kl0"]
 [ext_resource type="Script" uid="uid://cja8ehiirmcyt" path="res://addons/cards/CardBoundary.gd" id="1_g14j6"]
@@ -11,12 +11,16 @@
 [ext_resource type="Script" uid="uid://bo08qvvq1e3aj" path="res://addons/cards/cards/DeleteCard.gd" id="9_xersf"]
 [ext_resource type="Script" uid="uid://ciwr6t8y6q0qb" path="res://addons/cards/cards/TurnByCard.gd" id="10_00tp4"]
 [ext_resource type="Script" path="res://addons/cards/cards/NumberCard.gd" id="11_77dp3"]
+[ext_resource type="Script" uid="uid://dmb2syao4idmy" path="res://addons/cards/cards/MousePositionCard.gd" id="12_5tkv4"]
+[ext_resource type="Script" uid="uid://dve76ylj0x1xs" path="res://addons/cards/cards/MouseLeftClickCard.gd" id="13_b0q6j"]
+[ext_resource type="Script" uid="uid://cutfv582eptcx" path="res://addons/cards/cards/MouseRightClickCard.gd" id="14_mhym6"]
+[ext_resource type="Script" uid="uid://c5ccmpcq05phf" path="res://addons/cards/cards/LookAtCard.gd" id="15_mhym6"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_37kl0"]
 size = Vector2(40, 40)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_77dp3"]
-size = Vector2(500, 40)
+size = Vector2(1200, 90)
 
 [node name="test" type="Node2D"]
 
@@ -142,17 +146,55 @@ metadata/_custom_type_script = ExtResource("11_77dp3")
 [node name="hand" type="CanvasLayer" parent="."]
 
 [node name="CardBoundary" type="Area2D" parent="hand"]
-position = Vector2(727, 1008)
+position = Vector2(537, 945)
 script = ExtResource("1_g14j6")
 disable_on_enter = true
 layout_cards_in_row = true
+card_scale = 0.5
 metadata/_custom_type_script = ExtResource("1_g14j6")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="hand/CardBoundary"]
-position = Vector2(250, 20)
+position = Vector2(601, 45)
 shape = SubResource("RectangleShape2D_77dp3")
 
 [node name="ColorRect2" type="ColorRect" parent="hand/CardBoundary"]
-offset_right = 500.0
-offset_bottom = 40.0
+offset_right = 1200.0
+offset_bottom = 90.0
 metadata/_edit_use_anchors_ = true
+
+[node name="MousePositionCard" type="Node2D" parent="hand/CardBoundary"]
+position = Vector2(71, 45)
+script = ExtResource("12_5tkv4")
+connections = Dictionary[String, Array]({
+"__output": []
+})
+disable = true
+metadata/_custom_type_script = ExtResource("12_5tkv4")
+
+[node name="MouseLeftClickCard" type="Node2D" parent="hand/CardBoundary"]
+position = Vector2(191, 45)
+script = ExtResource("13_b0q6j")
+connections = Dictionary[String, Array]({
+"__output": []
+})
+disable = true
+metadata/_custom_type_script = ExtResource("13_b0q6j")
+
+[node name="MouseRightClickCard" type="Node2D" parent="hand/CardBoundary"]
+position = Vector2(311, 45)
+script = ExtResource("14_mhym6")
+connections = Dictionary[String, Array]({
+"__output": []
+})
+disable = true
+metadata/_custom_type_script = ExtResource("14_mhym6")
+
+[node name="LookAtCard" type="Node2D" parent="hand/CardBoundary"]
+position = Vector2(436, 45)
+script = ExtResource("15_mhym6")
+connections = Dictionary[String, Array]({
+"__input": [],
+"__object": []
+})
+disable = true
+metadata/_custom_type_script = ExtResource("15_mhym6")

@@ -24,6 +24,7 @@ func invoke(signature_name: String, args: Array):
 	var signature = signatures[signature_name]
 	for connected in card.connections[get_slot_name()]:
 		var them = card.get_node_or_null(connected[0])
+		if not them: continue
 		var slot_name = connected[1]
 		var their_slot = them.get_slot_by_name(slot_name)
 		their_slot.invoke(signature, args)

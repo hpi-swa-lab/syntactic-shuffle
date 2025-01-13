@@ -62,9 +62,9 @@ var dragging: bool:
 		if dragging:
 			CardBoundary.get_card_boundary(self).card_picked_up(self)
 		connection_draw_node.queue_redraw()
+		var s = get_base_scale() * 1.1 if dragging else get_base_scale()
 		create_tween().tween_property(visual, "scale",
-				DEFAULT_SCALE * 1.1 if dragging else DEFAULT_SCALE,
-				0.17 if dragging else 0.13).from_current().set_trans(Tween.TRANS_EXPO)
+				s, 0.17 if dragging else 0.13).from_current().set_trans(Tween.TRANS_EXPO)
 	get: return dragging
 
 func _ready() -> void:
@@ -76,7 +76,7 @@ func _ready() -> void:
 	add_child(connection_draw_node)
 	
 	visual = preload("res://addons/cards/CardVisual.tscn").instantiate()
-	visual.scale = DEFAULT_SCALE
+	visual.scale = get_base_scale()
 	visual.dragging.connect(func (d): dragging = d)
 	visual.locked = locked
 	add_child(visual)
@@ -175,6 +175,10 @@ func invoke_output(signature_name: String, args: Array, name = "__output"):
 
 func get_card_boundary():
 	return CardBoundary.get_card_boundary(self)
+
+func get_base_scale():
+	var s = get_card_boundary().card_scale
+	return Vector2(s, s)
 
 func _forward_canvas_gui_input(event: InputEvent, undo_redo):
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
