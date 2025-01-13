@@ -30,3 +30,8 @@ func draw_connections(draw_node, inverted):
 	for info in connections:
 		var to = card.get_node_or_null(info[0])
 		if to: draw_node.draw_connection(card, to, inverted)
+
+func signatures_match(a: Array, b: Array):
+	if a == ["*"]: return true
+	if b == ["*"]: return true
+	return a == b

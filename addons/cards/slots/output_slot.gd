@@ -5,23 +5,31 @@ class_name OutputSlot
 ## Provide an output from a card, to be used by an [InputSlot].
 
 var signatures: Dictionary[String, Array]
+var is_generic = false
+
+func resolve_signatures():
+	if is_generic: return card.get_slot_by_name("__input").signatures
+	else: return signatures
 
 func get_slot_name():
 	return "__output"
 
 func _init(signatures: Dictionary[String, Array]):
 	self.signatures = signatures
+	if signatures.size() == 1 and signatures[signatures.keys()[0]] == ["*"]:
+		is_generic = true
 
 func can_connect_to(object: Node, slot: Slot):
+	var my_signatures = resolve_signatures()
 	if not slot is InputSlot: return false
-	for my_signature_name in signatures:
+	for my_signature_name in my_signatures:
 		for their_signature_name in slot.signatures:
-			if signatures[my_signature_name] == slot.signatures[their_signature_name]:
+			if signatures_match(my_signatures[my_signature_name], slot.signatures[their_signature_name]):
 				return true
 	return false
 
 func invoke(signature_name: String, args: Array):
-	var signature = signatures[signature_name]
+	var signature = resolve_signatures()[signature_name]
 	for connected in card.connections[get_slot_name()]:
 		var them = card.get_node_or_null(connected[0])
 		if not them: continue
