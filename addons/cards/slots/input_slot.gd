@@ -14,8 +14,11 @@ func _init(signatures: Dictionary[String, Array]):
 
 func invoke(signature: Array, args: Array):
 	for s in signatures:
-		if signatures[s] == signature:
-			card.callv(s, args)
+		if signatures_match(signatures[s], signature):
+			if signatures[s] == ["*"]:
+				card.generic_called(s, args)
+			else:
+				card.callv(s, args)
 			return
 	push_error("no matching signature found on input")
 
@@ -23,6 +26,6 @@ func can_connect_to(object: Node, slot: Slot):
 	if not slot is OutputSlot: return false
 	for my_signature_name in signatures:
 		for their_signature_name in slot.signatures:
-			if signatures[my_signature_name] == slot.signatures[their_signature_name]:
+			if signatures_match(signatures[my_signature_name], slot.signatures[their_signature_name]):
 				return true
 	return false

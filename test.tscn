@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://dcjpymb1evgp4"]
+[gd_scene load_steps=19 format=3 uid="uid://dcjpymb1evgp4"]
 
 [ext_resource type="Script" uid="uid://cxldeg24krchn" path="res://camera_2d.gd" id="1_37kl0"]
 [ext_resource type="Script" uid="uid://cja8ehiirmcyt" path="res://addons/cards/CardBoundary.gd" id="1_g14j6"]
@@ -15,6 +15,7 @@
 [ext_resource type="Script" uid="uid://dve76ylj0x1xs" path="res://addons/cards/cards/MouseLeftClickCard.gd" id="13_b0q6j"]
 [ext_resource type="Script" uid="uid://cutfv582eptcx" path="res://addons/cards/cards/MouseRightClickCard.gd" id="14_mhym6"]
 [ext_resource type="Script" uid="uid://c5ccmpcq05phf" path="res://addons/cards/cards/LookAtCard.gd" id="15_mhym6"]
+[ext_resource type="Script" uid="uid://b3nxhs2cf52ki" path="res://addons/cards/cards/DelayCard.gd" id="16_a3se8"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_37kl0"]
 size = Vector2(40, 40)
@@ -59,19 +60,19 @@ offset_bottom = 20.0
 metadata/_edit_use_anchors_ = true
 
 [node name="MoveCard" type="Node2D" parent="main"]
-position = Vector2(489, 288)
+position = Vector2(521, 338)
 script = ExtResource("3_6uqi0")
 connections = Dictionary[String, Array]({
-"__input": [[NodePath("../AxisControlsCard"), "__output"], [NodePath("../Vector2Card"), "__output"]],
-"__object": [[NodePath("../CharacterBody2D"), "__object"]]
+"__input": [[NodePath("../DelayCard"), "__output"]],
+"__object": []
 })
 metadata/_custom_type_script = ExtResource("3_6uqi0")
 
 [node name="AxisControlsCard" type="Node2D" parent="main"]
-position = Vector2(597, 229)
+position = Vector2(661, 232)
 script = ExtResource("4_ppyta")
 connections = Dictionary[String, Array]({
-"__output": [[NodePath("../MoveCard"), "__input"]]
+"__output": [[NodePath("../DelayCard"), "__input"]]
 })
 locked = null
 disable = null
@@ -81,67 +82,57 @@ metadata/_custom_type_script = ExtResource("4_ppyta")
 position = Vector2(701, 373)
 script = ExtResource("5_ykrsh")
 connections = Dictionary[String, Array]({
-"__output": []
+"__output": [[NodePath("../DelayCard"), "__input"]]
 })
 locked = null
 disable = null
 metadata/_custom_type_script = ExtResource("5_ykrsh")
 
-[node name="ClockCard" type="Node2D" parent="main"]
-position = Vector2(510, 461)
-script = ExtResource("6_vbegm")
-delay_seconds = 0.1
-connections = Dictionary[String, Array]({
-"__output": [[NodePath("../Vector2Card"), "__input"]]
-})
-metadata/_custom_type_script = ExtResource("6_vbegm")
-
-[node name="Vector2Card" type="Node2D" parent="main"]
-position = Vector2(449, 399)
-script = ExtResource("7_ehkex")
-vector = Vector2(0.3, 0)
-connections = Dictionary[String, Array]({
-"__input": [[NodePath("../ClockCard"), "__output"]],
-"__output": [[NodePath("../MoveCard"), "__input"]]
-})
-metadata/_custom_type_script = ExtResource("7_ehkex")
-
 [node name="CollisionCard" type="Node2D" parent="main"]
-position = Vector2(404, 187)
+position = Vector2(348, 57)
 script = ExtResource("8_ehkex")
 connections = Dictionary[String, Array]({
-"__object": [[NodePath("../CharacterBody2D"), "__object"]],
-"__output": [[NodePath("../DeleteCard"), "__input"], [NodePath("../NumberCard"), "__input"]]
+"__object": [],
+"__output": []
 })
 metadata/_custom_type_script = ExtResource("8_ehkex")
 
 [node name="DeleteCard" type="Node2D" parent="main"]
-position = Vector2(497, 169)
+position = Vector2(507, 58)
 script = ExtResource("9_xersf")
 connections = Dictionary[String, Array]({
-"__input": [[NodePath("../CollisionCard"), "__output"]],
+"__input": [],
 "__object": []
 })
 metadata/_custom_type_script = ExtResource("9_xersf")
 
 [node name="TurnByCard" type="Node2D" parent="main"]
-position = Vector2(222, 171)
+position = Vector2(77, 158)
 script = ExtResource("10_00tp4")
 connections = Dictionary[String, Array]({
-"__input": [[NodePath("../NumberCard"), "__output"]],
-"__object": [[NodePath("../StaticBody2D"), "__object"]]
+"__input": [],
+"__object": []
 })
 metadata/_custom_type_script = ExtResource("10_00tp4")
 
 [node name="NumberCard" type="Node2D" parent="main"]
-position = Vector2(297, 122)
+position = Vector2(189, 50)
 script = ExtResource("11_77dp3")
 number = 2.0
 connections = Dictionary[String, Array]({
-"__input": [[NodePath("../CollisionCard"), "__output"]],
-"__output": [[NodePath("../TurnByCard"), "__input"]]
+"__input": [],
+"__output": []
 })
 metadata/_custom_type_script = ExtResource("11_77dp3")
+
+[node name="DelayCard" type="Node2D" parent="main"]
+position = Vector2(586, 301)
+script = ExtResource("16_a3se8")
+connections = Dictionary[String, Array]({
+"__input": [[NodePath("../AxisControlsCard"), "__output"], [NodePath("../RandomAxisCard"), "__output"]],
+"__output": [[NodePath("../MoveCard"), "__input"]]
+})
+metadata/_custom_type_script = ExtResource("16_a3se8")
 
 [node name="hand" type="CanvasLayer" parent="."]
 
@@ -163,7 +154,7 @@ offset_bottom = 90.0
 metadata/_edit_use_anchors_ = true
 
 [node name="MousePositionCard" type="Node2D" parent="hand/CardBoundary"]
-position = Vector2(71, 45)
+position = Vector2(66, 45)
 script = ExtResource("12_5tkv4")
 connections = Dictionary[String, Array]({
 "__output": []
@@ -172,7 +163,7 @@ disable = true
 metadata/_custom_type_script = ExtResource("12_5tkv4")
 
 [node name="MouseLeftClickCard" type="Node2D" parent="hand/CardBoundary"]
-position = Vector2(191, 45)
+position = Vector2(181, 45)
 script = ExtResource("13_b0q6j")
 connections = Dictionary[String, Array]({
 "__output": []
@@ -181,7 +172,7 @@ disable = true
 metadata/_custom_type_script = ExtResource("13_b0q6j")
 
 [node name="MouseRightClickCard" type="Node2D" parent="hand/CardBoundary"]
-position = Vector2(311, 45)
+position = Vector2(296, 45)
 script = ExtResource("14_mhym6")
 connections = Dictionary[String, Array]({
 "__output": []
@@ -190,7 +181,7 @@ disable = true
 metadata/_custom_type_script = ExtResource("14_mhym6")
 
 [node name="LookAtCard" type="Node2D" parent="hand/CardBoundary"]
-position = Vector2(436, 45)
+position = Vector2(411, 45)
 script = ExtResource("15_mhym6")
 connections = Dictionary[String, Array]({
 "__input": [],
@@ -198,3 +189,24 @@ connections = Dictionary[String, Array]({
 })
 disable = true
 metadata/_custom_type_script = ExtResource("15_mhym6")
+
+[node name="ClockCard" type="Node2D" parent="hand/CardBoundary"]
+position = Vector2(526, 45)
+script = ExtResource("6_vbegm")
+delay_seconds = 0.1
+connections = Dictionary[String, Array]({
+"__output": []
+})
+disable = true
+metadata/_custom_type_script = ExtResource("6_vbegm")
+
+[node name="Vector2Card" type="Node2D" parent="hand/CardBoundary"]
+position = Vector2(646, 45)
+script = ExtResource("7_ehkex")
+vector = Vector2(0.3, 0)
+connections = Dictionary[String, Array]({
+"__input": [],
+"__output": []
+})
+disable = true
+metadata/_custom_type_script = ExtResource("7_ehkex")

@@ -21,7 +21,7 @@ func check_redraw(delta):
 var last_deps = null
 func should_redraw():
 	if card.disable: return false
-
+	
 	var deps = []
 	for s in card.slots: s.get_draw_dependencies(deps)
 	
