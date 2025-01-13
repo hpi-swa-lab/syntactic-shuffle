@@ -10,7 +10,7 @@
 [ext_resource type="Script" uid="uid://bvoloc64pi1db" path="res://addons/cards/cards/CollisionCard.gd" id="8_ehkex"]
 [ext_resource type="Script" uid="uid://bo08qvvq1e3aj" path="res://addons/cards/cards/DeleteCard.gd" id="9_xersf"]
 [ext_resource type="Script" uid="uid://ciwr6t8y6q0qb" path="res://addons/cards/cards/TurnByCard.gd" id="10_00tp4"]
-[ext_resource type="Script" path="res://addons/cards/cards/NumberCard.gd" id="11_77dp3"]
+[ext_resource type="Script" uid="uid://dpxat1ltburl" path="res://addons/cards/cards/NumberCard.gd" id="11_77dp3"]
 [ext_resource type="Script" uid="uid://dmb2syao4idmy" path="res://addons/cards/cards/MousePositionCard.gd" id="12_5tkv4"]
 [ext_resource type="Script" uid="uid://dve76ylj0x1xs" path="res://addons/cards/cards/MouseLeftClickCard.gd" id="13_b0q6j"]
 [ext_resource type="Script" uid="uid://cutfv582eptcx" path="res://addons/cards/cards/MouseRightClickCard.gd" id="14_mhym6"]

@@ -6,4 +6,3 @@ class_name ObjectOutputSlot
 
 func get_slot_name():
 	return "__object"
-

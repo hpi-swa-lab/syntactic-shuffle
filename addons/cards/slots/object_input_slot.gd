@@ -29,13 +29,28 @@ func get_object():
 	return null
 
 func can_connect_to(object: Node, slot: Slot):
-	return (slot is ObjectOutputSlot
+	if not (slot is ObjectOutputSlot
 		and (limit_to_group == "" or object.is_in_group(limit_to_group))
 		and not object is Camera2D
-		and object.get_parent() == card.get_parent())
+		and object.get_parent() == card.get_parent()):
+			return false
+	# check if we have a connection that's closer to us already
+	for info in card.connections[get_slot_name()]:
+		var them = card.get_node_or_null(info[0])
+		if them and them.global_position.distance_to(card.global_position) < object.global_position.distance_to(card.global_position):
+			return false
+	return true
 
 func on_connect(object: Node, slot: Slot):
 	if _on_connect: _on_connect.call(object)
+	
+	# disconnect all other connections, there may only be one (iterate while modify is okay here
+	# because we have at most one other connection)
+	for info in card.connections[get_slot_name()]:
+		var them = card.get_node_or_null(info[0])
+		if them and them != object:
+			Card.node_disconnect_slot(card, self, them, Card.node_get_slot_by_name(them, info[1]))
+			Card.node_disconnect_slot(them, Card.node_get_slot_by_name(them, info[1]), card, self)
 
 func on_disconnect(object: Node, slot: Slot):
 	if _on_disconnect: _on_disconnect.call(object)
