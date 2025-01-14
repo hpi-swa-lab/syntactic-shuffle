@@ -27,6 +27,9 @@ func _ready() -> void:
 		[InputSlot.new({"any": ["*"]}), OutputSlot.new({"any": ["*"]})],
 		[delay_seconds_ui])
 
-func generic_called(method, args):
+func generic_called(signature, args):
+	var signatures = get_slot_by_name("__output").resolve_signatures()
 	await get_tree().create_timer(delay_seconds).timeout
-	invoke_output(method, args)
+	# if we reconnect while buffering, our output may suddenly become invalid
+	if signatures == get_slot_by_name("__output").resolve_signatures():
+		invoke_generic_output(signature, args)

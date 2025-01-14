@@ -147,7 +147,9 @@ func disconnect_slot(my_slot: Slot, them: Node, their_slot: Slot, index: int = -
 		list.remove_at(index)
 	else:
 		var path = get_path_to(them)
-		list.erase([path, their_slot.get_slot_name()])
+		var pair = [path, their_slot.get_slot_name()]
+		assert(list.has(pair))
+		list.erase(pair)
 		my_slot.on_disconnect(them, their_slot)
 
 func disconnect_all():
@@ -172,6 +174,9 @@ func get_slot_by_name(name: String) -> Slot:
 
 func invoke_output(signature_name: String, args: Array, name = "__output"):
 	get_slot_by_name(name).invoke(signature_name, args)
+
+func invoke_generic_output(signature: Array, args: Array, name = "__output"):
+	get_slot_by_name(name).invoke_signature(signature, args)
 
 func get_card_boundary():
 	return CardBoundary.get_card_boundary(self)

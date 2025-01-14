@@ -30,6 +30,7 @@ script = ExtResource("1_g14j6")
 metadata/_custom_type_script = ExtResource("1_g14j6")
 
 [node name="Camera2D" type="Camera2D" parent="main"]
+position = Vector2(426, 228)
 script = ExtResource("1_37kl0")
 
 [node name="StaticBody2D" type="StaticBody2D" parent="main"]
@@ -60,16 +61,16 @@ offset_bottom = 20.0
 metadata/_edit_use_anchors_ = true
 
 [node name="MoveCard" type="Node2D" parent="main"]
-position = Vector2(521, 338)
+position = Vector2(493, 346)
 script = ExtResource("3_6uqi0")
 connections = Dictionary[String, Array]({
 "__input": [[NodePath("../DelayCard"), "__output"]],
-"__object": []
+"__object": [[NodePath("../CharacterBody2D"), "__object"]]
 })
 metadata/_custom_type_script = ExtResource("3_6uqi0")
 
 [node name="AxisControlsCard" type="Node2D" parent="main"]
-position = Vector2(661, 232)
+position = Vector2(681, 269)
 script = ExtResource("4_ppyta")
 connections = Dictionary[String, Array]({
 "__output": [[NodePath("../DelayCard"), "__input"]]
@@ -79,10 +80,10 @@ disable = null
 metadata/_custom_type_script = ExtResource("4_ppyta")
 
 [node name="RandomAxisCard" type="Node2D" parent="main"]
-position = Vector2(701, 373)
+position = Vector2(600, 80)
 script = ExtResource("5_ykrsh")
 connections = Dictionary[String, Array]({
-"__output": [[NodePath("../DelayCard"), "__input"]]
+"__output": []
 })
 locked = null
 disable = null
@@ -116,7 +117,7 @@ connections = Dictionary[String, Array]({
 metadata/_custom_type_script = ExtResource("10_00tp4")
 
 [node name="NumberCard" type="Node2D" parent="main"]
-position = Vector2(189, 50)
+position = Vector2(775, 374)
 script = ExtResource("11_77dp3")
 number = 2.0
 connections = Dictionary[String, Array]({
@@ -126,10 +127,10 @@ connections = Dictionary[String, Array]({
 metadata/_custom_type_script = ExtResource("11_77dp3")
 
 [node name="DelayCard" type="Node2D" parent="main"]
-position = Vector2(586, 301)
+position = Vector2(602, 317)
 script = ExtResource("16_a3se8")
 connections = Dictionary[String, Array]({
-"__input": [[NodePath("../AxisControlsCard"), "__output"], [NodePath("../RandomAxisCard"), "__output"]],
+"__input": [[NodePath("../AxisControlsCard"), "__output"]],
 "__output": [[NodePath("../MoveCard"), "__input"]]
 })
 metadata/_custom_type_script = ExtResource("16_a3se8")
