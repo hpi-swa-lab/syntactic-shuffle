@@ -97,7 +97,7 @@ position = Vector2(337, 173)
 script = ExtResource("8_ehkex")
 connections = Dictionary[String, Array]({
 "__object": [[NodePath("../CharacterBody2D"), "__object"]],
-"__output": [[NodePath("../NumberCard"), "__input"], [NodePath("../IncrementCard"), "__input"]]
+"__output": [[NodePath("../NumberCard"), "__input"]]
 })
 metadata/_custom_type_script = ExtResource("8_ehkex")
 
@@ -164,13 +164,22 @@ connections = Dictionary[String, Array]({
 metadata/_custom_type_script = ExtResource("12_45l4g")
 
 [node name="IncrementCard" type="Node2D" parent="main"]
-position = Vector2(266, 135)
+position = Vector2(143, 264)
 script = ExtResource("13_4uo0j")
 connections = Dictionary[String, Array]({
-"__input": [[NodePath("../CollisionCard"), "__output"]],
+"__input": [[NodePath("../ClockCard"), "__output"]],
 "__output": [[NodePath("../StoreCard"), "__input"]]
 })
 metadata/_custom_type_script = ExtResource("13_4uo0j")
+
+[node name="ClockCard" type="Node2D" parent="main"]
+position = Vector2(37, 295)
+script = ExtResource("6_vbegm")
+delay_seconds = 0.8
+connections = Dictionary[String, Array]({
+"__output": [[NodePath("../IncrementCard"), "__input"]]
+})
+metadata/_custom_type_script = ExtResource("6_vbegm")
 
 [node name="hand" type="CanvasLayer" parent="."]
 
@@ -228,18 +237,8 @@ connections = Dictionary[String, Array]({
 disable = true
 metadata/_custom_type_script = ExtResource("15_mhym6")
 
-[node name="ClockCard" type="Node2D" parent="hand/CardBoundary"]
-position = Vector2(526, 45)
-script = ExtResource("6_vbegm")
-delay_seconds = 0.1
-connections = Dictionary[String, Array]({
-"__output": []
-})
-disable = true
-metadata/_custom_type_script = ExtResource("6_vbegm")
-
 [node name="Vector2Card" type="Node2D" parent="hand/CardBoundary"]
-position = Vector2(646, 45)
+position = Vector2(526, 45)
 script = ExtResource("7_ehkex")
 vector = Vector2(0.3, 0)
 connections = Dictionary[String, Array]({

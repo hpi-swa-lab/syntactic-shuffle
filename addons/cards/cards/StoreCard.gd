@@ -7,7 +7,10 @@ var number: float = 0
 func _ready() -> void:
 	super._ready()
 	setup("Store", "Stores a number.", Card.Type.Store, [
-		InputSlot.new({"increment": ["increment"]}),
+		InputSlot.new({
+			"increment": ["increment"],
+			"override": ["float"]
+		}),
 		OutputSlot.new({"default": ["float"]})
 	])
 

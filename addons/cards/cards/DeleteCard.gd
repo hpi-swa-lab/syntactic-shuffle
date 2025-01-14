@@ -1,5 +1,5 @@
 @tool
-#thumb("Remove.svg")
+#thumb("delete.png")
 extends Card
 
 func _ready() -> void:

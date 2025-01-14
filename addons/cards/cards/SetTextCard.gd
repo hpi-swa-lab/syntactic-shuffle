@@ -1,5 +1,5 @@
 @tool
-#thumb("event.png")
+#thumb("trigger.png")
 extends Card
 
 func _ready() -> void:

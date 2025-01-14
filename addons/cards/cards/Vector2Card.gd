@@ -1,5 +1,5 @@
 @tool
-#thumb("RandomNumberGenerator.svg")
+#thumb("vector.png")
 extends Card
 
 @export var vector: Vector2 = Vector2.ZERO:

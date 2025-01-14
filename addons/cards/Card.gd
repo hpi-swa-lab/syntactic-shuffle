@@ -90,8 +90,8 @@ func setup(name: String, description: String, type: Type, slots: Array[Slot], ex
 	if show_cards():
 		var type_icon
 		match type:
-			Type.Trigger: type_icon = "event.png"
-			Type.Effect: type_icon = "PreviewSun.svg"
+			Type.Trigger: type_icon = "trigger.png"
+			Type.Effect: type_icon = "event.png"
 			Type.Store: type_icon = "CylinderMesh.svg"
 		visual.setup(name, description, get_icon_name(), type_icon, extra_ui)
 
@@ -173,9 +173,11 @@ func get_slot_by_name(name: String) -> Slot:
 	return null
 
 func invoke_output(signature_name: String, args: Array, name = "__output"):
+	if disable: return
 	get_slot_by_name(name).invoke(signature_name, args)
 
 func invoke_generic_output(signature: Array, args: Array, name = "__output"):
+	if disable: return
 	get_slot_by_name(name).invoke_signature(signature, args)
 
 func get_card_boundary():
