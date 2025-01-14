@@ -30,6 +30,7 @@ size = Vector2(1200, 90)
 
 [node name="main" type="Area2D" parent="."]
 script = ExtResource("1_g14j6")
+card_layout = null
 metadata/_custom_type_script = ExtResource("1_g14j6")
 
 [node name="Camera2D" type="Camera2D" parent="main"]
@@ -184,10 +185,10 @@ metadata/_custom_type_script = ExtResource("6_vbegm")
 [node name="hand" type="CanvasLayer" parent="."]
 
 [node name="CardBoundary" type="Area2D" parent="hand"]
-position = Vector2(537, 945)
+position = Vector2(529, 891)
 script = ExtResource("1_g14j6")
 disable_on_enter = true
-layout_cards_in_row = true
+card_layout = 1
 card_scale = 0.5
 metadata/_custom_type_script = ExtResource("1_g14j6")
 

@@ -2,9 +2,14 @@
 extends Area2D
 class_name CardBoundary
 
+enum Layout {
+	NONE,
+	ROW,
+	FAN
+}
+
 @export var disable_on_enter = false
-@export var layout_cards_in_row = false
-@export var horizontal_spacing = 15
+@export var card_layout = Layout.NONE
 @export var card_scale = 0.2
 
 func _ready() -> void:
@@ -53,7 +58,7 @@ func card_picked_up(card: Card):
 	pass
 
 func card_dropped(card: Card):
-	if layout_cards_in_row:
+	if card_layout != Layout.NONE:
 		_relayout()
 
 func background_rect() -> Rect2:
@@ -62,11 +67,20 @@ func background_rect() -> Rect2:
 		return shape_owner_get_transform(id) * shape.get_rect()
 	return Rect2()
 
+func my_card_extent():
+	return CardVisual.base_card_size * card_scale
+
 func _relayout():
+	match card_layout:
+		Layout.ROW: _relayout_row()
+		Layout.FAN: _relayout_fan()
+
+func _relayout_row():
+	var horizontal_spacing = 30 * card_scale
 	var background = background_rect()
 	var left = horizontal_spacing + background.position.x
 	for card in get_children().filter(func (s): return s is Card):
-		var extent = card.get_extent()
+		var extent = my_card_extent()
 		var new_position = Vector2(left + extent.x / 2, background.position.y + background.size.y / 2)
 		var tween = get_tree().create_tween()
 		tween\
@@ -74,3 +88,6 @@ func _relayout():
 			.set_trans(Tween.TRANS_ELASTIC) \
 			.tween_property(card, "position", new_position, 0.25)
 		left += extent.x + horizontal_spacing
+
+func _relayout_fan():
+	pass

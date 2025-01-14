@@ -9,7 +9,6 @@ enum Type {
 }
 
 const SHOW_IN_GAME = true
-const DEFAULT_SCALE = Vector2(0.2, 0.2)
 const MAX_CONNECTION_DISTANCE = 150
 
 static func show_cards():
@@ -155,9 +154,6 @@ func disconnect_slot(my_slot: Slot, them: Node, their_slot: Slot, index: int = -
 func disconnect_all():
 	for list in connections:
 		connections[list].clear()
-
-func get_extent() -> Vector2:
-	return visual.get_extent()
 
 func get_object_input():
 	return get_slot_by_name("__object").get_object()

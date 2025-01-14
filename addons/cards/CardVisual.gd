@@ -2,6 +2,8 @@
 extends Node2D
 class_name CardVisual
 
+static var base_card_size = Vector2(10, 10)
+
 signal dragging(d: bool)
 
 @export var locked = false:
@@ -29,6 +31,7 @@ func icon_from_theme(name: StringName):
 func _ready() -> void:
 	$CardControl.gui_input.connect(input_event)
 	locked = locked
+	base_card_size = $CardControl.size
 
 var held = false
 func input_event(e: InputEvent):
@@ -45,6 +48,3 @@ func _unhandled_input(e: InputEvent) -> void:
 		input_event(e)
 	if e is InputEventMouseButton and e.button_index == MOUSE_BUTTON_LEFT and held and not e.is_pressed():
 		input_event(e)
-
-func get_extent() -> Vector2:
-	return $CardControl.size * scale
