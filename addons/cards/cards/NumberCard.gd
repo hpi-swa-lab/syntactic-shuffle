@@ -1,5 +1,5 @@
 @tool
-#thumb("RandomNumberGenerator.svg")
+#thumb("number.png")
 extends Card
 
 @export var number: float = 0.0:
