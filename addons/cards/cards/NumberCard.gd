@@ -23,7 +23,10 @@ func _ready() -> void:
 	super._ready()
 	
 	setup("Output Number", "Continuously outputs the number, unless an input is connected.", Card.Type.Trigger,
-		[OutputSlot.new({"number": ["float"]}), InputSlot.new({"trigger": []})],
+		[
+			OutputSlot.new({"number": ["float"]}),
+			InputSlot.new({"trigger": []})
+		],
 		[number_ui])
 
 func trigger():

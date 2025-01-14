@@ -59,6 +59,8 @@ var dragging: bool:
 		if was_dragging and not dragging:
 			CardBoundary.get_card_boundary(self).card_dropped(self)
 		if dragging:
+			create_tween().tween_property(self, "rotation", 0, 0.1).set_trans(Tween.TRANS_EXPO)
+			create_tween().tween_property(self, "scale", Vector2(1, 1), 0.1).set_trans(Tween.TRANS_EXPO)
 			CardBoundary.get_card_boundary(self).card_picked_up(self)
 		connection_draw_node.queue_redraw()
 		var s = get_base_scale() * 1.1 if dragging else get_base_scale()
