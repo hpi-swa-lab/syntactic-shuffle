@@ -32,6 +32,7 @@ size = Vector2(1200, 90)
 [node name="main" type="Area2D" parent="."]
 script = ExtResource("1_g14j6")
 card_layout = null
+duplicate_on_drag = null
 metadata/_custom_type_script = ExtResource("1_g14j6")
 
 [node name="Camera2D" type="Camera2D" parent="main"]
@@ -192,6 +193,7 @@ script = ExtResource("1_g14j6")
 disable_on_enter = true
 card_layout = 1
 card_scale = 0.5
+duplicate_on_drag = null
 metadata/_custom_type_script = ExtResource("1_g14j6")
 
 [node name="ColorRect2" type="ColorRect" parent="hand/hand"]
@@ -205,7 +207,7 @@ position = Vector2(600, 45)
 shape = SubResource("RectangleShape2D_77dp3")
 
 [node name="MousePositionCard" type="Node2D" parent="hand/hand"]
-position = Vector2(65, 45)
+position = Vector2(50, 45)
 script = ExtResource("12_5tkv4")
 connections = Dictionary[String, Array]({
 "__output": []
@@ -214,7 +216,7 @@ disable = true
 metadata/_custom_type_script = ExtResource("12_5tkv4")
 
 [node name="MouseLeftClickCard" type="Node2D" parent="hand/hand"]
-position = Vector2(180, 45)
+position = Vector2(165, 45)
 script = ExtResource("13_b0q6j")
 connections = Dictionary[String, Array]({
 "__output": []
@@ -223,7 +225,7 @@ disable = true
 metadata/_custom_type_script = ExtResource("13_b0q6j")
 
 [node name="MouseRightClickCard" type="Node2D" parent="hand/hand"]
-position = Vector2(295, 45)
+position = Vector2(280, 45)
 script = ExtResource("14_mhym6")
 connections = Dictionary[String, Array]({
 "__output": []
@@ -232,7 +234,7 @@ disable = true
 metadata/_custom_type_script = ExtResource("14_mhym6")
 
 [node name="LookAtCard" type="Node2D" parent="hand/hand"]
-position = Vector2(410, 45)
+position = Vector2(395, 45)
 script = ExtResource("15_mhym6")
 connections = Dictionary[String, Array]({
 "__input": [],
@@ -242,7 +244,7 @@ disable = true
 metadata/_custom_type_script = ExtResource("15_mhym6")
 
 [node name="Vector2Card" type="Node2D" parent="hand/hand"]
-position = Vector2(525, 45)
+position = Vector2(510, 45)
 script = ExtResource("7_ehkex")
 vector = Vector2(0.3, 0)
 connections = Dictionary[String, Array]({

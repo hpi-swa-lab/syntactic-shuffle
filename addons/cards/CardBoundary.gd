@@ -5,6 +5,7 @@ class_name CardBoundary
 enum Layout {
 	NONE,
 	ROW,
+	COLLAPSED_ROW,
 	FAN
 }
 
@@ -13,19 +14,27 @@ enum Layout {
 	get: return card_layout
 	set(v):
 		card_layout = v
+		_extra_collision.shape = null
 		_relayout()
 @export var card_scale = 0.2
+@export var duplicate_on_drag = false
+
+# we close the expanded view when we leave the collision area, so add more collision behind the cards when expanded
+var _extra_collision = CollisionShape2D.new()
 
 var hovered = false:
 	get: return hovered
 	set(v):
 		if hovered != v:
 			hovered = v
+			_extra_collision.disabled = not hovered
 			_relayout()
 
 func _ready() -> void:
 	add_to_group("card_boundary")
 	input_pickable = true
+	_extra_collision.disabled = true
+	add_child(_extra_collision)
 
 static func traverse_connection_candidates(card: Card, cb: Callable):
 	var boundary = get_card_boundary(card)
@@ -44,29 +53,44 @@ static func boundary_at_card(card: Card):
 	var pos = card.get_viewport().get_mouse_position()
 	var fallback = null
 	for boundary in card.get_tree().get_nodes_in_group("card_boundary").filter(func (c): return c.is_visible_in_tree()):
-		if boundary.get_shape_owners().is_empty():
+		if boundary.is_fallback_boundary():
 			assert(fallback == null, "cannot have multiple fallback card boundaries")
 			fallback = boundary
 		if boundary.contains_screen_position(pos):
 			return boundary
+	assert(fallback, "did not find fallback boundary")
 	return fallback
 
 static func card_moved(card: Card):
 	var boundary = boundary_at_card(card)
 	var old_boundary = get_card_boundary(card)
 	if old_boundary != boundary:
+		var old_index = card.get_index()
 		card.reparent(boundary)
 		card.global_position = boundary.get_global_mouse_position()
 		card.disable = boundary.disable_on_enter
+		
+		if old_boundary.duplicate_on_drag:
+			var dupl = card.get_script().new()
+			old_boundary.add_child(dupl)
+			old_boundary.move_child(dupl, old_index)
 		old_boundary._relayout()
+
+func is_fallback_boundary():
+	for id in get_shape_owners():
+		if not is_shape_owner_disabled(id):
+			return false
+	return true
 
 func contains_screen_position(pos: Vector2):
 	for id in get_shape_owners():
-		var shape = shape_owner_get_shape(id, 0)
-		var rect = shape_owner_get_transform(id) * shape.get_rect()
-		rect = get_canvas_transform() * get_global_transform() * rect
-		if rect.has_point(pos):
-			return true
+		if is_shape_owner_disabled(id): continue
+		for sid in range(0, shape_owner_get_shape_count(id)):
+			var shape = shape_owner_get_shape(id, sid)
+			var rect = shape_owner_get_transform(id) * shape.get_rect()
+			rect = get_canvas_transform() * get_global_transform() * rect
+			if rect.has_point(pos):
+				return true
 	return false
 
 func card_picked_up(card: Card):
@@ -76,6 +100,7 @@ func card_dropped(card: Card):
 	_relayout()
 
 func background_rect() -> Rect2:
+	# FIXME how to make sure we pick the background and not the extra collision?
 	for id in get_shape_owners():
 		if shape_owner_get_shape_count(id) <= 0: continue
 		var shape = shape_owner_get_shape(id, 0)
@@ -91,6 +116,7 @@ func my_card_extent():
 func _relayout():
 	match card_layout:
 		Layout.ROW: _relayout_row()
+		Layout.COLLAPSED_ROW: _relayout_collapsed_row()
 		Layout.FAN: _relayout_fan()
 
 func get_cards():
@@ -104,36 +130,45 @@ func _apply_card_transform(card: Node2D, new_transform: Transform2D):
 			.set_trans(Tween.TRANS_ELASTIC) \
 			.tween_property(card, "transform", new_transform, 0.25)
 
-func _relayout_row(spacing = 30, margin_left = 0):
+func _relayout_row(spacing = 30, stacked = false, extra_zoom = 1):
 	var horizontal_spacing = spacing * card_scale
 	var background = background_rect()
-	var left = horizontal_spacing + background.position.x + margin_left
+	var extent = my_card_extent() * extra_zoom
+	var left = background.position.x / extra_zoom
 	for card in get_cards():
-		var extent = my_card_extent()
-		var new_transform = Transform2D(0, Vector2(left + extent.x / 2, background.position.y + background.size.y / 2))
-		_apply_card_transform(card, new_transform)
-		left += extent.x + horizontal_spacing
+		var new_transform = Transform2D(0, Vector2(left + extent.x / extra_zoom / 2, background.position.y + background.size.y / 2))
+		_apply_card_transform(card, new_transform.scaled(Vector2(extra_zoom, extra_zoom)))
+		left += (extent.x / extra_zoom if not stacked else 0) + horizontal_spacing
 
-var _fan_collision = CollisionShape2D.new()
+func _relayout_collapsed_row():
+	if not hovered:
+		_relayout_row(30, true)
+	else:
+		const EXTRA_ZOOM = 2.5
+		const GAP = 10
+		_relayout_row(GAP, false, EXTRA_ZOOM)
+		
+		var extent = my_card_extent() * EXTRA_ZOOM
+		_extra_collision.shape = RectangleShape2D.new()
+		_extra_collision.shape.size = Vector2((extent.x + GAP)  * get_cards().size(), extent.y)
+		_extra_collision.position = Vector2(_extra_collision.shape.size.x / 2, 0)
+
 func _relayout_fan():
 	if not hovered:
-		if _fan_collision.get_parent(): _fan_collision.get_parent().remove_child(_fan_collision)
-		_relayout_row(-my_card_extent().x * 1.6, get_cards().size() * my_card_extent().x * 0.2)
+		_relayout_row(30, true)
 	else:
 		const EXTRA_ZOOM = 1.8
 		
-		# we close the fan when we leave the collision area, so add more collision behind the cards
 		var extent = my_card_extent() * EXTRA_ZOOM
-		_fan_collision.shape = RectangleShape2D.new()
-		_fan_collision.shape.size = Vector2(Vector2(extent.y * 2 + 200, 200 + extent.y))
-		_fan_collision.position = Vector2(0, -extent.y / 2)
-		if not _fan_collision.get_parent(): add_child(_fan_collision)
+		_extra_collision.shape = RectangleShape2D.new()
+		_extra_collision.shape.size = Vector2(Vector2(extent.y * 2 + 200, 200 + extent.y))
+		_extra_collision.position = Vector2(0, -extent.y / 2)
 		
 		# make sure the full rect is on screen
-		var rect = _fan_collision.get_canvas_transform() * _fan_collision.get_global_transform() * _fan_collision.shape.get_rect()
+		var rect = _extra_collision.get_canvas_transform() * _extra_collision.get_global_transform() * _extra_collision.shape.get_rect()
 		# FIXME also check for bottom / right
 		var delta = Vector2.ZERO.max(-rect.position)
-		_fan_collision.position += delta
+		_extra_collision.position += delta
 		
 		var c = get_cards()
 		var i = c.size() / -2
