@@ -19,7 +19,7 @@ func on_disconnect(object: Node, slot: Slot):
 func on_connect(object: Node, slot: Slot):
 	pass
 
-func draw(draw_node):
+func draw(draw_node: CardConnectionsDraw):
 	pass
 
 func get_draw_dependencies(deps: Array):
@@ -42,7 +42,7 @@ func delete_all_connections_but(object: Node):
 			Card.node_disconnect_slot(card, self, them, Card.node_get_slot_by_name(them, info[1]))
 			Card.node_disconnect_slot(them, Card.node_get_slot_by_name(them, info[1]), card, self)
 
-func draw_connections(draw_node, inverted):
+func draw_connections(draw_node: CardConnectionsDraw, inverted):
 	var connections = card.connections[get_slot_name()]
 	for info in connections:
 		var to = card.get_node_or_null(info[0])

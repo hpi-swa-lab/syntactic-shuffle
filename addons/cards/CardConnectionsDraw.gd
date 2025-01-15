@@ -33,6 +33,15 @@ func should_redraw():
 			return true
 	return false
 
+func draw_label_to(obj: Node2D, label: String):
+	var font = ThemeDB.fallback_font
+	var angle = global_position.angle_to_point(obj.global_position)
+	var flip = abs(angle) > PI / 2
+	const FONT_SIZE = 10
+	const OFFSET = 32
+	draw_set_transform_matrix(Transform2D(angle + PI if flip else angle, Vector2.ZERO) * Transform2D(0.0, Vector2(-OFFSET - font.get_multiline_string_size(label, HORIZONTAL_ALIGNMENT_CENTER, -1, FONT_SIZE).x if flip else OFFSET, -4)))
+	draw_string(font, Vector2(0, 0), label, HORIZONTAL_ALIGNMENT_CENTER, -1, FONT_SIZE, Color(Color.WHITE, 0.7))
+
 func draw_connection(from, to, inverted):
 	if not to: return
 	var target = to.global_position

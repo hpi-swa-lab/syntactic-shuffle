@@ -21,13 +21,14 @@ func resolve_signatures():
 
 func can_connect_to(object: Node, slot: Slot):
 	if not slot is InputSlot: return false
-	var my_signatures = resolve_signatures()
-	var their_signatures = slot.resolve_signatures()
-	for my_signature_name in my_signatures:
-		for their_signature_name in their_signatures:
-			if signatures_match(my_signatures[my_signature_name], their_signatures[their_signature_name]):
-				return true
-	return false
+	return slot.can_connect_to(card, self)
+	#var my_signatures = resolve_signatures()
+	#var their_signatures = slot.resolve_signatures()
+	#for my_signature_name in my_signatures:
+		#for their_signature_name in their_signatures:
+			#if signatures_match(my_signatures[my_signature_name], their_signatures[their_signature_name]):
+				#return true
+	#return false
 
 func invoke(signature_name: String, args: Array):
 	var signature = resolve_signatures()[signature_name]

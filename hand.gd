@@ -29,6 +29,11 @@ var categories = {
 		"MoveCard",
 		"TurnByCard",
 		"LookAtCard",
+	],
+	"Math": [
+		"MinusCard",
+		"ReflectCard",
+		"PlusCard"
 	]
 }
 
