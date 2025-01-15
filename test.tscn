@@ -2,10 +2,10 @@
 
 [ext_resource type="Script" uid="uid://cxldeg24krchn" path="res://camera_2d.gd" id="1_37kl0"]
 [ext_resource type="Script" uid="uid://cja8ehiirmcyt" path="res://addons/cards/CardBoundary.gd" id="1_g14j6"]
-[ext_resource type="Script" uid="uid://crd44l523beul" path="res://addons/cards/cards/PlusCard.gd" id="3_00tp4"]
-[ext_resource type="Script" uid="uid://dcgmjg1cijh6d" path="res://addons/cards/cards/MinusCard.gd" id="5_77dp3"]
+[ext_resource type="Script" uid="uid://d23cwws3aqxp1" path="res://addons/cards/cards/MoveCard.gd" id="5_a3se8"]
+[ext_resource type="Script" uid="uid://eb56jikr7vt0" path="res://addons/cards/cards/ReflectCard.gd" id="6_5tkv4"]
+[ext_resource type="Script" uid="uid://bvoloc64pi1db" path="res://addons/cards/cards/CollisionCard.gd" id="6_uty7l"]
 [ext_resource type="Script" uid="uid://by84b3jta1gov" path="res://addons/cards/cards/Vector2Card.gd" id="7_ehkex"]
-[ext_resource type="Script" uid="uid://dpxat1ltburl" path="res://addons/cards/cards/NumberCard.gd" id="11_77dp3"]
 [ext_resource type="Script" uid="uid://vnfn6yjp8q5s" path="res://addons/cards/Trash.gd" id="12_0m0f1"]
 [ext_resource type="Script" uid="uid://dmb2syao4idmy" path="res://addons/cards/cards/MousePositionCard.gd" id="12_5tkv4"]
 [ext_resource type="Script" uid="uid://dve76ylj0x1xs" path="res://addons/cards/cards/MouseLeftClickCard.gd" id="13_b0q6j"]
@@ -65,43 +65,62 @@ offset_right = 679.0
 offset_bottom = 408.0
 text = "Score"
 
-[node name="PlusCard2" type="Node2D" parent="main"]
-position = Vector2(753, 244)
-script = ExtResource("3_00tp4")
+[node name="MoveCard" type="Node2D" parent="main"]
+position = Vector2(1015, 601)
+script = ExtResource("5_a3se8")
 connections = Dictionary[String, Array]({
-"__output": [],
-"left": [],
-"right": []
+"__input": [[NodePath("../Vector2Card"), "__output"]],
+"__object": [[NodePath("../CharacterBody2D"), "__object"]]
 })
-metadata/_custom_type_script = ExtResource("3_00tp4")
+metadata/_custom_type_script = ExtResource("5_a3se8")
 
-[node name="NumberCard" type="Node2D" parent="main"]
-position = Vector2(303, 151)
-script = ExtResource("11_77dp3")
+[node name="CollisionCard" type="Node2D" parent="main"]
+position = Vector2(872, 496)
+script = ExtResource("6_uty7l")
+connections = Dictionary[String, Array]({
+"__object": [[NodePath("../CharacterBody2D"), "__object"]],
+"__output": [[NodePath("../Vector2Card2"), "__input"]]
+})
+metadata/_custom_type_script = ExtResource("6_uty7l")
+
+[node name="Vector2Card" type="Node2D" parent="main"]
+position = Vector2(1093, 510)
+script = ExtResource("7_ehkex")
+vector = Vector2(0.3, 0.3)
 connections = Dictionary[String, Array]({
 "__input": [],
+"__output": [[NodePath("../MoveCard"), "__input"], [NodePath("../ReflectCard"), "vector"]]
+})
+metadata/_custom_type_script = ExtResource("7_ehkex")
+
+[node name="Vector2Card2" type="Node2D" parent="main"]
+position = Vector2(940, 407)
+script = ExtResource("7_ehkex")
+vector = Vector2(0, 1)
+connections = Dictionary[String, Array]({
+"__input": [[NodePath("../CollisionCard"), "__output"]],
+"__output": [[NodePath("../ReflectCard"), "normal"]]
+})
+metadata/_custom_type_script = ExtResource("7_ehkex")
+
+[node name="ReflectCard" type="Node2D" parent="main"]
+position = Vector2(1053, 406)
+script = ExtResource("6_5tkv4")
+connections = Dictionary[String, Array]({
+"__output": [[NodePath("../Vector2Card3"), "__input"]],
+"normal": [[NodePath("../Vector2Card2"), "__output"]],
+"vector": [[NodePath("../Vector2Card"), "__output"]]
+})
+metadata/_custom_type_script = ExtResource("6_5tkv4")
+
+[node name="Vector2Card3" type="Node2D" parent="main"]
+position = Vector2(1140, 336)
+script = ExtResource("7_ehkex")
+connections = Dictionary[String, Array]({
+"__input": [[NodePath("../ReflectCard"), "__output"]],
 "__output": []
 })
-metadata/_custom_type_script = ExtResource("11_77dp3")
-
-[node name="NumberCard2" type="Node2D" parent="main"]
-position = Vector2(154, 187)
-script = ExtResource("11_77dp3")
-connections = Dictionary[String, Array]({
-"__input": [],
-"__output": []
-})
-metadata/_custom_type_script = ExtResource("11_77dp3")
-
-[node name="MinusCard" type="Node2D" parent="main"]
-position = Vector2(916, 247)
-script = ExtResource("5_77dp3")
-connections = Dictionary[String, Array]({
-"__output": [],
-"left": [],
-"right": []
-})
-metadata/_custom_type_script = ExtResource("5_77dp3")
+metadata/_custom_type_script = ExtResource("7_ehkex")
 
 [node name="hand" type="CanvasLayer" parent="."]
 script = ExtResource("15_vxl6d")

@@ -22,12 +22,24 @@ func _init() -> void:
 func _ready() -> void:
 	super._ready()
 	
-	setup("Output Number", "Continuously outputs the number, unless an input is connected.", Card.Type.Trigger,
+	setup("Number", "Stores a number. Continuously outputs it, unless an input is connected.", Card.Type.Trigger,
 		[
 			OutputSlot.new({"number": ["float"]}),
-			InputSlot.new({"trigger": []})
+			InputSlot.new({
+				"trigger": [],
+				"increment": ["increment"],
+				"override": ["float"]
+			})
 		],
 		[number_ui])
+
+func override(num: float):
+	number = num
+	trigger()
+
+func increment():
+	number += 1
+	trigger()
 
 func trigger():
 	invoke_output("number", [number])
@@ -37,4 +49,4 @@ func _process(delta: float) -> void:
 	if Engine.is_editor_hint(): return
 	
 	if connections["__input"].is_empty():
-		invoke_output("number", [number])
+		trigger()

@@ -32,9 +32,19 @@ func _init() -> void:
 func _ready() -> void:
 	super._ready()
 	
-	setup("Output 2D Vector", "Continuously outputs the vector, unless an input is connected.", Card.Type.Trigger,
-		[OutputSlot.new({"vector": ["Vector2"]}), InputSlot.new({"trigger": []})],
+	setup("2D Vector", "Stores a 2D Vector. Continuously outputs it, unless an input is connected.", Card.Type.Trigger,
+		[
+			OutputSlot.new({"vector": ["Vector2"]}),
+			InputSlot.new({
+				"trigger": [],
+				"override": ["Vector2"]
+			})
+		],
 		[vector_x, vector_y])
+
+func override(vector: Vector2):
+	self.vector = vector
+	trigger()
 
 func trigger():
 	invoke_output("vector", [vector])
@@ -44,4 +54,4 @@ func _process(delta: float) -> void:
 	if Engine.is_editor_hint(): return
 	
 	if connections["__input"].is_empty():
-		invoke_output("vector", [vector])
+		trigger()

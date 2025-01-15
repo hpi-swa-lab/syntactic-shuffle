@@ -155,7 +155,7 @@ func disconnect_slot(my_slot: Slot, them: Node, their_slot: Slot, index: int = -
 	else:
 		var path = get_path_to(them)
 		var pair = [path, their_slot.get_slot_name()]
-		assert(list.has(pair))
+		assert(list.has(pair), "tried to delete connection that did not exist")
 		list.erase(pair)
 		my_slot.on_disconnect(them, their_slot)
 

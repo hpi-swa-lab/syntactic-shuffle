@@ -8,20 +8,16 @@ var categories = {
 		"MousePositionCard",
 		"MouseRightClickCard",
 	],
-	"Time": [
-		"DelayCard",
-		"ClockCard",
-	],
-	"Spawn": [
-		"DeleteCard",
-	],
 	"Primitives": [
 		"Vector2Card",
 		"NumberCard",
 	],
-	"Store": [
-		"IncrementCard",
-		"StoreCard",
+	"Time": [
+		"DelayCard",
+		"ClockCard",
+	],
+	"Actions": [
+		"DeleteCard",
 		"SetTextCard",
 	],
 	"Movement": [
@@ -31,6 +27,7 @@ var categories = {
 		"LookAtCard",
 	],
 	"Math": [
+		"IncrementCard",
 		"MinusCard",
 		"ReflectCard",
 		"PlusCard"
