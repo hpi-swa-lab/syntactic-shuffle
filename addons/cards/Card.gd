@@ -82,6 +82,12 @@ func _ready() -> void:
 	visual.locked = locked
 	add_child(visual)
 
+## If your Card defers delivery of outputs you can signal here that it is
+## possible to connect it in a cycle. (Otherwise, if inputs are synchronously
+## delivered to outputs we get an infinite loop).
+func allow_cycles() -> bool:
+	return false
+
 func setup(name: String, description: String, type: Type, slots: Array[Slot], extra_ui: Array[Control] = []):
 	self.slots = slots
 	for s in slots:

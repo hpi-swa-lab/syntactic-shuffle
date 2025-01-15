@@ -22,5 +22,5 @@ func normal(normal: Vector2):
 	do()
 
 func do():
-	if _vector and _normal:
+	if _vector != null and _normal != null and _normal != Vector2.ZERO:
 		invoke_output("vector", [_vector.reflect(_normal)])

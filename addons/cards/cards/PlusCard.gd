@@ -10,17 +10,17 @@ func _ready() -> void:
 		OutputSlot.new({"sum": ["float"]})
 	])
 
-var _left: Vector2
-var _right: Vector2
+var _left: float
+var _right: float
 
-func left(left: Vector2):
+func left(left: float):
 	_left = left
 	do()
 
-func right(right: Vector2):
+func right(right: float):
 	_right = right
 	do()
 
 func do():
-	if _right and _left:
+	if _right != null and _left != null:
 		invoke_output("sum", [_left + _right])

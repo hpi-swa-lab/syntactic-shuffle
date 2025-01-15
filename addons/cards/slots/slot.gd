@@ -52,3 +52,22 @@ func signatures_match(a: Array, b: Array):
 	if a == ["*"]: return true
 	if b == ["*"]: return true
 	return a == b
+
+func detect_cycles_for_new_connection(from: Card, to: Card) -> bool:
+	return check_is_connected(from, to)
+
+func check_is_connected(a: Card, b: Card) -> bool:
+	var queue = [a]
+	var visitited = {}
+	while not queue.is_empty():
+		var node: Card = queue.pop_front()
+		visitited[node] = true
+		for name in node.connections:
+			for info in node.connections[name]:
+				if info[1] != "__output": continue
+				var next = node.get_node_or_null(info[0])
+				if next and not visitited.has(next):
+					if next == b:
+						return true
+					queue.push_back(next)
+	return false

@@ -20,5 +20,7 @@ func set_int_text(num: int):
 	set_text(str(num))
 
 func set_text(text: String):
-	get_object_input().text = text
-	activate_object_input()
+	var obj = get_object_input()
+	if obj:
+		obj.text = text
+		activate_object_input()

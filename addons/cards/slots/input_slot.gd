@@ -34,12 +34,16 @@ func invoke(signature: Array, args: Array):
 
 func can_connect_to(object: Node, slot: Slot):
 	if not slot is OutputSlot: return false
+	if not can_connect_to_multiple() and has_closer_connection_than(object):
+		return false
+	if detect_cycles_for_new_connection(object, card):
+		return false
 	var my_signatures = resolve_signatures()
 	var their_signatures = slot.resolve_signatures()
 	for my_signature_name in my_signatures:
 		for their_signature_name in their_signatures:
 			if signatures_match(my_signatures[my_signature_name], their_signatures[their_signature_name]):
-				return can_connect_to_multiple() or not has_closer_connection_than(object)
+				return true
 	return false
 
 func can_connect_to_multiple():

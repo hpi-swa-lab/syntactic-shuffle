@@ -18,3 +18,6 @@ func _physics_process(delta):
 			var collision = o.get_slide_collision(collision_index)
 			invoke_output("default", [])
 			activate_object_input()
+
+func allow_cycles():
+	return true
