@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://dcjpymb1evgp4"]
+[gd_scene load_steps=15 format=3 uid="uid://dcjpymb1evgp4"]
 
 [ext_resource type="Script" uid="uid://cxldeg24krchn" path="res://camera_2d.gd" id="1_37kl0"]
 [ext_resource type="Script" uid="uid://cja8ehiirmcyt" path="res://addons/cards/CardBoundary.gd" id="1_g14j6"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://dcgmjg1cijh6d" path="res://addons/cards/cards/MinusCard.gd" id="5_77dp3"]
 [ext_resource type="Script" uid="uid://by84b3jta1gov" path="res://addons/cards/cards/Vector2Card.gd" id="7_ehkex"]
 [ext_resource type="Script" uid="uid://dpxat1ltburl" path="res://addons/cards/cards/NumberCard.gd" id="11_77dp3"]
+[ext_resource type="Script" uid="uid://vnfn6yjp8q5s" path="res://addons/cards/Trash.gd" id="12_0m0f1"]
 [ext_resource type="Script" uid="uid://dmb2syao4idmy" path="res://addons/cards/cards/MousePositionCard.gd" id="12_5tkv4"]
 [ext_resource type="Script" uid="uid://dve76ylj0x1xs" path="res://addons/cards/cards/MouseLeftClickCard.gd" id="13_b0q6j"]
 [ext_resource type="Script" uid="uid://cutfv582eptcx" path="res://addons/cards/cards/MouseRightClickCard.gd" id="14_mhym6"]
@@ -171,3 +172,8 @@ connections = Dictionary[String, Array]({
 })
 disable = true
 metadata/_custom_type_script = ExtResource("7_ehkex")
+
+[node name="Trash" type="Area2D" parent="."]
+position = Vector2(1810, 998)
+script = ExtResource("12_0m0f1")
+metadata/_custom_type_script = ExtResource("12_0m0f1")

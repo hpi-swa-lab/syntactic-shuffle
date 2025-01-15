@@ -69,6 +69,9 @@ static func card_moved(card: Card):
 		card.reparent(boundary)
 		card.global_position = boundary.get_global_mouse_position()
 		card.disable = boundary.disable_on_enter
+		var tween = card.visual.create_tween()
+		tween.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC) \
+			.tween_property(card.visual, "scale", Vector2(boundary.card_scale, boundary.card_scale), 0.25)
 		
 		if old_boundary.duplicate_on_drag:
 			var dupl = card.get_script().new()
