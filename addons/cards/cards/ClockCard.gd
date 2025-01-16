@@ -1,4 +1,3 @@
-#thumb("clock.png")
 @tool
 extends Card
 
@@ -24,6 +23,7 @@ func _ready() -> void:
 	
 	setup("Clock",
 		"Trigger a singal after a specified time.",
+		"clock.png",
 		Card.Type.Effect,
 		[OutputSlot.new({"default": []})],
 		[delay_seconds_ui])

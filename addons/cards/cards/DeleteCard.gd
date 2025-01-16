@@ -1,11 +1,11 @@
 @tool
-#thumb("delete.png")
 extends Card
 
 func _ready() -> void:
 	super._ready()
 	setup("Delete",
 		"Delete a node.",
+		"delete.png",
 		Card.Type.Effect,
 		[ObjectInputSlot.new(), InputSlot.new({"delete_input": [], "delete_arg": ["Node"]})])
 

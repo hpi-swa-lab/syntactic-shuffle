@@ -1,13 +1,14 @@
 @tool
-#thumb("vector.png")
 extends Card
 
 @export var vector: Vector2 = Vector2.ZERO:
 	get: return vector
 	set(v):
+		if vector == v: return
 		vector = v
 		vector_x.set_value_no_signal(v.x)
 		vector_y.set_value_no_signal(v.y)
+		editor_sync_prop("vector")
 
 var vector_x = SpinBox.new()
 var vector_y = SpinBox.new()
@@ -32,7 +33,7 @@ func _init() -> void:
 func _ready() -> void:
 	super._ready()
 	
-	setup("2D Vector", "Stores a 2D Vector. Continuously outputs it, unless an input is connected.", Card.Type.Trigger,
+	setup("2D Vector", "Stores a 2D Vector. Continuously outputs it, unless an input is connected.", "vector.png", Card.Type.Trigger,
 		[
 			OutputSlot.new({"vector": ["Vector2"]}),
 			InputSlot.new({

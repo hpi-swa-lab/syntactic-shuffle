@@ -1,10 +1,9 @@
 @tool
-#thumb("RandomNumberGenerator.svg")
 extends Card
 
 func _ready() -> void:
 	super._ready()
-	setup("Random Axis Output", "Emits signals for random inputs on the four axes.", Card.Type.Trigger, [
+	setup("Random Axis Output", "Emits signals for random inputs on the four axes.", "RandomNumberGenerator.svg", Card.Type.Trigger, [
 		OutputSlot.new({"vector": ["Vector2"]})
 	])
 

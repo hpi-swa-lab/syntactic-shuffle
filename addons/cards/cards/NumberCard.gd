@@ -1,12 +1,13 @@
 @tool
-#thumb("number.png")
 extends Card
 
 @export var number: float = 0.0:
 	get: return number
 	set(v):
+		if number == v: return
 		number = v
 		number_ui.set_value_no_signal(v)
+		editor_sync_prop("number")
 
 var number_ui = SpinBox.new()
 
@@ -22,7 +23,7 @@ func _init() -> void:
 func _ready() -> void:
 	super._ready()
 	
-	setup("Number", "Stores a number. Continuously outputs it, unless an input is connected.", Card.Type.Trigger,
+	setup("Number", "Stores a number. Continuously outputs it, unless an input is connected.", "number.png", Card.Type.Trigger,
 		[
 			OutputSlot.new({"number": ["float"]}),
 			InputSlot.new({

@@ -1,13 +1,10 @@
-[gd_scene load_steps=13 format=3 uid="uid://dcjpymb1evgp4"]
+[gd_scene load_steps=10 format=3 uid="uid://dcjpymb1evgp4"]
 
 [ext_resource type="Script" uid="uid://cxldeg24krchn" path="res://camera_2d.gd" id="1_37kl0"]
 [ext_resource type="Script" uid="uid://cja8ehiirmcyt" path="res://addons/cards/CardBoundary.gd" id="1_g14j6"]
 [ext_resource type="Script" uid="uid://dsn8t1oa5bses" path="res://addons/cards/slots/slot.gd" id="3_mhym6"]
 [ext_resource type="Script" uid="uid://d23cwws3aqxp1" path="res://addons/cards/cards/MoveCard.gd" id="5_a3se8"]
-[ext_resource type="Script" uid="uid://dkyx51jnk8cvd" path="res://addons/cards/cards/AxisControlsCard.gd" id="6_0m0f1"]
-[ext_resource type="Script" uid="uid://bvoloc64pi1db" path="res://addons/cards/cards/CollisionCard.gd" id="6_uty7l"]
-[ext_resource type="Script" uid="uid://bu0m5ny8o8lda" path="res://addons/cards/cards/MagnetCard.gd" id="7_0m0f1"]
-[ext_resource type="Script" uid="uid://bo08qvvq1e3aj" path="res://addons/cards/cards/DeleteCard.gd" id="7_b0q6j"]
+[ext_resource type="Script" uid="uid://dpxat1ltburl" path="res://addons/cards/cards/NumberCard.gd" id="6_ehkex"]
 [ext_resource type="Script" uid="uid://vnfn6yjp8q5s" path="res://addons/cards/Trash.gd" id="12_0m0f1"]
 [ext_resource type="Script" uid="uid://dio881dm6xtr3" path="res://hand.gd" id="15_vxl6d"]
 
@@ -79,48 +76,35 @@ metadata/connections = Dictionary[String, Array]({
 })
 
 [node name="MoveCard" type="Node2D" parent="main"]
-position = Vector2(1032, 583)
+position = Vector2(1148, 610)
 script = ExtResource("5_a3se8")
 connections = Dictionary[String, Array]({
-"__input": [[NodePath("../AxisControlsCard"), "__output"]],
-"__object": [[NodePath("../CharacterBody2D"), "__object"]]
+"__input": [],
+"__object": []
 })
+locked = null
+disable = null
+id = "2bae7df3-eee0-4bff-89cb-471c020fb179"
 metadata/_custom_type_script = ExtResource("5_a3se8")
 
-[node name="MagnetCard" type="Node2D" parent="main"]
-position = Vector2(1011, 235)
-script = ExtResource("7_0m0f1")
-proxied_object = NodePath("../Label")
+[node name="Node2D" type="Node2D" parent="main"]
+position = Vector2(613.98, 505.585)
+script = ExtResource("6_ehkex")
 connections = Dictionary[String, Array]({
-"__object": [[NodePath("../DeleteCard"), "__object"]]
+"__input": [],
+"__output": []
 })
-metadata/_custom_type_script = ExtResource("7_0m0f1")
+id = "0c61b4e5-0f06-484f-9ffd-54df46ca457d"
 
-[node name="AxisControlsCard" type="Node2D" parent="main"]
-position = Vector2(1131, 583)
-script = ExtResource("6_0m0f1")
+[node name="Node2D2" type="Node2D" parent="main"]
+position = Vector2(491.091, 392.612)
+script = ExtResource("6_ehkex")
+number = 0.4
 connections = Dictionary[String, Array]({
-"__output": [[NodePath("../MoveCard"), "__input"]]
+"__input": [],
+"__output": []
 })
-metadata/_custom_type_script = ExtResource("6_0m0f1")
-
-[node name="CollisionCard" type="Node2D" parent="main"]
-position = Vector2(957, 462)
-script = ExtResource("6_uty7l")
-connections = Dictionary[String, Array]({
-"__object": [[NodePath("../CharacterBody2D"), "__object"]],
-"__output": [[NodePath("../DeleteCard"), "__input"]]
-})
-metadata/_custom_type_script = ExtResource("6_uty7l")
-
-[node name="DeleteCard" type="Node2D" parent="main"]
-position = Vector2(1022, 371)
-script = ExtResource("7_b0q6j")
-connections = Dictionary[String, Array]({
-"__input": [[NodePath("../CollisionCard"), "__output"]],
-"__object": [[NodePath("../MagnetCard"), "__object"]]
-})
-metadata/_custom_type_script = ExtResource("7_b0q6j")
+id = "93afde27-d884-4fab-a4f0-24037b4137d3"
 
 [node name="hand" type="CanvasLayer" parent="."]
 script = ExtResource("15_vxl6d")
@@ -144,7 +128,7 @@ metadata/_edit_use_anchors_ = true
 position = Vector2(600, 45)
 shape = SubResource("RectangleShape2D_77dp3")
 
-[node name="Trash" type="Area2D" parent="."]
+[node name="Trash" type="Area2D" parent="hand"]
 position = Vector2(1810, 998)
 script = ExtResource("12_0m0f1")
 card_scale = 0.01

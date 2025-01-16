@@ -1,10 +1,9 @@
 @tool
-#thumb("minus.png")
 extends Card
 
 func _ready() -> void:
 	super._ready()
-	setup("Minus", "Subtract two things.", Card.Type.Effect, [
+	setup("Minus", "Subtract two things.", "minus.png", Card.Type.Effect, [
 		NamedInputSlot.new("left", {"left": ["float"]}),
 		NamedInputSlot.new("right", {"right": ["float"]}),
 		OutputSlot.new({"difference": ["float"]})

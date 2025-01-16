@@ -17,6 +17,7 @@ config/icon="res://icon.svg"
 
 [autoload]
 
+uuid="*res://addons/cards/uuid.gd"
 G="*res://addons/cards/G.gd"
 
 [display]

@@ -1,10 +1,9 @@
 @tool
-#thumb("right_click.png")
 extends Card
 
 func _ready() -> void:
 	super._ready()
-	setup("Mouse Right Click", "Emits signals when the mouse right click is pressed.", Card.Type.Trigger, [
+	setup("Mouse Right Click", "Emits signals when the mouse right click is pressed.", "right_click.png", Card.Type.Trigger, [
 		OutputSlot.new({"default": [], "vector": ["Vector2"]})
 	])
 

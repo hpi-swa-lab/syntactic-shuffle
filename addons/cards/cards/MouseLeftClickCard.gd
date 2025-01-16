@@ -1,10 +1,9 @@
 @tool
-#thumb("left_click.png")
 extends Card
 
 func _ready() -> void:
 	super._ready()
-	setup("Mouse Left Click", "Emits signals when the mouse left click is pressed.", Card.Type.Trigger, [
+	setup("Mouse Left Click", "Emits signals when the mouse left click is pressed.", "left_click.png", Card.Type.Trigger, [
 		OutputSlot.new({"default": [], "vector": ["Vector2"]})
 	])
 

@@ -1,10 +1,9 @@
 @tool
-#thumb("collision.png")
 extends Card
 
 func _ready() -> void:
 	super._ready()
-	setup("Collision", "Emit when colliding.", Card.Type.Trigger, [
+	setup("Collision", "Emit when colliding.", "collision.png", Card.Type.Trigger, [
 		ObjectInputSlot.new(),
 		OutputSlot.new({"default": []})
 	])

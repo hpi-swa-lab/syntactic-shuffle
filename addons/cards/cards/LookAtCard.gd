@@ -1,10 +1,9 @@
 @tool
-#thumb("look_at.png")
 extends Card
 
 func _ready() -> void:
 	super._ready()
-	setup("Look At", "Turns the target to look at a position.", Card.Type.Effect, [
+	setup("Look At", "Turns the target to look at a position.", "look_at.png", Card.Type.Effect, [
 		ObjectInputSlot.new(),
 		InputSlot.new({"turn_toward": ["Vector2"]})
 	])

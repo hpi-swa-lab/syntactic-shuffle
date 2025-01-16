@@ -1,10 +1,9 @@
 @tool
-#thumb("trigger.png")
 extends Card
 
 func _ready() -> void:
 	super._ready()
-	setup("Set Text", "Set the text of a label.", Card.Type.Trigger, [
+	setup("Set Text", "Set the text of a label.", "trigger.png", Card.Type.Trigger, [
 		InputSlot.new({
 			"set_float_text": ["float"],
 			"set_int_text": ["int"],

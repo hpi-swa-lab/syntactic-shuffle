@@ -77,6 +77,8 @@ static func card_moved(card: Card):
 			var dupl = card.get_script().new()
 			old_boundary.add_child(dupl)
 			old_boundary.move_child(dupl, old_index)
+			
+			Card.editor_sync("cards:spawn", [boundary.get_path(), card.id, card.get_script().resource_path, card.get_index()])
 		old_boundary._relayout()
 
 func is_fallback_boundary():

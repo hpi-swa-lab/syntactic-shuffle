@@ -1,12 +1,13 @@
 @tool
-#thumb("clock.png")
 extends Card
 
 @export var delay_seconds: float = 1.0:
 	get: return delay_seconds
 	set(v):
+		if delay_seconds == v: return
 		delay_seconds = v
 		delay_seconds_ui.set_value_no_signal(v)
+		editor_sync_prop("delay_seconds")
 
 var delay_seconds_ui = SpinBox.new()
 var current_elapsed_time = 0.0
@@ -23,6 +24,7 @@ func _ready() -> void:
 	super._ready()
 	setup("Delay",
 		"Delay for a given time and then forward the inputs.",
+		"clock.png",
 		Card.Type.Effect,
 		[InputSlot.new({"any": ["*"]}), OutputSlot.new({"any": ["*"]})],
 		[delay_seconds_ui])

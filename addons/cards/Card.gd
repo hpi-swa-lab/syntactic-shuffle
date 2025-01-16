@@ -11,8 +11,15 @@ enum Type {
 const SHOW_IN_GAME = true
 const MAX_CONNECTION_DISTANCE = 150
 
+static func editor_sync(message: String, args: Array):
+	if EngineDebugger.is_active(): EngineDebugger.send_message(message, args)
+
 static func show_cards():
 	return not Engine.is_editor_hint() or SHOW_IN_GAME
+
+static func get_id(node: Node):
+	if node is Card: return node.id
+	push_error("missing get_id")
 
 static func node_get_slots(node: Node) -> Array:
 	if node is Card: return node.slots
@@ -48,7 +55,8 @@ var _connections: Dictionary[String, Array] = {}
 ## to an array of tuples of [NodePath, slot name].
 @export var connections: Dictionary[String, Array]:
 	get: return _get_connections()
-	set(v): _connections = v
+	set(v):
+		_connections = v
 func _get_connections() -> Dictionary[String, Array]: return _connections
 
 @export var locked = false:
@@ -63,6 +71,8 @@ func _get_connections() -> Dictionary[String, Array]: return _connections
 		if connection_draw_node: connection_draw_node.queue_redraw()
 		if disable: disconnect_all()
 	get: return disable
+
+@export var id: String
 
 var slots: Array[Slot]:
 	get: return _get_slots()
@@ -106,6 +116,9 @@ func _ready() -> void:
 	visual.dragging.connect(func (d): dragging = d)
 	visual.locked = locked
 	add_child(visual)
+	
+	if not id:
+		id = uuid.v4()
 
 ## If your Card defers delivery of outputs you can signal here that it is
 ## possible to connect it in a cycle. (Otherwise, if inputs are synchronously
@@ -113,7 +126,7 @@ func _ready() -> void:
 func allow_cycles() -> bool:
 	return false
 
-func setup(name: String, description: String, type: Type, slots: Array[Slot], extra_ui: Array[Control] = []):
+func setup(name: String, description: String, icon: String, type: Type, slots: Array[Slot], extra_ui: Array[Control] = []):
 	self.slots = slots
 	for s in slots:
 		if not connections.has(s.get_slot_name()): connections[s.get_slot_name()] = []
@@ -125,18 +138,14 @@ func setup(name: String, description: String, type: Type, slots: Array[Slot], ex
 			Type.Trigger: type_icon = "trigger.png"
 			Type.Effect: type_icon = "event.png"
 			Type.Store: type_icon = "CylinderMesh.svg"
-		visual.setup(name, description, get_icon_name(), type_icon, extra_ui)
-
-func get_icon_name():
-	if get_script():
-		var name = get_script().resource_path.get_file().split('.')[0]
-		return G.at("addon").cards[name]
-	return null
+		visual.setup(name, description, icon, type_icon, extra_ui)
 
 func _process(delta: float) -> void:
 	if not show_cards(): return
 	
-	if dragging and not Engine.is_editor_hint(): CardBoundary.card_moved(self)
+	if dragging and not Engine.is_editor_hint():
+		CardBoundary.card_moved(self)
+		editor_sync("cards:set_prop", [id, "position", position])
 	
 	if disable: return
 	if dragging:
@@ -172,6 +181,10 @@ func connect_slot(my_slot: Slot, them: Node, their_slot: Slot):
 	if not list.has(pair):
 		list.push_back(pair)
 		my_slot.on_connect(them, their_slot)
+		editor_sync("cards:set_prop", [id, "connections", connections])
+
+func editor_sync_prop(name: String):
+	editor_sync("cards:set_prop", [id, name, get(name)])
 
 func disconnect_slot(my_slot: Slot, them: Node, their_slot: Slot, index: int = -1):
 	var list = connections[my_slot.get_slot_name()]
@@ -183,6 +196,7 @@ func disconnect_slot(my_slot: Slot, them: Node, their_slot: Slot, index: int = -
 		assert(list.has(pair), "tried to delete connection that did not exist")
 		list.erase(pair)
 		my_slot.on_disconnect(them, their_slot)
+		editor_sync("cards:set_prop", [id, "connections", connections])
 
 func disconnect_all():
 	for list in connections:

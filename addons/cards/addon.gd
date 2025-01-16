@@ -4,29 +4,30 @@ class_name CardsAddon
 
 var cards = {}
 var selected_card: Card = null
+var debugger: EditorSync
 
 func _enter_tree() -> void:
-	G.put("addon", self)
+	add_autoload_singleton("uuid", 'res://addons/cards/uuid.gd')
+	add_autoload_singleton("G", 'res://addons/cards/G.gd')
+	
 	var base = get_editor_interface().get_base_control()
 	find_behavior_classes(func(name, script, icon):
 		add_custom_type(name, "Node2D", script, base.get_theme_icon(icon, &"EditorIcons"))
 		cards[name] = icon)
+	
+	debugger = EditorSync.new(get_editor_interface())
+	add_debugger_plugin(debugger)
 
 ## List all behaviors in their folder and install as custom types
 static func find_behavior_classes(callback: Callable):
 	var regex = RegEx.new()
-	regex.compile("#thumb\\(\"(.+)\"\\)")
+	regex.compile("#thumb\\(\"(.o+)\"\\)")
 	for file in DirAccess.get_files_at("res://addons/cards/cards"):
 		if file.get_extension() != "gd": continue
 		var name = file.get_basename()
-		var icon = ""
 		var script = load("res://addons/cards/cards/" + file)
 		var result = regex.search(script.source_code)
-		if result:
-			icon = result.strings[1]
-		else:
-			push_error("Card {0} is missing #thumb(\"...\") annotation".format([name]))
-		callback.call(name, script, icon)
+		callback.call(name, script, "")
 
 func _forward_canvas_gui_input(event):
 	if not selected_card: return false
@@ -38,6 +39,9 @@ func _exit_tree():
 	for key in cards:
 		remove_custom_type(key)
 	cards.clear()
+	remove_debugger_plugin(debugger)
+	remove_autoload_singleton("uuid")
+	remove_autoload_singleton("G")
 
 func _handles(object: Object) -> bool:
 	return true

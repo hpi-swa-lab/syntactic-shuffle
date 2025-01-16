@@ -1,15 +1,6 @@
 @tool
 extends Node
 
-class MockAddon:
-	var cards = {}
-	func _init() -> void:
-		CardsAddon.find_behavior_classes(func(name, script, icon): cards[name] = icon)
-
-func _ready() -> void:
-	if Card.show_cards() and not Engine.is_editor_hint():
-		G.put("addon", MockAddon.new())
-
 var values = {}
 
 func put(name: String, value: Variant):

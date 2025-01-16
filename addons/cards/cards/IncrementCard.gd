@@ -1,10 +1,9 @@
 @tool
-#thumb("increment.png")
 extends Card
 
 func _ready() -> void:
 	super._ready()
-	setup("Increment", "Increment.", Card.Type.Trigger, [
+	setup("Increment", "Increment.", "increment.png", Card.Type.Trigger, [
 		InputSlot.new({"trigger": []}),
 		OutputSlot.new({"default": ["increment"]})
 	])

@@ -1,10 +1,9 @@
 @tool
-#thumb("turn_by.png")
 extends Card
 
 func _ready() -> void:
 	super._ready()
-	setup("Turn", "Rotates the parent by the given degrees.", Card.Type.Effect, [
+	setup("Turn", "Rotates the parent by the given degrees.", "turn_by.png", Card.Type.Effect, [
 		ObjectInputSlot.new(),
 		InputSlot.new({"turn": ["float"]})
 	])

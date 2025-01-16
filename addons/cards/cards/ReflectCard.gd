@@ -1,10 +1,9 @@
 @tool
-#thumb("reflect.png")
 extends Card
 
 func _ready() -> void:
 	super._ready()
-	setup("Reflect", "Reflect a vector.", Card.Type.Effect, [
+	setup("Reflect", "Reflect a vector.", "reflect.png", Card.Type.Effect, [
 		NamedInputSlot.new("vector", {"vector": ["Vector2"]}),
 		NamedInputSlot.new("normal", {"normal": ["Vector2"]}),
 		OutputSlot.new({"vector": ["Vector2"]})

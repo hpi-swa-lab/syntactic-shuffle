@@ -1,10 +1,9 @@
 @tool
-#thumb("keyboard_input.png")
 extends Card
 
 func _ready() -> void:
 	super._ready()
-	setup("Axis Controls", "Emits signals for inputs on the four axes.", Card.Type.Trigger, [
+	setup("Axis Controls", "Emits signals for inputs on the four axes.", "keyboard_input.png", Card.Type.Trigger, [
 		OutputSlot.new({"vector": ["Vector2"]})
 	])
 
