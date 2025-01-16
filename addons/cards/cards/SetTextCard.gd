@@ -21,6 +21,6 @@ func set_int_text(num: int):
 
 func set_text(text: String):
 	var obj = get_object_input()
-	if obj:
+	if obj and "text" in obj:
 		obj.text = text
 		activate_object_input()

@@ -14,11 +14,25 @@ const MAX_CONNECTION_DISTANCE = 150
 static func show_cards():
 	return not Engine.is_editor_hint() or SHOW_IN_GAME
 
-static func node_get_slots(node: Node):
+static func node_get_slots(node: Node) -> Array:
 	if node is Card: return node.slots
-	else: return [ObjectOutputSlot.new()]
+	else:
+		if node.has_meta("slots"): return node.get_meta("slots") as Array[Slot]
+		else:
+			var slots = [ObjectOutputSlot.new()] as Array[Slot]
+			node.set_meta("slots", slots)
+			return slots
 
-static func node_get_slot_by_name(node: Node, name: String):
+static func node_get_connections(node: Node) -> Dictionary[String, Array]:
+	if node is Card: return node.slots
+	else:
+		if node.has_meta("connections"): return node.get_meta("connections") as Dictionary[String, Array]
+		else:
+			var connections = {"__object": []} as Dictionary[String, Array]
+			node.set_meta("connections", connections)
+			return connections
+
+static func node_get_slot_by_name(node: Node, name: String) -> Slot:
 	if node is Card: return node.get_slot_by_name(name)
 	else: return ObjectOutputSlot.new()
 
@@ -28,10 +42,14 @@ static func node_connect_slot(me: Node, my_slot: Slot, them: Node, their_slot: S
 static func node_disconnect_slot(me: Node, my_slot: Slot, them: Node, their_slot: Slot):
 	if me is Card: me.disconnect_slot(my_slot, them, their_slot)
 
+var _connections: Dictionary[String, Array] = {}
 ## List of connections from this card to other cards.
 ## The dictionary maps from this card's slot name (such as __output)
 ## to an array of tuples of [NodePath, slot name].
-@export var connections: Dictionary[String, Array] = {}
+@export var connections: Dictionary[String, Array]:
+	get: return _get_connections()
+	set(v): _connections = v
+func _get_connections() -> Dictionary[String, Array]: return _connections
 
 @export var locked = false:
 	get: return locked
@@ -46,7 +64,14 @@ static func node_disconnect_slot(me: Node, my_slot: Slot, them: Node, their_slot
 		if disable: disconnect_all()
 	get: return disable
 
-var slots: Array[Slot]
+var slots: Array[Slot]:
+	get: return _get_slots()
+	set(v): _set_slots(v)
+
+var _slots: Array[Slot]
+func _get_slots(): return _slots
+func _set_slots(v: Array[Slot]): _slots = v
+
 var visual: CardVisual
 var connection_draw_node = CardConnectionsDraw.new()
 var dragging: bool:

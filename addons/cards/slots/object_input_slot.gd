@@ -22,8 +22,8 @@ func get_object():
 	for info in card.connections[get_slot_name()]:
 		var path = info[0]
 		var o = card.get_node_or_null(path)
-		if o is CardProxy:
-			return o.proxy_target
+		if o is MagnetCard:
+			return o.get_proxied()
 		else:
 			return o
 	return null
