@@ -3,7 +3,7 @@ extends EditorPlugin
 class_name CardsAddon
 
 var cards = {}
-var selected_card: Card = null
+var selected_node: Node2D = null
 var debugger: EditorSync
 
 func _enter_tree() -> void:
@@ -30,10 +30,14 @@ static func find_behavior_classes(callback: Callable):
 		callback.call(name, script, "")
 
 func _forward_canvas_gui_input(event):
-	if not selected_card: return false
-	var ret = selected_card._forward_canvas_gui_input(event, get_undo_redo())
+	if not selected_node: return false
+	var ret = selected_node._forward_canvas_gui_input(event, get_undo_redo())
 	if ret: update_overlays()
 	return ret
+
+func _forward_canvas_draw_over_viewport(viewport_control: Control) -> void:
+	if selected_node is Placeholder:
+		selected_node._forward_canvas_draw_over_viewport(viewport_control)
 
 func _exit_tree():
 	for key in cards:
@@ -47,9 +51,9 @@ func _handles(object: Object) -> bool:
 	return true
 
 func _edit(object: Object) -> void:
-	if selected_card:
-		selected_card.dragging = false
-		selected_card = null
-	if object is Card:
-		selected_card = object
-		object.dragging = true
+	if selected_node:
+		if selected_node is Card: selected_node.dragging = false
+		selected_node = null
+	if object is Card or object is Placeholder:
+		selected_node = object
+		if selected_node is Card: selected_node.dragging = true
