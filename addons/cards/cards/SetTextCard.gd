@@ -5,12 +5,16 @@ func _ready() -> void:
 	super._ready()
 	setup("Set Text", "Set the text of a label.", "trigger.png", Card.Type.Trigger, [
 		InputSlot.new({
+			"set_vector2_text": ["Vector2"],
 			"set_float_text": ["float"],
 			"set_int_text": ["int"],
 			"set_text": ["String"]
 		}),
 		ObjectInputSlot.new()
 	])
+
+func set_vector2_text(v: Vector2):
+	set_text(str(v))
 
 func set_float_text(num: float):
 	set_text(str(num))

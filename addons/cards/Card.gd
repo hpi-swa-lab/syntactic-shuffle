@@ -193,7 +193,7 @@ func _process(delta: float) -> void:
 	
 	connection_draw_node.check_redraw(delta)
 
-func connect_slot(my_slot: Slot, them: Node, their_slot: Slot):
+func connect_slot(my_slot: Slot, them: Node, their_slot: Slot) -> void:
 	var pair = [get_path_to(them), their_slot.get_slot_name()]
 	var list = connections[my_slot.get_slot_name()]
 	if not list.has(pair):
@@ -231,7 +231,7 @@ func get_slot_by_name(name: String) -> Slot:
 	for s in slots:
 		if s.get_slot_name() == name:
 			return s
-	push_error("slot not found")
+	push_error("slot {0} not found".format([name]))
 	return null
 
 func invoke_output(signature_name: String, args: Array, name = "__output"):

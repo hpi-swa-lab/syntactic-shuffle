@@ -69,7 +69,7 @@ func _check_one_output(output_slot, my_signatures, them, their_slot):
 	var their_signatures = their_slot.resolve_signatures()
 	for my_signature_name in my_signatures:
 		for their_signature_name in their_signatures:
-			if not signatures_match(my_signatures[my_signature_name], their_signatures[their_signature_name]):
-				Card.node_disconnect_slot(card, output_slot, them, Card.node_get_slot_by_name(them, their_slot.get_slot_name()))
-				Card.node_disconnect_slot(them, Card.node_get_slot_by_name(them, their_slot.get_slot_name()), card, output_slot)
+			if signatures_match(my_signatures[my_signature_name], their_signatures[their_signature_name]):
 				return
+	Card.node_disconnect_slot(card, output_slot, them, Card.node_get_slot_by_name(them, their_slot.get_slot_name()))
+	Card.node_disconnect_slot(them, Card.node_get_slot_by_name(them, their_slot.get_slot_name()), card, output_slot)
