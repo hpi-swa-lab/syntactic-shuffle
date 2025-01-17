@@ -31,6 +31,10 @@ var categories = {
 		"MinusCard",
 		"ReflectCard",
 		"PlusCard"
+	],
+	"Groups": [
+		"SceneCard",
+		"SpawnCard"
 	]
 }
 

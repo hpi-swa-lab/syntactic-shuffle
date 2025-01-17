@@ -13,6 +13,12 @@ signal dragging(d: bool)
 		locked = v
 		%locked.visible = v
 
+@export var paused = false:
+	get: return paused
+	set(v):
+		paused = v
+		$CardControl.self_modulate = Color(Color.WHITE, 0.5 if paused else 1.0)
+
 func setup(name: String, description: String, icon: String, type_icon: String, extra_ui: Array[Control]):
 	%Name.text = name
 	%Description.text = description

@@ -9,7 +9,7 @@ func _ready():
 	z_index = 1
 
 func _draw():
-	if not card.show_cards() or card.disable: return
+	if not card or not card.show_cards() or card.disable: return
 	for slot in card.slots:
 		slot.draw(self)
 
@@ -46,6 +46,10 @@ func draw_connection(from, to, inverted):
 	if not to: return
 	var target = to.global_position
 	var distance = target.distance_to(from.global_position)
+	# FIXME save guard -- if this happens, we have a problem anyways
+	# that needs to be solved differently
+	distance = min(distance, 1000)
+	
 	var angle = from.global_position.angle_to_point(target) - from.get_global_transform().get_rotation()
 	draw_set_transform(Vector2.ZERO, angle - PI / 2)
 	const SIZE = 3

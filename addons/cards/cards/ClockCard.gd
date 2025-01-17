@@ -6,6 +6,7 @@ extends Card
 	set(v):
 		delay_seconds = v
 		delay_seconds_ui.set_value_no_signal(v)
+		editor_sync_prop("delay_seconds")
 
 var delay_seconds_ui = SpinBox.new()
 var current_elapsed_time = 0.0

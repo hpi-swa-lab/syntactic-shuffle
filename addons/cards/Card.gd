@@ -19,6 +19,7 @@ static func show_cards():
 
 static func get_id(node: Node):
 	if node is Card: return node.id
+	if node is CardBoundary: return node.id
 	push_error("missing get_id")
 
 static func node_get_slots(node: Node) -> Array:
@@ -59,18 +60,29 @@ var _connections: Dictionary[String, Array] = {}
 		_connections = v
 func _get_connections() -> Dictionary[String, Array]: return _connections
 
+## Not currently able to move
 @export var locked = false:
 	get: return locked
 	set(v):
 		locked = v
 		if visual: visual.locked = v
 
+## Not currently able to move, connect, or emit
 @export var disable = false:
 	set(v):
 		disable = v
 		if connection_draw_node: connection_draw_node.queue_redraw()
 		if disable: disconnect_all()
+		if visual: visual.paused = paused
 	get: return disable
+
+## Not currently activating triggers or returning objects but can be
+## connected to other cards and objects
+@export var paused = false:
+	set(v):
+		paused = v
+		if visual: visual.paused = v
+	get: return paused or disable
 
 @export var id: String
 
@@ -115,7 +127,10 @@ func _ready() -> void:
 	visual.scale = get_base_scale()
 	visual.dragging.connect(func (d): dragging = d)
 	visual.locked = locked
+	visual.paused = paused
 	add_child(visual)
+	
+	get_card_boundary().card_entered(self)
 	
 	if not id:
 		id = uuid.v4()
@@ -203,6 +218,7 @@ func disconnect_all():
 		connections[list].clear()
 
 func get_object_input():
+	if paused: return null
 	return get_slot_by_name("__object").get_object()
 
 func activate_object_input():
@@ -216,11 +232,11 @@ func get_slot_by_name(name: String) -> Slot:
 	return null
 
 func invoke_output(signature_name: String, args: Array, name = "__output"):
-	if disable: return
+	if paused: return
 	get_slot_by_name(name).invoke(signature_name, args)
 
 func invoke_generic_output(signature: Array, args: Array, name = "__output"):
-	if disable: return
+	if paused: return
 	get_slot_by_name(name).invoke_signature(signature, args)
 
 func get_card_boundary():

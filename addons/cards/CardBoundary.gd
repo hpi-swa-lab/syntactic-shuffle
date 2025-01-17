@@ -10,6 +10,7 @@ enum Layout {
 }
 
 @export var disable_on_enter = false
+@export var pause_on_enter = false
 @export var card_layout = Layout.NONE:
 	get: return card_layout
 	set(v):
@@ -18,6 +19,7 @@ enum Layout {
 		_relayout()
 @export var card_scale = 0.2
 @export var duplicate_on_drag = false
+@export var id: String
 
 # we close the expanded view when we leave the collision area, so add more collision behind the cards when expanded
 var _extra_collision = CollisionShape2D.new()
@@ -35,6 +37,8 @@ func _ready() -> void:
 	input_pickable = true
 	_extra_collision.disabled = true
 	add_child(_extra_collision)
+	if not id:
+		id = uuid.v4()
 
 static func traverse_connection_candidates(card: Card, cb: Callable):
 	var boundary = get_card_boundary(card)
@@ -68,10 +72,7 @@ static func card_moved(card: Card):
 		var old_index = card.get_index()
 		card.reparent(boundary)
 		card.global_position = boundary.get_global_mouse_position()
-		card.disable = boundary.disable_on_enter
-		var tween = card.visual.create_tween()
-		tween.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC) \
-			.tween_property(card.visual, "scale", Vector2(boundary.card_scale, boundary.card_scale), 0.25)
+		boundary.card_entered(card)
 		
 		if old_boundary.duplicate_on_drag:
 			var dupl = card.get_script().new()
@@ -93,10 +94,20 @@ func contains_screen_position(pos: Vector2):
 		for sid in range(0, shape_owner_get_shape_count(id)):
 			var shape = shape_owner_get_shape(id, sid)
 			var rect = shape_owner_get_transform(id) * shape.get_rect()
-			rect = get_canvas_transform() * get_global_transform() * rect
+			rect = get_viewport_transform() * get_global_transform() * rect
 			if rect.has_point(pos):
 				return true
 	return false
+
+func card_entered(card: Card):
+	card.disable = disable_on_enter
+	card.paused = pause_on_enter
+	card.editor_sync_prop("paused")
+	card.editor_sync_prop("disabled")
+	card.editor_sync("cards:move_boundary", [card.id, Card.get_id(self)])
+	var tween = card.visual.create_tween()
+	tween.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC) \
+		.tween_property(card.visual, "scale", Vector2(card_scale, card_scale), 0.25)
 
 func card_picked_up(card: Card):
 	pass
@@ -170,7 +181,7 @@ func _relayout_fan():
 		_extra_collision.position = Vector2(0, -extent.y / 2)
 		
 		# make sure the full rect is on screen
-		var rect = _extra_collision.get_canvas_transform() * _extra_collision.get_global_transform() * _extra_collision.shape.get_rect()
+		var rect = _extra_collision.get_viewport_transform() * _extra_collision.get_global_transform() * _extra_collision.shape.get_rect()
 		# FIXME also check for bottom / right
 		var delta = Vector2.ZERO.max(-rect.position)
 		_extra_collision.position += delta

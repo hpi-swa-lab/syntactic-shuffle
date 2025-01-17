@@ -26,6 +26,10 @@ func _capture(message, data, session_id):
 			parent.add_child(node, true)
 			parent.move_child(node, index)
 			node.owner = scene.get_child(0)
+		"cards:move_boundary":
+			var card = find_node_for_id(data[0], scene)
+			var boundary = find_node_for_id(data[1], scene)
+			if card and boundary: card.reparent(boundary)
 		"cards:delete":
 			var obj = find_node_for_id(data[0], scene)
 			if obj: obj.queue_free()
@@ -37,7 +41,7 @@ func _capture(message, data, session_id):
 			if obj: obj.set(field, value)
 	return true
 
-func find_node_for_id(id: String, parent: Node):
+func find_node_for_id(id: String, parent: Node) -> Node:
 	for c in parent.get_children():
 		if "id" in c and c.id == id:
 			return c
