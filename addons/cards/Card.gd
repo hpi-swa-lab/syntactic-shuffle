@@ -50,6 +50,9 @@ static func node_connect_slot(me: Node, my_slot: Slot, them: Node, their_slot: S
 static func node_disconnect_slot(me: Node, my_slot: Slot, them: Node, their_slot: Slot):
 	if me is Card: me.disconnect_slot(my_slot, them, their_slot)
 
+static func set_ignore_object(node: Node):
+	node.set_meta("_cards_ignore", true)
+
 var _connections: Dictionary[String, Array] = {}
 ## List of connections from this card to other cards.
 ## The dictionary maps from this card's slot name (such as __output)

@@ -32,6 +32,7 @@ func can_connect_to(object: Node, slot: Slot):
 	if not (slot is ObjectOutputSlot
 		and (limit_to_group == "" or object.is_in_group(limit_to_group))
 		and not object is Camera2D
+		and not object.has_meta("_cards_ignore")
 		and object.get_parent() == card.get_parent()):
 			return false
 	if has_closer_connection_than(object):

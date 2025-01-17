@@ -36,6 +36,7 @@ func _ready() -> void:
 	add_to_group("card_boundary")
 	input_pickable = true
 	_extra_collision.disabled = true
+	Card.set_ignore_object(_extra_collision)
 	add_child(_extra_collision)
 	if not id:
 		id = uuid.v4()

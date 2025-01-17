@@ -22,4 +22,8 @@ func instantiate():
 	scene.replace_by(root)
 	scene.free()
 	
+	for card in root.get_children():
+		if card is Card:
+			card.id = uuid.v4()
+	
 	return root

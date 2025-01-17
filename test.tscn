@@ -1,21 +1,11 @@
-[gd_scene load_steps=16 format=3 uid="uid://dcjpymb1evgp4"]
+[gd_scene load_steps=8 format=3 uid="uid://dcjpymb1evgp4"]
 
-[ext_resource type="Script" uid="uid://cxldeg24krchn" path="res://camera_2d.gd" id="1_37kl0"]
 [ext_resource type="Script" uid="uid://cja8ehiirmcyt" path="res://addons/cards/CardBoundary.gd" id="1_g14j6"]
 [ext_resource type="Script" uid="uid://dsn8t1oa5bses" path="res://addons/cards/slots/slot.gd" id="3_mhym6"]
-[ext_resource type="Script" uid="uid://ikmnhqa6duo8" path="res://addons/cards/cards/SceneCard.gd" id="6_5tkv4"]
-[ext_resource type="Script" uid="uid://bvr4vcw3kd72b" path="res://addons/cards/placeholder/placeholder.gd" id="6_xersf"]
-[ext_resource type="Script" uid="uid://d23cwws3aqxp1" path="res://addons/cards/cards/MoveCard.gd" id="7_5tkv4"]
-[ext_resource type="Script" uid="uid://by84b3jta1gov" path="res://addons/cards/cards/Vector2Card.gd" id="8_0m0f1"]
-[ext_resource type="Script" uid="uid://dkyx51jnk8cvd" path="res://addons/cards/cards/AxisControlsCard.gd" id="9_0m0f1"]
-[ext_resource type="Script" uid="uid://b4chvslh0woya" path="res://addons/cards/cards/SpawnCard.gd" id="9_5tkv4"]
 [ext_resource type="Script" uid="uid://c1y5hmu8ve21k" path="res://addons/cards/cards/ClockCard.gd" id="9_77dp3"]
-[ext_resource type="Script" uid="uid://b0fhdhoolsdy1" path="res://addons/cards/CardGroup.gd" id="10_00tp4"]
+[ext_resource type="Script" uid="uid://c8cfoeik47tv2" path="res://addons/cards/cards/RandomAxisCard.gd" id="10_mhym6"]
 [ext_resource type="Script" uid="uid://vnfn6yjp8q5s" path="res://addons/cards/Trash.gd" id="12_0m0f1"]
 [ext_resource type="Script" uid="uid://dio881dm6xtr3" path="res://hand.gd" id="15_vxl6d"]
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_37kl0"]
-size = Vector2(40, 40)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_77dp3"]
 size = Vector2(1200, 90)
@@ -28,84 +18,6 @@ id = "bb0e0c61-f6ca-448b-98fe-d0065eb2a52e"
 metadata/_custom_type_script = ExtResource("1_g14j6")
 metadata/slots = Array[ExtResource("3_mhym6")]([Object(Object,"script":Resource("res://addons/cards/slots/object_output_slot.gd"),"card":null)
 ])
-
-[node name="Camera2D" type="Camera2D" parent="main"]
-position = Vector2(955, 547)
-script = ExtResource("1_37kl0")
-metadata/slots = Array[ExtResource("3_mhym6")]([Object(Object,"script":Resource("res://addons/cards/slots/object_output_slot.gd"),"card":null)
-])
-
-[node name="StaticBody2D" type="StaticBody2D" parent="main"]
-position = Vector2(772, 573)
-
-[node name="Placeholder" type="Node2D" parent="main/StaticBody2D"]
-script = ExtResource("6_xersf")
-color = Color(1, 0, 0, 1)
-placeholder_size = Vector2(49, 114)
-metadata/_custom_type_script = ExtResource("6_xersf")
-
-[node name="CharacterBody2D" type="CharacterBody2D" parent="main"]
-position = Vector2(902, 591)
-metadata/slots = Array[ExtResource("3_mhym6")]([Object(Object,"script":Resource("res://addons/cards/slots/object_output_slot.gd"),"card":null)
-])
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="main/CharacterBody2D"]
-shape = SubResource("RectangleShape2D_37kl0")
-metadata/slots = Array[ExtResource("3_mhym6")]([Object(Object,"script":Resource("res://addons/cards/slots/object_output_slot.gd"),"card":null)
-])
-
-[node name="ColorRect" type="ColorRect" parent="main/CharacterBody2D"]
-offset_left = -20.0
-offset_top = -20.0
-offset_right = 20.0
-offset_bottom = 20.0
-metadata/_edit_use_anchors_ = true
-metadata/slots = Array[ExtResource("3_mhym6")]([Object(Object,"script":Resource("res://addons/cards/slots/object_output_slot.gd"),"card":null)
-])
-
-[node name="Node2D" type="Node2D" parent="main"]
-position = Vector2(766, 405)
-script = ExtResource("6_5tkv4")
-group_path = NodePath("../../BulletScene")
-connections = Dictionary[String, Array]({
-"__input": []
-})
-id = "eca6296b-2df2-46ef-934b-05627f57a284"
-
-[node name="Node2D2" type="Node2D" parent="main"]
-position = Vector2(469, 592)
-script = ExtResource("9_5tkv4")
-connections = Dictionary[String, Array]({
-"__input": [[NodePath("../Node2D3"), "__output"]],
-"__output": []
-})
-id = "420303f5-e371-4e80-ab8f-1a359e2838bb"
-
-[node name="Node2D3" type="Node2D" parent="main"]
-position = Vector2(389, 690)
-script = ExtResource("9_77dp3")
-delay_seconds = 5.0
-connections = Dictionary[String, Array]({
-"__output": [[NodePath("../Node2D2"), "__input"]]
-})
-id = "b7b2230b-eb6e-4f5e-92b6-c9e052a60a21"
-
-[node name="Node2D4" type="Node2D" parent="main"]
-position = Vector2(953, 699)
-script = ExtResource("7_5tkv4")
-connections = Dictionary[String, Array]({
-"__input": [[NodePath("../@Node2D@20"), "__output"], [NodePath("../Node2D5"), "__output"]],
-"__object": [[NodePath("../CharacterBody2D"), "__object"]]
-})
-id = "e3061465-99bc-4f3f-b5cc-064baa525cde"
-
-[node name="Node2D5" type="Node2D" parent="main"]
-position = Vector2(1045, 761)
-script = ExtResource("9_0m0f1")
-connections = Dictionary[String, Array]({
-"__output": [[NodePath("../Node2D4"), "__input"]]
-})
-id = "d40edb34-a1db-40d4-909f-3973ecdb7fc4"
 
 [node name="overlay" type="CanvasLayer" parent="."]
 script = ExtResource("15_vxl6d")
@@ -129,52 +41,27 @@ metadata/_edit_use_anchors_ = true
 position = Vector2(600, 45)
 shape = SubResource("RectangleShape2D_77dp3")
 
+[node name="Node2D3" type="Node2D" parent="overlay/hand"]
+position = Vector2(50, 45)
+script = ExtResource("9_77dp3")
+connections = Dictionary[String, Array]({
+"__output": []
+})
+paused = true
+id = "b7b2230b-eb6e-4f5e-92b6-c9e052a60a21"
+
+[node name="Node2D6" type="Node2D" parent="overlay/hand"]
+position = Vector2(165, 45)
+script = ExtResource("10_mhym6")
+connections = Dictionary[String, Array]({
+"__output": []
+})
+paused = true
+id = "cc3a0cab-8181-4310-a009-6b1a21c6f74c"
+
 [node name="Trash" type="Area2D" parent="overlay"]
 position = Vector2(1810, 998)
 script = ExtResource("12_0m0f1")
 card_scale = 0.01
 id = "ee5cf77f-9423-4993-87ed-cb30508dfc21"
 metadata/_custom_type_script = ExtResource("12_0m0f1")
-
-[node name="BulletScene" type="Area2D" parent="."]
-position = Vector2(377, 183)
-script = ExtResource("10_00tp4")
-pause_on_enter = true
-id = "0b1a4cb2-905a-4dea-88fe-110e1d639ed9"
-metadata/_custom_type_script = ExtResource("10_00tp4")
-metadata/slots = Array[ExtResource("3_mhym6")]([Object(Object,"script":Resource("res://addons/cards/slots/object_output_slot.gd"),"card":null)
-])
-
-[node name="Area2D" type="Area2D" parent="BulletScene"]
-position = Vector2(-15, -58)
-metadata/slots = Array[ExtResource("3_mhym6")]([Object(Object,"script":Resource("res://addons/cards/slots/object_output_slot.gd"),"card":null)
-])
-
-[node name="Placeholder" type="Node2D" parent="BulletScene/Area2D"]
-script = ExtResource("6_xersf")
-label = "bullet"
-placeholder_size = Vector2(26, 9)
-metadata/_custom_type_script = ExtResource("6_xersf")
-metadata/slots = Array[ExtResource("3_mhym6")]([Object(Object,"script":Resource("res://addons/cards/slots/object_output_slot.gd"),"card":null)
-])
-
-[node name="Node2D4" type="Node2D" parent="BulletScene"]
-position = Vector2(-66, 19)
-script = ExtResource("7_5tkv4")
-connections = Dictionary[String, Array]({
-"__input": [[NodePath("../Node2D5"), "__output"]],
-"__object": [[NodePath("../Area2D"), "__object"]]
-})
-paused = true
-id = "c934bd9b-b142-4804-b77a-12dfe299bf63"
-
-[node name="Node2D5" type="Node2D" parent="BulletScene"]
-position = Vector2(50, 61)
-script = ExtResource("8_0m0f1")
-vector = Vector2(2, 0)
-connections = Dictionary[String, Array]({
-"__input": [],
-"__output": [[NodePath("../Node2D4"), "__input"]]
-})
-paused = true
-id = "38cd4aab-a621-4aeb-8451-12f159cd85bb"
