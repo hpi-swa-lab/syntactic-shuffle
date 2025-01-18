@@ -1,25 +1,27 @@
 @tool
 extends Card
+class_name ReflectCard
 
-func _ready() -> void:
-	super._ready()
-	setup("Reflect", "Reflect a vector.", "reflect.png", CardVisual.Type.Effect, [
-		NamedInputSlot.new("vector", {"vector": ["Vector2"]}),
-		NamedInputSlot.new("normal", {"normal": ["Vector2"]}),
-		OutputSlot.new({"vector": ["Vector2"]})
-	])
+func s():
+	title("Reflect")
+	description("Reflect a vector.")
+	icon("reflect.png")
+	
+	var out_card = OutCard.data()
+	
+	var code_card = CodeCard.create(["Vector2"], func (card):
+		var v = card.get_named_input("vector")
+		var n = card.get_named_input("normal")
+		# FIXME n != Vector.ZERO
+		card.output([v.reflect(n)]))
+	code_card.c(out_card)
 
-var _vector: Vector2
-var _normal: Vector2
+	var remember_vector_card = RememberCard.new()
+	remember_vector_card.c(code_card)
+	var remember_normal_card = RememberCard.new()
+	remember_normal_card.c(code_card)
 
-func vector(vector: Vector2):
-	_vector = vector
-	do()
-
-func normal(normal: Vector2):
-	_normal = normal
-	do()
-
-func do():
-	if _vector != null and _normal != null and _normal != Vector2.ZERO:
-		invoke_output("vector", [_vector.reflect(_normal)])
+	var vector_card = NamedInCard.named_data("vector", "Vector2")
+	vector_card.c(remember_vector_card)
+	var normal_card = NamedInCard.named_data("normal", "Vector2")
+	normal_card.c(remember_normal_card)

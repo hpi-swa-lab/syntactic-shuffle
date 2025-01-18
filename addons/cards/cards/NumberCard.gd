@@ -1,53 +1,37 @@
 @tool
 extends Card
+class_name NumberCard
 
-@export var number: float = 0.0:
-	get: return number
+@export var number: float:
+	get:
+		for c in cards:
+			if c is CellCard: return c.data
+		return 0.0
 	set(v):
-		if number == v: return
-		number = v
-		number_ui.set_value_no_signal(v)
-		editor_sync_prop("number")
+		for c in cards:
+			if c is CellCard: c.data = v
 
-var number_ui = SpinBox.new()
-
-func _init() -> void:
-	number_ui.prefix = "x: "
-	number_ui.set_value_no_signal(number)
-	number_ui.custom_arrow_step = 0.1
-	number_ui.step = 0.01
-	number_ui.min_value = -1e8
-	number_ui.max_value = 1e8
-	number_ui.value_changed.connect(func (v): number = v)
-
-func _ready() -> void:
-	super._ready()
+func s():
+	title("Number")
+	description("Store or present a number.")
+	icon("number.png")
 	
-	setup("Number", "Stores a number. Continuously outputs it, unless an input is connected.", "number.png", CardVisual.Type.Trigger,
-		[
-			OutputSlot.new({"number": ["float"]}),
-			InputSlot.new({
-				"trigger": [],
-				"increment": ["increment"],
-				"override": ["float"]
-			})
-		],
-		[number_ui])
-
-func override(num: float):
-	number = num
-	trigger()
-
-func increment():
-	number += 1
-	trigger()
-
-func trigger():
-	invoke_output("number", [number])
-
-func _process(delta: float) -> void:
-	super._process(delta)
-	if Engine.is_editor_hint(): return
+	var out_card = OutCard.data()
 	
-	if connections["__input"].is_empty():
-		trigger()
+	var cell_card = CellCard.new()
+	cell_card.data = 0.0
+	cell_card.c(out_card)
+	
+	var store_card = StoreCard.new()
+	store_card.c(cell_card)
+	
+	var override_card = InCard.data("float")
+	override_card.c(store_card)
+	
+	var trigger_card = InCard.trigger()
+	trigger_card.c(cell_card)
+	
+	var increment_code = CodeCard.create(["increment"], func (card):
+		card.parent.number += 1)
+	var increment_card = InCard.command("increment")
+	increment_card.c(increment_code)

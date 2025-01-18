@@ -1,12 +1,12 @@
 @tool
 extends Card
+class_name IncrementCard
 
-func _ready() -> void:
-	super._ready()
-	setup("Increment", "Increment.", "increment.png", CardVisual.Type.Trigger, [
-		InputSlot.new({"trigger": []}),
-		OutputSlot.new({"default": ["increment"]})
-	])
+func s():
+	title("Increment")
+	description("Increment a number.")
+	icon("increment.png")
 
-func trigger():
-	invoke_output("default", [])
+	var out_card = OutCard.command("increment")
+	var in_card = InCard.trigger()
+	in_card.c(out_card)

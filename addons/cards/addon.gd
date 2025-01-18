@@ -12,7 +12,7 @@ func _enter_tree() -> void:
 	
 	var base = get_editor_interface().get_base_control()
 	find_behavior_classes(func(name, script, icon):
-		add_custom_type(name, "Node2D", script, base.get_theme_icon(icon, &"EditorIcons"))
+		#add_custom_type(name, "Node2D", script, base.get_theme_icon(icon, &"EditorIcons"))
 		cards[name] = icon)
 	
 	debugger = EditorSync.new(get_editor_interface())

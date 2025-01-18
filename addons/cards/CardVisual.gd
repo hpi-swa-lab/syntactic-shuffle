@@ -12,48 +12,23 @@ static var base_card_size = Vector2(10, 10)
 
 signal dragging(d: bool)
 
-@export var locked = false:
-	get: return locked
-	set(v):
-		if typeof(v) != TYPE_BOOL: v = false
-		locked = v
-		%locked.visible = v
-
 @export var paused = false:
 	get: return paused
 	set(v):
 		paused = v
 		$CardControl.self_modulate = Color(Color.WHITE, 0.5 if paused else 1.0)
 
-func setup(name: String, description: String, icon: String, type: Type, extra_ui: Array[Control]):
-	var type_icon
-	match type:
-		Type.Trigger: type_icon = "trigger.png"
-		Type.Effect: type_icon = "event.png"
-		Type.Store: type_icon = "CylinderMesh.svg"
-
-	%Name.text = name
-	%Description.text = description
-	%Icon.path = "res://addons/cards/icons/" + icon
-	%TypeIcon.path = "res://addons/cards/icons/" + type_icon
-	for c in extra_ui:
-		%extra_ui.add_child(c)
-
-func icon_from_theme(name: StringName):
-	if Engine.is_editor_hint():
-		var ref = self if get_viewport().get_parent() == null else get_viewport().get_parent().get_parent()
-		return ref.get_theme_icon(name, &"EditorIcons")
-	else:
-		return null
+func title(s: String): %Name.text = s
+func description(s: String): %Description.text = s
+func icon(s: String): %Icon.path = "res://addons/cards/icons/" + s
+func ui(c: Control): %extra_ui.add_child(c)
 
 func _ready() -> void:
 	$CardControl.gui_input.connect(input_event)
-	locked = locked
 	base_card_size = $CardControl.size
 
 var held = false
 func input_event(e: InputEvent):
-	if locked: return
 	if e is InputEventMouseButton and e.button_index == MOUSE_BUTTON_LEFT:
 		held = e.is_pressed()
 		dragging.emit(held)

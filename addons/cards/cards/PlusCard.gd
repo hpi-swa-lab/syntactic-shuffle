@@ -1,25 +1,29 @@
 @tool
 extends Card
+class_name PlusCard
 
-func _ready() -> void:
-	super._ready()
-	setup("Plus", "Add two things.", "plus.png", CardVisual.Type.Effect, [
-		NamedInputSlot.new("left", {"left": ["float"]}),
-		NamedInputSlot.new("right", {"right": ["float"]}),
-		OutputSlot.new({"sum": ["float"]})
-	])
+var remember_left_card: RememberCard
+var remember_right_card: RememberCard
 
-var _left: float
-var _right: float
-
-func left(left: float):
-	_left = left
-	do()
-
-func right(right: float):
-	_right = right
-	do()
-
-func do():
-	if _right != null and _left != null:
-		invoke_output("sum", [_left + _right])
+func s():
+	title("Plus")
+	description("Adds two numbers.")
+	icon("plus.png")
+	
+	var out_card = OutCard.data()
+	
+	var code_card = CodeCard.create(["float"], func (card: CodeCard):
+		var l = remember_left_card.get_remembered()
+		var r = remember_right_card.get_remembered()
+		if l and r: card.output([l[0] + r[0]]))
+	code_card.c(out_card)
+	
+	remember_left_card = RememberCard.new()
+	remember_left_card.c(code_card)
+	remember_right_card = RememberCard.new()
+	remember_right_card.c(code_card)
+	
+	var left_card = NamedInCard.named_data("left", "float")
+	left_card.c(remember_left_card)
+	var right_card = NamedInCard.named_data("right", "float")
+	right_card.c(remember_right_card)

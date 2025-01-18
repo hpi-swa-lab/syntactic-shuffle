@@ -80,7 +80,7 @@ static func card_moved(card: Card):
 			old_boundary.add_child(dupl)
 			old_boundary.move_child(dupl, old_index)
 			
-			Card.editor_sync("cards:spawn", [boundary.get_path(), card.id, card.get_script().resource_path, card.get_index()])
+			# FIXME Card.editor_sync("cards:spawn", [boundary.get_path(), card.id, card.get_script().resource_path, card.get_index()])
 		old_boundary._relayout()
 
 func is_fallback_boundary():
@@ -103,9 +103,9 @@ func contains_screen_position(pos: Vector2):
 func card_entered(card: Card):
 	card.disable = disable_on_enter
 	card.paused = pause_on_enter
-	card.editor_sync_prop("paused")
-	card.editor_sync_prop("disabled")
-	card.editor_sync("cards:move_boundary", [card.id, Card.get_id(self)])
+	#card.editor_sync_prop("paused")
+	#card.editor_sync_prop("disabled")
+	#card.editor_sync("cards:move_boundary", [card.id, Card.get_id(self)])
 	var tween = card.visual.create_tween()
 	tween.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC) \
 		.tween_property(card.visual, "scale", Vector2(card_scale, card_scale), 0.25)

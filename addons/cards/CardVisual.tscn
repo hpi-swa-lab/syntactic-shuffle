@@ -1,7 +1,8 @@
-[gd_scene load_steps=7 format=3 uid="uid://deh4uywqorec7"]
+[gd_scene load_steps=8 format=3 uid="uid://deh4uywqorec7"]
 
 [ext_resource type="Script" uid="uid://td86i40sy764" path="res://addons/cards/CardVisual.gd" id="1_7r0de"]
 [ext_resource type="Texture2D" uid="uid://c52trtl0cac7l" path="res://icon.svg" id="1_x38hd"]
+[ext_resource type="Texture2D" uid="uid://bhh80pg8s0om5" path="res://addons/cards/icons/trigger.png" id="2_xtshy"]
 [ext_resource type="Script" uid="uid://cxk63c2k70ijb" path="res://addons/cards/ScalingIcon.gd" id="3_hogqd"]
 [ext_resource type="Texture2D" uid="uid://nf875nia2sti" path="res://addons/cards/icons/padlock.png" id="4_odv1r"]
 
@@ -64,7 +65,7 @@ theme_override_constants/margin_bottom = 0
 [node name="TypeIcon" type="TextureRect" parent="CardControl/MainColumn/HeaderRow/TypeIconMargin"]
 unique_name_in_owner = true
 layout_mode = 2
-texture = ExtResource("1_x38hd")
+texture = ExtResource("2_xtshy")
 expand_mode = 3
 script = ExtResource("3_hogqd")
 

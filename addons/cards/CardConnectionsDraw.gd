@@ -9,9 +9,13 @@ func _ready():
 	z_index = 1
 
 func _draw():
-	if not card or not card.show_cards() or card.disable: return
-	for slot in card.slots:
-		slot.draw(self)
+	if not card or card.disable: return
+	for to in card.get_outgoing():
+		draw_connection(self, to, false)
+	var named = card.get_named_outgoing()
+	for name in named:
+		draw_connection(self, named[name], false)
+		draw_label_to(named[name], name)
 
 func check_redraw(delta):
 	if should_redraw(): queue_redraw()
@@ -23,7 +27,10 @@ func should_redraw():
 	if card.disable: return false
 	
 	var deps = []
-	for s in card.slots: s.get_draw_dependencies(deps)
+	for to in card.get_outgoing(): deps.push_back(to.global_position)
+	var named = card.get_named_outgoing()
+	for name in named: deps.push_back(named[name])
+	if not deps.is_empty(): deps.push_back(global_position)
 	
 	var comp_deps = last_deps
 	last_deps = deps
