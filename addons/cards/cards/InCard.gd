@@ -12,19 +12,11 @@ static func data(type: String):
 
 static func command(command: String, type: String = ""):
 	var c = InCard.new()
-	if type:
-		c.signature = [command, type] as Array[String]
-	else:
-		c.signature = [command] as Array[String]
+	if type: c.signature = [command, type] as Array[String]
+	else: c.signature = [command] as Array[String]
 	return c
 
 @export var signature: Array[String] = []
-
-class Message:
-	var signature: Array[String] = []
-	var data := []
-
-var stored_message: Message = null
 
 func get_out_signatures(list: Array):
 	list.push_back(signature)
@@ -40,6 +32,7 @@ func invoke(args: Array, signature: Array[String], named = ""):
 
 func try_connect(them: Card):
 	if them.get_outgoing().has(parent): return
+	if detect_cycles_for_new_connection(parent, them): return
 	
 	for card in them.cards:
 		if card is OutCard:
@@ -49,3 +42,23 @@ func try_connect(them: Card):
 				if signature_match(signature, their_signature):
 					them.connect_to(parent)
 					return
+
+func detect_cycles_for_new_connection(from: Card, to: Card) -> bool:
+	return check_is_connected(from, to)
+
+func check_is_connected(a: Card, b: Card) -> bool:
+	var queue = [a]
+	var visitited = {}
+	while not queue.is_empty():
+		var node: Card = queue.pop_front()
+		visitited[node] = true
+		for next in node.get_outgoing():
+			if not visitited.has(next):
+				if next == b: return true
+				queue.push_back(next)
+		for name in node.named_outgoing:
+			var next = node.named_outgoing[name]
+			if next and not visitited.has(next):
+				if next == b: return true
+				queue.push_back(next)
+	return false

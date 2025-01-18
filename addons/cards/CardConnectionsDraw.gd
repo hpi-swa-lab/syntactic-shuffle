@@ -12,10 +12,11 @@ func _draw():
 	if not card or card.disable: return
 	for to in card.get_outgoing():
 		draw_connection(self, to, false)
-	var named = card.get_named_outgoing()
+	var named = card.named_outgoing
 	for name in named:
-		draw_connection(self, named[name], false)
-		draw_label_to(named[name], name)
+		if named[name]:
+			draw_connection(self, named[name], false)
+			draw_label_to(named[name], name)
 
 func check_redraw(delta):
 	if should_redraw(): queue_redraw()
@@ -28,8 +29,10 @@ func should_redraw():
 	
 	var deps = []
 	for to in card.get_outgoing(): deps.push_back(to.global_position)
-	var named = card.get_named_outgoing()
-	for name in named: deps.push_back(named[name])
+	var named = card.named_outgoing
+	for name in named:
+		if named[name]:
+			deps.push_back(named[name].global_position)
 	if not deps.is_empty(): deps.push_back(global_position)
 	
 	var comp_deps = last_deps

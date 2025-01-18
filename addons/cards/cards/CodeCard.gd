@@ -16,7 +16,7 @@ func s():
 	description("Run some code.")
 	icon("code.png")
 	
-	var out_card = OutCard.data()
+	var out_card = OutCard.static_signature(signature)
 
 func invoke(args: Array, signature: Array[String], named = ""):
 	if process.get_argument_count() == 1:

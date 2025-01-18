@@ -110,12 +110,13 @@ func c(other: Card):
 	other.incoming.push_back(self)
 func c_named(name: String, other: Card):
 	named_outgoing[name] = other
-	other.incoming.push_back(self)
+	other.named_incoming[name] = self
 
 var parent: Card
 @export var incoming: Array[Card] = []
 @export var outgoing: Array[Card] = []
 @export var named_outgoing: Dictionary[String, Card] = {}
+@export var named_incoming: Dictionary[String, Card] = {}
 
 func get_out_signatures(signatures: Array):
 	for card in cards:
@@ -143,9 +144,6 @@ func signature_match(a: Array[String], b: Array[String]) -> bool:
 			return false
 	return true
 
-func get_named_outgoing():
-	return named_outgoing
-
 func get_incoming() -> Array[Card]:
 	return incoming
 
@@ -156,28 +154,33 @@ func disconnect_all():
 	pass
 
 func disconnect_from(them: Card):
+	self._disconnect_from(them)
+	them._disconnect_from(self)
+
+func _disconnect_from(them: Card):
 	if get_incoming().has(them):
 		incoming.erase(them)
-		assert(them.get_outgoing().has(self))
-		them.get_outgoing().erase(self)
 		return
-	elif get_outgoing().has(them):
+	if get_outgoing().has(them):
 		outgoing.erase(them)
-		assert(them.get_incoming().has(self))
-		them.get_incoming().erase(self)
 		return
-	else:
-		for name in get_named_outgoing():
-			if get_named_outgoing()[name] == them:
-				get_named_outgoing()[name] = null
-				assert(them.get_incoming().has(self))
-				them.get_incoming().erase(self)
-				return
+	for name in named_outgoing:
+		if named_outgoing[name] == them:
+			named_outgoing[name] = null
+			return
+	for name in named_incoming:
+		if named_incoming[name] == them:
+			named_incoming[name] = null
+			return
 	assert("node to disconnect from not found")
 
-func connect_to(them: Card):
-	get_outgoing().push_back(them)
-	them.get_incoming().push_back(self)
+func connect_to(them: Card, named = ""):
+	if named:
+		self.named_outgoing[named] = them
+		them.named_incoming[named] = self
+	else:
+		self.get_outgoing().push_back(them)
+		them.get_incoming().push_back(self)
 
 func _check_disconnect(them: Card):
 	var my_boundary = get_card_boundary()
@@ -196,19 +199,28 @@ func _process(delta: float) -> void:
 		# check for disconnects
 		for card in get_outgoing(): _check_disconnect(card)
 		for card in get_incoming(): _check_disconnect(card)
-		for name in get_named_outgoing():
-			var them = get_named_outgoing()[name]
-			if them: _check_disconnect(them)
+		for name in named_outgoing:
+			if named_outgoing[name]: _check_disconnect(named_outgoing[name])
+		for name in named_incoming:
+			if named_incoming[name]: _check_disconnect(named_incoming[name])
 		
 		# check for connects
 		CardBoundary.traverse_connection_candidates(self, func (obj):
-			if not obj is Card or global_position.distance_to(obj.global_position) > MAX_CONNECTION_DISTANCE:
-				return
-			for card in cards:
-				if card is InCard: card.try_connect(obj)
-				if card is OutCard: card.try_connect(obj))
+			if obj is Card and global_position.distance_to(obj.global_position) <= MAX_CONNECTION_DISTANCE:
+				try_connect(obj))
 	
 	connection_draw_node.check_redraw(delta)
+
+func _each_input_candidate(cb: Callable, named: bool):
+	for card in cards:
+		if (named and card is NamedInCard or
+			not named and not card is NamedInCard and card is InCard): cb.call(card)
+
+func try_connect(them: Card):
+	self._each_input_candidate(func (card): card.try_connect(them), true)
+	them._each_input_candidate(func (card): card.try_connect(self), true)
+	self._each_input_candidate(func (card): card.try_connect(them), false)
+	them._each_input_candidate(func (card): card.try_connect(self), false)
 
 func get_card_boundary():
 	return CardBoundary.get_card_boundary(self)

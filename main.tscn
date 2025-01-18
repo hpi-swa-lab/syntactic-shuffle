@@ -1,9 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://dygk1gjdmu08b"]
+[gd_scene load_steps=7 format=3 uid="uid://dygk1gjdmu08b"]
 
 [ext_resource type="Script" uid="uid://cja8ehiirmcyt" path="res://addons/cards/CardBoundary.gd" id="1_0xm2m"]
 [ext_resource type="Script" uid="uid://cxldeg24krchn" path="res://camera_2d.gd" id="2_h2yge"]
+[ext_resource type="Script" uid="uid://bapqs0tgxuf2o" path="res://addons/cards/cards/PlusCard.gd" id="3_h2yge"]
 [ext_resource type="Script" uid="uid://dtcitdmnbq585" path="res://addons/cards/cards/NumberCard.gd" id="4_1bvp3"]
-[ext_resource type="Script" path="res://addons/cards/cards/IncrementCard.gd" id="4_lquwl"]
+[ext_resource type="Script" uid="uid://bk0ki1qtyvhix" path="res://addons/cards/cards/IncrementCard.gd" id="4_lquwl"]
 [ext_resource type="Script" uid="uid://37sr8xfsjcsp" path="res://addons/cards/cards/PhysicsProcessCard.gd" id="5_lquwl"]
 
 [node name="main" type="Node2D"]
@@ -17,25 +18,47 @@ metadata/_custom_type_script = ExtResource("1_0xm2m")
 position = Vector2(961, 540)
 script = ExtResource("2_h2yge")
 
-[node name="NumberCard" type="Node2D" parent="CardBoundary" node_paths=PackedStringArray("incoming")]
-position = Vector2(925, 730)
+[node name="NumberCard" type="Node2D" parent="CardBoundary" node_paths=PackedStringArray("incoming", "named_outgoing")]
+position = Vector2(840, 677)
 script = ExtResource("4_1bvp3")
-number = 1054.0
 id = "9003804c-6dac-488f-bc83-9b298b7a26cb"
 incoming = [NodePath("../IncrementCard")]
+named_outgoing = {
+"left": NodePath("../PlusCard"),
+"right": null
+}
 metadata/_custom_type_script = ExtResource("4_1bvp3")
 
-[node name="IncrementCard" type="Node2D" parent="CardBoundary" node_paths=PackedStringArray("incoming", "outgoing")]
-position = Vector2(804, 763)
+[node name="IncrementCard" type="Node2D" parent="CardBoundary" node_paths=PackedStringArray("outgoing")]
+position = Vector2(760, 752)
 script = ExtResource("4_lquwl")
 id = "32277d3a-dd6d-481e-a6fd-2315b46d7025"
-incoming = [NodePath("../PhysicsProcessCard")]
-outgoing = [NodePath("../NumberCard")]
+outgoing = [NodePath("../NumberCard"), NodePath("../NumberCard2")]
 metadata/_custom_type_script = ExtResource("4_lquwl")
 
-[node name="PhysicsProcessCard" type="Node2D" parent="CardBoundary" node_paths=PackedStringArray("outgoing")]
-position = Vector2(727, 791)
+[node name="PhysicsProcessCard" type="Node2D" parent="CardBoundary"]
+position = Vector2(603, 819)
 script = ExtResource("5_lquwl")
 id = "d269e3c0-226d-4374-afe1-b321e432902c"
-outgoing = [NodePath("../IncrementCard")]
 metadata/_custom_type_script = ExtResource("5_lquwl")
+
+[node name="PlusCard" type="Node2D" parent="CardBoundary" node_paths=PackedStringArray("named_incoming")]
+position = Vector2(944, 739)
+script = ExtResource("3_h2yge")
+id = "ac8fc86b-180a-46ed-8c92-ecd21deb000b"
+named_incoming = {
+"left": NodePath("../NumberCard"),
+"right": NodePath("../NumberCard2")
+}
+metadata/_custom_type_script = ExtResource("3_h2yge")
+
+[node name="NumberCard2" type="Node2D" parent="CardBoundary" node_paths=PackedStringArray("incoming", "named_outgoing")]
+position = Vector2(875, 830)
+script = ExtResource("4_1bvp3")
+id = "ed2162bf-8b22-4b68-928a-a667a4e8857b"
+incoming = [NodePath("../IncrementCard")]
+named_outgoing = {
+"left": null,
+"right": NodePath("../PlusCard")
+}
+metadata/_custom_type_script = ExtResource("4_1bvp3")

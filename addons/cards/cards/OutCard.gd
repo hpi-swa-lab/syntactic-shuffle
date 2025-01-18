@@ -58,27 +58,16 @@ func get_out_signatures(signatures: Array):
 			i.get_out_signatures(signatures)
 
 func invoke(args: Array, signature: Array[String], named = ""):
+	if Engine.is_editor_hint(): return
+	
 	if remember_message: remembered = args
 	
 	if command_name:
 		signature = _add_command(signature)
 	for out in parent.get_outgoing():
 		out.invoke(args, signature)
-	var dict = parent.get_named_outgoing()
-	for out in dict:
-		dict[out].invoke(args, signature, out)
+	for out in parent.named_outgoing:
+		parent.named_outgoing[out].invoke(args, signature, out)
 
 func get_remembered():
 	return remembered
-
-func try_connect(them: Card):
-	if them.get_incoming().has(parent): return
-	
-	for card in them.cards:
-		if card is InCard:
-			var my_signatures = []
-			get_out_signatures(my_signatures)
-			for my_signature in my_signatures:
-				if signature_match(my_signature, card.signature):
-					parent.connect_to(them)
-					return

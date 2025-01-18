@@ -20,7 +20,13 @@ class ManualTriggerCard extends Card:
 
 @export_tool_button("Run") var _run = run
 func run():
-	run_cards_test(test_simple)
+	for method in get_method_list():
+		if method["name"].begins_with("test_"):
+			print(method["name"])
+			run_cards_test(Callable(self, method["name"]))
+
+func _ready():
+	if not Engine.is_editor_hint(): run()
 
 func run_cards_test(test):
 	var cards = []
@@ -28,7 +34,7 @@ func run_cards_test(test):
 	test.call(func ():
 		for card in cards:
 			card.setup(null)
-		Card.active_card_list = null)
+		Card.pop_active_card_list())
 
 func test_simple(ready):
 	var store = NumberCard.new()
@@ -52,5 +58,30 @@ func test_simple(ready):
 	b_trigger.trigger([])
 	assert(store.number == 20)
 
-func _ready():
-	if not Engine.is_editor_hint(): run()
+func test_simple_outgoing_connect(ready):
+	var increment = IncrementCard.new()
+	var process = PhysicsProcessCard.new()
+	ready.call()
+	process.try_connect(increment)
+	assert(process.get_outgoing().has(increment))
+	assert(increment.get_incoming().has(process))
+
+func test_simple_incoming_connect(ready):
+	var increment = IncrementCard.new()
+	var process = PhysicsProcessCard.new()
+	ready.call()
+	increment.try_connect(process)
+	assert(process.get_outgoing().has(increment))
+	assert(increment.get_incoming().has(process))
+
+func test_simple_named_connect(ready):
+	var l = NumberCard.new()
+	var r = NumberCard.new()
+	var plus = PlusCard.new()
+	ready.call()
+	l.try_connect(plus)
+	l.try_connect(plus)
+	assert(plus.named_incoming["left"] == l)
+	assert(not plus.named_incoming.has("right"))
+	r.try_connect(plus)
+	assert(plus.named_incoming["right"] == r)
