@@ -235,7 +235,7 @@ func get_slot_by_name(name: String) -> Slot:
 	return null
 
 func invoke_output(signature_name: String, args: Array, name = "__output"):
-	if paused: return
+	if paused or Engine.is_editor_hint(): return
 	get_slot_by_name(name).invoke(signature_name, args)
 
 func invoke_generic_output(signature: Array, args: Array, name = "__output"):

@@ -30,6 +30,13 @@ func _ready() -> void:
 	
 	update_info_label(false)
 
+func get_value():
+	var obj = get_object_input()
+	if obj:
+		if field in obj: return obj.get(field)
+		if obj.has_meta(field): return obj.get_meta(field)
+	return null
+
 func set_value(arg):
 	var obj = get_object_input()
 	if obj: obj.set(field, arg)
@@ -38,8 +45,7 @@ func _process(delta: float) -> void:
 	super._process(delta)
 	var obj = get_object_input()
 	if obj and not Engine.is_editor_hint():
-		var val = obj.get(field)
-		invoke_output("default", [val])
+		invoke_output("default", [get_value()])
 
 func connect_slot(my_slot: Slot, them: Node, their_slot: Slot):
 	super.connect_slot(my_slot, them, their_slot)
@@ -49,10 +55,10 @@ func connect_slot(my_slot: Slot, them: Node, their_slot: Slot):
 func update_info_label(check_connections: bool):
 	var obj = get_object_input()
 	if obj:
-		if field in obj:
-			var val = obj.get(field)
+		if field in obj or obj.has_meta(field):
+			var val = get_value()
 			var type = find_type(val)
-			info_label.text = "V: {0}\nT: {1}".format([str(val), type])
+			info_label.text = "Value: {0}\nType: {1}".format([str(val), type])
 			update_type(type, check_connections)
 		else:
 			info_label.text = "Attribute {0} not defined.".format([field])
