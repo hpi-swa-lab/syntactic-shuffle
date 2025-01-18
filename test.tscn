@@ -8,9 +8,9 @@
 [ext_resource type="Script" uid="uid://cxldeg24krchn" path="res://camera_2d.gd" id="6_00tp4"]
 [ext_resource type="Script" uid="uid://dkyx51jnk8cvd" path="res://addons/cards/cards/AxisControlsCard.gd" id="7_5tkv4"]
 [ext_resource type="Script" uid="uid://d23cwws3aqxp1" path="res://addons/cards/cards/MoveCard.gd" id="8_0m0f1"]
-[ext_resource type="Script" path="res://addons/cards/cards/GroupCard.gd" id="9_0m0f1"]
+[ext_resource type="Script" uid="uid://bss3ee6m881hx" path="res://addons/cards/cards/GroupCard.gd" id="9_0m0f1"]
 [ext_resource type="Script" uid="uid://c1y5hmu8ve21k" path="res://addons/cards/cards/ClockCard.gd" id="9_77dp3"]
-[ext_resource type="Script" path="res://addons/cards/cards/GetNameCard.gd" id="10_b0q6j"]
+[ext_resource type="Script" uid="uid://j7n80v2begui" path="res://addons/cards/cards/GetNameCard.gd" id="10_b0q6j"]
 [ext_resource type="Script" uid="uid://c8cfoeik47tv2" path="res://addons/cards/cards/RandomAxisCard.gd" id="10_mhym6"]
 [ext_resource type="Script" uid="uid://vnfn6yjp8q5s" path="res://addons/cards/Trash.gd" id="12_0m0f1"]
 [ext_resource type="Script" uid="uid://dio881dm6xtr3" path="res://hand.gd" id="15_vxl6d"]
@@ -33,7 +33,7 @@ script = ExtResource("3_vbegm")
 field = "hp"
 connections = Dictionary[String, Array]({
 "__input": [],
-"__object": [[NodePath("../other3"), "__object"]],
+"__object": [],
 "__output": []
 })
 id = "1dbc8b27-4c94-4d39-9f12-6aebc8883f25"
@@ -85,8 +85,8 @@ metadata/_edit_lock_ = true
 position = Vector2(1035.04, 415.417)
 script = ExtResource("5_xersf")
 connections = Dictionary[String, Array]({
-"__input": [[NodePath("../GetNameCard"), "__output"]],
-"__object": [[NodePath("../Label"), "__object"]]
+"__input": [],
+"__object": []
 })
 id = "793d226c-0a86-48ee-9e49-2712385576f0"
 metadata/_custom_type_script = ExtResource("5_xersf")
@@ -110,7 +110,7 @@ metadata/slots = Array[ExtResource("3_mhym6")]([Object(Object,"script":Resource(
 position = Vector2(649.871, 538.749)
 script = ExtResource("7_5tkv4")
 connections = Dictionary[String, Array]({
-"__output": [[NodePath("../Node2D2"), "__input"]]
+"__output": []
 })
 id = "1054a197-9d0d-41e0-9846-8bb3c5b52ef7"
 
@@ -118,8 +118,8 @@ id = "1054a197-9d0d-41e0-9846-8bb3c5b52ef7"
 position = Vector2(584.401, 488.072)
 script = ExtResource("8_0m0f1")
 connections = Dictionary[String, Array]({
-"__input": [[NodePath("../Node2D"), "__output"]],
-"__object": [[NodePath("../other3"), "__object"]]
+"__input": [],
+"__object": []
 })
 id = "74149f00-8cf3-49ed-9003-4c12f378f1df"
 
@@ -128,7 +128,7 @@ position = Vector2(928.503, 564.691)
 script = ExtResource("9_0m0f1")
 group_name = "enemy"
 connections = Dictionary[String, Array]({
-"__output": [[NodePath("../GetNameCard"), "__input"]]
+"__output": []
 })
 id = "6a48ec26-47c8-4646-9a6b-d2d5d60c82cc"
 metadata/_custom_type_script = ExtResource("9_0m0f1")
@@ -137,9 +137,9 @@ metadata/_custom_type_script = ExtResource("9_0m0f1")
 position = Vector2(1027.36, 560.916)
 script = ExtResource("10_b0q6j")
 connections = Dictionary[String, Array]({
-"__input": [[NodePath("../GroupCard"), "__output"]],
+"__input": [],
 "__object": [],
-"__output": [[NodePath("../SetTextCard"), "__input"]]
+"__output": []
 })
 id = "de938453-9802-4daf-9e44-0b6270592776"
 metadata/_custom_type_script = ExtResource("10_b0q6j")
@@ -189,6 +189,10 @@ id = "cc3a0cab-8181-4310-a009-6b1a21c6f74c"
 [node name="Trash" type="Area2D" parent="overlay"]
 position = Vector2(1810, 998)
 script = ExtResource("12_0m0f1")
+disable_on_enter = null
+pause_on_enter = null
+card_layout = null
 card_scale = 0.01
+duplicate_on_drag = null
 id = "ee5cf77f-9423-4993-87ed-cb30508dfc21"
 metadata/_custom_type_script = ExtResource("12_0m0f1")

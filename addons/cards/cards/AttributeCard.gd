@@ -22,7 +22,7 @@ func _init() -> void:
 
 func _ready() -> void:
 	super._ready()
-	setup("Attribute", "Get or set an attribute.", "attribute.png", Card.Type.Trigger, [
+	setup("Attribute", "Get or set an attribute.", "attribute.png", CardVisual.Type.Trigger, [
 		ObjectInputSlot.new(),
 		OutputSlot.new({"default": ["*"]}),
 		InputSlot.new({"set_value": ["*"]}),

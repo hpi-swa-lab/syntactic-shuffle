@@ -3,7 +3,7 @@ extends Card
 
 func _ready() -> void:
 	super._ready()
-	setup("Mouse Position", "Continuosly emits signals for the current mouse position.", "mouse_position.png", Card.Type.Trigger, [
+	setup("Mouse Position", "Continuosly emits signals for the current mouse position.", "mouse_position.png", CardVisual.Type.Trigger, [
 		OutputSlot.new({"vector": ["Vector2"]})
 	])
 

@@ -2,12 +2,6 @@
 extends Node2D
 class_name Card
 
-enum Type {
-	Trigger,
-	Effect,
-	Store
-}
-
 const SHOW_IN_GAME = true
 const MAX_CONNECTION_DISTANCE = 150
 
@@ -63,13 +57,6 @@ var _connections: Dictionary[String, Array] = {}
 		_connections = v
 func _get_connections() -> Dictionary[String, Array]: return _connections
 
-## Not currently able to move
-@export var locked = false:
-	get: return locked
-	set(v):
-		locked = v
-		if visual: visual.locked = v
-
 ## Not currently able to move, connect, or emit
 @export var disable = false:
 	set(v):
@@ -101,21 +88,13 @@ var visual: CardVisual
 var connection_draw_node = CardConnectionsDraw.new()
 var dragging: bool:
 	set(v):
-		if locked: v = false
 		if v == dragging: return
-		
 		var was_dragging = dragging != null
 		dragging = v
 		if was_dragging and not dragging:
 			CardBoundary.get_card_boundary(self).card_dropped(self)
 		if dragging:
-			create_tween().tween_property(self, "rotation", 0, 0.1).set_trans(Tween.TRANS_EXPO)
-			create_tween().tween_property(self, "scale", Vector2(1, 1), 0.1).set_trans(Tween.TRANS_EXPO)
 			CardBoundary.get_card_boundary(self).card_picked_up(self)
-		connection_draw_node.queue_redraw()
-		var s = get_base_scale() * 1.1 if dragging else get_base_scale()
-		create_tween().tween_property(visual, "scale",
-				s, 0.17 if dragging else 0.13).from_current().set_trans(Tween.TRANS_EXPO)
 	get: return dragging
 
 func _ready() -> void:
@@ -129,14 +108,12 @@ func _ready() -> void:
 	visual = preload("res://addons/cards/CardVisual.tscn").instantiate()
 	visual.scale = get_base_scale()
 	visual.dragging.connect(func (d): dragging = d)
-	visual.locked = locked
 	visual.paused = paused
 	add_child(visual)
 	
 	get_card_boundary().card_entered(self)
 	
-	if not id:
-		id = uuid.v4()
+	if not id: id = uuid.v4()
 
 ## If your Card defers delivery of outputs you can signal here that it is
 ## possible to connect it in a cycle. (Otherwise, if inputs are synchronously
@@ -144,19 +121,17 @@ func _ready() -> void:
 func allow_cycles() -> bool:
 	return false
 
-func setup(name: String, description: String, icon: String, type: Type, slots: Array[Slot], extra_ui: Array[Control] = []):
+func setup(name: String, description: String, icon: String, type: CardVisual.Type, slots: Array[Slot], extra_ui: Array[Control] = []):
 	self.slots = slots
 	for s in slots:
 		if not connections.has(s.get_slot_name()): connections[s.get_slot_name()] = []
 		s.ready(self)
-	
-	if show_cards():
-		var type_icon
-		match type:
-			Type.Trigger: type_icon = "trigger.png"
-			Type.Effect: type_icon = "event.png"
-			Type.Store: type_icon = "CylinderMesh.svg"
-		visual.setup(name, description, icon, type_icon, extra_ui)
+	if show_cards(): visual.setup(name, description, icon, type, extra_ui)
+
+func _forward_canvas_gui_input(event: InputEvent, undo_redo):
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+		dragging = event.pressed
+	return false
 
 func _process(delta: float) -> void:
 	if not show_cards(): return
@@ -200,9 +175,6 @@ func connect_slot(my_slot: Slot, them: Node, their_slot: Slot) -> void:
 		list.push_back(pair)
 		my_slot.on_connect(them, their_slot)
 		editor_sync("cards:set_prop", [id, "connections", connections])
-
-func editor_sync_prop(name: String):
-	editor_sync("cards:set_prop", [id, name, get(name)])
 
 func disconnect_slot(my_slot: Slot, them: Node, their_slot: Slot, index: int = -1):
 	var list = connections[my_slot.get_slot_name()]
@@ -249,7 +221,5 @@ func get_base_scale():
 	var s = get_card_boundary().card_scale
 	return Vector2(s, s)
 
-func _forward_canvas_gui_input(event: InputEvent, undo_redo):
-	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
-		dragging = event.pressed
-	return false
+func editor_sync_prop(name: String):
+	editor_sync("cards:set_prop", [id, name, get(name)])

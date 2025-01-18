@@ -2,6 +2,12 @@
 extends Node2D
 class_name CardVisual
 
+enum Type {
+	Trigger,
+	Effect,
+	Store
+}
+
 static var base_card_size = Vector2(10, 10)
 
 signal dragging(d: bool)
@@ -19,7 +25,13 @@ signal dragging(d: bool)
 		paused = v
 		$CardControl.self_modulate = Color(Color.WHITE, 0.5 if paused else 1.0)
 
-func setup(name: String, description: String, icon: String, type_icon: String, extra_ui: Array[Control]):
+func setup(name: String, description: String, icon: String, type: Type, extra_ui: Array[Control]):
+	var type_icon
+	match type:
+		Type.Trigger: type_icon = "trigger.png"
+		Type.Effect: type_icon = "event.png"
+		Type.Store: type_icon = "CylinderMesh.svg"
+
 	%Name.text = name
 	%Description.text = description
 	%Icon.path = "res://addons/cards/icons/" + icon

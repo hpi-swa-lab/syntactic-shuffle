@@ -23,7 +23,7 @@ func _init() -> void:
 func _ready() -> void:
 	super._ready()
 	
-	setup("Number", "Stores a number. Continuously outputs it, unless an input is connected.", "number.png", Card.Type.Trigger,
+	setup("Number", "Stores a number. Continuously outputs it, unless an input is connected.", "number.png", CardVisual.Type.Trigger,
 		[
 			OutputSlot.new({"number": ["float"]}),
 			InputSlot.new({

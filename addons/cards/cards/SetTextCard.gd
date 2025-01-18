@@ -3,7 +3,7 @@ extends Card
 
 func _ready() -> void:
 	super._ready()
-	setup("Set Text", "Set the text of a label.", "trigger.png", Card.Type.Trigger, [
+	setup("Set Text", "Set the text of a label.", "trigger.png", CardVisual.Type.Trigger, [
 		InputSlot.new({
 			"set_vector2_text": ["Vector2"],
 			"set_float_text": ["float"],

@@ -3,7 +3,7 @@ extends Card
 
 func _ready() -> void:
 	super._ready()
-	setup("Collision", "Emit when colliding.", "collision.png", Card.Type.Trigger, [
+	setup("Collision", "Emit when colliding.", "collision.png", CardVisual.Type.Trigger, [
 		ObjectInputSlot.new(),
 		OutputSlot.new({"default": []})
 	])

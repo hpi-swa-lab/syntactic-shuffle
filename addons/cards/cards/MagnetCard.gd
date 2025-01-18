@@ -43,7 +43,7 @@ func get_proxied():
 func _ready() -> void:
 	super._ready()
 	
-	setup("Magnet", "Proxy another card or object from this card.", "magnet.png", Card.Type.Effect, [])
+	setup("Magnet", "Proxy another card or object from this card.", "magnet.png", CardVisual.Type.Effect, [])
 	
 	if not _proxied_object and proxied_object:
 		_proxied_object = get_node_or_null(proxied_object)

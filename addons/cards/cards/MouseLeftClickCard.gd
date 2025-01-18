@@ -3,7 +3,7 @@ extends Card
 
 func _ready() -> void:
 	super._ready()
-	setup("Mouse Left Click", "Emits signals when the mouse left click is pressed.", "left_click.png", Card.Type.Trigger, [
+	setup("Mouse Left Click", "Emits signals when the mouse left click is pressed.", "left_click.png", CardVisual.Type.Trigger, [
 		OutputSlot.new({"default": [], "vector": ["Vector2"]})
 	])
 

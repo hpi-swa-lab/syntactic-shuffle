@@ -3,7 +3,7 @@ extends Card
 
 func _ready() -> void:
 	super._ready()
-	setup("Plus", "Add two things.", "plus.png", Card.Type.Effect, [
+	setup("Plus", "Add two things.", "plus.png", CardVisual.Type.Effect, [
 		NamedInputSlot.new("left", {"left": ["float"]}),
 		NamedInputSlot.new("right", {"right": ["float"]}),
 		OutputSlot.new({"sum": ["float"]})

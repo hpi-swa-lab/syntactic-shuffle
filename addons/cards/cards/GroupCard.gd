@@ -21,7 +21,7 @@ func _init() -> void:
 
 func _ready() -> void:
 	super._ready()
-	setup("Query Group", "Get all nodes in a group.", "group.png", Card.Type.Effect, [
+	setup("Query Group", "Get all nodes in a group.", "group.png", CardVisual.Type.Effect, [
 		OutputSlot.new({"default": ["Array"]}),
 	], [field_ui, info_label])
 

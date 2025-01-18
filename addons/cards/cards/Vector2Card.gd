@@ -33,7 +33,7 @@ func _init() -> void:
 func _ready() -> void:
 	super._ready()
 	
-	setup("2D Vector", "Stores a 2D Vector. Continuously outputs it, unless an input is connected.", "vector.png", Card.Type.Trigger,
+	setup("2D Vector", "Stores a 2D Vector. Continuously outputs it, unless an input is connected.", "vector.png", CardVisual.Type.Trigger,
 		[
 			OutputSlot.new({"vector": ["Vector2"]}),
 			InputSlot.new({

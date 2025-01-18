@@ -5,7 +5,7 @@ extends Card
 
 func _ready() -> void:
 	super._ready()
-	setup("Scene", "Create an embedded scene.", "scene.png", Card.Type.Effect, [
+	setup("Scene", "Create an embedded scene.", "scene.png", CardVisual.Type.Effect, [
 		InputSlot.new({"spawn": ["spawn"]})
 	])
 

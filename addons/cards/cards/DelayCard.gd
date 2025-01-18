@@ -25,7 +25,7 @@ func _ready() -> void:
 	setup("Delay",
 		"Delay for a given time and then forward the inputs.",
 		"clock.png",
-		Card.Type.Effect,
+		CardVisual.Type.Effect,
 		[InputSlot.new({"any": ["*"]}), OutputSlot.new({"any": ["*"]})],
 		[delay_seconds_ui])
 

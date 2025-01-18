@@ -111,10 +111,12 @@ func card_entered(card: Card):
 		.tween_property(card.visual, "scale", Vector2(card_scale, card_scale), 0.25)
 
 func card_picked_up(card: Card):
-	pass
+	card.create_tween().tween_property(card, "rotation", 0, 0.1).set_trans(Tween.TRANS_EXPO)
+	card.visual.create_tween().tween_property(card.visual, "scale", Vector2(card_scale * 1.1, card_scale * 1.1), 0.15).set_trans(Tween.TRANS_EXPO)
 
 func card_dropped(card: Card):
 	_relayout()
+	create_tween().tween_property(card.visual, "scale", Vector2(card_scale, card_scale), 0.15).set_trans(Tween.TRANS_EXPO)
 
 func background_rect() -> Rect2:
 	# FIXME how to make sure we pick the background and not the extra collision?

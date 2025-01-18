@@ -3,7 +3,7 @@ extends Card
 
 func _ready() -> void:
 	super._ready()
-	setup("Move", "Moves an object around.", "move.png", Card.Type.Effect, [
+	setup("Move", "Moves an object around.", "move.png", CardVisual.Type.Effect, [
 		ObjectInputSlot.new(),
 		InputSlot.new({"move_direction": ["Vector2"]})
 	])

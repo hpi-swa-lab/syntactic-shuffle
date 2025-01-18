@@ -3,7 +3,7 @@ extends Card
 
 func _ready() -> void:
 	super._ready()
-	setup("Name", "Get a node's name.", "attribute.png", Card.Type.Trigger, [
+	setup("Name", "Get a node's name.", "attribute.png", CardVisual.Type.Trigger, [
 		ObjectInputSlot.new(),
 		InputSlot.new({"array": ["Array"]}),
 		OutputSlot.new({"default": ["String"], "array": ["Array"]}),
