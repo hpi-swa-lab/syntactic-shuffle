@@ -16,8 +16,8 @@ func s():
 	icon("forward.png")
 
 func try_connect(them: Node):
-	if them.get_outgoing().has(parent): return
-	if detect_cycles_for_new_connection(parent, them): return
+	if parent.get_incoming().has(them): return
+	if them is Card and detect_cycles_for_new_connection(parent, them): return
 	
 	var named = parent.named_incoming
 	var p = parent.get_path_to(them)
@@ -27,7 +27,7 @@ func try_connect(them: Node):
 		# only allow one connection to us
 		if name == input_name and named[name]: return
 	
-	for card in them.cards:
+	for card in get_object_cards(them):
 		if card is OutCard:
 			var their_signatures = []
 			card.get_out_signatures(their_signatures)

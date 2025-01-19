@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://bqninusgeuw0i"]
+[gd_scene load_steps=6 format=3 uid="uid://bqninusgeuw0i"]
 
 [ext_resource type="Script" path="res://addons/cards/CardBoundary.gd" id="1_ig7tw"]
 [ext_resource type="Script" uid="uid://bvoloc64pi1db" path="res://addons/cards/cards/CollisionCard.gd" id="3_1bvp3"]
 [ext_resource type="Script" uid="uid://dtcitdmnbq585" path="res://addons/cards/cards/NumberCard.gd" id="3_h2yge"]
 [ext_resource type="Script" uid="uid://bapqs0tgxuf2o" path="res://addons/cards/cards/PlusCard.gd" id="4_1bvp3"]
+[ext_resource type="Script" uid="uid://bvr4vcw3kd72b" path="res://addons/cards/placeholder/placeholder.gd" id="5_lquwl"]
 
 [node name="Node2D" type="Node2D"]
 
@@ -13,27 +14,25 @@ id = "4d539466-3572-4d4f-b596-fdb825ac923e"
 metadata/_custom_type_script = ExtResource("1_ig7tw")
 
 [node name="CollisionCard" type="Node2D" parent="CardBoundary"]
-position = Vector2(753, 454)
+position = Vector2(721, 519)
 script = ExtResource("3_1bvp3")
 id = "1648faab-9727-478b-a4c2-9722845148b2"
-outgoing = Array[NodePath]([NodePath("../NumberCard")])
+incoming = Array[NodePath]([NodePath("../CharacterBody2D")])
 metadata/_custom_type_script = ExtResource("3_1bvp3")
 
 [node name="NumberCard" type="Node2D" parent="CardBoundary"]
-position = Vector2(883, 463)
+position = Vector2(940, 465)
 script = ExtResource("3_h2yge")
 id = "026f606c-d9a8-4875-8def-b4331fc63d23"
-incoming = Array[NodePath]([NodePath("../CollisionCard")])
 named_outgoing = Dictionary[String, NodePath]({
 "right": NodePath("../PlusCard")
 })
 metadata/_custom_type_script = ExtResource("3_h2yge")
 
 [node name="PlusCard" type="Node2D" parent="CardBoundary"]
-position = Vector2(905, 572)
+position = Vector2(880, 588)
 script = ExtResource("4_1bvp3")
 id = "938b6f02-632e-488f-b526-cc4508b9553f"
-outgoing = Array[NodePath]([NodePath("../NumberCard2")])
 named_incoming = Dictionary[String, NodePath]({
 "left": NodePath("../NumberCard3"),
 "right": NodePath("../NumberCard")
@@ -41,20 +40,33 @@ named_incoming = Dictionary[String, NodePath]({
 metadata/_custom_type_script = ExtResource("4_1bvp3")
 
 [node name="NumberCard2" type="Node2D" parent="CardBoundary"]
-position = Vector2(825, 675)
+position = Vector2(835, 720)
 script = ExtResource("3_h2yge")
 id = "b4dc944b-3b77-4108-8530-fe11d1615a57"
-incoming = Array[NodePath]([NodePath("../PlusCard")])
 named_outgoing = Dictionary[String, NodePath]({
 "left": NodePath("")
 })
 metadata/_custom_type_script = ExtResource("3_h2yge")
 
 [node name="NumberCard3" type="Node2D" parent="CardBoundary"]
-position = Vector2(1038, 609)
+position = Vector2(993, 624)
 script = ExtResource("3_h2yge")
 id = "e998c3c5-6478-4687-bf98-e37249d5a886"
 named_outgoing = Dictionary[String, NodePath]({
 "left": NodePath("../PlusCard")
 })
 metadata/_custom_type_script = ExtResource("3_h2yge")
+
+[node name="CharacterBody2D" type="CharacterBody2D" parent="CardBoundary"]
+position = Vector2(793, 588)
+metadata/cards_out_card = Object(Node2D,"_import_path":NodePath(""),"unique_name_in_owner":false,"process_mode":0,"process_priority":0,"process_physics_priority":0,"process_thread_group":0,"physics_interpolation_mode":0,"auto_translate_mode":0,"editor_description":"","visible":true,"modulate":Color(1, 1, 1, 1),"self_modulate":Color(1, 1, 1, 1),"show_behind_parent":false,"top_level":false,"clip_children":0,"light_mask":1,"visibility_layer":1,"z_index":0,"z_as_relative":true,"y_sort_enabled":false,"texture_filter":0,"texture_repeat":0,"material":null,"use_parent_material":false,"position":Vector2(0, 0),"rotation":0.0,"scale":Vector2(1, 1),"skew":0.0,"script":Resource("res://addons/cards/cards/OutCard.gd"),"remember_message":false,"command_name":"","has_static_signature":true,"signature":Array[String](["CharacterBody2D"]),"remembered":null,"disable":false,"paused":false,"id":"","visual":null,"connection_draw_node":Object(Node2D,"_import_path":NodePath(""),"unique_name_in_owner":false,"process_mode":0,"process_priority":0,"process_physics_priority":0,"process_thread_group":0,"physics_interpolation_mode":0,"auto_translate_mode":0,"editor_description":"","visible":true,"modulate":Color(1, 1, 1, 1),"self_modulate":Color(1, 1, 1, 1),"show_behind_parent":false,"top_level":false,"clip_children":0,"light_mask":1,"visibility_layer":1,"z_index":0,"z_as_relative":true,"y_sort_enabled":false,"texture_filter":0,"texture_repeat":0,"material":null,"use_parent_material":false,"position":Vector2(0, 0),"rotation":0.0,"scale":Vector2(1, 1),"skew":0.0,"script":Resource("res://addons/cards/CardConnectionsDraw.gd"),"card":null,"arrows_offset":0.0,"last_deps":null,"_tween_values":{},"_running_tweens":{},"flash_value":0.0)
+,"dragging":false,"cards":Array[Node]([]),"cards_parent":Object(Node2D,"_import_path":NodePath(""),"unique_name_in_owner":false,"process_mode":0,"process_priority":0,"process_physics_priority":0,"process_thread_group":0,"physics_interpolation_mode":0,"auto_translate_mode":0,"editor_description":"","visible":true,"modulate":Color(1, 1, 1, 1),"self_modulate":Color(1, 1, 1, 1),"show_behind_parent":false,"top_level":false,"clip_children":0,"light_mask":1,"visibility_layer":1,"z_index":0,"z_as_relative":true,"y_sort_enabled":false,"texture_filter":0,"texture_repeat":0,"material":null,"use_parent_material":false,"position":Vector2(0, 0),"rotation":0.0,"scale":Vector2(1, 1),"skew":0.0,"script":null)
+,"parent":null,"incoming":Array[NodePath]([]),"outgoing":Array[NodePath]([]),"named_outgoing":Dictionary[String, NodePath]({}),"named_incoming":Dictionary[String, NodePath]({}))
+
+metadata/cards_outgoing = [NodePath("../CollisionCard")]
+
+[node name="Placeholder" type="Node2D" parent="CardBoundary/CharacterBody2D"]
+script = ExtResource("5_lquwl")
+placeholder_size = Vector2(20, 20)
+metadata/_custom_type_script = ExtResource("5_lquwl")
+metadata/_edit_lock_ = true

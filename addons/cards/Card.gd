@@ -235,9 +235,7 @@ func _process(delta: float) -> void:
 	connection_draw_node.check_redraw(delta)
 
 static func _each_input_candidate(object: Node, cb: Callable, named: bool):
-	if not object is Card:
-		if not named: cb.call(get_object_out_card(object))
-		return
+	if not object is Card: return
 	for card in object.cards:
 		if (named and card is NamedInCard or
 			not named and not card is NamedInCard and card is InCard): cb.call(card)
