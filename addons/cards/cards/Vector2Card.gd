@@ -12,7 +12,6 @@ func s():
 	var out_card = OutCard.remember([vector], ["Vector2"])
 	
 	var cell_card = CellCard.new()
-	print(vector)
 	cell_card.data = vector
 	cell_card.type = "Vector2"
 	cell_card.c(out_card)

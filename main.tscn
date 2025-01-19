@@ -70,7 +70,7 @@ incoming = Array[NodePath]([NodePath("../CharacterBody2D"), NodePath("../AxisCon
 metadata/_custom_type_script = ExtResource("6_7mycd")
 
 [node name="Vector2Card" type="Node2D" parent="CardBoundary"]
-position = Vector2(343, 894)
+position = Vector2(449, 862)
 script = ExtResource("6_272bh")
 vector = Vector2(1, 0)
 id = "03409fab-1f41-4c2c-ae4c-c96b5c5c3e29"
@@ -83,7 +83,7 @@ id = "65377cae-b483-4bbe-a469-5e7750fd47bc"
 metadata/_custom_type_script = ExtResource("7_272bh")
 
 [node name="AxisControlsCard" type="Node2D" parent="CardBoundary"]
-position = Vector2(567, 794)
+position = Vector2(581, 774)
 script = ExtResource("8_5vw27")
 id = "30b2fc2a-5464-4107-9241-8ef915cc8aff"
 outgoing = [NodePath("../MoveCard")]
