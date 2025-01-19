@@ -59,9 +59,8 @@ func check_is_connected(a: Card, b: Card) -> bool:
 			if not visitited.has(next):
 				if next == b: return true
 				queue.push_back(next)
-		for name in node.named_outgoing:
-			var next = node.named_outgoing[name]
-			if next and not visitited.has(next):
+		for next in node.get_named_outgoing():
+			if not visitited.has(next):
 				if next == b: return true
 				queue.push_back(next)
 	return false

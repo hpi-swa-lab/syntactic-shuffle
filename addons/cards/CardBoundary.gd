@@ -186,7 +186,7 @@ func _relayout_fan():
 		# make sure the full rect is on screen
 		var rect = _extra_collision.get_viewport_transform() * _extra_collision.get_global_transform() * _extra_collision.shape.get_rect()
 		# FIXME also check for bottom / right
-		var delta = Vector2.ZERO.max(-rect.position)
+		var delta = Vector2.ZERO# Vector2.ZERO.max(-rect.position)
 		_extra_collision.position += delta
 		
 		var c = get_cards()

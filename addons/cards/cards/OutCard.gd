@@ -48,6 +48,7 @@ func get_out_signatures(signatures: Array):
 	if has_static_signature:
 		signatures.push_back(signature)
 		return
+	var incoming = get_incoming()
 	assert(not incoming.is_empty(), "out cards without static signature require connections to infer their signature")
 	for i in incoming:
 		if command_name:
@@ -61,13 +62,12 @@ func invoke(args: Array, signature: Array[String], named = ""):
 	if Engine.is_editor_hint(): return
 	
 	if remember_message: remembered = args
+	if command_name: signature = _add_command(signature)
 	
-	if command_name:
-		signature = _add_command(signature)
+	for name in parent.named_outgoing:
+		parent.get_node_or_null(parent.named_outgoing[name]).invoke(args, signature, name)
 	for out in parent.get_outgoing():
-		out.invoke(args, signature)
-	for out in parent.named_outgoing:
-		parent.named_outgoing[out].invoke(args, signature, out)
+		out.invoke(args, signature, named)
 
 func get_remembered():
 	return remembered

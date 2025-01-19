@@ -18,15 +18,6 @@ static func get_id(node: Node):
 	if node is CardBoundary: return node.id
 	push_error("missing get_id")
 
-static func node_get_connections(node: Node) -> Dictionary[String, Array]:
-	if node is Card: return node.slots
-	else:
-		if node.has_meta("connections"): return node.get_meta("connections") as Dictionary[String, Array]
-		else:
-			var connections = {"__object": []} as Dictionary[String, Array]
-			node.set_meta("connections", connections)
-			return connections
-
 static func set_ignore_object(node: Node):
 	node.set_meta("_cards_ignore", true)
 
@@ -62,18 +53,20 @@ var dragging: bool:
 			CardBoundary.get_card_boundary(self).card_picked_up(self)
 	get: return dragging
 
-var cards: Array[Card] = []
+var cards: Array[Node]:
+	get: return cards_parent.get_children()
 
 func _init():
-	if not active_card_list.is_empty(): active_card_list.back().push_back(self)
+	if not active_card_list.is_empty(): active_card_list.back().add_child(self)
 
 func setup(parent: Card):
 	self.parent = parent
 	if not id: id = uuid.v4()
 	
-	push_active_card_list(cards)
+	push_active_card_list(cards_parent)
 	s()
 	pop_active_card_list()
+	cards.append_array(cards_parent.get_children())
 	
 	for card in cards: card.setup(self)
 
@@ -91,6 +84,8 @@ func _ready() -> void:
 	
 	setup(null)
 
+var cards_parent = Node2D.new()
+
 ## Setup function DSL
 func s(): pass
 func title(t: String): if visual: visual.title(t)
@@ -98,11 +93,11 @@ func description(t: String): if visual: visual.description(t)
 func icon(t: String): if visual: visual.icon(t)
 func ui(t: Control): if visual: visual.ui(t)
 func c(other: Card):
-	outgoing.push_back(other)
-	other.incoming.push_back(self)
+	outgoing.push_back(get_path_to(other))
+	other.incoming.push_back(other.get_path_to(self))
 func c_named(name: String, other: Card):
-	named_outgoing[name] = other
-	other.named_incoming[name] = self
+	named_outgoing[name] = get_path_to(other)
+	other.named_incoming[name] = other.get_path_to(self)
 ## If your Card defers delivery of outputs you can signal here that it is
 ## possible to connect it in a cycle. (Otherwise, if inputs are synchronously
 ## delivered to outputs we get an infinite loop).
@@ -110,10 +105,10 @@ func allow_cycles():
 	pass
 
 var parent: Card
-@export var incoming: Array[Card] = []
-@export var outgoing: Array[Card] = []
-@export var named_outgoing: Dictionary[String, Card] = {}
-@export var named_incoming: Dictionary[String, Card] = {}
+@export var incoming: Array[NodePath] = []
+@export var outgoing: Array[NodePath] = []
+@export var named_outgoing: Dictionary[String, NodePath] = {}
+@export var named_incoming: Dictionary[String, NodePath] = {}
 
 func get_out_signatures(signatures: Array):
 	for card in cards:
@@ -141,40 +136,57 @@ func signature_match(a: Array[String], b: Array[String]) -> bool:
 			return false
 	return true
 
-func get_incoming() -> Array[Card]:
-	return incoming
+static func not_null(obj):
+	return obj != null
 
-func get_outgoing() -> Array[Card]:
-	return outgoing
+func get_incoming() -> Array:
+	return incoming.map(func (p): return get_node_or_null(p)).filter(not_null)
+
+func get_outgoing() -> Array:
+	return outgoing.map(func (p): return get_node_or_null(p)).filter(not_null)
+
+func get_named_outgoing() -> Array:
+	return named_outgoing.values().map(func (p): return get_node_or_null(p)).filter(not_null)
+
+func get_named_incoming() -> Array:
+	return named_incoming.values().map(func (p): return get_node_or_null(p)).filter(not_null)
+
+func get_named_incoming_at(name: String):
+	var p = named_incoming.get(name)
+	return get_node_or_null(p) if p else null
+
+func get_named_outcoming_at(name: String):
+	var p = named_outgoing.get(name)
+	return get_node_or_null(p) if p else null
 
 func disconnect_all():
 	pass
 
 static func get_meta_or(object: Node, name: String, default: Callable):
-	if not object.has_meta(name): object.set_meta(name, default.call())
+	if not object.has_meta(name) or not object.get_meta(name): object.set_meta(name, default.call())
 	return object.get_meta(name)
 static func get_object_cards(object: Node):
 	if object is Card: return object.cards
 	else: return [get_object_out_card(object)]
 static func get_object_out_card(object: Node):
-	return object.get_meta_or("_cards_out_card", func(): return OutCard.static_signature([object.get_class()]))
+	return get_meta_or(object, "cards_out_card", func(): return OutCard.static_signature([object.get_class()]))
 static func get_object_incoming(object: Node):
 	return object.incoming if object is Card else []
 static func get_object_outgoing(object: Node):
 	if object is Card: return object.outgoing
-	else: return get_meta_or(object, "_cards_outgoing", func (): return [])
+	else: return get_meta_or(object, "cards_outgoing", func (): return [])
 static func get_object_named_outgoing(object: Node):
 	if object is Card: return object.named_outgoing
-	else: return get_meta_or(object, "_cards_named_outgoing", func (): return {})
+	else: return get_meta_or(object, "cards_named_outgoing", func (): return {})
 static func get_object_named_incoming(object: Node):
 	return object.named_incoming if object is Card else {}
-static func unset_value(dict: Dictionary, value: Object):
+static func unset_value(dict: Dictionary, value: NodePath):
 	for key in dict:
 		if dict[key] == value:
-			dict[key] = null
+			dict[key] = NodePath()
 			return true
 	return false
-static func try_erase(array: Array, value: Object):
+static func try_erase(array: Array, value: NodePath):
 	if array.has(value):
 		array.erase(value)
 		return true
@@ -183,20 +195,21 @@ static func object_disconnect_from(from: Node, to: Node):
 	_object_disconnect_from(from, to)
 	_object_disconnect_from(to, from)
 static func _object_disconnect_from(from: Node, to: Node):
-	if try_erase(get_object_incoming(from), to): return
-	if try_erase(get_object_outgoing(from), to): return
-	if unset_value(get_object_named_outgoing(from), to): return
-	if unset_value(get_object_named_incoming(from), to): return
+	var p = from.get_path_to(to)
+	if try_erase(get_object_incoming(from), p): return
+	if try_erase(get_object_outgoing(from), p): return
+	if unset_value(get_object_named_outgoing(from), p): return
+	if unset_value(get_object_named_incoming(from), p): return
 	assert("node to disconnect from not found")
 static func connect_to(from: Node, to: Node, named = ""):
 	if named:
-		get_object_named_outgoing(from)[named] = to
-		get_object_named_incoming(to)[named] = from
+		get_object_named_outgoing(from)[named] = from.get_path_to(to)
+		get_object_named_incoming(to)[named] = to.get_path_to(from)
 	else:
-		get_object_outgoing(from).push_back(to)
-		get_object_incoming(to).push_back(from)
+		get_object_outgoing(from).push_back(from.get_path_to(to))
+		get_object_incoming(to).push_back(to.get_path_to(from))
 
-func _check_disconnect(them: Card):
+func _check_disconnect(them: Node2D):
 	var my_boundary = get_card_boundary()
 	var their_boundary = get_card_boundary()
 	if (global_position.distance_to(them.global_position) > MAX_CONNECTION_DISTANCE
@@ -212,10 +225,8 @@ func _process(delta: float) -> void:
 	if dragging:
 		for card in get_outgoing(): _check_disconnect(card)
 		for card in get_incoming(): _check_disconnect(card)
-		for name in named_outgoing:
-			if named_outgoing[name]: _check_disconnect(named_outgoing[name])
-		for name in named_incoming:
-			if named_incoming[name]: _check_disconnect(named_incoming[name])
+		for card in get_named_outgoing(): _check_disconnect(card)
+		for card in get_named_incoming(): _check_disconnect(card)
 		
 		CardBoundary.traverse_connection_candidates(self, func (obj):
 			if (obj is Card or obj is CharacterBody2D) and global_position.distance_to(obj.global_position) <= MAX_CONNECTION_DISTANCE:

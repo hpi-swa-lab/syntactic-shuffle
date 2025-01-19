@@ -25,18 +25,22 @@ func run():
 			print(method["name"])
 			run_cards_test(Callable(self, method["name"]))
 
+func assert_eq(a, b):
+	if a != b:
+		assert(false, "Was {0} but expected {1}".format([a, b]))
+
 func _ready():
 	if not Engine.is_editor_hint(): run()
 
 func run_cards_test(test):
-	var cards = []
+	var cards = Node2D.new()
 	Card.push_active_card_list(cards)
 	test.call(func ():
-		for card in cards:
+		for card in cards.get_children():
 			card.setup(null)
 		Card.pop_active_card_list())
 
-func test_simple(ready):
+func test_named_addition_and_store(ready):
 	var store = NumberCard.new()
 	
 	var plus = PlusCard.new()
@@ -56,7 +60,19 @@ func test_simple(ready):
 	b.number = 15
 	a_trigger.trigger([])
 	b_trigger.trigger([])
-	assert(store.number == 20)
+	assert_eq(store.number, 20.0)
+
+func test_simple_named_connect(ready):
+	var l = NumberCard.new()
+	var r = NumberCard.new()
+	var plus = PlusCard.new()
+	ready.call()
+	l.try_connect(plus)
+	l.try_connect(plus)
+	assert_eq(plus.get_named_incoming_at("left"), l)
+	assert(not plus.named_incoming.has("right"))
+	r.try_connect(plus)
+	assert_eq(plus.get_named_incoming_at("right"), r)
 
 func test_simple_outgoing_connect(ready):
 	var increment = IncrementCard.new()
@@ -73,15 +89,3 @@ func test_simple_incoming_connect(ready):
 	increment.try_connect(process)
 	assert(process.get_outgoing().has(increment))
 	assert(increment.get_incoming().has(process))
-
-func test_simple_named_connect(ready):
-	var l = NumberCard.new()
-	var r = NumberCard.new()
-	var plus = PlusCard.new()
-	ready.call()
-	l.try_connect(plus)
-	l.try_connect(plus)
-	assert(plus.named_incoming["left"] == l)
-	assert(not plus.named_incoming.has("right"))
-	r.try_connect(plus)
-	assert(plus.named_incoming["right"] == r)

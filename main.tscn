@@ -1,97 +1,60 @@
-[gd_scene load_steps=10 format=3 uid="uid://dygk1gjdmu08b"]
+[gd_scene load_steps=5 format=3 uid="uid://bqninusgeuw0i"]
 
-[ext_resource type="Script" uid="uid://cja8ehiirmcyt" path="res://addons/cards/CardBoundary.gd" id="1_0xm2m"]
-[ext_resource type="Script" uid="uid://cxldeg24krchn" path="res://camera_2d.gd" id="2_h2yge"]
-[ext_resource type="Script" uid="uid://bapqs0tgxuf2o" path="res://addons/cards/cards/PlusCard.gd" id="3_h2yge"]
-[ext_resource type="Script" uid="uid://dtcitdmnbq585" path="res://addons/cards/cards/NumberCard.gd" id="4_1bvp3"]
-[ext_resource type="Script" uid="uid://bk0ki1qtyvhix" path="res://addons/cards/cards/IncrementCard.gd" id="4_lquwl"]
-[ext_resource type="Script" uid="uid://37sr8xfsjcsp" path="res://addons/cards/cards/PhysicsProcessCard.gd" id="5_lquwl"]
-[ext_resource type="Script" path="res://addons/cards/cards/SetCard.gd" id="7_5vw27"]
-[ext_resource type="Script" uid="uid://bvr4vcw3kd72b" path="res://addons/cards/placeholder/placeholder.gd" id="7_272bh"]
-[ext_resource type="Script" uid="uid://bvoloc64pi1db" path="res://addons/cards/cards/CollisionCard.gd" id="9_kek77"]
+[ext_resource type="Script" path="res://addons/cards/CardBoundary.gd" id="1_ig7tw"]
+[ext_resource type="Script" uid="uid://bvoloc64pi1db" path="res://addons/cards/cards/CollisionCard.gd" id="3_1bvp3"]
+[ext_resource type="Script" uid="uid://dtcitdmnbq585" path="res://addons/cards/cards/NumberCard.gd" id="3_h2yge"]
+[ext_resource type="Script" uid="uid://bapqs0tgxuf2o" path="res://addons/cards/cards/PlusCard.gd" id="4_1bvp3"]
 
-[node name="main" type="Node2D"]
+[node name="Node2D" type="Node2D"]
 
 [node name="CardBoundary" type="Area2D" parent="."]
-script = ExtResource("1_0xm2m")
-id = "9a5aa796-f8bf-4f80-a4bd-95815cf8e35c"
-metadata/_custom_type_script = ExtResource("1_0xm2m")
-
-[node name="Camera2D" type="Camera2D" parent="CardBoundary"]
-position = Vector2(961, 540)
-script = ExtResource("2_h2yge")
-
-[node name="NumberCard" type="Node2D" parent="CardBoundary" node_paths=PackedStringArray("incoming", "named_outgoing")]
-position = Vector2(795.481, 598.939)
-script = ExtResource("4_1bvp3")
-id = "9003804c-6dac-488f-bc83-9b298b7a26cb"
-incoming = [NodePath("../IncrementCard")]
-named_outgoing = {
-"left": NodePath("../PlusCard"),
-"right": null
-}
-metadata/_custom_type_script = ExtResource("4_1bvp3")
-
-[node name="IncrementCard" type="Node2D" parent="CardBoundary" node_paths=PackedStringArray("incoming", "outgoing")]
-position = Vector2(698.414, 651.483)
-script = ExtResource("4_lquwl")
-id = "32277d3a-dd6d-481e-a6fd-2315b46d7025"
-incoming = [NodePath("../PhysicsProcessCard")]
-outgoing = [NodePath("../NumberCard")]
-metadata/_custom_type_script = ExtResource("4_lquwl")
-
-[node name="PhysicsProcessCard" type="Node2D" parent="CardBoundary" node_paths=PackedStringArray("outgoing")]
-position = Vector2(638, 777)
-script = ExtResource("5_lquwl")
-id = "d269e3c0-226d-4374-afe1-b321e432902c"
-outgoing = [NodePath("../IncrementCard")]
-metadata/_custom_type_script = ExtResource("5_lquwl")
-
-[node name="PlusCard" type="Node2D" parent="CardBoundary" node_paths=PackedStringArray("named_outgoing", "named_incoming")]
-position = Vector2(962.193, 611.476)
-script = ExtResource("3_h2yge")
-id = "ac8fc86b-180a-46ed-8c92-ecd21deb000b"
-named_outgoing = {
-"object": null
-}
-named_incoming = {
-"left": NodePath("../NumberCard"),
-"right": null
-}
-metadata/_custom_type_script = ExtResource("3_h2yge")
-
-[node name="NumberCard2" type="Node2D" parent="CardBoundary" node_paths=PackedStringArray("named_outgoing")]
-position = Vector2(927, 922)
-script = ExtResource("4_1bvp3")
-id = "ed2162bf-8b22-4b68-928a-a667a4e8857b"
-named_outgoing = {
-"left": null,
-"right": null,
-"value": null
-}
-metadata/_custom_type_script = ExtResource("4_1bvp3")
-
-[node name="SetCard" type="Node2D" parent="CardBoundary" node_paths=PackedStringArray("named_incoming")]
-position = Vector2(1139, 805)
-script = ExtResource("7_5vw27")
-property_name = "name"
-id = "5a512619-1d7b-41f2-9b7d-51799f990153"
-named_incoming = {
-"object": null,
-"value": null
-}
-metadata/_custom_type_script = ExtResource("7_5vw27")
-
-[node name="CharacterBody2D" type="CharacterBody2D" parent="CardBoundary"]
-position = Vector2(1041, 859)
-
-[node name="Placeholder" type="Node2D" parent="CardBoundary/CharacterBody2D"]
-script = ExtResource("7_272bh")
-placeholder_size = Vector2(20, 20)
-metadata/_custom_type_script = ExtResource("7_272bh")
+script = ExtResource("1_ig7tw")
+id = "4d539466-3572-4d4f-b596-fdb825ac923e"
+metadata/_custom_type_script = ExtResource("1_ig7tw")
 
 [node name="CollisionCard" type="Node2D" parent="CardBoundary"]
-position = Vector2(1122, 926)
-script = ExtResource("9_kek77")
-id = "a9aed2a2-45f2-4b0d-82f2-2aba5f747e71"
-metadata/_custom_type_script = ExtResource("9_kek77")
+position = Vector2(753, 454)
+script = ExtResource("3_1bvp3")
+id = "1648faab-9727-478b-a4c2-9722845148b2"
+outgoing = Array[NodePath]([NodePath("../NumberCard")])
+metadata/_custom_type_script = ExtResource("3_1bvp3")
+
+[node name="NumberCard" type="Node2D" parent="CardBoundary"]
+position = Vector2(883, 463)
+script = ExtResource("3_h2yge")
+id = "026f606c-d9a8-4875-8def-b4331fc63d23"
+incoming = Array[NodePath]([NodePath("../CollisionCard")])
+named_outgoing = Dictionary[String, NodePath]({
+"right": NodePath("../PlusCard")
+})
+metadata/_custom_type_script = ExtResource("3_h2yge")
+
+[node name="PlusCard" type="Node2D" parent="CardBoundary"]
+position = Vector2(905, 572)
+script = ExtResource("4_1bvp3")
+id = "938b6f02-632e-488f-b526-cc4508b9553f"
+outgoing = Array[NodePath]([NodePath("../NumberCard2")])
+named_incoming = Dictionary[String, NodePath]({
+"left": NodePath("../NumberCard3"),
+"right": NodePath("../NumberCard")
+})
+metadata/_custom_type_script = ExtResource("4_1bvp3")
+
+[node name="NumberCard2" type="Node2D" parent="CardBoundary"]
+position = Vector2(825, 675)
+script = ExtResource("3_h2yge")
+id = "b4dc944b-3b77-4108-8530-fe11d1615a57"
+incoming = Array[NodePath]([NodePath("../PlusCard")])
+named_outgoing = Dictionary[String, NodePath]({
+"left": NodePath("")
+})
+metadata/_custom_type_script = ExtResource("3_h2yge")
+
+[node name="NumberCard3" type="Node2D" parent="CardBoundary"]
+position = Vector2(1038, 609)
+script = ExtResource("3_h2yge")
+id = "e998c3c5-6478-4687-bf98-e37249d5a886"
+named_outgoing = Dictionary[String, NodePath]({
+"left": NodePath("../PlusCard")
+})
+metadata/_custom_type_script = ExtResource("3_h2yge")

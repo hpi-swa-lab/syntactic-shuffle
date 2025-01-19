@@ -14,9 +14,10 @@ func _draw():
 		draw_connection(self, to, false)
 	var named = card.named_outgoing
 	for name in named:
-		if named[name]:
-			draw_connection(self, named[name], false)
-			draw_label_to(named[name], name)
+		var node = card.get_node_or_null(named[name])
+		if node:
+			draw_connection(self, node, false)
+			draw_label_to(node, name)
 
 func check_redraw(delta):
 	if should_redraw(): queue_redraw()
@@ -29,10 +30,7 @@ func should_redraw():
 	
 	var deps = []
 	for to in card.get_outgoing(): deps.push_back(to.global_position)
-	var named = card.named_outgoing
-	for name in named:
-		if named[name]:
-			deps.push_back(named[name].global_position)
+	for node in card.get_named_outgoing(): deps.push_back(node.global_position)
 	if not deps.is_empty(): deps.push_back(global_position)
 	
 	var comp_deps = last_deps

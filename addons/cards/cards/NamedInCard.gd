@@ -20,9 +20,10 @@ func try_connect(them: Node):
 	if detect_cycles_for_new_connection(parent, them): return
 	
 	var named = parent.named_incoming
+	var p = parent.get_path_to(them)
 	for name in named:
-		# don't allow us to appear in multiple connections to this input
-		if named[name] == them: return
+		# don't allow them to appear in multiple connections to us
+		if named[name] == p: return
 		# only allow one connection to us
 		if name == input_name and named[name]: return
 	
