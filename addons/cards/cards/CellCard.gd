@@ -25,15 +25,15 @@ func s():
 	# refresh type info
 	self.type = type
 	
-	var code_card = CodeCard.create(["*"], func (card, args):
-		data = args[0]
-		card.output([args[0]]))
+	var code_card = CodeCard.create({"arg": "*"}, ["*"], func (card, args):
+		data = args["args"]
+		card.output([data]))
 	code_card.c(out_card)
 	
 	var override_card = InCard.command("store", "*")
 	override_card.c(code_card)
 	
-	var trigger_code_card = CodeCard.create(["*"], func (card): card.output([data]))
+	var trigger_code_card = CodeCard.create({}, ["*"], func (card): card.output([data]))
 	trigger_code_card.c(out_card)
 	
 	var trigger_card = InCard.trigger()

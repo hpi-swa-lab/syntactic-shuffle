@@ -12,9 +12,9 @@ func s():
 	
 	var out_card = OutCard.data()
 	
-	var code_card = CodeCard.create(["float"], func (card: CodeCard):
-		var l = remember_left_card.get_remembered()
-		var r = remember_right_card.get_remembered()
+	var code_card = CodeCard.create({"left": "float", "right": "float"}, ["float"], func (card: CodeCard, args):
+		var l = args["left"]
+		var r = args["right"]
 		if l and r: card.output([l[0] + r[0]]))
 	code_card.c(out_card)
 	

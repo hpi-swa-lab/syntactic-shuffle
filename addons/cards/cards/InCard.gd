@@ -26,7 +26,16 @@ func s():
 	description("Receive input.")
 	icon("forward.png")
 
-func invoke(args: Array, signature: Array[String], named = ""):
+func _get_remembered_for(signature: Array[String]):
+	for card in parent.get_all_incoming():
+		var val = get_remembered_for(card, signature)
+		if val: return val
+	return null
+
+func get_remembered():
+	return _get_remembered_for(signature)
+
+func invoke(args: Array, signature: Array[String], named = "", remember = false):
 	for card in get_outgoing():
 		card.invoke(args, signature)
 

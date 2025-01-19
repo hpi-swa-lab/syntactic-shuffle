@@ -21,10 +21,10 @@ func s():
 	# refresh
 	self.property_name = property_name
 	
-	var code_card = CodeCard.create(["*"], func (card, args):
+	var code_card = CodeCard.create({"value": "*", "object": "*"}, ["*"], func (card, args):
 		print(args))
 	
 	var in_value_card = NamedInCard.named_data("object", "*")
-	in_value_card.c(code_card)
+	in_value_card.c_named("value", code_card)
 	
-	in_object_card.c(code_card)
+	in_object_card.c_named("object", code_card)

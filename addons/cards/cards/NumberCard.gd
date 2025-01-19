@@ -32,7 +32,7 @@ func s():
 	var trigger_card = InCard.trigger()
 	trigger_card.c(cell_card)
 	
-	var increment_code = CodeCard.create(["increment"], func (card):
+	var increment_code = CodeCard.create({}, ["increment"], func (card):
 		card.parent.number += 1)
 	var increment_card = InCard.command("increment")
 	increment_card.c(increment_code)

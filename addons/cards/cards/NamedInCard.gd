@@ -4,7 +4,10 @@ class_name NamedInCard
 
 static func named_data(name: String, type: String):
 	var c = NamedInCard.new()
-	c.signature = [type] as Array[String]
+	if type:
+		c.signature = [type] as Array[String]
+	else:
+		c.signature = [] as Array[String]
 	c.input_name = name
 	return c
 

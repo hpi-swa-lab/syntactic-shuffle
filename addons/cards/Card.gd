@@ -104,7 +104,7 @@ func c_named(name: String, other: Card):
 func allow_cycles():
 	pass
 
-var parent: Card
+var parent: Node
 @export var incoming: Array[NodePath] = []
 @export var outgoing: Array[NodePath] = []
 @export var named_outgoing: Dictionary[String, NodePath] = {}
@@ -159,6 +159,12 @@ func get_named_outcoming_at(name: String):
 	var p = named_outgoing.get(name)
 	return get_node_or_null(p) if p else null
 
+func get_all_incoming() -> Array:
+	var all = []
+	all.append_array(get_incoming())
+	all.append_array(get_named_incoming())
+	return all
+
 func disconnect_all():
 	pass
 
@@ -169,7 +175,10 @@ static func get_object_cards(object: Node):
 	if object is Card: return object.cards
 	else: return [get_object_out_card(object)]
 static func get_object_out_card(object: Node):
-	return get_meta_or(object, "cards_out_card", func(): return OutCard.static_signature([object.get_class()]))
+	var c = get_meta_or(object, "cards_out_card", func(): return OutCard.static_signature([object.get_class()], true))
+	c.parent = object
+	if not c.remembered: c.invoke([object], [object.get_class()] as Array[String])
+	return c
 static func get_object_incoming(object: Node):
 	return object.incoming if object is Card else []
 static func get_object_outgoing(object: Node):
@@ -234,6 +243,10 @@ func _process(delta: float) -> void:
 	
 	connection_draw_node.check_redraw(delta)
 
+func _physics_process(delta: float) -> void:
+	for c in cards:
+		c._physics_process(delta)
+
 static func _each_input_candidate(object: Node, cb: Callable, named: bool):
 	if not object is Card: return
 	for card in object.cards:
@@ -245,6 +258,14 @@ func try_connect(them: Node):
 	_each_input_candidate(them, func (card): card.try_connect(self), true)
 	_each_input_candidate(self, func (card): card.try_connect(them), false)
 	_each_input_candidate(them, func (card): card.try_connect(self), false)
+
+static func get_remembered_for(object: Node, signature: Array[String]):
+	if object is InCard or object is OutCard: return object._get_remembered_for(signature)
+	for card in get_object_cards(object):
+		if card is OutCard:
+			var val = get_remembered_for(card, signature)
+			if val: return val
+	return null
 
 func get_card_boundary():
 	return CardBoundary.get_card_boundary(self)

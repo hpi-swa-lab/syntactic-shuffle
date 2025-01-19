@@ -21,10 +21,11 @@ static func remember_command(command: String):
 	c.command_name = command
 	return c
 
-static func static_signature(signature: Array[String]):
+static func static_signature(signature: Array[String], remember = false):
 	var c = OutCard.new()
 	c.signature = signature
 	c.has_static_signature = true
+	c.remember_message = remember
 	return c
 
 @export var remember_message := false
@@ -33,6 +34,12 @@ static func static_signature(signature: Array[String]):
 @export var signature: Array[String] = []
 
 var remembered
+var remembered_signature
+
+func _get_remembered_for(signature: Array[String]):
+	if remembered_signature == signature:
+		return remembered
+	return null
 
 func s():
 	title("Output")
@@ -61,13 +68,15 @@ func get_out_signatures(signatures: Array):
 func invoke(args: Array, signature: Array[String], named = ""):
 	if Engine.is_editor_hint(): return
 	
-	if remember_message: remembered = args
+	if remember_message:
+		remembered_signature = signature
+		remembered = args
 	if command_name: signature = _add_command(signature)
 	
-	for name in parent.named_outgoing:
-		parent.get_node_or_null(parent.named_outgoing[name]).invoke(args, signature, name)
-	for out in parent.get_outgoing():
-		out.invoke(args, signature, named)
-
-func get_remembered():
-	return remembered
+	var n = get_object_named_outgoing(parent)
+	for name in n:
+		var obj = parent.get_node_or_null(n[name])
+		obj.invoke(args, signature, name)
+	for out in get_object_outgoing(parent):
+		var obj = parent.get_node_or_null(out)
+		obj.invoke(args, signature, named)
