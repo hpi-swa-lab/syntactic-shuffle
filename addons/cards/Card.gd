@@ -196,7 +196,6 @@ func _process(delta: float) -> void:
 	
 	if disable: return
 	if dragging:
-		# check for disconnects
 		for card in get_outgoing(): _check_disconnect(card)
 		for card in get_incoming(): _check_disconnect(card)
 		for name in named_outgoing:
@@ -204,7 +203,6 @@ func _process(delta: float) -> void:
 		for name in named_incoming:
 			if named_incoming[name]: _check_disconnect(named_incoming[name])
 		
-		# check for connects
 		CardBoundary.traverse_connection_candidates(self, func (obj):
 			if obj is Card and global_position.distance_to(obj.global_position) <= MAX_CONNECTION_DISTANCE:
 				try_connect(obj))

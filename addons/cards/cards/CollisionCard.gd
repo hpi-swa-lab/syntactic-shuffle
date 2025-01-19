@@ -1,5 +1,6 @@
 @tool
 extends Card
+class_name CollisionCard
 
 func s():
 	title("Collision")

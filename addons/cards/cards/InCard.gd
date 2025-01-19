@@ -30,6 +30,9 @@ func invoke(args: Array, signature: Array[String], named = ""):
 	for card in get_outgoing():
 		card.invoke(args, signature)
 
+func signature_changed():
+	pass
+
 func try_connect(them: Card):
 	if them.get_outgoing().has(parent): return
 	if detect_cycles_for_new_connection(parent, them): return

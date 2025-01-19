@@ -20,6 +20,7 @@ func s():
 	
 	var cell_card = CellCard.new()
 	cell_card.data = 0.0
+	cell_card.type = "float"
 	cell_card.c(out_card)
 	
 	var store_card = StoreCard.new()
