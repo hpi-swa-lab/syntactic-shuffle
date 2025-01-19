@@ -33,17 +33,17 @@ func invoke(args: Array, signature: Array[String], named = ""):
 func signature_changed():
 	pass
 
-func try_connect(them: Card):
-	if them.get_outgoing().has(parent): return
-	if detect_cycles_for_new_connection(parent, them): return
+func try_connect(them: Node):
+	if parent.get_incoming().has(them): return
+	if them is Card and detect_cycles_for_new_connection(parent, them): return
 	
-	for card in them.cards:
+	for card in Card.get_object_cards(them):
 		if card is OutCard:
 			var their_signatures = []
 			card.get_out_signatures(their_signatures)
 			for their_signature in their_signatures:
 				if signature_match(signature, their_signature):
-					them.connect_to(parent)
+					connect_to(them, parent)
 					return
 
 func detect_cycles_for_new_connection(from: Card, to: Card) -> bool:

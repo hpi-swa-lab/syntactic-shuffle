@@ -4,6 +4,12 @@ class_name Card
 
 const MAX_CONNECTION_DISTANCE = 150
 
+static var active_card_list = []
+static func push_active_card_list(list):
+	active_card_list.push_back(list)
+static func pop_active_card_list():
+	active_card_list.pop_back()
+
 static func editor_sync(message: String, args: Array):
 	if EngineDebugger.is_active(): EngineDebugger.send_message(message, args)
 
@@ -85,22 +91,8 @@ func _ready() -> void:
 	
 	setup(null)
 
-static var active_card_list = []
-static func push_active_card_list(list):
-	active_card_list.push_back(list)
-static func pop_active_card_list():
-	active_card_list.pop_back()
-
-## If your Card defers delivery of outputs you can signal here that it is
-## possible to connect it in a cycle. (Otherwise, if inputs are synchronously
-## delivered to outputs we get an infinite loop).
-func allow_cycles():
-	pass
-
 ## Setup function DSL
-func s():
-	pass
-
+func s(): pass
 func title(t: String): if visual: visual.title(t)
 func description(t: String): if visual: visual.description(t)
 func icon(t: String): if visual: visual.icon(t)
@@ -111,6 +103,11 @@ func c(other: Card):
 func c_named(name: String, other: Card):
 	named_outgoing[name] = other
 	other.named_incoming[name] = self
+## If your Card defers delivery of outputs you can signal here that it is
+## possible to connect it in a cycle. (Otherwise, if inputs are synchronously
+## delivered to outputs we get an infinite loop).
+func allow_cycles():
+	pass
 
 var parent: Card
 @export var incoming: Array[Card] = []
@@ -153,41 +150,58 @@ func get_outgoing() -> Array[Card]:
 func disconnect_all():
 	pass
 
-func disconnect_from(them: Card):
-	self._disconnect_from(them)
-	them._disconnect_from(self)
-
-func _disconnect_from(them: Card):
-	if get_incoming().has(them):
-		incoming.erase(them)
-		return
-	if get_outgoing().has(them):
-		outgoing.erase(them)
-		return
-	for name in named_outgoing:
-		if named_outgoing[name] == them:
-			named_outgoing[name] = null
-			return
-	for name in named_incoming:
-		if named_incoming[name] == them:
-			named_incoming[name] = null
-			return
+static func get_meta_or(object: Node, name: String, default: Callable):
+	if not object.has_meta(name): object.set_meta(name, default.call())
+	return object.get_meta(name)
+static func get_object_cards(object: Node):
+	if object is Card: return object.cards
+	else: return [get_object_out_card(object)]
+static func get_object_out_card(object: Node):
+	return object.get_meta_or("_cards_out_card", func(): return OutCard.static_signature([object.get_class()]))
+static func get_object_incoming(object: Node):
+	return object.incoming if object is Card else []
+static func get_object_outgoing(object: Node):
+	if object is Card: return object.outgoing
+	else: return get_meta_or(object, "_cards_outgoing", func (): return [])
+static func get_object_named_outgoing(object: Node):
+	if object is Card: return object.named_outgoing
+	else: return get_meta_or(object, "_cards_named_outgoing", func (): return {})
+static func get_object_named_incoming(object: Node):
+	return object.named_incoming if object is Card else {}
+static func unset_value(dict: Dictionary, value: Object):
+	for key in dict:
+		if dict[key] == value:
+			dict[key] = null
+			return true
+	return false
+static func try_erase(array: Array, value: Object):
+	if array.has(value):
+		array.erase(value)
+		return true
+	return false
+static func object_disconnect_from(from: Node, to: Node):
+	_object_disconnect_from(from, to)
+	_object_disconnect_from(to, from)
+static func _object_disconnect_from(from: Node, to: Node):
+	if try_erase(get_object_incoming(from), to): return
+	if try_erase(get_object_outgoing(from), to): return
+	if unset_value(get_object_named_outgoing(from), to): return
+	if unset_value(get_object_named_incoming(from), to): return
 	assert("node to disconnect from not found")
-
-func connect_to(them: Card, named = ""):
+static func connect_to(from: Node, to: Node, named = ""):
 	if named:
-		self.named_outgoing[named] = them
-		them.named_incoming[named] = self
+		get_object_named_outgoing(from)[named] = to
+		get_object_named_incoming(to)[named] = from
 	else:
-		self.get_outgoing().push_back(them)
-		them.get_incoming().push_back(self)
+		get_object_outgoing(from).push_back(to)
+		get_object_incoming(to).push_back(from)
 
 func _check_disconnect(them: Card):
 	var my_boundary = get_card_boundary()
 	var their_boundary = get_card_boundary()
 	if (global_position.distance_to(them.global_position) > MAX_CONNECTION_DISTANCE
 		or my_boundary != their_boundary):
-		disconnect_from(them)
+		object_disconnect_from(self, them)
 
 func _process(delta: float) -> void:
 	if dragging and not Engine.is_editor_hint():
@@ -204,21 +218,24 @@ func _process(delta: float) -> void:
 			if named_incoming[name]: _check_disconnect(named_incoming[name])
 		
 		CardBoundary.traverse_connection_candidates(self, func (obj):
-			if obj is Card and global_position.distance_to(obj.global_position) <= MAX_CONNECTION_DISTANCE:
+			if (obj is Card or obj is CharacterBody2D) and global_position.distance_to(obj.global_position) <= MAX_CONNECTION_DISTANCE:
 				try_connect(obj))
 	
 	connection_draw_node.check_redraw(delta)
 
-func _each_input_candidate(cb: Callable, named: bool):
-	for card in cards:
+static func _each_input_candidate(object: Node, cb: Callable, named: bool):
+	if not object is Card:
+		if not named: cb.call(get_object_out_card(object))
+		return
+	for card in object.cards:
 		if (named and card is NamedInCard or
 			not named and not card is NamedInCard and card is InCard): cb.call(card)
 
-func try_connect(them: Card):
-	self._each_input_candidate(func (card): card.try_connect(them), true)
-	them._each_input_candidate(func (card): card.try_connect(self), true)
-	self._each_input_candidate(func (card): card.try_connect(them), false)
-	them._each_input_candidate(func (card): card.try_connect(self), false)
+func try_connect(them: Node):
+	_each_input_candidate(self, func (card): card.try_connect(them), true)
+	_each_input_candidate(them, func (card): card.try_connect(self), true)
+	_each_input_candidate(self, func (card): card.try_connect(them), false)
+	_each_input_candidate(them, func (card): card.try_connect(self), false)
 
 func get_card_boundary():
 	return CardBoundary.get_card_boundary(self)

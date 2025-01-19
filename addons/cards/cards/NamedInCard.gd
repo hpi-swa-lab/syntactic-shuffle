@@ -15,7 +15,7 @@ func s():
 	description("Receive input via a named connection.")
 	icon("forward.png")
 
-func try_connect(them: Card):
+func try_connect(them: Node):
 	if them.get_outgoing().has(parent): return
 	if detect_cycles_for_new_connection(parent, them): return
 	
@@ -32,5 +32,5 @@ func try_connect(them: Card):
 			card.get_out_signatures(their_signatures)
 			for their_signature in their_signatures:
 				if signature_match(signature, their_signature):
-					them.connect_to(parent, input_name)
+					connect_to(them, parent, input_name)
 					return
