@@ -10,9 +10,12 @@ static func command(command: String):
 	c.command_name = command
 	return c
 
-static func remember():
+static func remember(init = null, init_signature: Array[String] = []):
 	var c = OutCard.new()
 	c.remember_message = true
+	if init:
+		c.remembered = init
+		c.remembered_signature = init_signature
 	return c
 
 static func remember_command(command: String):
@@ -72,6 +75,10 @@ func invoke(args: Array, signature: Array[String], named = ""):
 		remembered_signature = signature
 		remembered = args
 	if command_name: signature = _add_command(signature)
+	
+	if has_static_signature:
+		assert(signature_match(signature, self.signature))
+		signature = self.signature
 	
 	var n = get_object_named_outgoing(parent)
 	for name in n:

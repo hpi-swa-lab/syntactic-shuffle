@@ -38,3 +38,10 @@ func try_connect(them: Node):
 				if signature_match(signature, their_signature):
 					connect_to(them, parent, input_name)
 					return
+
+func _get_remembered_for(signature: Array[String]):
+	var card = parent.get_node_or_null(parent.named_incoming[input_name])
+	if is_valid_incoming(card, signature):
+		var val = get_remembered_for(card, signature)
+		if val: return val
+	return null

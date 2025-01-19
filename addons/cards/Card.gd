@@ -175,9 +175,13 @@ static func get_object_cards(object: Node):
 	if object is Card: return object.cards
 	else: return [get_object_out_card(object)]
 static func get_object_out_card(object: Node):
-	var c = get_meta_or(object, "cards_out_card", func(): return OutCard.static_signature([object.get_class()], true))
+	# FIXME storing the card in meta led to serialization issues.
+	# Not sure if we will get a noticeable performance impact from recreating the
+	# card on every request.
+	var c = OutCard.static_signature([object.get_class()], true)
 	c.parent = object
-	if not c.remembered: c.invoke([object], [object.get_class()] as Array[String])
+	c.remembered = [object]
+	c.remembered_signature = [object.get_class()] as Array[String]
 	return c
 static func get_object_incoming(object: Node):
 	return object.incoming if object is Card else []

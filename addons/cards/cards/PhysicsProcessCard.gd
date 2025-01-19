@@ -7,7 +7,7 @@ var out_card: OutCard
 func s():
 	title("Physics Process")
 	description("Invoke in every physics tick.")
-	icon("code.png")
+	icon("always.png")
 	
 	out_card = OutCard.static_signature([])
 

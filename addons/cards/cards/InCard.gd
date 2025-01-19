@@ -28,16 +28,29 @@ func s():
 
 func _get_remembered_for(signature: Array[String]):
 	for card in parent.get_all_incoming():
-		var val = get_remembered_for(card, signature)
-		if val: return val
+		if is_valid_incoming(card, signature):
+			var val = get_remembered_for(card, signature)
+			if val: return val
 	return null
+
+func is_valid_incoming(card, signature):
+	return true
+	# FIXME this needed?
+	#var s = []
+	#card.get_out_signatures(s)
+	#for sig in s:
+		#if signature_match(sig, signature): return true
+	#return false
 
 func get_remembered():
 	return _get_remembered_for(signature)
 
-func invoke(args: Array, signature: Array[String], named = "", remember = false):
+func invoke(args: Array, signature: Array[String], named = ""):
 	for card in get_outgoing():
 		card.invoke(args, signature)
+	for name in named_outgoing:
+		var card = get_node_or_null(named_outgoing[name])
+		if card: card.invoke(args, signature, name)
 
 func signature_changed():
 	pass

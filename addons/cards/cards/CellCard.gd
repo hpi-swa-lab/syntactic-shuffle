@@ -21,17 +21,17 @@ func s():
 	description("Store or piece of data.")
 	icon("number.png")
 	
-	out_card = OutCard.new()
+	out_card = OutCard.remember(data, [type])
 	# refresh type info
 	self.type = type
 	
 	var code_card = CodeCard.create({"arg": "*"}, ["*"], func (card, args):
-		data = args["args"]
+		data = args["arg"][0]
 		card.output([data]))
 	code_card.c(out_card)
 	
 	var override_card = InCard.command("store", "*")
-	override_card.c(code_card)
+	override_card.c_named("arg", code_card)
 	
 	var trigger_code_card = CodeCard.create({}, ["*"], func (card): card.output([data]))
 	trigger_code_card.c(out_card)
