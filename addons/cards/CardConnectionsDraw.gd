@@ -2,7 +2,9 @@ extends Node2D
 class_name CardConnectionsDraw
 
 var card: Card
-var arrows_offset = 0.0
+
+var dragging:
+	get: return card.dragging
 
 func _ready():
 	name = "ConnectionDraw"
@@ -21,25 +23,36 @@ func _draw():
 
 func check_redraw(delta):
 	if should_redraw(): queue_redraw()
-	if card.dragging:
-		arrows_offset += delta
 
 var last_deps = null
 func should_redraw():
 	if card.disable: return false
 	
+	var dragging = card.dragging
 	var deps = []
-	for to in card.get_incoming(): deps.push_back(to.global_position)
-	for node in card.get_named_incoming(): deps.push_back(node.global_position)
+	for to in card.get_incoming():
+		deps.push_back(to.global_position)
+		dragging = dragging or object_is_dragging(to)
+	for node in card.get_named_incoming():
+		deps.push_back(node.global_position)
+		dragging = dragging or object_is_dragging(node)
 	if not deps.is_empty(): deps.push_back(global_position)
 	
 	var comp_deps = last_deps
 	last_deps = deps
-	if comp_deps == null or card.dragging or comp_deps.size() != deps.size(): return true
+	if comp_deps == null or dragging or comp_deps.size() != deps.size(): return true
 	for i in range(deps.size()):
 		if comp_deps[i] != deps[i]:
 			return true
 	return false
+
+func get_draw_offset(from, to):
+	if object_is_dragging(from) or object_is_dragging(to):
+		return Time.get_ticks_msec() / 100.0
+	return 0
+
+static func object_is_dragging(object):
+	return "dragging" in object and object.dragging
 
 func draw_label_to(obj: Node2D, label: String):
 	var font = ThemeDB.fallback_font
@@ -63,7 +76,7 @@ func draw_connection(from, to, inverted):
 	const SIZE = 3
 	const GAP = SIZE * 2.2
 	
-	var offset = arrows_offset * GAP
+	var offset = get_draw_offset(from, to) * GAP
 	offset = offset - int(offset)
 	for i in range(0, distance / GAP):
 		draw_arrow(Vector2(0, (i + offset) * GAP), SIZE, inverted, to)
@@ -84,7 +97,7 @@ func on_activated(them):
 	if current != null:
 		if current.get_total_elapsed_time() < 0.1: return
 		else: current.kill()
-	var t = card.connection_draw_node.create_tween()
+	var t = create_tween()
 	_running_tweens[them] = t
 	if current == null:
 		t.tween_method(flash_line.bind(them), 0.0, 1.0, 0.2)

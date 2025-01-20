@@ -83,7 +83,9 @@ func invoke(args: Array, signature: Array[String], named = ""):
 	var n = get_object_named_outgoing(parent)
 	for name in n:
 		var obj = parent.get_node_or_null(n[name])
+		obj.connection_draw_node.on_activated(parent)
 		obj.invoke(args, signature, name)
 	for out in get_object_outgoing(parent):
 		var obj = parent.get_node_or_null(out)
+		obj.connection_draw_node.on_activated(parent)
 		obj.invoke(args, signature, named)

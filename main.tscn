@@ -26,7 +26,7 @@ named_outgoing = Dictionary[String, NodePath]({
 metadata/_custom_type_script = ExtResource("3_h2yge")
 
 [node name="PlusCard" type="Node2D" parent="CardBoundary"]
-position = Vector2(924, 605)
+position = Vector2(892, 778)
 script = ExtResource("4_1bvp3")
 id = "938b6f02-632e-488f-b526-cc4508b9553f"
 named_incoming = Dictionary[String, NodePath]({
@@ -45,7 +45,7 @@ named_outgoing = Dictionary[String, NodePath]({
 metadata/_custom_type_script = ExtResource("3_h2yge")
 
 [node name="NumberCard3" type="Node2D" parent="CardBoundary"]
-position = Vector2(1052, 649)
+position = Vector2(1016, 619)
 script = ExtResource("3_h2yge")
 id = "e998c3c5-6478-4687-bf98-e37249d5a886"
 named_outgoing = Dictionary[String, NodePath]({
@@ -63,21 +63,21 @@ placeholder_size = Vector2(20, 20)
 metadata/_custom_type_script = ExtResource("5_lquwl")
 
 [node name="MoveCard" type="Node2D" parent="CardBoundary"]
-position = Vector2(630, 660)
+position = Vector2(603, 664)
 script = ExtResource("6_7mycd")
 id = "72710ad0-3a6e-4602-9b73-d342b25ee369"
 incoming = Array[NodePath]([NodePath("../CharacterBody2D"), NodePath("../AxisControlsCard")])
 metadata/_custom_type_script = ExtResource("6_7mycd")
 
 [node name="Vector2Card" type="Node2D" parent="CardBoundary"]
-position = Vector2(449, 862)
+position = Vector2(480, 623)
 script = ExtResource("6_272bh")
 vector = Vector2(1, 0)
 id = "03409fab-1f41-4c2c-ae4c-c96b5c5c3e29"
 metadata/_custom_type_script = ExtResource("6_272bh")
 
 [node name="PhysicsProcessCard" type="Node2D" parent="CardBoundary"]
-position = Vector2(407, 692)
+position = Vector2(360, 719)
 script = ExtResource("7_272bh")
 id = "65377cae-b483-4bbe-a469-5e7750fd47bc"
 metadata/_custom_type_script = ExtResource("7_272bh")
