@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://bqninusgeuw0i"]
+[gd_scene load_steps=12 format=3 uid="uid://bqninusgeuw0i"]
 
 [ext_resource type="Script" path="res://addons/cards/CardBoundary.gd" id="1_ig7tw"]
 [ext_resource type="Script" uid="uid://bvoloc64pi1db" path="res://addons/cards/cards/CollisionCard.gd" id="3_1bvp3"]
@@ -10,8 +10,7 @@
 [ext_resource type="Script" uid="uid://37sr8xfsjcsp" path="res://addons/cards/cards/PhysicsProcessCard.gd" id="7_272bh"]
 [ext_resource type="Script" uid="uid://dkyx51jnk8cvd" path="res://addons/cards/cards/AxisControlsCard.gd" id="8_5vw27"]
 [ext_resource type="Script" uid="uid://cxldeg24krchn" path="res://camera_2d.gd" id="9_kek77"]
-[ext_resource type="Script" path="res://addons/cards/cards/BoolCard.gd" id="10_4c57u"]
-[ext_resource type="Script" path="res://addons/cards/cards/ToggleCard.gd" id="12_dg77c"]
+[ext_resource type="Script" path="res://addons/cards/cards/DeleteCard.gd" id="13_ycdy4"]
 
 [node name="Node2D" type="Node2D"]
 
@@ -59,7 +58,7 @@ metadata/_custom_type_script = ExtResource("3_h2yge")
 
 [node name="CharacterBody2D" type="CharacterBody2D" parent="CardBoundary"]
 position = Vector2(607, 566)
-metadata/cards_outgoing = [NodePath("../MoveCard"), NodePath("../CollisionCard")]
+metadata/cards_outgoing = [NodePath("../MoveCard"), NodePath("../DeleteCard"), NodePath("../CollisionCard")]
 
 [node name="Placeholder" type="Node2D" parent="CardBoundary/CharacterBody2D"]
 script = ExtResource("5_lquwl")
@@ -67,7 +66,7 @@ placeholder_size = Vector2(20, 20)
 metadata/_custom_type_script = ExtResource("5_lquwl")
 
 [node name="MoveCard" type="Node2D" parent="CardBoundary"]
-position = Vector2(595, 659)
+position = Vector2(605, 663)
 script = ExtResource("6_7mycd")
 id = "72710ad0-3a6e-4602-9b73-d342b25ee369"
 incoming = Array[NodePath]([NodePath("../CharacterBody2D"), NodePath("../AxisControlsCard")])
@@ -97,13 +96,6 @@ metadata/_custom_type_script = ExtResource("8_5vw27")
 position = Vector2(960, 537)
 script = ExtResource("9_kek77")
 
-[node name="BoolCard" type="Node2D" parent="CardBoundary"]
-position = Vector2(338, 643)
-script = ExtResource("10_4c57u")
-id = "2dd63444-325a-4cb8-83cc-6b4f18f5b79d"
-incoming = Array[NodePath]([NodePath("../ToggleCard")])
-metadata/_custom_type_script = ExtResource("10_4c57u")
-
 [node name="StaticBody2D" type="StaticBody2D" parent="CardBoundary"]
 position = Vector2(541, 399)
 
@@ -114,17 +106,16 @@ placeholder_size = Vector2(225, 52)
 metadata/_custom_type_script = ExtResource("5_lquwl")
 
 [node name="CollisionCard" type="Node2D" parent="CardBoundary"]
-position = Vector2(502, 559)
+position = Vector2(492, 544)
 script = ExtResource("3_1bvp3")
 id = "7a638eb8-b963-4870-8fd0-5b4d51467e65"
 incoming = Array[NodePath]([NodePath("../CharacterBody2D")])
-outgoing = Array[NodePath]([NodePath("../ToggleCard")])
+outgoing = Array[NodePath]([NodePath("../DeleteCard")])
 metadata/_custom_type_script = ExtResource("3_1bvp3")
 
-[node name="ToggleCard" type="Node2D" parent="CardBoundary"]
-position = Vector2(422, 595)
-script = ExtResource("12_dg77c")
-id = "c6150c79-d664-4885-bd7c-7af95a53b054"
-incoming = Array[NodePath]([NodePath("../CollisionCard")])
-outgoing = Array[NodePath]([NodePath("../BoolCard")])
-metadata/_custom_type_script = ExtResource("12_dg77c")
+[node name="DeleteCard" type="Node2D" parent="CardBoundary"]
+position = Vector2(609, 492)
+script = ExtResource("13_ycdy4")
+id = "0150d4d2-3c49-4b2e-b0ac-c189a56b3e57"
+incoming = Array[NodePath]([NodePath("../CharacterBody2D"), NodePath("../CollisionCard")])
+metadata/_custom_type_script = ExtResource("13_ycdy4")
