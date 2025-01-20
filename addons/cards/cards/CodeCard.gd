@@ -40,7 +40,7 @@ func invoke(args: Array, signature: Array[String], named = ""):
 				if not card: return
 				var remembered = card.get_remembered()
 				# not enough args yet
-				if not remembered: return
+				if remembered == null: return
 				combined_args[card.input_name] = remembered
 		process.call(self, combined_args)
 

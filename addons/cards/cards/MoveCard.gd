@@ -12,7 +12,7 @@ func s():
 	var code_card = CodeCard.create({"velocity": "Vector2", "body": "CharacterBody2D", "trigger": ""}, ["Vector2"], func (card, args):
 		var o = args["body"][0]
 		var v = args["velocity"][0]
-		var friction = 10
+		var friction = 20
 		v = v.lerp(Vector2.ZERO, min(1.0, friction * get_process_delta_time()))
 		o.velocity = v
 		o.move_and_slide()
@@ -29,7 +29,7 @@ func s():
 		var direction = args["direction"][0]
 		var velocity = args["velocity"][0]
 		var _accel = 10
-		var max_velocity = 500
+		var max_velocity = 2000
 		if false: direction = direction.rotated(get_parent().rotation) # rotated
 		var v = velocity.lerp(direction * max_velocity, min(1.0, _accel * get_process_delta_time()))
 		card.output([v]), ["velocity"])

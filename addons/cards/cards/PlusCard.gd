@@ -19,9 +19,9 @@ func s():
 	code_card.c(out_card)
 	
 	remember_left_card = RememberCard.new()
-	remember_left_card.c(code_card)
+	remember_left_card.c_named("left", code_card)
 	remember_right_card = RememberCard.new()
-	remember_right_card.c(code_card)
+	remember_right_card.c_named("right", code_card)
 	
 	var left_card = NamedInCard.named_data("left", "float")
 	left_card.c(remember_left_card)

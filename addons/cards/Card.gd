@@ -83,6 +83,10 @@ func _ready() -> void:
 	get_card_boundary().card_entered(self)
 	
 	setup(null)
+	
+	for card in cards:
+		if card is CellCard:
+			for element in card.get_extra_ui(): ui(element)
 
 var cards_parent = Node2D.new()
 
@@ -268,7 +272,7 @@ static func get_remembered_for(object: Node, signature: Array[String]):
 	for card in get_object_cards(object):
 		if card is OutCard:
 			var val = get_remembered_for(card, signature)
-			if val: return val
+			if val != null: return val
 	return null
 
 func get_card_boundary():

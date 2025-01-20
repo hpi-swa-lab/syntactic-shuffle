@@ -13,7 +13,7 @@ static func command(command: String):
 static func remember(init = null, init_signature: Array[String] = []):
 	var c = OutCard.new()
 	c.remember_message = true
-	if init:
+	if init != null:
 		c.remembered = init
 		c.remembered_signature = init_signature
 	return c
@@ -71,21 +71,23 @@ func get_out_signatures(signatures: Array):
 func invoke(args: Array, signature: Array[String], named = ""):
 	if Engine.is_editor_hint(): return
 	
-	if remember_message:
-		remembered_signature = signature
-		remembered = args
 	if command_name: signature = _add_command(signature)
 	
 	if has_static_signature:
 		assert(signature_match(signature, self.signature))
 		signature = self.signature
 	
+	if remember_message:
+		remembered_signature = signature
+		remembered = args
+	
 	var n = get_object_named_outgoing(parent)
 	for name in n:
 		var obj = parent.get_node_or_null(n[name])
-		obj.connection_draw_node.on_activated(parent)
-		obj.invoke(args, signature, name)
+		if obj:
+			obj.invoke(args, signature, name)
+			obj.connection_draw_node.on_activated(parent)
 	for out in get_object_outgoing(parent):
 		var obj = parent.get_node_or_null(out)
-		obj.connection_draw_node.on_activated(parent)
 		obj.invoke(args, signature, named)
+		obj.connection_draw_node.on_activated(parent)
