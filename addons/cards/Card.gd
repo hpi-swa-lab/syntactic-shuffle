@@ -92,6 +92,7 @@ func _ready() -> void:
 	setup(null)
 	
 	for card in cards:
+		card.setup_finished()
 		if card is CellCard:
 			for element in card.get_extra_ui(): ui(element)
 
@@ -139,15 +140,14 @@ func invoke_outputs(args: Array, signature: Signature):
 	for card in get_outgoing():
 		card.invoke(args, signature)
 
+func setup_finished(): pass
+
 func invoke(args: Array, signature: Signature, named = ""):
 	invoke_inputs(args, signature, named)
 
-static func not_null(obj):
-	return obj != null
-
+static func not_null(obj): return obj != null
 func get_incoming() -> Array:
 	return incoming.map(func (p): return get_node_or_null(p)).filter(not_null)
-
 func get_outgoing() -> Array:
 	return outgoing.map(func (p): return get_node_or_null(p)).filter(not_null)
 
@@ -210,15 +210,17 @@ static func try_erase(array: Array, value: NodePath):
 		array.erase(value)
 		return true
 	return false
+static func _notify_disconnect_incoming(from: Node, to: Node): if to is Card: to.incoming_disconnected(from)
+static func _notify_disconnect_outgoing(from: Node, to: Node): if from is Card: from.incoming_disconnected(to)
 static func object_disconnect_from(from: Node, to: Node):
 	_object_disconnect_from(from, to)
 	_object_disconnect_from(to, from)
 static func _object_disconnect_from(from: Node, to: Node):
 	var p = from.get_path_to(to)
-	if try_erase(get_object_incoming(from), p): return
-	if try_erase(get_object_outgoing(from), p): return
-	if unset_value(get_object_named_outgoing(from), p): return
-	if unset_value(get_object_named_incoming(from), p): return
+	if try_erase(get_object_incoming(from), p): return _notify_disconnect_incoming(to, from)
+	if try_erase(get_object_outgoing(from), p): return _notify_disconnect_outgoing(from, to)
+	if unset_value(get_object_named_outgoing(from), p): return _notify_disconnect_outgoing(from, to)
+	if unset_value(get_object_named_incoming(from), p): return _notify_disconnect_incoming(to, from)
 	assert("node to disconnect from not found")
 static func connect_to(from: Node, to: Node, named = ""):
 	if named:
@@ -248,7 +250,7 @@ func _process(delta: float) -> void:
 		for card in get_named_incoming(): _check_disconnect(card)
 		
 		CardBoundary.traverse_connection_candidates(self, func (obj):
-			if (obj is Card or obj is CharacterBody2D) and global_position.distance_to(obj.global_position) <= MAX_CONNECTION_DISTANCE:
+			if (obj is Card or obj.get_parent() == get_parent()) and global_position.distance_to(obj.global_position) <= MAX_CONNECTION_DISTANCE:
 				try_connect(obj))
 	
 	connection_draw_node.check_redraw(delta)
@@ -284,7 +286,10 @@ func get_base_scale():
 	var s = get_card_boundary().card_scale
 	return Vector2(s, s)
 
-
+func incoming_disconnected(obj: Node):
+	for input in cards:
+		if input is InCard: input.incoming_disconnected(obj)
+func outgoing_disconnected(obj: Node): pass
 
 func editor_sync_prop(name: String):
 	editor_sync("cards:set_prop", [id, name, get(name)])

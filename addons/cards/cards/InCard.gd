@@ -27,6 +27,9 @@ func s():
 	description("Receive input.")
 	icon("forward.png")
 
+func setup_finished():
+	incoming_connected(null)
+
 func _get_remembered_for(signature: Signature):
 	for card in parent.get_all_incoming():
 		if is_valid_incoming(card, signature):
@@ -53,8 +56,13 @@ func invoke(args: Array, signature: Signature, named = ""):
 		var card = get_node_or_null(named_outgoing[name])
 		if card: card.invoke(args, signature, name)
 
-func signature_changed():
-	pass
+func signature_changed(): pass
+
+## An incoming connection from [obj] was established. [obj] is [null]
+## when this is called from the initialization of pre-existing connections.
+func incoming_connected(obj: Node): pass
+
+func incoming_disconnected(obj: Node): pass
 
 func try_connect(them: Node):
 	if parent.get_incoming().has(them): return
@@ -65,8 +73,9 @@ func try_connect(them: Node):
 			var their_signatures = [] as Array[Signature]
 			card.get_out_signatures(their_signatures)
 			for their_signature in their_signatures:
-				if signature.compatible_with(their_signature):
+				if their_signature.compatible_with(signature):
 					connect_to(them, parent)
+					incoming_connected(them)
 					return
 
 func detect_cycles_for_new_connection(from: Card, to: Card) -> bool:
