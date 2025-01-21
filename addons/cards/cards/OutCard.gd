@@ -40,7 +40,7 @@ var remembered
 var remembered_signature
 
 func _get_remembered_for(signature: Signature):
-	if remembered_signature and remembered_signature.compatible_with(signature):
+	if remembered_signature and signature.compatible_with(remembered_signature):
 		for arg in remembered:
 			# guard against freed objects to which we remember references
 			if not is_instance_valid(arg) and typeof(arg) == TYPE_OBJECT:

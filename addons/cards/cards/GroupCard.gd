@@ -11,7 +11,7 @@ func s():
 	
 	var out_card = OutCard.remember()
 	
-	var code_card = CodeCard.create([["trigger", trg()]], {"out": t("Node")}, func (card, args):
+	var code_card = CodeCard.create([["trigger", trg()]], {"out": t("Node")}, func (card):
 		var elements = get_tree().get_nodes_in_group(group_name)
 		if not elements.is_empty():
 			card.output("out", [elements[0]]))

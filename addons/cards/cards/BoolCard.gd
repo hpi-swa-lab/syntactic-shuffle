@@ -19,7 +19,7 @@ func s():
 	var store_card = StoreCard.new()
 	store_card.c(cell_card)
 	
-	var override_card = InCard.data("bool")
+	var override_card = InCard.data(t("bool"))
 	override_card.c(store_card)
 	
 	var trigger_card = InCard.trigger()

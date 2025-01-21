@@ -36,6 +36,7 @@ func invoke(args: Array, signature: Signature, named = ""):
 		var combined_args = [self]
 		var pulled_remembered = []
 		for pair in inputs:
+			if not pair[1].provides_data(): continue
 			if pair[0] == named:
 				combined_args.append_array(args)
 			else:
@@ -49,6 +50,7 @@ func invoke(args: Array, signature: Signature, named = ""):
 				pulled_remembered.push_back(remembered)
 		# FIXME very noisy -- add extra protocol?
 		# for out in pulled_remembered: out.mark_activated(parent)
+		assert(process.get_argument_count() == combined_args.size())
 		process.callv(combined_args)
 
 func output(name: String, args: Array):

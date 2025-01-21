@@ -34,6 +34,7 @@ class CommandSignature extends Signature:
 	func _init(command: String, arg: Signature):
 		self.command = command
 		self.arg = arg if arg else TriggerSignature.new()
+	func provides_data(): return arg.provides_data()
 	func get_description(): return ">{0}[{1}]".format([command, arg.get_description()]) if arg else ">{0}".format([command])
 	func compatible_with(other: Signature): return other.compatible_with_command(self)
 	func compatible_with_command(other: CommandSignature):
@@ -41,6 +42,7 @@ class CommandSignature extends Signature:
 
 class GenericTypeSignature extends Signature:
 	func get_description(): return "*"
+	func provides_data(): return true
 	func compatible_with(other: Signature): return other.compatible_with_generic(self)
 	func compatible_with_type(other: Signature): return true
 
@@ -67,6 +69,7 @@ class StructSignature extends Signature:
 	func _init(props: Dictionary[String, Signature], methods: Array[String]):
 		self.props = props
 		self.methods = methods
+	func provides_data(): return true
 	func get_description():
 		var out = "@"
 		for prop in props: out += "{0}:{1};".format([prop, props[prop].get_description()])
