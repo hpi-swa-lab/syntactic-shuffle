@@ -7,9 +7,8 @@ func s():
 	description("Delete an object.")
 	icon("delete.png")
 	
-	var code_card = CodeCard.create([["body", t("Node")], ["trigger", trg()]], {}, func (card, args):
-		var o = args["body"][0]
-		o.queue_free())
+	var code_card = CodeCard.create([["body", t("Node")], ["trigger", trg()]], {}, func (card, body):
+		body.queue_free())
 	
 	var trigger_card = InCard.trigger()
 	trigger_card.c_named("trigger", code_card)

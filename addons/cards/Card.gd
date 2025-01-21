@@ -218,7 +218,7 @@ static func try_erase(array: Array, value: NodePath):
 		return true
 	return false
 static func _notify_disconnect_incoming(from: Node, to: Node): if to is Card: to.incoming_disconnected(from)
-static func _notify_disconnect_outgoing(from: Node, to: Node): if from is Card: from.incoming_disconnected(to)
+static func _notify_disconnect_outgoing(from: Node, to: Node): if from is Card: from.outgoing_disconnected(to)
 static func object_disconnect_from(from: Node, to: Node):
 	_object_disconnect_from(from, to)
 	_object_disconnect_from(to, from)

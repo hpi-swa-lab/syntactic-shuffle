@@ -37,7 +37,7 @@ func invoke(args: Array, signature: Signature, named = ""):
 		var pulled_remembered = []
 		for pair in inputs:
 			if not pair[1].provides_data(): continue
-			if pair[0] == named:
+			if pair[0] == named and signature.compatible_with(pair[1]):
 				combined_args.append_array(args)
 			else:
 				var card

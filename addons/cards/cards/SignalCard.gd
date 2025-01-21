@@ -6,6 +6,7 @@ class_name SignalCard
 @export var type: String
 
 var sub
+var connect_card
 
 func s():
 	title("Signal")
@@ -14,9 +15,9 @@ func s():
 	
 	var out_card = OutCard.data()
 	
-	var connect_card = CodeCard.create([["obj", cmd("connect", t("Object"))]], {"trigger": trg()}, func (card, obj):
-		sub = func (): card.output("trigger", [])
-		print(sub)
+	connect_card = CodeCard.create([["obj", cmd("connect", t("Object"))]], {"trigger": trg(), "one_arg": t(type)}, func (card, obj):
+		if not signal_name: return
+		sub = func (arg): card.output("one_arg", [arg]) if type else func (): card.output("trigger", [])
 		obj.connect(signal_name, sub))
 	connect_card.c(out_card)
 	
@@ -26,4 +27,4 @@ func s():
 	
 	var in_object = SubscribeInCard.create(t("Object"))
 	in_object.c_named("obj", connect_card)
-	#in_object.c_named("obj", disconnect_card)
+	in_object.c_named("obj", disconnect_card)

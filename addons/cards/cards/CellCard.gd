@@ -30,7 +30,7 @@ func s():
 	# refresh type info
 	self.type = type
 	
-	var code_card = CodeCard.create([["arg", any()]], {"out": any()}, func (card, arg):
+	var code_card = CodeCard.create([["arg", cmd("store", any())]], {"out": any()}, func (card, arg):
 		data = arg
 		card.output("out", [data]))
 	code_card.c(out_card)

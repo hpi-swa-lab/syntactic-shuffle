@@ -9,18 +9,21 @@ func s():
 	
 	var velocity_card = Vector2Card.new()
 	
-	var code_card = CodeCard.create([["velocity", t("Vector2")], ["body", t("CharacterBody2D")], ["trigger", trg()]], {"out": t("Vector2")}, func (card, velocity, body):
+	var code_card = CodeCard.create([["velocity", t("Vector2")], ["body", t("Node")], ["trigger", trg()]], {"out": t("Vector2")}, func (card, velocity, body):
 		var friction = 20
 		velocity = velocity.lerp(Vector2.ZERO, min(1.0, friction * get_process_delta_time()))
-		body.velocity = velocity
-		body.move_and_slide()
+		if body is CharacterBody2D:
+			body.velocity = velocity
+			body.move_and_slide()
+		elif body is Node2D:
+			body.position += velocity
 		card.output("out", [velocity]), ["body", "velocity"])
 	code_card.c(velocity_card)
 	
 	var physics_card = PhysicsProcessCard.new()
 	physics_card.c_named("trigger", code_card)
 	
-	var in_character = InCard.data(t("CharacterBody2D"))
+	var in_character = InCard.data(t("Node"))
 	in_character.c_named("body", code_card)
 	
 	var add_card = CodeCard.create([["direction", t("Vector2")], ["velocity", t("Vector2")]], {"out": t("Vector2")}, func (card, direction, velocity):
