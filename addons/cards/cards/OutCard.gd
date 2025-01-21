@@ -41,6 +41,11 @@ var remembered_signature
 
 func _get_remembered_for(signature: Array[String]):
 	if remembered_signature == signature:
+		for arg in remembered:
+			# guard against freed objects to which we remember references
+			if not is_instance_valid(arg) and typeof(arg) == TYPE_OBJECT:
+				remembered_signature = null
+				remembered = null
 		return remembered
 	return null
 

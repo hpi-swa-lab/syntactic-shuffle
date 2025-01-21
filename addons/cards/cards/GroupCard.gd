@@ -12,7 +12,9 @@ func s():
 	var out_card = OutCard.remember()
 	
 	var code_card = CodeCard.create({"trigger": ""}, ["CharacterBody2D"], func (card, args):
-		card.output([get_tree().get_nodes_in_group(group_name)[0]]))
+		var elements = get_tree().get_nodes_in_group(group_name)
+		if not elements.is_empty():
+			card.output([elements[0]]))
 	code_card.c(out_card)
 	
 	var in_card = InCard.trigger()
