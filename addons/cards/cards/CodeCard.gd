@@ -26,32 +26,31 @@ func s():
 	for pair in inputs:
 		NamedInCard.named_data(pair[0], pair[1])
 
-func invoke(args: Array, signature: Signature, named = ""):
-	if not inputs.is_empty():
-		assert(named, "code cards with inputs can only have named connections")
-	if process.get_argument_count() == 1:
-		process.call(self)
-	else:
-		if pull_only.has(named): return
-		var combined_args = [self]
-		var pulled_remembered = []
-		for pair in inputs:
+func invoke(args: Array, signature: Signature, named = "", source_out = null):
+	if not inputs.is_empty(): assert(named, "code cards with inputs can only have named connections")
+	if pull_only.has(named): return
+	
+	var combined_args = [self]
+	var pulled_remembered = []
+	for pair in inputs:
+		if pair[0] == named:
+			if not signature.compatible_with(pair[1]): return
 			if not pair[1].provides_data(): continue
-			if pair[0] == named and signature.compatible_with(pair[1]):
-				combined_args.append_array(args)
-			else:
-				var card
-				for c in cards: if c is NamedInCard and c.input_name == pair[0]: card = c
-				if not card: return
-				var remembered = card.get_remembered()
-				# not enough args yet
-				if remembered == null: return
-				combined_args.append_array(remembered.get_remembered_value())
-				pulled_remembered.push_back(remembered)
-		# FIXME very noisy -- add extra protocol?
-		# for out in pulled_remembered: out.mark_activated(parent)
-		assert(process.get_argument_count() == combined_args.size())
-		process.callv(combined_args)
+			combined_args.append_array(args)
+		else:
+			if not pair[1].provides_data(): continue
+			var card
+			for c in cards: if c is NamedInCard and c.input_name == pair[0]: card = c
+			if not card: return
+			var remembered = card.get_remembered()
+			# not enough args yet
+			if remembered == null: return
+			combined_args.append_array(remembered.get_remembered_value())
+			pulled_remembered.push_back(remembered)
+	# FIXME very noisy -- add extra protocol?
+	# for out in pulled_remembered: out.mark_activated(parent)
+	assert(process.get_argument_count() == combined_args.size())
+	process.callv(combined_args)
 
 func output(name: String, args: Array):
 	invoke_outputs(args, outputs[name])

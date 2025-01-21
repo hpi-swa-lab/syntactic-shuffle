@@ -50,7 +50,7 @@ func is_valid_incoming(card, signature):
 func get_remembered():
 	return _get_remembered_for(signature)
 
-func invoke(args: Array, signature: Signature, named = ""):
+func invoke(args: Array, signature: Signature, named = "", source_out = null):
 	for card in get_outgoing():
 		card.invoke(args, signature)
 	for name in named_outgoing:

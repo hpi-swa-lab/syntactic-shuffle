@@ -48,8 +48,10 @@ func get_extra_ui() -> Array[Control]:
 	match type:
 		"Vector2":
 			var x = get_number_input()
+			if data: x.value = data.x
 			x.value_changed.connect(func(v): data.x = v)
 			var y = get_number_input()
+			if data: y.value = data.y
 			y.value_changed.connect(func(v): data.y = v)
 			update_ui_func = func(val):
 				y.set_value_no_signal(val.y)
@@ -57,11 +59,13 @@ func get_extra_ui() -> Array[Control]:
 			return [x, y]
 		"float":
 			var n = get_number_input()
+			if data: n.value = data
 			n.value_changed.connect(func(v): data = v)
 			update_ui_func = func(val): n.set_value_no_signal(val)
 			return [n]
 		"bool":
 			var b = CheckButton.new()
+			if data != null: b.pressed = data
 			b.toggled.connect(func(b): data = b)
 			update_ui_func = func(v): b.set_pressed_no_signal(v)
 			return [b]

@@ -9,7 +9,7 @@ var categories = {
 		"NumberCard",
 	],
 	"Time": [
-		#"ClockCard",
+		"ClockCard",
 	],
 	"Actions": [
 		"DeleteCard",

@@ -76,13 +76,13 @@ func get_out_signatures(signatures: Array[Signature]):
 		else:
 			i.get_out_signatures(signatures)
 
-func invoke(args: Array, signature: Signature, named = ""):
+func invoke(args: Array, signature: Signature, named = "", source_out = null):
 	if Engine.is_editor_hint(): return
 	
 	if command_name: signature = _add_command(signature)
 	
 	if has_static_signature:
-		assert(signature.compatible_with(self.signature))
+		if not signature.compatible_with(self.signature): return
 		signature = self.signature
 	
 	if remember_message:
@@ -93,12 +93,7 @@ func invoke(args: Array, signature: Signature, named = ""):
 	for name in n:
 		for p in n[name]:
 			var obj = parent.get_node_or_null(p)
-			obj.invoke(args, signature, name)
-			mark_activated(obj)
+			obj.invoke(args, signature, name, self)
 	for out in get_object_outgoing(parent):
 		var obj = parent.get_node_or_null(out)
-		obj.invoke(args, signature, named)
-		mark_activated(obj)
-
-func mark_activated(to):
-	to.connection_draw_node.on_activated(parent)
+		obj.invoke(args, signature, named, self)

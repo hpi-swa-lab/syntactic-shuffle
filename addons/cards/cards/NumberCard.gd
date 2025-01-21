@@ -2,24 +2,17 @@
 extends Card
 class_name NumberCard
 
-@export var number: float:
-	get:
-		for c in cards:
-			if c is CellCard: return c.data
-		return 0.0
-	set(v):
-		for c in cards:
-			if c is CellCard: c.data = v
+@export var number: float
 
 func s():
 	title("Number")
 	description("Store or present a number.")
 	icon("number.png")
 	
-	var out_card = OutCard.data()
+	var out_card = OutCard.remember([number], t("float"))
 	
 	var cell_card = CellCard.new()
-	cell_card.data = 0.0
+	cell_card.data = number
 	cell_card.type = "float"
 	cell_card.c(out_card)
 	
