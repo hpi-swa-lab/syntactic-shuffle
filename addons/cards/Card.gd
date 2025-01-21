@@ -68,7 +68,8 @@ func setup(parent: Card):
 	pop_active_card_list()
 	cards.append_array(cards_parent.get_children())
 	
-	for card in cards: card.setup(self)
+	for card in cards:
+		card.setup(self)
 	
 	#var outputs = [] as Array[Signature]
 	#get_out_signatures(outputs)
@@ -140,7 +141,8 @@ func invoke_outputs(args: Array, signature: Signature):
 	for card in get_outgoing():
 		card.invoke(args, signature)
 
-func setup_finished(): pass
+func setup_finished():
+	pass
 
 func invoke(args: Array, signature: Signature, named = ""):
 	invoke_inputs(args, signature, named)
@@ -176,6 +178,11 @@ func get_all_incoming() -> Array:
 	var all = []
 	all.append_array(get_incoming())
 	all.append_array(get_named_incoming())
+	return all
+func get_all_outgoing() -> Array:
+	var all = []
+	all.append_array(get_outgoing())
+	all.append_array(get_named_outgoing())
 	return all
 
 func disconnect_all():

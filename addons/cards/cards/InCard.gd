@@ -28,6 +28,7 @@ func s():
 	icon("forward.png")
 
 func setup_finished():
+	super.setup_finished()
 	incoming_connected(null)
 
 func _get_remembered_for(signature: Signature):
@@ -61,9 +62,15 @@ func signature_changed(): pass
 
 ## An incoming connection from [obj] was established. [obj] is [null]
 ## when this is called from the initialization of pre-existing connections.
-func incoming_connected(obj: Node): pass
+func incoming_connected(obj: Node):
+	for card in get_all_outgoing():
+		for input in card.cards:
+			if input is InCard: input.incoming_connected(obj)
 
-func incoming_disconnected(obj: Node): pass
+func incoming_disconnected(obj: Node):
+	for card in get_all_outgoing():
+		for input in card.cards:
+			if input is InCard: input.incoming_disconnected(obj)
 
 func try_connect(them: Node):
 	if parent.get_incoming().has(them): return
