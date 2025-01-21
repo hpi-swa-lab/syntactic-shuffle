@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://bqninusgeuw0i"]
+[gd_scene load_steps=15 format=3 uid="uid://bqninusgeuw0i"]
 
 [ext_resource type="Script" uid="uid://cja8ehiirmcyt" path="res://addons/cards/CardBoundary.gd" id="1_ig7tw"]
 [ext_resource type="Script" uid="uid://dtcitdmnbq585" path="res://addons/cards/cards/NumberCard.gd" id="3_h2yge"]
@@ -12,6 +12,7 @@
 [ext_resource type="Script" uid="uid://c7aevbspikqwh" path="res://addons/cards/cards/GroupCard.gd" id="12_dg77c"]
 [ext_resource type="Script" uid="uid://bvoloc64pi1db" path="res://addons/cards/cards/CollisionCard.gd" id="12_ycdy4"]
 [ext_resource type="Script" uid="uid://dwnls6753y3pv" path="res://addons/cards/cards/DeleteCard.gd" id="13_ycdy4"]
+[ext_resource type="Script" path="res://addons/cards/cards/ForwardTriggerCard.gd" id="14_vivmo"]
 [ext_resource type="Script" uid="uid://bjqiubr544s46" path="res://addons/cards/cards/SignalCard.gd" id="14_w48qg"]
 
 [node name="Node2D" type="Node2D"]
@@ -113,10 +114,10 @@ placeholder_size = Vector2(225, 52)
 metadata/_custom_type_script = ExtResource("5_lquwl")
 
 [node name="DeleteCard" type="Node2D" parent="CardBoundary"]
-position = Vector2(820, 241)
+position = Vector2(794.83, 230.564)
 script = ExtResource("13_ycdy4")
 id = "0150d4d2-3c49-4b2e-b0ac-c189a56b3e57"
-incoming = Array[NodePath]([NodePath("../Area2D")])
+incoming = Array[NodePath]([NodePath("../Area2D"), NodePath("../ForwardTriggerCard")])
 metadata/_custom_type_script = ExtResource("13_ycdy4")
 
 [node name="CharacterBody2D2" type="CharacterBody2D" parent="CardBoundary" groups=["enemy"]]
@@ -172,9 +173,18 @@ circle_radius = 198.446
 metadata/_custom_type_script = ExtResource("5_lquwl")
 
 [node name="SignalCard" type="Node2D" parent="CardBoundary"]
-position = Vector2(1045, 281)
+position = Vector2(926.703, 318.019)
 script = ExtResource("14_w48qg")
 signal_name = "body_entered"
 type = "Node2D"
 id = "5b177f3b-377c-4bd8-9f78-1e275dd1cd17"
+outgoing = Array[NodePath]([NodePath("../ForwardTriggerCard")])
 metadata/_custom_type_script = ExtResource("14_w48qg")
+
+[node name="ForwardTriggerCard" type="Node2D" parent="CardBoundary"]
+position = Vector2(919, 221)
+script = ExtResource("14_vivmo")
+id = "abbf3d33-b9bb-4503-9fd0-ae6bf6670731"
+incoming = Array[NodePath]([NodePath("../SignalCard")])
+outgoing = [NodePath("../DeleteCard")]
+metadata/_custom_type_script = ExtResource("14_vivmo")
