@@ -12,10 +12,8 @@ func s():
 	
 	var out_card = OutCard.data()
 	
-	var code_card = CodeCard.create({"left": "float", "right": "float"}, ["float"], func (card: CodeCard, args):
-		var l = args["left"]
-		var r = args["right"]
-		if l and r: card.output([l[0] + r[0]]))
+	var code_card = CodeCard.create([["left", t("float")], ["right", t("float")]], {"out": t("float")}, func (card, l, r):
+		if l != null and r != null: card.output("out", [l + r]))
 	code_card.c(out_card)
 	
 	remember_left_card = RememberCard.new()
@@ -23,7 +21,7 @@ func s():
 	remember_right_card = RememberCard.new()
 	remember_right_card.c_named("right", code_card)
 	
-	var left_card = NamedInCard.named_data("left", "float")
+	var left_card = NamedInCard.named_data("left", t("float"))
 	left_card.c(remember_left_card)
-	var right_card = NamedInCard.named_data("right", "float")
+	var right_card = NamedInCard.named_data("right", t("float"))
 	right_card.c(remember_right_card)

@@ -2,12 +2,9 @@
 extends InCard
 class_name NamedInCard
 
-static func named_data(name: String, type: String):
+static func named_data(name: String, signature: Signature):
 	var c = NamedInCard.new()
-	if type:
-		c.signature = [type] as Array[String]
-	else:
-		c.signature = [] as Array[String]
+	c.signature = signature
 	c.input_name = name
 	return c
 
@@ -32,14 +29,14 @@ func try_connect(them: Node):
 	
 	for card in get_object_cards(them):
 		if card is OutCard:
-			var their_signatures = []
+			var their_signatures = [] as Array[Signature]
 			card.get_out_signatures(their_signatures)
 			for their_signature in their_signatures:
-				if signature_match(signature, their_signature):
+				if signature.compatible_with(their_signature):
 					connect_to(them, parent, input_name)
 					return
 
-func _get_remembered_for(signature: Array[String]):
+func _get_remembered_for(signature: Signature):
 	var card = parent.get_node_or_null(parent.named_incoming[input_name])
 	if is_valid_incoming(card, signature):
 		var val = get_remembered_for(card, signature)

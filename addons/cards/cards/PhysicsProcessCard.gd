@@ -9,7 +9,7 @@ func s():
 	description("Invoke in every physics tick.")
 	icon("always.png")
 	
-	out_card = OutCard.static_signature([])
+	out_card = OutCard.static_signature(trg())
 
 func _physics_process(delta: float):
-	out_card.invoke([], [])
+	out_card.invoke([], trg())

@@ -8,5 +8,5 @@ func s():
 	icon("number.png")
 
 	var out_card = OutCard.command("store")
-	var in_card = InCard.data("*")
+	var in_card = InCard.data(any())
 	in_card.c(out_card)

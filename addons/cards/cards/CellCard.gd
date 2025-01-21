@@ -16,7 +16,7 @@ var out_card: OutCard
 		if out_card:
 			if v:
 				out_card.has_static_signature = true
-				out_card.signature = [v] as Array[String]
+				out_card.signature = Signature.TypeSignature.new(v)
 			else:
 				out_card.has_static_signature = false
 var update_ui_func = null
@@ -26,19 +26,19 @@ func s():
 	description("Store or piece of data.")
 	icon("number.png")
 	
-	out_card = OutCard.remember([data], [type])
+	out_card = OutCard.remember([data], Signature.TypeSignature.new(type))
 	# refresh type info
 	self.type = type
 	
-	var code_card = CodeCard.create({"arg": "*"}, ["*"], func (card, args):
-		data = args["arg"][0]
-		card.output([data]))
+	var code_card = CodeCard.create([["arg", any()]], {"out": any()}, func (card, arg):
+		data = arg
+		card.output("out", [data]))
 	code_card.c(out_card)
 	
-	var override_card = InCard.command("store", "*")
+	var override_card = InCard.command("store", any())
 	override_card.c_named("arg", code_card)
 	
-	var trigger_code_card = CodeCard.create({}, ["*"], func (card): card.output([data]))
+	var trigger_code_card = CodeCard.create([], {"out": any()}, func (card): card.output("out", [data]))
 	trigger_code_card.c(out_card)
 	
 	var trigger_card = InCard.trigger()

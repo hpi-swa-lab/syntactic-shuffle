@@ -10,7 +10,7 @@ static func command(command: String):
 	c.command_name = command
 	return c
 
-static func remember(init = null, init_signature: Array[String] = []):
+static func remember(init = null, init_signature: Signature = null):
 	var c = OutCard.new()
 	c.remember_message = true
 	if init != null:
@@ -24,7 +24,7 @@ static func remember_command(command: String):
 	c.command_name = command
 	return c
 
-static func static_signature(signature: Array[String], remember = false):
+static func static_signature(signature: Signature, remember = false):
 	var c = OutCard.new()
 	c.signature = signature
 	c.has_static_signature = true
@@ -34,13 +34,13 @@ static func static_signature(signature: Array[String], remember = false):
 @export var remember_message := false
 @export var command_name := ""
 @export var has_static_signature := false
-@export var signature: Array[String] = []
+var signature: Signature
 
 var remembered
 var remembered_signature
 
-func _get_remembered_for(signature: Array[String]):
-	if remembered_signature == signature:
+func _get_remembered_for(signature: Signature):
+	if remembered_signature and remembered_signature.compatible_with(signature):
 		for arg in remembered:
 			# guard against freed objects to which we remember references
 			if not is_instance_valid(arg) and typeof(arg) == TYPE_OBJECT:
@@ -58,12 +58,10 @@ func s():
 	description("Emit output.")
 	icon("forward.png")
 
-func _add_command(signature: Array[String]):
-	var full = [command_name] as Array[String]
-	full.append_array(signature)
-	return full
+func _add_command(signature: Signature) -> Signature:
+	return Signature.CommandSignature.new(command_name, signature)
 
-func get_out_signatures(signatures: Array):
+func get_out_signatures(signatures: Array[Signature]):
 	if has_static_signature:
 		signatures.push_back(signature)
 		return
@@ -77,13 +75,13 @@ func get_out_signatures(signatures: Array):
 		else:
 			i.get_out_signatures(signatures)
 
-func invoke(args: Array, signature: Array[String], named = ""):
+func invoke(args: Array, signature: Signature, named = ""):
 	if Engine.is_editor_hint(): return
 	
 	if command_name: signature = _add_command(signature)
 	
 	if has_static_signature:
-		assert(signature_match(signature, self.signature))
+		assert(signature.compatible_with(self.signature))
 		signature = self.signature
 	
 	if remember_message:

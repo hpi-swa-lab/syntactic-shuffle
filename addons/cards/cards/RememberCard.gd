@@ -11,7 +11,7 @@ func s():
 	
 	out_card = OutCard.remember()
 	
-	var in_card = InCard.data("*")
+	var in_card = InCard.data(any())
 	in_card.c(out_card)
 
 func get_remembered():

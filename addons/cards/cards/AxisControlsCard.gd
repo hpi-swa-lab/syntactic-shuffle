@@ -9,13 +9,13 @@ func s():
 	
 	var out_card = OutCard.data()
 	
-	var code_card = CodeCard.create({"trigger": ""}, ["Vector2"], func (card, args):
+	var code_card = CodeCard.create([["trigger", trg()]], {"out": t("Vector2")}, func (card):
 		var input_direction = Vector2.ZERO
 		if _is_key_pressed("left"): input_direction += Vector2.LEFT
 		if _is_key_pressed("right"): input_direction += Vector2.RIGHT
 		if _is_key_pressed("up"): input_direction += Vector2.UP
 		if _is_key_pressed("down"): input_direction += Vector2.DOWN
-		if input_direction.length() > 0: card.output([input_direction.normalized()]))
+		if input_direction.length() > 0: card.output("out", [input_direction.normalized()]))
 	code_card.c(out_card)
 	
 	var physics_card = PhysicsProcessCard.new()

@@ -9,9 +9,7 @@ func s():
 	
 	var out_card = OutCard.data()
 	
-	var code_card = CodeCard.create({"vector": "Vector2", "normal": "Vector2"}, ["Vector2"], func (card, args):
-		var v = args["vector"]
-		var n = args["normal"]
+	var code_card = CodeCard.create([["vector", t("Vector2")], ["normal", t("Vector2")]], {"out": t("Vector2")}, func (card, v, n):
 		# FIXME n != Vector.ZERO
 		card.output([v.reflect(n)]))
 	code_card.c(out_card)
@@ -21,7 +19,7 @@ func s():
 	var remember_normal_card = RememberCard.new()
 	remember_normal_card.c_named("normal", code_card)
 	
-	var vector_card = NamedInCard.named_data("vector", "Vector2")
+	var vector_card = NamedInCard.named_data("vector", t("Vector2"))
 	vector_card.c(remember_vector_card)
-	var normal_card = NamedInCard.named_data("normal", "Vector2")
+	var normal_card = NamedInCard.named_data("normal", t("Vector2"))
 	normal_card.c(remember_normal_card)

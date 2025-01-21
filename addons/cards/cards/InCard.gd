@@ -3,20 +3,21 @@ extends Card
 class_name InCard
 
 static func trigger():
-	return InCard.new()
-
-static func data(type: String):
 	var c = InCard.new()
-	c.signature = [type] as Array[String]
+	c.signature = trg()
 	return c
 
-static func command(command: String, type: String = ""):
+static func data(signature: Signature):
 	var c = InCard.new()
-	if type: c.signature = [command, type] as Array[String]
-	else: c.signature = [command] as Array[String]
+	c.signature = signature
 	return c
 
-@export var signature: Array[String] = []
+static func command(command: String, type: Signature = null):
+	var c = InCard.new()
+	c.signature = cmd(command, type)
+	return c
+
+var signature: Signature
 
 func get_out_signatures(list: Array):
 	list.push_back(signature)
@@ -26,7 +27,7 @@ func s():
 	description("Receive input.")
 	icon("forward.png")
 
-func _get_remembered_for(signature: Array[String]):
+func _get_remembered_for(signature: Signature):
 	for card in parent.get_all_incoming():
 		if is_valid_incoming(card, signature):
 			var val = get_remembered_for(card, signature)
@@ -45,7 +46,7 @@ func is_valid_incoming(card, signature):
 func get_remembered():
 	return _get_remembered_for(signature)
 
-func invoke(args: Array, signature: Array[String], named = ""):
+func invoke(args: Array, signature: Signature, named = ""):
 	for card in get_outgoing():
 		card.invoke(args, signature)
 	for name in named_outgoing:
@@ -61,10 +62,10 @@ func try_connect(them: Node):
 	
 	for card in Card.get_object_cards(them):
 		if card is OutCard:
-			var their_signatures = []
+			var their_signatures = [] as Array[Signature]
 			card.get_out_signatures(their_signatures)
 			for their_signature in their_signatures:
-				if signature_match(signature, their_signature):
+				if signature.compatible_with(their_signature):
 					connect_to(them, parent)
 					return
 

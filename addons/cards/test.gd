@@ -2,10 +2,10 @@
 extends CardBoundary
 
 class ManualTriggerCard extends Card:
-	var type: Array[String]
+	var type: Signature
 	var out_card: OutCard
 	
-	func _init(type: Array[String]):
+	func _init(type: Signature):
 		super._init()
 		self.type = type
 	
@@ -52,9 +52,9 @@ func test_named_addition_and_store(ready):
 	a.c_named("left", plus)
 	var b = NumberCard.new()
 	b.c_named("right", plus)
-	var a_trigger = ManualTriggerCard.new([])
+	var a_trigger = ManualTriggerCard.new(Signature.TriggerSignature.new())
 	a_trigger.c(a)
-	var b_trigger = ManualTriggerCard.new([])
+	var b_trigger = ManualTriggerCard.new(Signature.TriggerSignature.new())
 	b_trigger.c(b)
 	
 	ready.call()

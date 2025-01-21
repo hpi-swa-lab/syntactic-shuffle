@@ -2,17 +2,17 @@
 extends Card
 class_name CodeCard
 
-static func create(inputs: Dictionary[String, String], signature: Array[String], process: Callable, pull_only = []):
+static func create(inputs: Array[Array], outputs: Dictionary[String, Signature], process: Callable, pull_only = []):
 	var c = CodeCard.new()
-	c.signature = signature
+	c.outputs = outputs
 	c.process = process
 	c.inputs = inputs
 	c.pull_only = pull_only
 	return c
 
-var signature: Array[String]
+var outputs: Dictionary[String, Signature]
 var process: Callable
-var inputs: Dictionary[String, String]
+var inputs: Array[Array]
 var pull_only: Array
 
 func s():
@@ -20,33 +20,36 @@ func s():
 	description("Run some code.")
 	icon("code.png")
 	
-	var out_card = OutCard.static_signature(signature)
+	for output in outputs:
+		OutCard.static_signature(outputs[output])
 	
-	for input in inputs:
-		NamedInCard.named_data(input, inputs[input])
+	for pair in inputs:
+		NamedInCard.named_data(pair[0], pair[1])
 
-func invoke(args: Array, signature: Array[String], named = ""):
+func invoke(args: Array, signature: Signature, named = ""):
 	if not inputs.is_empty():
 		assert(named, "code cards with inputs can only have named connections")
 	if process.get_argument_count() == 1:
 		process.call(self)
 	else:
 		if pull_only.has(named): return
-		var combined_args = {named: args}
+		var combined_args = [self]
 		var pulled_remembered = []
-		for input_name in inputs:
-			if input_name != named:
+		for pair in inputs:
+			if pair[0] == named:
+				combined_args.append_array(args)
+			else:
 				var card
-				for c in cards: if c is NamedInCard and c.input_name == input_name: card = c
+				for c in cards: if c is NamedInCard and c.input_name == pair[0]: card = c
 				if not card: return
 				var remembered = card.get_remembered()
 				# not enough args yet
 				if remembered == null: return
-				combined_args[card.input_name] = remembered.get_remembered_value()
+				combined_args.append_array(remembered.get_remembered_value())
 				pulled_remembered.push_back(remembered)
 		# FIXME very noisy -- add extra protocol?
 		# for out in pulled_remembered: out.mark_activated(parent)
-		process.call(self, combined_args)
+		process.callv(combined_args)
 
-func output(args: Array):
-	invoke_outputs(args, signature)
+func output(name: String, args: Array):
+	invoke_outputs(args, outputs[name])

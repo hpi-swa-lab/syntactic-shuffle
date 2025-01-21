@@ -69,6 +69,13 @@ func setup(parent: Card):
 	cards.append_array(cards_parent.get_children())
 	
 	for card in cards: card.setup(self)
+	
+	#var outputs = [] as Array[Signature]
+	#get_out_signatures(outputs)
+	#for other in get_all_incoming():
+		#var inputs = []
+		#other.get_in_signatures(inputs)
+		#assert(outputs.any(func (o): return inputs.any(func (i): return o.compatible_with(i))))
 
 func _ready() -> void:
 	connection_draw_node.card = self
@@ -116,29 +123,24 @@ var parent: Node
 
 func get_out_signatures(signatures: Array):
 	for card in cards:
-		if card is OutCard:
-			card.get_out_signatures(signatures)
+		if card is OutCard: card.get_out_signatures(signatures)
 
-func invoke_inputs(args: Array, signature: Array[String], named = ""):
+func get_in_signatures(signatures: Array):
+	for card in cards:
+		if card is InCard: signatures.push_back(card.signature)
+
+func invoke_inputs(args: Array, signature: Signature, named = ""):
 	for input in cards:
 		if not named and input is InCard or named and input is NamedInCard and input.input_name == named:
-			if signature_match(signature, input.signature):
+			if signature.compatible_with(input.signature):
 				input.invoke(args, signature)
 
-func invoke_outputs(args: Array, signature: Array[String]):
+func invoke_outputs(args: Array, signature: Signature):
 	for card in get_outgoing():
 		card.invoke(args, signature)
 
-func invoke(args: Array, signature: Array[String], named = ""):
+func invoke(args: Array, signature: Signature, named = ""):
 	invoke_inputs(args, signature, named)
-
-func signature_match(a: Array[String], b: Array[String]) -> bool:
-	if a.is_empty() and b.is_empty(): return true
-	if a.size() != b.size(): return false
-	for i in range(a.size()):
-		if a[i] != b[i] and a[i] != "*" and b[i] != "*":
-			return false
-	return true
 
 static func not_null(obj):
 	return obj != null
@@ -182,10 +184,10 @@ static func get_object_out_card(object: Node):
 	# FIXME storing the card in meta led to serialization issues.
 	# Not sure if we will get a noticeable performance impact from recreating the
 	# card on every request.
-	var c = OutCard.static_signature([object.get_class()], true)
+	var c = OutCard.static_signature(t(object.get_class()), true)
 	c.parent = object
 	c.remembered = [object]
-	c.remembered_signature = [object.get_class()] as Array[String]
+	c.remembered_signature = c.signature
 	return c
 static func get_object_incoming(object: Node):
 	return object.incoming if object is Card else []
@@ -267,7 +269,7 @@ func try_connect(them: Node):
 	_each_input_candidate(self, func (card): card.try_connect(them), false)
 	_each_input_candidate(them, func (card): card.try_connect(self), false)
 
-static func get_remembered_for(object: Node, signature: Array[String]):
+static func get_remembered_for(object: Node, signature: Signature):
 	if object is InCard or object is OutCard: return object._get_remembered_for(signature)
 	for card in get_object_cards(object):
 		if card is OutCard:
@@ -291,3 +293,11 @@ func _forward_canvas_gui_input(event: InputEvent, undo_redo):
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		dragging = event.pressed
 	return false
+
+# DSL for signatures
+static func trg(): return Signature.TriggerSignature.new()
+static func none(): return Signature.VoidSignature.new()
+static func t(type: String): return Signature.TypeSignature.new(type)
+static func cmd(name: String, arg = null): return Signature.CommandSignature.new(name, arg)
+static func any(): return Signature.GenericTypeSignature.new()
+static func struct(props, methods): return Signature.StructSignature.new(props, methods)

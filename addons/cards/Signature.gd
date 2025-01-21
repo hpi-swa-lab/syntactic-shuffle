@@ -3,8 +3,9 @@ class_name Signature
 
 func compatible_with(other: Signature): pass
 func get_description(): pass
+func provides_data(): return false
 func compatible_with_command(other: CommandSignature): return false
-func compatible_with_null(other: NullSignature): return false
+func compatible_with_trigger(other: TriggerSignature): return false
 func compatible_with_generic(other: GenericTypeSignature): return false
 func compatible_with_type(other: TypeSignature): return false
 func compatible_with_struct(other: StructSignature): return false
@@ -15,6 +16,7 @@ class TypeSignature extends Signature:
 	func _init(type: String):
 		self.type = type
 	func get_description(): return type
+	func provides_data(): return true
 	func compatible_with(other: Signature): return other.compatible_with_type(self)
 	func compatible_with_generic(other: GenericTypeSignature): return true
 	func compatible_with_type(other: TypeSignature):
@@ -31,7 +33,7 @@ class CommandSignature extends Signature:
 	var command: String
 	func _init(command: String, arg: Signature):
 		self.command = command
-		self.arg = arg if arg else NullSignature.new()
+		self.arg = arg if arg else TriggerSignature.new()
 	func get_description(): return ">{0}[{1}]".format([command, arg.get_description()]) if arg else ">{0}".format([command])
 	func compatible_with(other: Signature): return other.compatible_with_command(self)
 	func compatible_with_command(other: CommandSignature):
@@ -42,10 +44,10 @@ class GenericTypeSignature extends Signature:
 	func compatible_with(other: Signature): return other.compatible_with_generic(self)
 	func compatible_with_type(other: Signature): return true
 
-class NullSignature extends Signature:
-	func get_description(): return "[NULL]"
-	func compatible_with(other: Signature): return other.compatible_with_null(self)
-	func compatible_with_null(other: NullSignature): return true
+class TriggerSignature extends Signature:
+	func get_description(): return "[TRIGGER]"
+	func compatible_with(other: Signature): return other.compatible_with_trigger(self)
+	func compatible_with_trigger(other: TriggerSignature): return true
 
 class IteratorSignature extends Signature:
 	var type: Signature
@@ -54,6 +56,10 @@ class IteratorSignature extends Signature:
 	func compatible_with(other: Signature): return other.compatible_with_iterator(self)
 	func get_description(): return "Iterator<{0}>".format([type.get_description()])
 	func compatible_with_iterator(other: IteratorSignature): return other.type.compatible_with(type)
+
+class VoidSignature extends Signature:
+	func get_description(): return "<void>"
+	func compatible_with(other: Signature): return false
 
 class StructSignature extends Signature:
 	var props: Dictionary[String, Signature]

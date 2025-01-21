@@ -26,13 +26,13 @@ func s():
 	var store_card = StoreCard.new()
 	store_card.c(cell_card)
 	
-	var override_card = InCard.data("float")
+	var override_card = InCard.data(t("float"))
 	override_card.c(store_card)
 	
 	var trigger_card = InCard.trigger()
 	trigger_card.c(cell_card)
 	
-	var increment_code = CodeCard.create({}, ["increment"], func (card):
+	var increment_code = CodeCard.create([["trigger", trg()]], {}, func (card, trigger):
 		card.parent.number += 1)
 	var increment_card = InCard.command("increment")
 	increment_card.c(increment_code)

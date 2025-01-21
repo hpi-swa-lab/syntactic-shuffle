@@ -9,7 +9,7 @@ func s():
 	description("Store or present a boolean.")
 	icon("bool.png")
 	
-	var out_card = OutCard.remember([value], ["bool"])
+	var out_card = OutCard.remember([value], t("bool"))
 	
 	var cell_card = CellCard.new()
 	cell_card.data = value
@@ -25,8 +25,8 @@ func s():
 	var trigger_card = InCard.trigger()
 	trigger_card.c(cell_card)
 	
-	var toggle_code = CodeCard.create({"bool": "bool", "trigger": ""}, ["store", "bool"],
-		func(card, args): card.output([not args["bool"][0]]),
+	var toggle_code = CodeCard.create([["value", "bool"], ["trigger", ""]], {"out": cmd("store", t("bool"))},
+		func(card, value): card.output("out", [not value]),
 		["bool"])
 	cell_card.c_named("bool", toggle_code)
 	toggle_code.c(cell_card)
