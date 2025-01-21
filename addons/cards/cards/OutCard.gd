@@ -46,8 +46,12 @@ func _get_remembered_for(signature: Array[String]):
 			if not is_instance_valid(arg) and typeof(arg) == TYPE_OBJECT:
 				remembered_signature = null
 				remembered = null
-		return remembered
+		return self
 	return null
+
+func get_remembered_value():
+	assert(remembered != null)
+	return remembered
 
 func s():
 	title("Output")
@@ -91,8 +95,11 @@ func invoke(args: Array, signature: Array[String], named = ""):
 		var obj = parent.get_node_or_null(n[name])
 		if obj:
 			obj.invoke(args, signature, name)
-			obj.connection_draw_node.on_activated(parent)
+			mark_activated(obj)
 	for out in get_object_outgoing(parent):
 		var obj = parent.get_node_or_null(out)
 		obj.invoke(args, signature, named)
-		obj.connection_draw_node.on_activated(parent)
+		mark_activated(obj)
+
+func mark_activated(to):
+	to.connection_draw_node.on_activated(parent)

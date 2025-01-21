@@ -33,6 +33,7 @@ func invoke(args: Array, signature: Array[String], named = ""):
 	else:
 		if pull_only.has(named): return
 		var combined_args = {named: args}
+		var pulled_remembered = []
 		for input_name in inputs:
 			if input_name != named:
 				var card
@@ -41,7 +42,10 @@ func invoke(args: Array, signature: Array[String], named = ""):
 				var remembered = card.get_remembered()
 				# not enough args yet
 				if remembered == null: return
-				combined_args[card.input_name] = remembered
+				combined_args[card.input_name] = remembered.get_remembered_value()
+				pulled_remembered.push_back(remembered)
+		# FIXME very noisy -- add extra protocol?
+		# for out in pulled_remembered: out.mark_activated(parent)
 		process.call(self, combined_args)
 
 func output(args: Array):
