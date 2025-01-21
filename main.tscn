@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://bqninusgeuw0i"]
+[gd_scene load_steps=16 format=3 uid="uid://bqninusgeuw0i"]
 
 [ext_resource type="Script" uid="uid://cja8ehiirmcyt" path="res://addons/cards/CardBoundary.gd" id="1_ig7tw"]
 [ext_resource type="Script" uid="uid://dtcitdmnbq585" path="res://addons/cards/cards/NumberCard.gd" id="3_h2yge"]
@@ -14,8 +14,9 @@
 [ext_resource type="Script" uid="uid://ca0jjcfdgxur" path="res://addons/cards/cards/OnEnterCard.gd" id="13_w48qg"]
 [ext_resource type="Script" uid="uid://dwnls6753y3pv" path="res://addons/cards/cards/DeleteCard.gd" id="13_ycdy4"]
 [ext_resource type="Script" path="res://addons/cards/cards/ForwardTriggerCard.gd" id="14_vivmo"]
+[ext_resource type="Script" uid="uid://dio881dm6xtr3" path="res://hand.gd" id="15_vivmo"]
 
-[node name="Node2D" type="Node2D"]
+[node name="main" type="Node2D"]
 
 [node name="CardBoundary" type="Area2D" parent="."]
 script = ExtResource("1_ig7tw")
@@ -185,3 +186,6 @@ id = "d501ac32-dbb0-499e-98db-21607c1f927c"
 incoming = Array[NodePath]([NodePath("../Area2D")])
 outgoing = Array[NodePath]([NodePath("../DeleteCard")])
 metadata/_custom_type_script = ExtResource("13_w48qg")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+script = ExtResource("15_vivmo")

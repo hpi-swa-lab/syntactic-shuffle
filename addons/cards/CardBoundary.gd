@@ -108,15 +108,15 @@ func card_entered(card: Card):
 	#card.editor_sync("cards:move_boundary", [card.id, Card.get_id(self)])
 	var tween = card.visual.create_tween()
 	tween.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC) \
-		.tween_property(card.visual, "scale", Vector2(card_scale, card_scale), 0.25)
+		.tween_property(card, "scale", Vector2(card_scale, card_scale), 0.25)
 
 func card_picked_up(card: Card):
 	card.create_tween().tween_property(card, "rotation", 0, 0.1).set_trans(Tween.TRANS_EXPO)
-	card.visual.create_tween().tween_property(card.visual, "scale", Vector2(card_scale * 1.1, card_scale * 1.1), 0.15).set_trans(Tween.TRANS_EXPO)
+	card.create_tween().tween_property(card, "scale", Vector2(card_scale * 1.1, card_scale * 1.1), 0.15).set_trans(Tween.TRANS_EXPO)
 
 func card_dropped(card: Card):
 	_relayout()
-	create_tween().tween_property(card.visual, "scale", Vector2(card_scale, card_scale), 0.15).set_trans(Tween.TRANS_EXPO)
+	create_tween().tween_property(card, "scale", Vector2(card_scale, card_scale), 0.15).set_trans(Tween.TRANS_EXPO)
 
 func background_rect() -> Rect2:
 	# FIXME how to make sure we pick the background and not the extra collision?
@@ -150,13 +150,13 @@ func _apply_card_transform(card: Node2D, new_transform: Transform2D):
 			.tween_property(card, "transform", new_transform, 0.25)
 
 func _relayout_row(spacing = 30, stacked = false, extra_zoom = 1):
-	var horizontal_spacing = spacing * card_scale
+	var horizontal_spacing = spacing
 	var background = background_rect()
-	var extent = my_card_extent() * extra_zoom
-	var left = background.position.x / extra_zoom
+	var extent = CardVisual.base_card_size * extra_zoom
+	var left = background.position.x / extra_zoom / card_scale
 	for card in get_cards():
 		var new_transform = Transform2D(0, Vector2(left + extent.x / extra_zoom / 2, background.position.y + background.size.y / 2))
-		_apply_card_transform(card, new_transform.scaled(Vector2(extra_zoom, extra_zoom)))
+		_apply_card_transform(card, new_transform.scaled(Vector2(extra_zoom, extra_zoom) * card_scale))
 		left += (extent.x / extra_zoom if not stacked else 0) + horizontal_spacing
 
 func _relayout_collapsed_row():
@@ -169,8 +169,8 @@ func _relayout_collapsed_row():
 		
 		var extent = my_card_extent() * EXTRA_ZOOM
 		_extra_collision.shape = RectangleShape2D.new()
-		_extra_collision.shape.size = Vector2((extent.x + GAP)  * get_cards().size(), extent.y)
-		_extra_collision.position = Vector2(_extra_collision.shape.size.x / 2, 0)
+		_extra_collision.shape.size = Vector2((extent.x + GAP) * get_cards().size(), extent.y)
+		_extra_collision.position = Vector2(_extra_collision.shape.size.x / 2 - extent.x / 2, 0)
 
 func _relayout_fan():
 	if not hovered:

@@ -3,39 +3,26 @@ extends CanvasLayer
 var categories = {
 	"Input": [
 		"AxisControlsCard",
-		"RandomAxisCard",
-		"MouseLeftClickCard",
-		"MousePositionCard",
-		"MouseRightClickCard",
 	],
 	"Primitives": [
 		"Vector2Card",
 		"NumberCard",
 	],
 	"Time": [
-		"DelayCard",
-		"ClockCard",
+		#"ClockCard",
 	],
 	"Actions": [
 		"DeleteCard",
-		"SetTextCard",
 	],
 	"Movement": [
 		"CollisionCard",
 		"MoveCard",
-		"TurnByCard",
-		"LookAtCard",
 	],
 	"Math": [
 		"IncrementCard",
-		"MinusCard",
 		"ReflectCard",
 		"PlusCard"
 	],
-	"Groups": [
-		"SceneCard",
-		"SpawnCard"
-	]
 }
 
 func _ready() -> void:

@@ -46,6 +46,7 @@ func _get_remembered_for(signature: Signature):
 			if not is_instance_valid(arg) and typeof(arg) == TYPE_OBJECT:
 				remembered_signature = null
 				remembered = null
+				continue
 		return self
 	return null
 

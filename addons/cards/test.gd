@@ -72,10 +72,10 @@ func test_simple_named_connect(ready):
 	ready.call()
 	l.try_connect(plus)
 	l.try_connect(plus)
-	assert_eq(plus.get_named_incoming_at("left"), l)
+	assert_eq(plus.get_first_named_incoming_at("left"), l)
 	assert(not plus.named_incoming.has("right"))
 	r.try_connect(plus)
-	assert_eq(plus.get_named_incoming_at("right"), r)
+	assert_eq(plus.get_first_named_incoming_at("right"), r)
 
 func test_simple_outgoing_connect(ready):
 	var increment = IncrementCard.new()

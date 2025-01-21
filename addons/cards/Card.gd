@@ -82,8 +82,8 @@ func _ready() -> void:
 	connection_draw_node.card = self
 	add_child(connection_draw_node)
 	
+	scale = get_base_scale()
 	visual = preload("res://addons/cards/CardVisual.tscn").instantiate()
-	visual.scale = get_base_scale()
 	visual.dragging.connect(func (d): dragging = d)
 	visual.paused = paused
 	add_child(visual)
@@ -166,8 +166,8 @@ func _get_named(dict) -> Array:
 			if card: out.append(card)
 	return out
 
-func get_named_incoming_at(name: String):
-	var p = named_incoming.get(name)
+func get_first_named_incoming_at(name: String):
+	var p = named_incoming.get(name)[0]
 	return get_node_or_null(p) if p else null
 
 func get_named_outcoming_at(name: String):
@@ -213,11 +213,9 @@ static func get_object_named_outgoing(object: Node):
 	else: return get_meta_or(object, "cards_named_outgoing", func (): return {})
 static func get_object_named_incoming(object: Node):
 	return object.named_incoming if object is Card else {}
-static func unset_value(dict: Dictionary, value: NodePath):
+static func delete_from_dict_list(dict: Dictionary, value: NodePath):
 	for key in dict:
-		if dict[key] == value:
-			dict[key] = NodePath()
-			return true
+		if try_erase(dict[key], value): return true
 	return false
 static func try_erase(array: Array, value: NodePath):
 	if array.has(value):
@@ -233,8 +231,8 @@ static func _object_disconnect_from(from: Node, to: Node):
 	var p = from.get_path_to(to)
 	if try_erase(get_object_incoming(from), p): return _notify_disconnect_incoming(to, from)
 	if try_erase(get_object_outgoing(from), p): return _notify_disconnect_outgoing(from, to)
-	if unset_value(get_object_named_outgoing(from), p): return _notify_disconnect_outgoing(from, to)
-	if unset_value(get_object_named_incoming(from), p): return _notify_disconnect_incoming(to, from)
+	if delete_from_dict_list(get_object_named_outgoing(from), p): return _notify_disconnect_outgoing(from, to)
+	if delete_from_dict_list(get_object_named_incoming(from), p): return _notify_disconnect_incoming(to, from)
 	assert("node to disconnect from not found")
 static func connect_to(from: Node, to: Node, named = ""):
 	if named:

@@ -61,7 +61,9 @@ func draw_label_to(obj: Node2D, label: String):
 	var flip = abs(angle) > PI / 2
 	const FONT_SIZE = 10
 	const OFFSET = 32
-	draw_set_transform_matrix(Transform2D(angle + PI if flip else angle, Vector2.ZERO) * Transform2D(0.0, Vector2(-OFFSET - font.get_multiline_string_size(label, HORIZONTAL_ALIGNMENT_CENTER, -1, FONT_SIZE).x if flip else OFFSET, -4)))
+	
+	var a = Transform2D(angle + PI if flip else angle, Vector2.ZERO) * Transform2D(0.0, Vector2(-OFFSET - font.get_multiline_string_size(label, HORIZONTAL_ALIGNMENT_CENTER, -1, FONT_SIZE).x if flip else OFFSET, -4))
+	draw_set_transform_matrix(a.scaled(Vector2.ONE / global_scale))
 	draw_string(font, Vector2(0, 0), label, HORIZONTAL_ALIGNMENT_CENTER, -1, FONT_SIZE, Color(Color.WHITE, 0.7))
 
 func draw_connection(from, to, inverted):
@@ -73,7 +75,7 @@ func draw_connection(from, to, inverted):
 	distance = min(distance, 1000)
 	
 	var angle = from.global_position.angle_to_point(target) - from.get_global_transform().get_rotation()
-	draw_set_transform(Vector2.ZERO, angle - PI / 2)
+	draw_set_transform(Vector2.ZERO, angle - PI / 2, Vector2.ONE / global_scale)
 	const SIZE = 3
 	const GAP = SIZE * 2.2
 	

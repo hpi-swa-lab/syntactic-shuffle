@@ -12,5 +12,5 @@ func s():
 	var code_card = CodeCard.create([["in", any()]], {"out": trg()}, func (card): card.output("out", []))
 	code_card.c(out_card)
 	
-	var in_card = InCard.data(any())
+	var in_card = NamedInCard.named_data("data", any())
 	in_card.c_named("in", code_card)
