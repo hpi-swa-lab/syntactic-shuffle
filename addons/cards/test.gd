@@ -35,10 +35,13 @@ func _ready():
 func run_cards_test(test):
 	var cards = Node2D.new()
 	Card.push_active_card_list(cards)
-	test.call(func ():
-		for card in cards.get_children():
-			card.setup(null)
-		Card.pop_active_card_list())
+	if test.get_argument_count() > 0:
+		test.call(func ():
+			for card in cards.get_children():
+				card.setup(null)
+			Card.pop_active_card_list())
+	else:
+		test.call()
 
 func test_named_addition_and_store(ready):
 	var store = NumberCard.new()
@@ -89,3 +92,40 @@ func test_simple_incoming_connect(ready):
 	increment.try_connect(process)
 	assert(process.get_outgoing().has(increment))
 	assert(increment.get_incoming().has(process))
+
+func assert_compatible(a, b, invert = false):
+	assert((not invert) == a.compatible_with(b), "Expected {0} to{2} be compatible with {1}".format([
+		a.get_description(),
+		b.get_description(),
+		" *not*" if invert else ""
+	]))
+func assert_not_compatible(a, b): assert_compatible(a, b, true)
+
+func test_signatures():
+	assert_compatible(Signature.TypeSignature.new("float"), Signature.TypeSignature.new("float"))
+	assert_compatible(
+		Signature.StructSignature.new({"position": Signature.TypeSignature.new("Vector2")}, ["queue_free"]),
+		Signature.TypeSignature.new("Node2D"))
+	assert_not_compatible(
+		Signature.StructSignature.new({"position": Signature.TypeSignature.new("Vector2")}, ["queue_free2"]),
+		Signature.TypeSignature.new("Node2D"))
+	assert_compatible(Signature.TypeSignature.new("float"), Signature.GenericTypeSignature.new())
+	assert_compatible(Signature.GenericTypeSignature.new(), Signature.TypeSignature.new("float"))
+	assert_not_compatible(
+		Signature.CommandSignature.new("increment", null),
+		Signature.GenericTypeSignature.new())
+	assert_not_compatible(
+		Signature.CommandSignature.new("increment", null),
+		Signature.CommandSignature.new("increment", Signature.TypeSignature.new("float")))
+	assert_compatible(
+		Signature.CommandSignature.new("increment", Signature.TypeSignature.new("float")),
+		Signature.CommandSignature.new("increment", Signature.GenericTypeSignature.new()))
+	assert_compatible(
+		Signature.IteratorSignature.new(Signature.TypeSignature.new("float")),
+		Signature.TypeSignature.new("float"))
+	assert_not_compatible(
+		Signature.TypeSignature.new("float"),
+		Signature.IteratorSignature.new(Signature.TypeSignature.new("float")))
+	assert_compatible(Signature.TypeSignature.new("CharacterBody2D"), Signature.TypeSignature.new("Node2D"))
+	assert_not_compatible(Signature.TypeSignature.new("Node2D"), Signature.TypeSignature.new("CharacterBody2D"))
+	assert_not_compatible(Signature.TypeSignature.new("float"), Signature.TypeSignature.new("Vector2"))
