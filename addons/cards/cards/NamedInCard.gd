@@ -23,9 +23,9 @@ func try_connect(them: Node):
 	var p = parent.get_path_to(them)
 	for name in named:
 		# don't allow them to appear in multiple connections to us
-		if named[name] == p: return
+		if named[name].has(p): return
 		# only allow one connection to us
-		if name == input_name and named[name]: return
+		if name == input_name and not named[name].is_empty(): return
 	
 	for card in get_object_cards(them):
 		if card is OutCard:
@@ -37,8 +37,9 @@ func try_connect(them: Node):
 					return
 
 func _get_remembered_for(signature: Signature):
-	var card = parent.get_node_or_null(parent.named_incoming[input_name])
-	if is_valid_incoming(card, signature):
-		var val = get_remembered_for(card, signature)
-		if val != null: return val
+	for p in parent.named_incoming[input_name]:
+		var card = parent.get_node_or_null(p)
+		if is_valid_incoming(card, signature):
+			var val = get_remembered_for(card, signature)
+			if val != null: return val
 	return null

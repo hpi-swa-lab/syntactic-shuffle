@@ -108,8 +108,8 @@ func c(other: Card):
 	outgoing.push_back(get_path_to(other))
 	other.incoming.push_back(other.get_path_to(self))
 func c_named(name: String, other: Card):
-	named_outgoing[name] = get_path_to(other)
-	other.named_incoming[name] = other.get_path_to(self)
+	get_or_put(named_outgoing, name).push_back(get_path_to(other))
+	get_or_put(other.named_incoming, name).push_back(other.get_path_to(self))
 ## If your Card defers delivery of outputs you can signal here that it is
 ## possible to connect it in a cycle. (Otherwise, if inputs are synchronously
 ## delivered to outputs we get an infinite loop).
@@ -119,8 +119,8 @@ func allow_cycles():
 var parent: Node
 @export var incoming: Array[NodePath] = []
 @export var outgoing: Array[NodePath] = []
-@export var named_outgoing: Dictionary[String, NodePath] = {}
-@export var named_incoming: Dictionary[String, NodePath] = {}
+@export var named_outgoing: Dictionary[String, Array] = {}
+@export var named_incoming: Dictionary[String, Array] = {}
 
 func get_out_signatures(signatures: Array):
 	for card in cards:
@@ -145,17 +145,24 @@ func setup_finished(): pass
 func invoke(args: Array, signature: Signature, named = ""):
 	invoke_inputs(args, signature, named)
 
+static func get_or_put(dict, key):
+	if not dict.has(key): dict.set(key, [])
+	return dict.get(key)
 static func not_null(obj): return obj != null
 func get_incoming() -> Array:
 	return incoming.map(func (p): return get_node_or_null(p)).filter(not_null)
 func get_outgoing() -> Array:
 	return outgoing.map(func (p): return get_node_or_null(p)).filter(not_null)
 
-func get_named_outgoing() -> Array:
-	return named_outgoing.values().map(func (p): return get_node_or_null(p)).filter(not_null)
-
-func get_named_incoming() -> Array:
-	return named_incoming.values().map(func (p): return get_node_or_null(p)).filter(not_null)
+func get_named_outgoing() -> Array: return _get_named(named_outgoing)
+func get_named_incoming() -> Array: return _get_named(named_incoming)
+func _get_named(dict) -> Array:
+	var out = []
+	for name in dict:
+		for p in dict[name]:
+			var card = get_node_or_null(p)
+			if card: out.append(card)
+	return out
 
 func get_named_incoming_at(name: String):
 	var p = named_incoming.get(name)
@@ -224,8 +231,8 @@ static func _object_disconnect_from(from: Node, to: Node):
 	assert("node to disconnect from not found")
 static func connect_to(from: Node, to: Node, named = ""):
 	if named:
-		get_object_named_outgoing(from)[named] = from.get_path_to(to)
-		get_object_named_incoming(to)[named] = to.get_path_to(from)
+		get_or_put(get_object_named_outgoing(from), named).push_back(from.get_path_to(to))
+		get_or_put(get_object_named_incoming(to), named).push_back(to.get_path_to(from))
 	else:
 		get_object_outgoing(from).push_back(from.get_path_to(to))
 		get_object_incoming(to).push_back(to.get_path_to(from))

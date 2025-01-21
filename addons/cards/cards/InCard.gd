@@ -53,8 +53,9 @@ func invoke(args: Array, signature: Signature, named = ""):
 	for card in get_outgoing():
 		card.invoke(args, signature)
 	for name in named_outgoing:
-		var card = get_node_or_null(named_outgoing[name])
-		if card: card.invoke(args, signature, name)
+		for p in named_outgoing[name]:
+			var card = get_node_or_null(p)
+			if card: card.invoke(args, signature, name)
 
 func signature_changed(): pass
 

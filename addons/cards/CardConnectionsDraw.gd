@@ -16,10 +16,11 @@ func _draw():
 		draw_connection(self, to, true)
 	var named = card.named_incoming
 	for name in named:
-		var node = card.get_node_or_null(named[name])
-		if node:
-			draw_connection(self, node, true)
-			draw_label_to(node, name)
+		for p in named[name]:
+			var node = card.get_node_or_null(p)
+			if node:
+				draw_connection(self, node, true)
+				draw_label_to(node, name)
 
 func check_redraw(delta):
 	if should_redraw(): queue_redraw()

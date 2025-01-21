@@ -13,7 +13,7 @@
 [ext_resource type="Script" uid="uid://bvoloc64pi1db" path="res://addons/cards/cards/CollisionCard.gd" id="12_ycdy4"]
 [ext_resource type="Script" uid="uid://ca0jjcfdgxur" path="res://addons/cards/cards/OnEnterCard.gd" id="13_w48qg"]
 [ext_resource type="Script" uid="uid://dwnls6753y3pv" path="res://addons/cards/cards/DeleteCard.gd" id="13_ycdy4"]
-[ext_resource type="Script" path="res://addons/cards/cards/SignalCard.gd" id="14_w48qg"]
+[ext_resource type="Script" uid="uid://bjqiubr544s46" path="res://addons/cards/cards/SignalCard.gd" id="14_w48qg"]
 
 [node name="Node2D" type="Node2D"]
 
@@ -23,11 +23,11 @@ id = "4d539466-3572-4d4f-b596-fdb825ac923e"
 metadata/_custom_type_script = ExtResource("1_ig7tw")
 
 [node name="NumberCard" type="Node2D" parent="CardBoundary"]
-position = Vector2(965, 508)
+position = Vector2(892, 479)
 script = ExtResource("3_h2yge")
 id = "026f606c-d9a8-4875-8def-b4331fc63d23"
-named_outgoing = Dictionary[String, NodePath]({
-"right": NodePath("../PlusCard")
+named_outgoing = Dictionary[String, Array]({
+"right": [NodePath("../PlusCard")]
 })
 metadata/_custom_type_script = ExtResource("3_h2yge")
 
@@ -35,27 +35,26 @@ metadata/_custom_type_script = ExtResource("3_h2yge")
 position = Vector2(910, 596)
 script = ExtResource("4_1bvp3")
 id = "938b6f02-632e-488f-b526-cc4508b9553f"
-named_incoming = Dictionary[String, NodePath]({
-"left": NodePath("../NumberCard3"),
-"right": NodePath("../NumberCard")
+outgoing = Array[NodePath]([NodePath("../NumberCard2")])
+named_incoming = Dictionary[String, Array]({
+"left": [NodePath("../NumberCard3")],
+"right": [NodePath("../NumberCard")]
 })
 metadata/_custom_type_script = ExtResource("4_1bvp3")
 
 [node name="NumberCard2" type="Node2D" parent="CardBoundary"]
-position = Vector2(821.206, 643.525)
+position = Vector2(848.159, 695.353)
 script = ExtResource("3_h2yge")
 id = "b4dc944b-3b77-4108-8530-fe11d1615a57"
-named_outgoing = Dictionary[String, NodePath]({
-"left": NodePath("")
-})
+incoming = Array[NodePath]([NodePath("../PlusCard")])
 metadata/_custom_type_script = ExtResource("3_h2yge")
 
 [node name="NumberCard3" type="Node2D" parent="CardBoundary"]
-position = Vector2(1016, 619)
+position = Vector2(1013, 597)
 script = ExtResource("3_h2yge")
 id = "e998c3c5-6478-4687-bf98-e37249d5a886"
-named_outgoing = Dictionary[String, NodePath]({
-"left": NodePath("../PlusCard")
+named_outgoing = Dictionary[String, Array]({
+"left": [NodePath("../PlusCard")]
 })
 metadata/_custom_type_script = ExtResource("3_h2yge")
 
@@ -86,7 +85,7 @@ outgoing = Array[NodePath]([NodePath("../MoveCard2")])
 metadata/_custom_type_script = ExtResource("6_272bh")
 
 [node name="PhysicsProcessCard" type="Node2D" parent="CardBoundary"]
-position = Vector2(374, 160)
+position = Vector2(1101.18, 472.99)
 script = ExtResource("7_272bh")
 id = "65377cae-b483-4bbe-a469-5e7750fd47bc"
 metadata/_custom_type_script = ExtResource("7_272bh")
@@ -172,14 +171,14 @@ circle_radius = 198.446
 metadata/_custom_type_script = ExtResource("5_lquwl")
 
 [node name="OnEnterCard" type="Node2D" parent="CardBoundary"]
-position = Vector2(659, 454)
+position = Vector2(715, 443)
 script = ExtResource("13_w48qg")
 id = "b4711027-d9c9-47a7-808f-52cd9fff6501"
 incoming = Array[NodePath]([NodePath("../Area2D")])
 metadata/_custom_type_script = ExtResource("13_w48qg")
 
 [node name="SignalCard" type="Node2D" parent="CardBoundary"]
-position = Vector2(999, 301)
+position = Vector2(994, 303)
 script = ExtResource("14_w48qg")
 id = "5b177f3b-377c-4bd8-9f78-1e275dd1cd17"
 metadata/_custom_type_script = ExtResource("14_w48qg")

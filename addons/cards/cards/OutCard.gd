@@ -90,8 +90,8 @@ func invoke(args: Array, signature: Signature, named = ""):
 	
 	var n = get_object_named_outgoing(parent)
 	for name in n:
-		var obj = parent.get_node_or_null(n[name])
-		if obj:
+		for p in n[name]:
+			var obj = parent.get_node_or_null(p)
 			obj.invoke(args, signature, name)
 			mark_activated(obj)
 	for out in get_object_outgoing(parent):
