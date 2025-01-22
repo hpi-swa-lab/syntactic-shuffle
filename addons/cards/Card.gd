@@ -131,25 +131,18 @@ func get_in_signatures(signatures: Array):
 	for card in cards:
 		if card is InCard: signatures.push_back(card.signature)
 
-func invoke_inputs(args: Array, signature: Signature, named = "", source_out = null):
-	for input in cards:
-		if not named and input is InCard or named and input is NamedInCard and input.input_name == named:
-			if signature.compatible_with(input.signature):
-				input.invoke(args, signature, "", source_out)
-				mark_activated(source_out)
-
 func mark_activated(from):
 	if from: connection_draw_node.on_activated(from.parent)
-
-func invoke_outputs(args: Array, signature: Signature):
-	for card in get_outgoing():
-		card.invoke(args, signature)
 
 func setup_finished():
 	pass
 
 func invoke(args: Array, signature: Signature, named = "", source_out = null):
-	invoke_inputs(args, signature, named, source_out)
+	for input in cards:
+		if not named and input is InCard or named and input is NamedInCard and input.input_name == named:
+			if signature.compatible_with(input.signature):
+				input.invoke(args, signature, "", source_out)
+				mark_activated(source_out)
 
 static func get_or_put(dict, key):
 	if not dict.has(key): dict.set(key, [])

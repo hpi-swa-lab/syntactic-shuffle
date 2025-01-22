@@ -53,4 +53,6 @@ func invoke(args: Array, signature: Signature, named = "", source_out = null):
 	process.callv(combined_args)
 
 func output(name: String, args: Array):
-	invoke_outputs(args, outputs[name])
+	var signature = outputs[name]
+	for card in get_outgoing():
+		card.invoke(args, signature)
