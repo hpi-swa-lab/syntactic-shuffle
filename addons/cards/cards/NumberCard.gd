@@ -29,3 +29,8 @@ func s():
 		card.parent.number += 1)
 	var increment_card = InCard.command("increment")
 	increment_card.c(increment_code)
+
+func get_stored_data():
+	for card in cards:
+		if card is CellCard:
+			return card.data

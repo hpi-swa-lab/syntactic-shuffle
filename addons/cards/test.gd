@@ -49,8 +49,10 @@ func test_named_addition_and_store(ready):
 	var plus = PlusCard.new()
 	plus.c(store)
 	var a = NumberCard.new()
+	a.number = 5.0
 	a.c_named("left", plus)
 	var b = NumberCard.new()
+	b.number = 15.0
 	b.c_named("right", plus)
 	var a_trigger = ManualTriggerCard.new(Signature.TriggerSignature.new())
 	a_trigger.c(a)
@@ -59,11 +61,9 @@ func test_named_addition_and_store(ready):
 	
 	ready.call()
 	
-	a.number = 5
-	b.number = 15
 	a_trigger.trigger([])
 	b_trigger.trigger([])
-	assert_eq(store.number, 20.0)
+	assert_eq(store.get_stored_data(), 20.0)
 
 func test_simple_named_connect(ready):
 	var l = NumberCard.new()
