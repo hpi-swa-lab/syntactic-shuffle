@@ -19,7 +19,7 @@ static func get_id(node: Node):
 	push_error("missing get_id")
 
 static func set_ignore_object(node: Node):
-	node.set_meta("_cards_ignore", true)
+	node.set_meta("cards_ignore", true)
 
 ## Not currently able to move, connect, or emit
 @export var disable = false:
@@ -70,13 +70,6 @@ func setup(parent: Card):
 	
 	for card in cards:
 		card.setup(self)
-	
-	#var outputs = [] as Array[Signature]
-	#get_out_signatures(outputs)
-	#for other in get_all_incoming():
-		#var inputs = []
-		#other.get_in_signatures(inputs)
-		#assert(outputs.any(func (o): return inputs.any(func (i): return o.compatible_with(i))))
 
 func _ready() -> void:
 	connection_draw_node.card = self
@@ -195,6 +188,7 @@ static func get_object_out_cards(object: Node):
 	# FIXME storing the card in meta led to serialization issues.
 	# Not sure if we will get a noticeable performance impact from recreating the
 	# card on every request.
+	if object.has_meta("cards_ignore"): return []
 	var c = OutCard.static_signature(t(object.get_class()), true)
 	c.parent = object
 	c.remembered = [object]
