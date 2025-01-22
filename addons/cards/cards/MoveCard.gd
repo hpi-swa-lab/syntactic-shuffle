@@ -5,7 +5,7 @@ class_name MoveCard
 func s():
 	title("Move")
 	description("Move an object.")
-	icon("move.png")
+	icon(preload("res://addons/cards/icons/move.png"))
 	
 	var velocity_card = Vector2Card.new()
 	var did_accelerate_card = BoolCard.new()

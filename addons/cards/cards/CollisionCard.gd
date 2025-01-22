@@ -5,7 +5,7 @@ class_name CollisionCard
 func s():
 	title("Collision")
 	description("Emit when colliding.")
-	icon("collision.png")
+	icon(preload("res://addons/cards/icons/collision.png"))
 	allow_cycles()
 	
 	var out_card = OutCard.data()

@@ -5,7 +5,7 @@ class_name ForwardTriggerCard
 func s():
 	title("Forward Trigger")
 	description("Receives any data input, discards the data, and emits a trigger.")
-	icon("forward.png")
+	icon(preload("res://addons/cards/icons/forward.png"))
 	
 	var out_card = OutCard.data()
 	

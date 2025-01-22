@@ -20,7 +20,7 @@ signal dragging(d: bool)
 
 func title(s: String): %Name.text = s
 func description(s: String): %Description.text = s
-func icon(s: String): %Icon.path = "res://addons/cards/icons/" + s
+func icon(s: Texture): %Icon.texture = s
 func ui(c: Control): %extra_ui.add_child(c)
 
 func _ready() -> void:

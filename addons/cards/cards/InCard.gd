@@ -25,7 +25,7 @@ func get_out_signatures(list: Array):
 func s():
 	title("Input")
 	description("Receive input.")
-	icon("forward.png")
+	icon(preload("res://addons/cards/icons/forward.png"))
 
 func setup_finished():
 	super.setup_finished()

@@ -7,7 +7,7 @@ class_name NumberCard
 func s():
 	title("Number")
 	description("Store or present a number.")
-	icon("number.png")
+	icon(preload("res://addons/cards/icons/number.png"))
 	
 	var out_card = OutCard.remember([number], t("float"))
 	

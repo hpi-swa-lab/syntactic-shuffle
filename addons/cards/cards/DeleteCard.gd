@@ -5,7 +5,7 @@ class_name DeleteCard
 func s():
 	title("Delete")
 	description("Delete an object.")
-	icon("delete.png")
+	icon(preload("res://addons/cards/icons/delete.png"))
 	
 	var code_card = CodeCard.create([["body", t("Node")], ["trigger", trg()]], {}, func (card, body):
 		body.queue_free())

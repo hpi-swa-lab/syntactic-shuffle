@@ -5,7 +5,7 @@ class_name OnEnterCard
 func s():
 	title("On Enter")
 	description("Emit when entered.")
-	icon("collision.png")
+	icon(preload("res://addons/cards/icons/collision.png"))
 	
 	var out_card = OutCard.data()
 	

@@ -15,7 +15,7 @@ var in_object_card: NamedInCard
 func s():
 	title("Set Property")
 	description("Set the property of an object.")
-	icon("increment.png")
+	icon(preload("res://addons/cards/icons/increment.png"))
 	
 	in_object_card = NamedInCard.named_data("value", any())
 	# refresh

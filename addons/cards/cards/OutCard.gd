@@ -57,7 +57,7 @@ func get_remembered_value():
 func s():
 	title("Output")
 	description("Emit output.")
-	icon("forward.png")
+	icon(preload("res://addons/cards/icons/forward.png"))
 
 func _add_command(signature: Signature) -> Signature:
 	return Signature.CommandSignature.new(command_name, signature)

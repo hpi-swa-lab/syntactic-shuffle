@@ -103,7 +103,7 @@ var cards_parent = Node2D.new()
 func s(): pass
 func title(t: String): if visual: visual.title(t)
 func description(t: String): if visual: visual.description(t)
-func icon(t: String): if visual: visual.icon(t)
+func icon(t: Texture): if visual: visual.icon(t)
 func ui(t: Control): if visual: visual.ui(t)
 func c(other: Card):
 	outgoing.push_back(get_path_to(other))

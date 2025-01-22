@@ -24,7 +24,7 @@ var update_ui_func = null
 func s():
 	title("Data Cell")
 	description("Store or piece of data.")
-	icon("number.png")
+	icon(preload("res://addons/cards/icons/number.png"))
 	
 	out_card = OutCard.remember([data], Signature.TypeSignature.new(type))
 	# refresh type info

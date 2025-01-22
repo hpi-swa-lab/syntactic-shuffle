@@ -5,7 +5,7 @@ class_name ReflectCard
 func s():
 	title("Reflect")
 	description("Reflect a vector.")
-	icon("reflect.png")
+	icon(preload("res://addons/cards/icons/reflect.png"))
 	
 	var out_card = OutCard.data()
 	

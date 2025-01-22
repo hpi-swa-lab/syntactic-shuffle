@@ -11,7 +11,7 @@ var connect_card
 func s():
 	title("Signal")
 	description("Connect to a singal and trigger when it emits.")
-	icon("signal.png")
+	icon(preload("res://addons/cards/icons/signal.png"))
 	
 	var out_card = OutCard.data()
 	

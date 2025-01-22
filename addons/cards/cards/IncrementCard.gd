@@ -5,7 +5,7 @@ class_name IncrementCard
 func s():
 	title("Increment")
 	description("Increment a number.")
-	icon("increment.png")
+	icon(preload("res://addons/cards/icons/increment.png"))
 
 	var out_card = OutCard.command("increment")
 	var in_card = InCard.trigger()

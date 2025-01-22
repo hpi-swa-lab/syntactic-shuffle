@@ -13,7 +13,7 @@ static func named_data(name: String, signature: Signature):
 func s():
 	title("Named Input")
 	description("Receive input via a named connection.")
-	icon("forward.png")
+	icon(preload("res://addons/cards/icons/forward.png"))
 
 func try_connect(them: Node):
 	if parent.get_incoming().has(them): return

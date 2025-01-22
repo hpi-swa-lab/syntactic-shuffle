@@ -7,7 +7,7 @@ class_name GroupCard
 func s():
 	title("Group")
 	description("All elements in a group.")
-	icon("group.png")
+	icon(preload("res://addons/cards/icons/group.png"))
 	
 	var out_card = OutCard.remember()
 	

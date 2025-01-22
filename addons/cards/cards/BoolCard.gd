@@ -7,7 +7,7 @@ class_name BoolCard
 func s():
 	title("Bool")
 	description("Store or present a boolean.")
-	icon("bool.png")
+	icon(preload("res://addons/cards/icons/bool.png"))
 	
 	var out_card = OutCard.remember([value], t("bool"))
 	

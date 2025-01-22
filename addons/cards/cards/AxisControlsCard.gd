@@ -5,7 +5,7 @@ class_name AxisControlsCard
 func s():
 	title("Axis Controls")
 	description("Emits signals for inputs on the four axes.")
-	icon("keyboard_input.png")
+	icon(preload("res://addons/cards/icons/keyboard_input.png"))
 	
 	var out_card = OutCard.data()
 	

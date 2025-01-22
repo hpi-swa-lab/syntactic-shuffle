@@ -7,7 +7,7 @@ class_name Vector2Card
 func s():
 	title("Vector")
 	description("Store or present a vector.")
-	icon("vector.png")
+	icon(preload("res://addons/cards/icons/vector.png"))
 	
 	var out_card = OutCard.remember([vector], t("Vector2"))
 	

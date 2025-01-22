@@ -92,7 +92,6 @@ unique_name_in_owner = true
 layout_mode = 2
 texture = ExtResource("1_x38hd")
 expand_mode = 5
-script = ExtResource("3_hogqd")
 
 [node name="DescriptionMargin" type="MarginContainer" parent="CardControl/MainColumn"]
 layout_mode = 2

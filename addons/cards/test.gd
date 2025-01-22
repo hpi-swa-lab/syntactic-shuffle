@@ -12,7 +12,6 @@ class ManualTriggerCard extends Card:
 	func s():
 		title("Manual Trigger")
 		description("For testing purposes.")
-		icon("plus.png")
 		out_card = OutCard.data()
 	
 	func trigger(data):

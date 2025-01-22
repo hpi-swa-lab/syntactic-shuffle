@@ -8,7 +8,7 @@ var delta_out_card: OutCard
 func s():
 	title("Physics Process")
 	description("Invoke in every physics tick.")
-	icon("always.png")
+	icon(preload("res://addons/cards/icons/always.png"))
 	
 	out_card = OutCard.static_signature(trg())
 	delta_out_card = OutCard.static_signature(t("float"))

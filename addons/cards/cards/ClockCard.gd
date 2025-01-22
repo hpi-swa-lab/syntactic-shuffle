@@ -5,7 +5,7 @@ class_name ClockCard
 func s():
 	title("Clock")
 	description("Trigger a signal after a specified time.")
-	icon("clock.png")
+	icon(preload("res://addons/cards/icons/clock.png"))
 	
 	var out = OutCard.static_signature(trg())
 	

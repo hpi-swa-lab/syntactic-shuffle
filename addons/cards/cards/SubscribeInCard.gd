@@ -10,7 +10,7 @@ static func create(signature: Signature):
 func s():
 	title("Subscribe Input")
 	description("Trigger when an input is connected and when it's disconnected.")
-	icon("forward.png")
+	icon(preload("res://addons/cards/icons/forward.png"))
 
 func incoming_connected(obj: Node):
 	var remembered = get_remembered_for(obj, signature) if obj else get_remembered()

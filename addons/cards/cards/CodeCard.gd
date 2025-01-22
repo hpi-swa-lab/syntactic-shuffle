@@ -18,7 +18,7 @@ var pull_only: Array
 func s():
 	title("Code")
 	description("Run some code.")
-	icon("code.png")
+	icon(preload("res://addons/cards/icons/code.png"))
 	
 	for output in outputs:
 		OutCard.static_signature(outputs[output])
