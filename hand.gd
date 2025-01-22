@@ -3,6 +3,7 @@ extends CanvasLayer
 var categories = {
 	"Input": [
 		"AxisControlsCard",
+		"MousePositionCard"
 	],
 	"Primitives": [
 		"Vector2Card",

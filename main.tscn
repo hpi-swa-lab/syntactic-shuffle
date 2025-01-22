@@ -76,7 +76,7 @@ placeholder_size = Vector2(20, 20)
 metadata/_custom_type_script = ExtResource("5_lquwl")
 
 [node name="MoveCard" type="Node2D" parent="CardBoundary"]
-position = Vector2(690.856, 610.867)
+position = Vector2(669.197, 617.636)
 scale = Vector2(0.2, 0.2)
 script = ExtResource("6_7mycd")
 id = "72710ad0-3a6e-4602-9b73-d342b25ee369"
