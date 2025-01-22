@@ -81,13 +81,15 @@ func draw_connection(from, to, inverted):
 	
 	var offset = get_draw_offset(from, to) * GAP
 	offset = offset - int(offset)
+	var stretch = 1 - distance / Card.MAX_CONNECTION_DISTANCE
 	for i in range(0, distance / GAP):
-		draw_arrow(Vector2(0, (i + offset) * GAP), SIZE, inverted, to)
+		draw_arrow(Vector2(0, (i + offset) * GAP), SIZE, inverted, to, stretch)
 
-func draw_arrow(pos, size, inverted, flash_key):
+func draw_arrow(pos, size, inverted, flash_key, stretch):
+	var base = Color(Color.WHITE, 0.5).lerp(Color.GREEN, remap(stretch, 0.4, 0, 1, 0)) if Card.always_reconned() else Color(Color.WHITE, 1)
 	draw_polyline(
 		[pos + Vector2(-size, 0), pos + Vector2(0, -size if inverted else size), pos + Vector2(size, 0)],
-		Color(Color.WHITE.lerp(Color.RED, _tween_values.get(flash_key, 0.0)), 1.0 if false else 0.5),
+		base.lerp(Color.RED, _tween_values.get(flash_key, 0.0)),
 		size / 2,
 		true)
 

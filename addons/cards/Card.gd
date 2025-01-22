@@ -241,13 +241,17 @@ func _check_disconnect(them: Node2D):
 		or my_boundary != their_boundary):
 		object_disconnect_from(self, them)
 
+const ALWAYS_RECONNECT = false
+static func always_reconned():
+	return ALWAYS_RECONNECT and not Engine.is_editor_hint()
+
 func _process(delta: float) -> void:
 	if dragging and not Engine.is_editor_hint():
 		CardBoundary.card_moved(self)
 		editor_sync("cards:set_prop", [id, "position", position])
 	
 	if disable: return
-	if dragging:
+	if dragging or always_reconned():
 		for card in get_outgoing(): _check_disconnect(card)
 		for card in get_incoming(): _check_disconnect(card)
 		for card in get_named_outgoing(): _check_disconnect(card)

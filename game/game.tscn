@@ -1,0 +1,52 @@
+[gd_scene load_steps=6 format=3 uid="uid://bwhhlxvige81v"]
+
+[ext_resource type="Script" uid="uid://cja8ehiirmcyt" path="res://addons/cards/CardBoundary.gd" id="1_vasa2"]
+[ext_resource type="Script" uid="uid://bumnnj6p1acqs" path="res://game/Player.gd" id="2_4fuuu"]
+[ext_resource type="Script" uid="uid://bvr4vcw3kd72b" path="res://addons/cards/placeholder/placeholder.gd" id="2_h7iqs"]
+[ext_resource type="Script" uid="uid://ctmo5roqpacap" path="res://addons/cards/cards/MoveCard.gd" id="3_h7iqs"]
+[ext_resource type="Script" uid="uid://dkyx51jnk8cvd" path="res://addons/cards/cards/AxisControlsCard.gd" id="5_dxrkv"]
+
+[node name="game" type="Node2D"]
+
+[node name="CardBoundary" type="Area2D" parent="."]
+script = ExtResource("1_vasa2")
+id = "00151438-8428-4883-bf82-9a1d6d28a963"
+metadata/_custom_type_script = ExtResource("1_vasa2")
+
+[node name="player" type="CharacterBody2D" parent="CardBoundary"]
+position = Vector2(348, 231)
+script = ExtResource("2_4fuuu")
+
+[node name="Placeholder" type="Node2D" parent="CardBoundary/player"]
+script = ExtResource("2_h7iqs")
+label = "player"
+placeholder_size = Vector2(20, 20)
+metadata/_custom_type_script = ExtResource("2_h7iqs")
+metadata/_edit_lock_ = true
+
+[node name="RayCast2D" type="RayCast2D" parent="CardBoundary/player"]
+
+[node name="wall" type="StaticBody2D" parent="CardBoundary"]
+position = Vector2(388, 316)
+metadata/cards_outgoing = []
+
+[node name="Placeholder" type="Node2D" parent="CardBoundary/wall"]
+script = ExtResource("2_h7iqs")
+color = Color(0.0674377, 0.0674377, 0.0674377, 1)
+placeholder_size = Vector2(219, 29)
+metadata/_custom_type_script = ExtResource("2_h7iqs")
+metadata/_edit_lock_ = true
+
+[node name="MoveCard" type="Node2D" parent="CardBoundary"]
+position = Vector2(422, 473)
+scale = Vector2(0.2, 0.2)
+script = ExtResource("3_h7iqs")
+id = "b654b72f-7143-4786-94b8-9015beba4704"
+metadata/_custom_type_script = ExtResource("3_h7iqs")
+
+[node name="AxisControlsCard" type="Node2D" parent="CardBoundary"]
+position = Vector2(226, 233)
+scale = Vector2(0.2, 0.2)
+script = ExtResource("5_dxrkv")
+id = "42de21f8-9ffa-4d81-a161-72d5b3206838"
+metadata/_custom_type_script = ExtResource("5_dxrkv")
