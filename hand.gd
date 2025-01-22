@@ -18,6 +18,7 @@ var categories = {
 	"Movement": [
 		"CollisionCard",
 		"MoveCard",
+		"LookAtCard"
 	],
 	"Math": [
 		"IncrementCard",
