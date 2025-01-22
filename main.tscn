@@ -13,7 +13,7 @@
 [ext_resource type="Script" uid="uid://bvoloc64pi1db" path="res://addons/cards/cards/CollisionCard.gd" id="12_ycdy4"]
 [ext_resource type="Script" uid="uid://ca0jjcfdgxur" path="res://addons/cards/cards/OnEnterCard.gd" id="13_w48qg"]
 [ext_resource type="Script" uid="uid://dwnls6753y3pv" path="res://addons/cards/cards/DeleteCard.gd" id="13_ycdy4"]
-[ext_resource type="Script" path="res://addons/cards/cards/ForwardTriggerCard.gd" id="14_vivmo"]
+[ext_resource type="Script" uid="uid://blhehm0kmlmk7" path="res://addons/cards/cards/ForwardTriggerCard.gd" id="14_vivmo"]
 [ext_resource type="Script" uid="uid://dio881dm6xtr3" path="res://hand.gd" id="15_vivmo"]
 
 [node name="main" type="Node2D"]
@@ -126,6 +126,7 @@ metadata/_custom_type_script = ExtResource("5_lquwl")
 
 [node name="DeleteCard" type="Node2D" parent="CardBoundary"]
 position = Vector2(794.83, 230.564)
+scale = Vector2(0.2, 0.2)
 script = ExtResource("13_ycdy4")
 id = "0150d4d2-3c49-4b2e-b0ac-c189a56b3e57"
 incoming = Array[NodePath]([NodePath("../Area2D"), NodePath("../OnEnterCard")])
@@ -154,12 +155,13 @@ metadata/_custom_type_script = ExtResource("12_dg77c")
 
 [node name="DeleteCard2" type="Node2D" parent="CardBoundary"]
 position = Vector2(427.371, 292.659)
+scale = Vector2(0.2, 0.2)
 script = ExtResource("13_ycdy4")
 id = "6d58c155-5e52-495b-9cd9-234e249a91d2"
 metadata/_custom_type_script = ExtResource("13_ycdy4")
 
 [node name="CollisionCard" type="Node2D" parent="CardBoundary"]
-position = Vector2(523, 499)
+position = Vector2(526.684, 515.576)
 scale = Vector2(0.2, 0.2)
 script = ExtResource("12_ycdy4")
 id = "13c9f1aa-0917-46f6-86d5-de2035379e1d"

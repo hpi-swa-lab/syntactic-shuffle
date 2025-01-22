@@ -25,7 +25,7 @@ func s():
 	var trigger_card = InCard.trigger()
 	trigger_card.c(cell_card)
 	
-	var toggle_code = CodeCard.create([["value", "bool"], ["trigger", ""]], {"out": cmd("store", t("bool"))},
+	var toggle_code = CodeCard.create([["value", t("bool")], ["trigger", trg()]], {"out": cmd("store", t("bool"))},
 		func(card, value): card.output("out", [not value]),
 		["bool"])
 	cell_card.c_named("bool", toggle_code)
