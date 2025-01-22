@@ -9,6 +9,7 @@ func compatible_with_trigger(other: TriggerSignature): return false
 func compatible_with_generic(other: GenericTypeSignature): return false
 func compatible_with_type(other: TypeSignature): return false
 func compatible_with_struct(other: StructSignature): return false
+func compatible_with_group(other: GroupSignature): return false
 func compatible_with_iterator(other: IteratorSignature): return other.type.compatible_with(self)
 
 class TypeSignature extends Signature:
@@ -62,6 +63,14 @@ class IteratorSignature extends Signature:
 class VoidSignature extends Signature:
 	func get_description(): return "<void>"
 	func compatible_with(other: Signature): return false
+
+class GroupSignature extends Signature:
+	var group_names: Array[StringName]
+	func _init(group_names: Array[StringName]): self.group_names = group_names
+	func get_description(): return "Group({0})".format([",".join(group_names)])
+	func provides_data(): return true
+	func compatible_with(other: Signature): return other.compatible_with_group(self)
+	func compatible_with_group(other: GroupSignature): return group_names.any(func(g): return other.group_names.has(g))
 
 class StructSignature extends Signature:
 	var props: Dictionary[String, Signature]

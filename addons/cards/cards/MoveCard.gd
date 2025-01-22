@@ -21,7 +21,7 @@ func s():
 				body.velocity = velocity
 				body.move_and_slide()
 			elif body is Node2D:
-				body.position += velocity
+				body.position += velocity * get_process_delta_time()
 			card.output("did_accelerate", [false])
 			card.output("out", [velocity]), ["body", "velocity", "did_accelerate"])
 	code_card.c(velocity_card)

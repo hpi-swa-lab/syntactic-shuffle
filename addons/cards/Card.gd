@@ -197,8 +197,8 @@ static func get_meta_or(object: Node, name: String, default: Callable):
 	return object.get_meta(name)
 static func get_object_cards(object: Node):
 	if object is Card: return object.cards
-	else: return [get_object_out_card(object)]
-static func get_object_out_card(object: Node):
+	else: return get_object_out_cards(object)
+static func get_object_out_cards(object: Node):
 	# FIXME storing the card in meta led to serialization issues.
 	# Not sure if we will get a noticeable performance impact from recreating the
 	# card on every request.
@@ -206,7 +206,8 @@ static func get_object_out_card(object: Node):
 	c.parent = object
 	c.remembered = [object]
 	c.remembered_signature = c.signature
-	return c
+	var g = OutCard.static_signature(grp(object.get_groups()), true)
+	return [c, g]
 static func get_object_incoming(object: Node):
 	return object.incoming if object is Card else []
 static func get_object_outgoing(object: Node):
@@ -319,6 +320,7 @@ func _forward_canvas_gui_input(event: InputEvent, undo_redo):
 static func trg(): return Signature.TriggerSignature.new()
 static func none(): return Signature.VoidSignature.new()
 static func t(type: String): return Signature.TypeSignature.new(type)
+static func grp(group_names: Array[StringName]): return Signature.GroupSignature.new(group_names)
 static func cmd(name: String, arg = null): return Signature.CommandSignature.new(name, arg)
 static func any(): return Signature.GenericTypeSignature.new()
 static func struct(props, methods): return Signature.StructSignature.new(props, methods)

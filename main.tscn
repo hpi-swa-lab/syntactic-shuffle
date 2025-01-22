@@ -76,7 +76,7 @@ placeholder_size = Vector2(20, 20)
 metadata/_custom_type_script = ExtResource("5_lquwl")
 
 [node name="MoveCard" type="Node2D" parent="CardBoundary"]
-position = Vector2(564, 634)
+position = Vector2(551.314, 666.087)
 scale = Vector2(0.2, 0.2)
 script = ExtResource("6_7mycd")
 id = "72710ad0-3a6e-4602-9b73-d342b25ee369"
@@ -125,7 +125,7 @@ placeholder_size = Vector2(225, 52)
 metadata/_custom_type_script = ExtResource("5_lquwl")
 
 [node name="DeleteCard" type="Node2D" parent="CardBoundary"]
-position = Vector2(794.83, 230.564)
+position = Vector2(283.879, 253.609)
 scale = Vector2(0.2, 0.2)
 script = ExtResource("13_ycdy4")
 id = "0150d4d2-3c49-4b2e-b0ac-c189a56b3e57"
@@ -154,7 +154,7 @@ outgoing = Array[NodePath]([NodePath("../MoveCard2")])
 metadata/_custom_type_script = ExtResource("12_dg77c")
 
 [node name="DeleteCard2" type="Node2D" parent="CardBoundary"]
-position = Vector2(427.371, 292.659)
+position = Vector2(157.694, 696.978)
 scale = Vector2(0.2, 0.2)
 script = ExtResource("13_ycdy4")
 id = "6d58c155-5e52-495b-9cd9-234e249a91d2"
@@ -196,7 +196,7 @@ id = "abbf3d33-b9bb-4503-9fd0-ae6bf6670731"
 metadata/_custom_type_script = ExtResource("14_vivmo")
 
 [node name="OnEnterCard" type="Node2D" parent="CardBoundary"]
-position = Vector2(867, 321)
+position = Vector2(807.136, 300.138)
 scale = Vector2(0.2, 0.2)
 script = ExtResource("13_w48qg")
 id = "d501ac32-dbb0-499e-98db-21607c1f927c"
