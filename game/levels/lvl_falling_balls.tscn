@@ -6,9 +6,9 @@
 [ext_resource type="Script" uid="uid://bp0k47mbcmlfe" path="res://addons/cards/cards/ApplyImpulseCard.gd" id="5_mlajv"]
 [ext_resource type="Script" uid="uid://bvoloc64pi1db" path="res://addons/cards/cards/CollisionCard.gd" id="7_6pthq"]
 [ext_resource type="Script" uid="uid://37sr8xfsjcsp" path="res://addons/cards/cards/PhysicsProcessCard.gd" id="8_oj8kc"]
-[ext_resource type="Script" path="res://addons/cards/cards/WinCard.gd" id="9_r4jth"]
+[ext_resource type="Script" uid="uid://yy4klw00tp2i" path="res://addons/cards/cards/WinCard.gd" id="9_r4jth"]
 [ext_resource type="Texture2D" uid="uid://hgl7rti485i7" path="res://game/assets/monochrome_tilemap_transparent_packed.png" id="10_fvnsy"]
-[ext_resource type="Script" uid="uid://c5kwqqq0tnn6r" path="res://addons/cards/cards/GetPositionCard.gd" id="10_tq027"]
+[ext_resource type="Script" uid="uid://d32wvubn2l5vg" path="res://addons/cards/cards/GetPositionCard.gd" id="10_tq027"]
 [ext_resource type="Script" uid="uid://bacqhnjopntyp" path="res://game/levels/spawn.gd" id="11_c6b0j"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_c6b0j"]
@@ -677,6 +677,7 @@ metadata/_edit_lock_ = true
 [node name="CollisionCard" type="CharacterBody2D" parent="."]
 position = Vector2(1653, 377)
 scale = Vector2(0.2, 0.2)
+collision_layer = 0
 motion_mode = 1
 script = ExtResource("7_6pthq")
 id = "e8c4296d-ce04-403a-92a2-5ec947b4e57e"
@@ -685,6 +686,7 @@ metadata/_custom_type_script = ExtResource("7_6pthq")
 [node name="WinCard" type="CharacterBody2D" parent="."]
 position = Vector2(1761, 556)
 scale = Vector2(0.2, 0.2)
+collision_layer = 0
 motion_mode = 1
 script = ExtResource("9_r4jth")
 id = "26662d42-1111-4377-a1f1-a429c66e27aa"
@@ -703,6 +705,7 @@ scene = NodePath("../ball")
 [node name="ApplyImpulseCard" type="CharacterBody2D" parent="."]
 position = Vector2(1360, 365)
 scale = Vector2(0.2, 0.2)
+collision_layer = 0
 motion_mode = 1
 script = ExtResource("5_mlajv")
 id = "d2f013a5-430d-4a3c-9ec2-f17b53fda7c9"
@@ -711,6 +714,7 @@ metadata/_custom_type_script = ExtResource("5_mlajv")
 [node name="GetPositionCard" type="CharacterBody2D" parent="."]
 position = Vector2(1465, 515)
 scale = Vector2(0.2, 0.2)
+collision_layer = 0
 motion_mode = 1
 script = ExtResource("10_tq027")
 id = "d66252e3-92b4-49af-a1ce-cfdb8c7d66b8"
@@ -725,6 +729,7 @@ tile_set = SubResource("TileSet_me2oe")
 [node name="PhysicsProcessCard" type="CharacterBody2D" parent="."]
 position = Vector2(1540, 202)
 scale = Vector2(0.2, 0.2)
+collision_layer = 0
 motion_mode = 1
 script = ExtResource("8_oj8kc")
 id = "ec4567de-92f8-4571-9edd-3e3141d22fe8"

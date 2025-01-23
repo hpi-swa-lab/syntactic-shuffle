@@ -3,9 +3,9 @@ extends Card
 class_name ApplyImpulseCard
 
 func s():
-	title("Apply Impulse")
+	title("Impulse")
 	description("Apply an impulse to an object.")
-	icon(preload("res://addons/cards/icons/delete.png"))
+	icon(preload("res://addons/cards/icons/impulse.png"))
 	
 	var code_card = CodeCard.create([["body", t("RigidBody2D")], ["toward", t("Vector2")]], {}, func (card, body: RigidBody2D, toward: Vector2):
 		body.apply_impulse((toward - body.global_position).normalized() * 1000))

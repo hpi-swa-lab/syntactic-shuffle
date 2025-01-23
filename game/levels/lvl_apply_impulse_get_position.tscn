@@ -7,8 +7,8 @@
 [ext_resource type="Script" uid="uid://bp0k47mbcmlfe" path="res://addons/cards/cards/ApplyImpulseCard.gd" id="5_yd7f3"]
 [ext_resource type="Script" uid="uid://bvoloc64pi1db" path="res://addons/cards/cards/CollisionCard.gd" id="7_postk"]
 [ext_resource type="Texture2D" uid="uid://hgl7rti485i7" path="res://game/assets/monochrome_tilemap_transparent_packed.png" id="8_6f53v"]
-[ext_resource type="Script" path="res://addons/cards/cards/WinCard.gd" id="9_p3cej"]
-[ext_resource type="Script" uid="uid://c5kwqqq0tnn6r" path="res://addons/cards/cards/GetPositionCard.gd" id="10_m4q82"]
+[ext_resource type="Script" uid="uid://yy4klw00tp2i" path="res://addons/cards/cards/WinCard.gd" id="9_p3cej"]
+[ext_resource type="Script" uid="uid://d32wvubn2l5vg" path="res://addons/cards/cards/GetPositionCard.gd" id="10_m4q82"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ln7ps"]
 texture = ExtResource("8_6f53v")
@@ -662,7 +662,8 @@ metadata/cards_ignore = false
 
 [node name="ClockCard" type="CharacterBody2D" parent="."]
 position = Vector2(1213, 293)
-scale = Vector2(0.22, 0.22)
+scale = Vector2(0.2, 0.2)
+collision_layer = 0
 motion_mode = 1
 script = ExtResource("3_k7h6e")
 id = "c9fac29b-e8c0-47dc-8841-def626393a5b"
@@ -684,6 +685,7 @@ metadata/_edit_lock_ = true
 [node name="ApplyImpulseCard" type="CharacterBody2D" parent="."]
 position = Vector2(1204, 538)
 scale = Vector2(0.2, 0.2)
+collision_layer = 0
 motion_mode = 1
 script = ExtResource("5_yd7f3")
 id = "28a4a500-cfdd-485e-9630-9dfedfc45e3f"
@@ -706,6 +708,7 @@ metadata/_edit_lock_ = true
 [node name="CollisionCard" type="CharacterBody2D" parent="."]
 position = Vector2(1339, 151)
 scale = Vector2(0.2, 0.2)
+collision_layer = 0
 motion_mode = 1
 script = ExtResource("7_postk")
 id = "3cae41c9-e591-4912-91d7-9914fac2c026"
@@ -722,6 +725,7 @@ tile_set = SubResource("TileSet_pxxsx")
 [node name="WinCard" type="CharacterBody2D" parent="."]
 position = Vector2(1337, 35)
 scale = Vector2(0.2, 0.2)
+collision_layer = 0
 motion_mode = 1
 script = ExtResource("9_p3cej")
 id = "7bf30c28-b50b-400b-9d1a-f0c4cdeeebd2"
@@ -731,6 +735,7 @@ metadata/_custom_type_script = ExtResource("9_p3cej")
 [node name="GetPositionCard" type="CharacterBody2D" parent="."]
 position = Vector2(1502, 291)
 scale = Vector2(0.2, 0.2)
+collision_layer = 0
 motion_mode = 1
 script = ExtResource("10_m4q82")
 id = "e13a71f7-9d90-4b4f-a762-4755822791de"

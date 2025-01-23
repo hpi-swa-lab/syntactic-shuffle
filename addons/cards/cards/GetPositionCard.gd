@@ -5,7 +5,7 @@ class_name GetPositionCard
 func s():
 	title("Get Position")
 	description("Get position of an object.")
-	icon(preload("res://addons/cards/icons/mouse_position.png"))
+	icon(preload("res://addons/cards/icons/location.png"))
 	
 	var out_card = OutCard.data()
 	

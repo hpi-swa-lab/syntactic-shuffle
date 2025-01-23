@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=4 uid="uid://cw3fi8sfc1arc"]
+[gd_scene load_steps=8 format=4 uid="uid://b17rknn5hvc5u"]
 
 [ext_resource type="Script" uid="uid://cja8ehiirmcyt" path="res://addons/cards/CardBoundary.gd" id="1_jhnhn"]
 [ext_resource type="Texture2D" uid="uid://hgl7rti485i7" path="res://game/assets/monochrome_tilemap_transparent_packed.png" id="2_he5yq"]
@@ -665,6 +665,7 @@ metadata/cards_ignore = false
 [node name="ForwardCard" type="CharacterBody2D" parent="."]
 position = Vector2(-88, 190)
 scale = Vector2(0.2, 0.2)
+collision_layer = 0
 motion_mode = 1
 script = ExtResource("4_6du0x")
 id = "ad295a36-af16-4c11-9f9a-22d5ecf97196"
