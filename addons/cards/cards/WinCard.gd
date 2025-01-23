@@ -8,7 +8,8 @@ func s():
 	icon(preload("res://addons/cards/icons/bool.png"))
 	
 	var code_card = CodeCard.create([["in", trg()]], {}, func(card):
-		confetti.emitting = true)
+		confetti.emitting = true
+		get_tree().root.find_child("Game", true, false).won())
 	
 	var in_card = InCard.trigger()
 	in_card.c_named("in", code_card)
