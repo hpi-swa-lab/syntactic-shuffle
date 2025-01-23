@@ -1,0 +1,87 @@
+[gd_scene load_steps=10 format=3 uid="uid://ctw2beyu5do7c"]
+
+[ext_resource type="Script" uid="uid://cja8ehiirmcyt" path="res://addons/cards/CardBoundary.gd" id="1_fvnsy"]
+[ext_resource type="Script" uid="uid://cxldeg24krchn" path="res://camera_2d.gd" id="2_c6b0j"]
+[ext_resource type="Script" uid="uid://bvr4vcw3kd72b" path="res://addons/cards/placeholder/placeholder.gd" id="4_osrqi"]
+[ext_resource type="Script" uid="uid://bp0k47mbcmlfe" path="res://addons/cards/cards/ApplyImpulseCard.gd" id="5_mlajv"]
+[ext_resource type="Script" uid="uid://bvoloc64pi1db" path="res://addons/cards/cards/CollisionCard.gd" id="7_6pthq"]
+[ext_resource type="Script" uid="uid://37sr8xfsjcsp" path="res://addons/cards/cards/PhysicsProcessCard.gd" id="8_oj8kc"]
+[ext_resource type="Script" uid="uid://yy4klw00tp2i" path="res://addons/cards/cards/WinCard.gd" id="9_r4jth"]
+[ext_resource type="Script" path="res://addons/cards/cards/GetPositionCard.gd" id="10_tq027"]
+[ext_resource type="Script" uid="uid://bacqhnjopntyp" path="res://game/levels/spawn.gd" id="11_c6b0j"]
+
+[node name="lvl-apply-impulse-get-position" type="Area2D"]
+script = ExtResource("1_fvnsy")
+id = "00151438-8428-4883-bf82-9a1d6d28a963"
+metadata/_custom_type_script = ExtResource("1_fvnsy")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(1633, 402)
+script = ExtResource("2_c6b0j")
+metadata/cards_ignore = false
+
+[node name="ball" type="RigidBody2D" parent="."]
+position = Vector2(2913, 358)
+freeze = true
+contact_monitor = true
+max_contacts_reported = 1
+metadata/cards_outgoing = []
+
+[node name="Placeholder" type="Node2D" parent="ball"]
+script = ExtResource("4_osrqi")
+shape_type = "Circle"
+circle_radius = 10.0
+metadata/_custom_type_script = ExtResource("4_osrqi")
+metadata/_edit_lock_ = true
+
+[node name="CollisionCard" type="Node2D" parent="."]
+position = Vector2(1653, 377)
+scale = Vector2(0.2, 0.2)
+script = ExtResource("7_6pthq")
+id = "6afd8c31-6239-434c-85b3-8fbf556d834a"
+named_outgoing = Dictionary[String, Array]({
+"data": []
+})
+metadata/_custom_type_script = ExtResource("7_6pthq")
+
+[node name="WinCard" type="Node2D" parent="."]
+position = Vector2(1761, 556)
+scale = Vector2(0.2, 0.2)
+script = ExtResource("9_r4jth")
+id = "0981c014-456b-4a15-bda8-c8c0d5961d51"
+metadata/_custom_type_script = ExtResource("9_r4jth")
+
+[node name="spawn" type="Node2D" parent="." node_paths=PackedStringArray("scene")]
+position = Vector2(1846, 192)
+script = ExtResource("11_c6b0j")
+scene = NodePath("../ball")
+
+[node name="spawn2" type="Node2D" parent="." node_paths=PackedStringArray("scene")]
+position = Vector2(1990, 118)
+script = ExtResource("11_c6b0j")
+scene = NodePath("../ball")
+
+[node name="ApplyImpulseCard" type="Node2D" parent="."]
+position = Vector2(1952, 386)
+scale = Vector2(0.2, 0.2)
+script = ExtResource("5_mlajv")
+id = "76199c13-31a8-4a55-9d3f-4e0cc35f79f9"
+incoming = Array[NodePath]([NodePath("../GetPositionCard")])
+metadata/_custom_type_script = ExtResource("5_mlajv")
+
+[node name="PhysicsProcessCard" type="Node2D" parent="."]
+position = Vector2(1781, 304)
+scale = Vector2(0.2, 0.2)
+script = ExtResource("8_oj8kc")
+id = "a5be441e-883c-4ef3-9940-af995c242e87"
+outgoing = Array[NodePath]([NodePath("../GetPositionCard")])
+metadata/_custom_type_script = ExtResource("8_oj8kc")
+
+[node name="GetPositionCard" type="Node2D" parent="."]
+position = Vector2(1904, 296)
+scale = Vector2(0.2, 0.2)
+script = ExtResource("10_tq027")
+id = "a4ad845c-d920-4439-b72b-2de843b75952"
+incoming = Array[NodePath]([NodePath("../PhysicsProcessCard")])
+outgoing = Array[NodePath]([NodePath("../ApplyImpulseCard")])
+metadata/_custom_type_script = ExtResource("10_tq027")
