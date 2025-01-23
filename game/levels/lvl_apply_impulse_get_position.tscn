@@ -1,11 +1,10 @@
-[gd_scene load_steps=13 format=4 uid="uid://3680781563ff"]
+[gd_scene load_steps=12 format=4 uid="uid://3680781563ff"]
 
 [ext_resource type="Script" uid="uid://cja8ehiirmcyt" path="res://addons/cards/CardBoundary.gd" id="1_wfh5c"]
 [ext_resource type="Script" uid="uid://cxldeg24krchn" path="res://camera_2d.gd" id="2_m4q82"]
 [ext_resource type="Script" uid="uid://dpn0hnjmcwudf" path="res://addons/cards/cards/ClockCard.gd" id="3_k7h6e"]
 [ext_resource type="Script" uid="uid://bvr4vcw3kd72b" path="res://addons/cards/placeholder/placeholder.gd" id="4_1blk6"]
 [ext_resource type="Script" uid="uid://bp0k47mbcmlfe" path="res://addons/cards/cards/ApplyImpulseCard.gd" id="5_yd7f3"]
-[ext_resource type="Script" uid="uid://cykn2a1upyl7a" path="res://addons/cards/cards/Vector2Card.gd" id="6_52vch"]
 [ext_resource type="Script" uid="uid://bvoloc64pi1db" path="res://addons/cards/cards/CollisionCard.gd" id="7_postk"]
 [ext_resource type="Texture2D" uid="uid://hgl7rti485i7" path="res://game/assets/monochrome_tilemap_transparent_packed.png" id="8_6f53v"]
 [ext_resource type="Script" uid="uid://yy4klw00tp2i" path="res://addons/cards/cards/WinCard.gd" id="9_p3cej"]
@@ -689,13 +688,6 @@ scale = Vector2(0.2, 0.2)
 script = ExtResource("5_yd7f3")
 id = "3dd1163b-f531-4aeb-bced-12757370bdcb"
 metadata/_custom_type_script = ExtResource("5_yd7f3")
-
-[node name="Vector2Card" type="Node2D" parent="."]
-position = Vector2(1494, 537)
-scale = Vector2(0.2, 0.2)
-script = ExtResource("6_52vch")
-id = "ced1df5d-7184-4f22-be4f-7b77e9889b2b"
-metadata/_custom_type_script = ExtResource("6_52vch")
 
 [node name="target" type="RigidBody2D" parent="."]
 position = Vector2(1340, 281)

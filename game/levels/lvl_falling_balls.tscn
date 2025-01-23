@@ -62,26 +62,22 @@ script = ExtResource("11_c6b0j")
 scene = NodePath("../ball")
 
 [node name="ApplyImpulseCard" type="Node2D" parent="."]
-position = Vector2(1952, 386)
+position = Vector2(1360, 365)
 scale = Vector2(0.2, 0.2)
 script = ExtResource("5_mlajv")
 id = "76199c13-31a8-4a55-9d3f-4e0cc35f79f9"
-incoming = Array[NodePath]([NodePath("../GetPositionCard")])
 metadata/_custom_type_script = ExtResource("5_mlajv")
 
 [node name="PhysicsProcessCard" type="Node2D" parent="."]
-position = Vector2(1781, 304)
+position = Vector2(1574, 226)
 scale = Vector2(0.2, 0.2)
 script = ExtResource("8_oj8kc")
 id = "a5be441e-883c-4ef3-9940-af995c242e87"
-outgoing = Array[NodePath]([NodePath("../GetPositionCard")])
 metadata/_custom_type_script = ExtResource("8_oj8kc")
 
 [node name="GetPositionCard" type="Node2D" parent="."]
-position = Vector2(1904, 296)
+position = Vector2(1465, 515)
 scale = Vector2(0.2, 0.2)
 script = ExtResource("10_tq027")
 id = "a4ad845c-d920-4439-b72b-2de843b75952"
-incoming = Array[NodePath]([NodePath("../PhysicsProcessCard")])
-outgoing = Array[NodePath]([NodePath("../ApplyImpulseCard")])
 metadata/_custom_type_script = ExtResource("10_tq027")
