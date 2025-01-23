@@ -37,8 +37,15 @@ func input_event(e: InputEvent):
 	if e is InputEventMouseButton and e.button_index == MOUSE_BUTTON_LEFT and get_parent().can_drag():
 		held = e.is_pressed()
 		dragging.emit(held)
-	if e is InputEventMouseMotion and held:
-		get_parent().position += e.screen_relative / get_viewport_transform().get_scale()
+		if not held:
+			get_parent().velocity = Vector2.ZERO
+	#if e is InputEventMouseMotion and held:
+		#print(get_viewport().get_mouse_position())
+		#print(get_viewport_transform().inverse() * e.global_position, get_parent().global_position, get_viewport_transform().inverse() * e.global_position - get_parent().global_position)
+		#print(get_viewport_transform().inverse() * get_viewport().get_mouse_position(), get_parent().global_position, get_viewport().get_mouse_position() - get_parent().global_position)
+		#get_parent().velocity = get_global_mouse_position() - get_parent().global_position
+		#get_parent().velocity = (e.screen_relative / get_viewport_transform().get_scale()) - get_parent().global_position
+		#get_parent().position += e.screen_relative / get_viewport_transform().get_scale()
 
 # if we move from the hand to the main scene, we won't receive the mouse button up
 func _unhandled_input(e: InputEvent) -> void:
@@ -46,3 +53,6 @@ func _unhandled_input(e: InputEvent) -> void:
 		input_event(e)
 	if e is InputEventMouseButton and e.button_index == MOUSE_BUTTON_LEFT and held and not e.is_pressed():
 		input_event(e)
+
+func get_size() -> Vector2:
+	return $CardControl.size

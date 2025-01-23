@@ -1,5 +1,5 @@
 @tool
-extends Node2D
+extends CharacterBody2D
 class_name Card
 
 const MAX_CONNECTION_DISTANCE = 150
@@ -73,6 +73,8 @@ func setup(parent: Card):
 		card.setup(self)
 
 func _ready() -> void:
+	motion_mode = CharacterBody2D.MOTION_MODE_FLOATING
+	
 	connection_draw_node.card = self
 	add_child(connection_draw_node)
 	
@@ -81,6 +83,12 @@ func _ready() -> void:
 	visual.dragging.connect(func (d): dragging = d)
 	visual.paused = paused
 	add_child(visual)
+	
+	var shape = RectangleShape2D.new()
+	shape.size = visual.get_size()
+	var collision_shape = CollisionShape2D.new()
+	collision_shape.shape = shape
+	add_child(collision_shape)
 	
 	get_card_boundary().card_entered(self)
 	
@@ -272,6 +280,18 @@ func _process(delta: float) -> void:
 	connection_draw_node.check_redraw(delta)
 
 func _physics_process(delta: float) -> void:
+	if not Engine.is_editor_hint():
+		#velocity = Vector2.RIGHT * 50
+		if dragging:
+			velocity = get_global_mouse_position() - global_position
+			velocity /= delta * 2
+			velocity = velocity.limit_length(1500)
+			print(velocity)
+			move_and_slide()
+			velocity = Vector2.ZERO
+		#var collision = move_and_collide(velocity)
+		#if collision:
+			#move_and_collide(collision.get_remainder().slide(collision.get_normal()))
 	for c in cards:
 		c._physics_process(delta)
 
@@ -282,6 +302,7 @@ static func _each_input_candidate(object: Node, cb: Callable, named: bool):
 			not named and not card is NamedInCard and card is InCard): cb.call(card)
 
 func _has_line_of_sight_to(other: Node) -> bool:
+	#if Engine.is_editor_hint(): return true
 	var space_state = PhysicsServer2D.space_get_direct_state(get_world_2d().space)
 	var query = PhysicsRayQueryParameters2D.create(global_position, other.global_position)
 	var result = space_state.intersect_ray(query)
