@@ -660,15 +660,6 @@ zoom = Vector2(1.45, 1.45)
 script = ExtResource("2_wjiir")
 metadata/cards_ignore = false
 
-[node name="ClockCard" type="CharacterBody2D" parent="."]
-position = Vector2(1213, 293)
-scale = Vector2(0.2, 0.2)
-collision_layer = 0
-motion_mode = 1
-script = ExtResource("3_ehe84")
-id = "02479bdf-80ac-4b7c-b2b9-f32d702245c4"
-metadata/_custom_type_script = ExtResource("3_ehe84")
-
 [node name="ball" type="RigidBody2D" parent="."]
 position = Vector2(1365, 532)
 continuous_cd = 2
@@ -742,3 +733,12 @@ script = ExtResource("9_xj13i")
 id = "26bb3a9a-bf5b-4760-8646-bb411dc1f2f0"
 incoming = Array[NodePath]([NodePath("../CollisionCard")])
 metadata/_custom_type_script = ExtResource("9_xj13i")
+
+[node name="ClockCard" type="CharacterBody2D" parent="."]
+position = Vector2(1222, 294)
+scale = Vector2(0.2, 0.2)
+collision_layer = 0
+motion_mode = 1
+script = ExtResource("3_ehe84")
+id = "0a7d3c8a-d80f-45b4-b673-23ab92160b1c"
+metadata/_custom_type_script = ExtResource("3_ehe84")
