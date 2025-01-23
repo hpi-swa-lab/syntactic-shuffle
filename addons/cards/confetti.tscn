@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=3 uid="uid://vee8mgyucqhd"]
 
-[ext_resource type="Texture2D" uid="uid://b0hxqytame26e" path="res://game/assets/a-rabbits-favorite-food-yummy-yummy.png" id="1_fy4n5"]
+[ext_resource type="Texture2D" uid="uid://dsu6ystq7iqm6" path="res://game/assets/a-rabbits-favorite-food-yummy-yummy-but-it-is-quite-small-haha.png" id="1_fy4n5"]
 
 [sub_resource type="Gradient" id="Gradient_fy4n5"]
 interpolation_mode = 1
@@ -30,6 +30,7 @@ initial_velocity_max = 1700.0
 gravity = Vector3(0, 300, 0)
 damping_min = 200.0
 damping_max = 500.0
+scale_min = 2.0
 scale_max = 2.0
 scale_curve = SubResource("CurveTexture_6p6ka")
 color_initial_ramp = SubResource("GradientTexture1D_6p6ka")
@@ -38,9 +39,9 @@ color_initial_ramp = SubResource("GradientTexture1D_6p6ka")
 z_index = 10
 emitting = false
 amount = 100
+texture = ExtResource("1_fy4n5")
 lifetime = 1.2
 one_shot = true
 explosiveness = 0.7
 randomness = 0.5
-texture = ExtResource("1_fy4n5")
 process_material = SubResource("ParticleProcessMaterial_6p6ka")
