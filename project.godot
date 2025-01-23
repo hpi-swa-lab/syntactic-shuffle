@@ -32,6 +32,7 @@ enabled=PackedStringArray("res://addons/cards/plugin.cfg")
 [global_group]
 
 enemy="won't be shot by enemies"
+player=""
 
 [gui]
 

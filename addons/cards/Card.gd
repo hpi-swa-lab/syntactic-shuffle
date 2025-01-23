@@ -11,7 +11,7 @@ static func pop_active_card_list():
 	active_card_list.pop_back()
 
 static func editor_sync(message: String, args: Array):
-	if EngineDebugger.is_active(): EngineDebugger.send_message(message, args)
+	if EngineDebugger.is_active() and false: EngineDebugger.send_message(message, args)
 
 static func get_id(node: Node):
 	if node is Card: return node.id
@@ -45,6 +45,7 @@ var connection_draw_node = CardConnectionsDraw.new()
 var dragging: bool:
 	set(v):
 		if v == dragging: return
+		if v and not can_drag(): return
 		var was_dragging = dragging != null
 		dragging = v
 		if was_dragging and not dragging:
@@ -92,6 +93,8 @@ func _ready() -> void:
 
 var cards_parent = Node2D.new()
 
+var _allow_cycles = false
+
 ## Setup function DSL
 func s(): pass
 func title(t: String): if visual: visual.title(t)
@@ -107,8 +110,9 @@ func c_named(name: String, other: Card):
 ## If your Card defers delivery of outputs you can signal here that it is
 ## possible to connect it in a cycle. (Otherwise, if inputs are synchronously
 ## delivered to outputs we get an infinite loop).
-func allow_cycles():
-	pass
+func allow_cycles(): _allow_cycles = true
+
+func allows_cycles(): return _allow_cycles
 
 var parent: Node
 @export var incoming: Array[NodePath] = []
@@ -244,6 +248,10 @@ func _check_disconnect(them: Node2D):
 const ALWAYS_RECONNECT = false
 static func always_reconned():
 	return ALWAYS_RECONNECT and not Engine.is_editor_hint()
+
+func can_drag():
+	for player in get_tree().get_nodes_in_group("player"):
+		return player.can_grab()
 
 func _process(delta: float) -> void:
 	if dragging and not Engine.is_editor_hint():

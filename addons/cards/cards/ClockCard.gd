@@ -2,6 +2,8 @@
 extends Card
 class_name ClockCard
 
+const TIMEOUT = 0.6
+
 func s():
 	title("Clock")
 	description("Trigger a signal after a specified time.")
@@ -13,8 +15,8 @@ func s():
 	
 	var code_card = CodeCard.create([["elapsed", t("float")], ["delta", t("float")]], {"out": trg(), "elapsed": t("float")}, func(card, elapsed, delta):
 		elapsed += delta
-		if elapsed >= 1.0:
-			elapsed -= 1.0
+		if elapsed >= TIMEOUT:
+			elapsed -= TIMEOUT
 			card.output("out", [])
 		card.output("elapsed", [elapsed]))
 	

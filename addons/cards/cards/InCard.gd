@@ -74,6 +74,8 @@ func incoming_disconnected(obj: Node):
 
 func try_connect(them: Node):
 	if parent.get_incoming().has(them): return
+	#if them is Card and them.allows_cycles():
+		#print("a")
 	if them is Card and detect_cycles_for_new_connection(parent, them): return
 	
 	for card in Card.get_object_cards(them):
@@ -87,6 +89,8 @@ func try_connect(them: Node):
 					return
 
 func detect_cycles_for_new_connection(from: Card, to: Card) -> bool:
+	if (to.allows_cycles() or from.allows_cycles()) and from.get_outgoing().has(to):
+		return false
 	return check_is_connected(from, to)
 
 func check_is_connected(a: Card, b: Card) -> bool:

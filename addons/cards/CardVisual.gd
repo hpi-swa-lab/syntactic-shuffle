@@ -27,9 +27,14 @@ func _ready() -> void:
 	$CardControl.gui_input.connect(input_event)
 	base_card_size = $CardControl.size
 
+func _process(delta: float):
+	if held and not get_parent().can_drag():
+		held = false
+		dragging.emit(held)
+
 var held = false
 func input_event(e: InputEvent):
-	if e is InputEventMouseButton and e.button_index == MOUSE_BUTTON_LEFT:
+	if e is InputEventMouseButton and e.button_index == MOUSE_BUTTON_LEFT and get_parent().can_drag():
 		held = e.is_pressed()
 		dragging.emit(held)
 	if e is InputEventMouseMotion and held:
