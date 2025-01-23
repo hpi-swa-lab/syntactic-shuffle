@@ -239,6 +239,7 @@ static func connect_to(from: Node, to: Node, named = ""):
 		get_object_incoming(to).push_back(to.get_path_to(from))
 
 func _check_disconnect(them: Node2D):
+	if not _has_line_of_sight_to(them): object_disconnect_from(self, them)
 	var my_boundary = get_card_boundary()
 	var their_boundary = get_card_boundary()
 	if (global_position.distance_to(them.global_position) > MAX_CONNECTION_DISTANCE
@@ -280,7 +281,14 @@ static func _each_input_candidate(object: Node, cb: Callable, named: bool):
 		if (named and card is NamedInCard or
 			not named and not card is NamedInCard and card is InCard): cb.call(card)
 
+func _has_line_of_sight_to(other: Node) -> bool:
+	var space_state = PhysicsServer2D.space_get_direct_state(get_world_2d().space)
+	var query = PhysicsRayQueryParameters2D.create(global_position, other.global_position)
+	var result = space_state.intersect_ray(query)
+	return result.is_empty()
+
 func try_connect(them: Node):
+	if not _has_line_of_sight_to(them): return
 	_each_input_candidate(self, func (card): card.try_connect(them), true)
 	_each_input_candidate(them, func (card): card.try_connect(self), true)
 	_each_input_candidate(self, func (card): card.try_connect(them), false)
