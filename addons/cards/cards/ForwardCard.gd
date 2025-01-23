@@ -4,7 +4,7 @@ class_name ForwardCard
 
 func s():
 	title("Forward")
-	description("Receives a trigger, and emits a trigger.")
+	description("Receives a trigger, and emits a trigger after a short delay.")
 	icon(preload("res://addons/cards/icons/forward.png"))
 	allow_cycles()
 	
@@ -15,5 +15,5 @@ func s():
 		card.output("out", []))
 	code_card.c(out_card)
 	
-	var in_card = NamedInCard.named_data("data", trg())
+	var in_card = NamedInCard.named_data("trigger", trg())
 	in_card.c_named("in", code_card)

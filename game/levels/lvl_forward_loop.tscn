@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://cxldeg24krchn" path="res://camera_2d.gd" id="2_deai0"]
 [ext_resource type="Script" uid="uid://b2sa3pktn765k" path="res://addons/cards/cards/ForwardCard.gd" id="3_dtmmn"]
 [ext_resource type="Texture2D" uid="uid://hgl7rti485i7" path="res://game/assets/monochrome_tilemap_transparent_packed.png" id="4_kknsj"]
-[ext_resource type="Script" path="res://addons/cards/cards/WinCard.gd" id="5_3yoo5"]
+[ext_resource type="Script" uid="uid://yy4klw00tp2i" path="res://addons/cards/cards/WinCard.gd" id="5_3yoo5"]
 [ext_resource type="Script" uid="uid://dpn0hnjmcwudf" path="res://addons/cards/cards/ClockCard.gd" id="6_deai0"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ln7ps"]
@@ -664,50 +664,60 @@ script = ExtResource("2_deai0")
 metadata/cards_ignore = false
 
 [node name="ForwardCard" type="CharacterBody2D" parent="."]
-position = Vector2(200, 74)
+position = Vector2(266, 63)
 scale = Vector2(0.2, 0.2)
+collision_layer = 0
 motion_mode = 1
 script = ExtResource("3_dtmmn")
 id = "f0dadd47-5419-4409-a8b5-4ced7980dde9"
 named_outgoing = Dictionary[String, Array]({
-"data": [NodePath("../ForwardCard2")]
+"data": [],
+"trigger": [NodePath("../ForwardCard2")]
 })
 named_incoming = Dictionary[String, Array]({
-"data": [NodePath("../ClockCard")]
+"data": [],
+"trigger": [NodePath("../ForwardCard3")]
 })
 metadata/_custom_type_script = ExtResource("3_dtmmn")
 
 [node name="ForwardCard2" type="CharacterBody2D" parent="."]
-position = Vector2(347, 75)
+position = Vector2(371, 40)
 scale = Vector2(0.2, 0.2)
+collision_layer = 0
 motion_mode = 1
 script = ExtResource("3_dtmmn")
 id = "f0dadd47-5419-4409-a8b5-4ced7980dde9"
 named_outgoing = Dictionary[String, Array]({
-"data": [NodePath("../ForwardCard3")]
+"data": [],
+"trigger": []
 })
 named_incoming = Dictionary[String, Array]({
-"data": [NodePath("../ForwardCard")]
+"data": [],
+"trigger": [NodePath("../ForwardCard")]
 })
 metadata/_custom_type_script = ExtResource("3_dtmmn")
 
 [node name="ForwardCard3" type="CharacterBody2D" parent="."]
-position = Vector2(494, 76)
+position = Vector2(173, 69)
 scale = Vector2(0.2, 0.2)
+collision_layer = 0
 motion_mode = 1
 script = ExtResource("3_dtmmn")
 id = "f0dadd47-5419-4409-a8b5-4ced7980dde9"
 named_outgoing = Dictionary[String, Array]({
-"data": []
+"data": [],
+"trigger": [NodePath("../ForwardCard")]
 })
 named_incoming = Dictionary[String, Array]({
-"data": [NodePath("../ForwardCard2")]
+"data": [],
+"trigger": [NodePath("../ClockCard")]
 })
 metadata/_custom_type_script = ExtResource("3_dtmmn")
 
 [node name="WinCard" type="CharacterBody2D" parent="."]
 position = Vector2(835, 73)
 scale = Vector2(0.2, 0.2)
+collision_layer = 0
 motion_mode = 1
 script = ExtResource("5_3yoo5")
 id = "dfce44c8-7eea-45c4-8005-bad52d477040"
@@ -716,10 +726,12 @@ metadata/_custom_type_script = ExtResource("5_3yoo5")
 [node name="ClockCard" type="CharacterBody2D" parent="."]
 position = Vector2(51, 71)
 scale = Vector2(0.2, 0.2)
+collision_layer = 0
 motion_mode = 1
 script = ExtResource("6_deai0")
 id = "c9a97567-0f85-414c-8416-b5b7e6853ec9"
 named_outgoing = Dictionary[String, Array]({
-"data": [NodePath("../ForwardCard")]
+"data": [],
+"trigger": [NodePath("../ForwardCard3")]
 })
 metadata/_custom_type_script = ExtResource("6_deai0")
