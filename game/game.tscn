@@ -1,13 +1,18 @@
-[gd_scene load_steps=5 format=3 uid="uid://cnho75hk2r38a"]
+[gd_scene load_steps=9 format=3 uid="uid://cnho75hk2r38a"]
 
 [ext_resource type="Script" uid="uid://dfgqu28socrd2" path="res://game/game.gd" id="1_l1rk1"]
 [ext_resource type="PackedScene" uid="uid://lpcjvd14w6h2" path="res://game/levels/lvl_apply_impulse.tscn" id="2_h7iqs"]
+[ext_resource type="PackedScene" uid="uid://s7egq2x38wfe" path="res://game/levels/lvl_why_cant_i_make_all_these_connections_but_i_actually_can.tscn" id="2_y36n6"]
 [ext_resource type="PackedScene" uid="uid://c8hporudm03e0" path="res://game/levels/lvl_why_cant_i_make_all_these_connections.tscn" id="3_4fuuu"]
 [ext_resource type="Texture2D" uid="uid://c3lxlhdfk7s3n" path="res://game/assets/arrow.png" id="3_h7iqs"]
+[ext_resource type="PackedScene" uid="uid://bdq67macodymq" path="res://game/levels/lvl_forward_loop.tscn" id="4_u5opy"]
+[ext_resource type="PackedScene" uid="uid://3680781563ff" path="res://game/levels/lvl_apply_impulse_get_position.tscn" id="5_y36n6"]
+[ext_resource type="PackedScene" uid="uid://ctw2beyu5do7c" path="res://game/levels/lvl_falling_balls.tscn" id="6_l8g03"]
 
 [node name="Game" type="Node2D"]
 script = ExtResource("1_l1rk1")
-levels = Array[Resource]([ExtResource("2_h7iqs"), ExtResource("3_4fuuu")])
+levels = Array[PackedScene]([ExtResource("2_y36n6"), ExtResource("3_4fuuu"), ExtResource("4_u5opy"), ExtResource("2_h7iqs"), ExtResource("5_y36n6"), ExtResource("6_l8g03")])
+level_index = 4
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 

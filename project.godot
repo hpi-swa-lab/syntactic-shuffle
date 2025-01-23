@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="cards"
-run/main_scene="uid://bwhhlxvige81v"
+run/main_scene="uid://cnho75hk2r38a"
 config/features=PackedStringArray("4.4", "Forward Plus")
 config/icon="res://icon.svg"
 
@@ -24,6 +24,7 @@ G="*res://addons/cards/G.gd"
 
 window/size/viewport_width=1920
 window/size/viewport_height=1080
+window/size/mode=3
 
 [editor_plugins]
 

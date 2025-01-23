@@ -679,14 +679,14 @@ named_incoming = Dictionary[String, Array]({
 metadata/_custom_type_script = ExtResource("4_17mou")
 
 [node name="ForwardCard3" type="CharacterBody2D" parent="."]
-position = Vector2(43, 215)
+position = Vector2(-8, 63)
 scale = Vector2(0.2, 0.2)
 collision_layer = 0
 motion_mode = 1
 script = ExtResource("4_17mou")
 id = "aa3091e3-8b68-493b-b5b8-73f7489c128a"
 named_outgoing = Dictionary[String, Array]({
-"data": [NodePath("../ForwardCard5")]
+"data": []
 })
 named_incoming = Dictionary[String, Array]({
 "data": []
@@ -704,7 +704,7 @@ named_outgoing = Dictionary[String, Array]({
 "data": []
 })
 named_incoming = Dictionary[String, Array]({
-"data": [NodePath("../ForwardCard3")]
+"data": []
 })
 metadata/_custom_type_script = ExtResource("4_17mou")
 

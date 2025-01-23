@@ -9,7 +9,9 @@ func s():
 	
 	var code_card = CodeCard.create([["in", trg()]], {}, func(card):
 		confetti.emitting = true
-		get_tree().root.find_child("Game", true, false).won())
+		if not get_tree(): return
+		var game = get_tree().root.find_child("Game", true, false)
+		if game: game.won())
 	
 	var in_card = InCard.trigger()
 	in_card.c_named("in", code_card)

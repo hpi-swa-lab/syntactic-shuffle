@@ -11,6 +11,7 @@ func s():
 	var out_card = OutCard.data()
 	
 	var code_card = CodeCard.create([["in", trg()]], {"out": trg()}, func (card):
+		if not is_inside_tree(): return
 		await get_tree().create_timer(0.8).timeout
 		card.output("out", []))
 	code_card.c(out_card)
