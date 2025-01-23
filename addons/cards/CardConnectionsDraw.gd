@@ -75,21 +75,30 @@ func draw_connection(from, to, inverted):
 	distance = min(distance, 1000)
 	
 	var angle = from.global_position.angle_to_point(target) - from.get_global_transform().get_rotation()
-	draw_set_transform(Vector2.ZERO, angle - PI / 2, Vector2.ONE / global_scale)
-	const SIZE = 3
-	const GAP = SIZE * 2.2
 	
-	var offset = get_draw_offset(from, to) * GAP
+	const SIZE = 3
+	const GAP = SIZE * 6.2
+	
+	var offset = -get_draw_offset(from, to) * GAP
 	offset = offset - int(offset)
 	var stretch = 1 - distance / Card.MAX_CONNECTION_DISTANCE
 	for i in range(0, distance / GAP):
-		draw_arrow(Vector2(0, (i + offset) * GAP), SIZE, inverted, to, stretch)
+		#draw_arrow(Vector2(0, (i + offset) * GAP), SIZE, inverted, to, stretch)
+		var t = _tween_values.get(to, 0.0)
+		var alpha = lerp(0.4, 1.0, t)
+		var transform = (Transform2D(angle - PI / 2, Vector2.ONE / global_scale, 0.0, Vector2.ZERO) * Transform2D(0, Vector2(0, (i + offset) * GAP))
+			* Transform2D(0, Vector2(32 / -2, 32 / -2)) * Transform2D(0, Vector2(16.0 / 512, 16.0 / 512), 0, Vector2.ZERO) * Transform2D(0, Vector2(512 / 2, 512 / 2)))
+		draw_set_transform_matrix(transform)
+		var color = Color.WHITE.lerp(Color.DARK_ORANGE, t)
+		draw_texture(preload("res://game/assets/a-rabbits-favorite-food-yummy-yummy.png"), Vector2(0, 0), Color(color, alpha))
+		#draw_texture(preload("res://game/assets/carrot.png"), Vector2(0, 0), Color(Color.WHITE, alpha))
 
 func draw_arrow(pos, size, inverted, flash_key, stretch):
-	var base = Color(Color.WHITE, 0.5).lerp(Color.GREEN, remap(stretch, 0.4, 0, 1, 0)) if Card.always_reconned() else Color(Color.WHITE, 1)
+	#var base = Color(Color.WHITE, 0.2).lerp(Color.WHITE, remap(stretch, 0.4, 0, 1, 0)) if Card.always_reconned() else Color(Color.WHITE, 1)
+	var base = Color(Color.WHITE, 0.6)
 	draw_polyline(
 		[pos + Vector2(-size, 0), pos + Vector2(0, -size if inverted else size), pos + Vector2(size, 0)],
-		base.lerp(Color.RED, _tween_values.get(flash_key, 0.0)),
+		base.lerp(Color.DARK_ORANGE, _tween_values.get(flash_key, 0.0)),
 		size / 2,
 		true)
 

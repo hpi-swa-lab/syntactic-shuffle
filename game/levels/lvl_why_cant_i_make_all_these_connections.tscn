@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://hgl7rti485i7" path="res://game/assets/monochrome_tilemap_transparent_packed.png" id="2_ypfbp"]
 [ext_resource type="Script" uid="uid://cxldeg24krchn" path="res://camera_2d.gd" id="3_gwyae"]
 [ext_resource type="Script" uid="uid://b2sa3pktn765k" path="res://addons/cards/cards/ForwardCard.gd" id="4_s6sxf"]
-[ext_resource type="Script" path="res://addons/cards/cards/WinCard.gd" id="5_7kclh"]
+[ext_resource type="Script" uid="uid://yy4klw00tp2i" path="res://addons/cards/cards/WinCard.gd" id="5_7kclh"]
 [ext_resource type="Script" uid="uid://dpn0hnjmcwudf" path="res://addons/cards/cards/ClockCard.gd" id="6_6mt8e"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ln7ps"]
