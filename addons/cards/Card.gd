@@ -89,6 +89,7 @@ func _ready() -> void:
 	var collision_shape = CollisionShape2D.new()
 	collision_shape.shape = shape
 	add_child(collision_shape)
+	collision_layer = 0
 	
 	get_card_boundary().card_entered(self)
 	
