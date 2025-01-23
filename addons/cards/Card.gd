@@ -245,7 +245,7 @@ func _check_disconnect(them: Node2D):
 		or my_boundary != their_boundary):
 		object_disconnect_from(self, them)
 
-const ALWAYS_RECONNECT = false
+const ALWAYS_RECONNECT = true
 static func always_reconned():
 	return ALWAYS_RECONNECT and not Engine.is_editor_hint()
 
