@@ -8,7 +8,7 @@
 [ext_resource type="Script" uid="uid://cykn2a1upyl7a" path="res://addons/cards/cards/Vector2Card.gd" id="6_u4cky"]
 [ext_resource type="Script" uid="uid://bvoloc64pi1db" path="res://addons/cards/cards/CollisionCard.gd" id="7_j6616"]
 [ext_resource type="Texture2D" uid="uid://hgl7rti485i7" path="res://game/assets/monochrome_tilemap_transparent_packed.png" id="8_xc6ti"]
-[ext_resource type="Script" path="res://addons/cards/cards/WinCard.gd" id="9_xj13i"]
+[ext_resource type="Script" uid="uid://yy4klw00tp2i" path="res://addons/cards/cards/WinCard.gd" id="9_xj13i"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ln7ps"]
 texture = ExtResource("8_xc6ti")
@@ -663,6 +663,7 @@ metadata/cards_ignore = false
 [node name="ClockCard" type="CharacterBody2D" parent="."]
 position = Vector2(1213, 293)
 scale = Vector2(0.2, 0.2)
+collision_layer = 0
 motion_mode = 1
 script = ExtResource("3_ehe84")
 id = "02479bdf-80ac-4b7c-b2b9-f32d702245c4"
@@ -685,6 +686,7 @@ metadata/_edit_lock_ = true
 [node name="ApplyImpulseCard" type="CharacterBody2D" parent="."]
 position = Vector2(1204, 538)
 scale = Vector2(0.2, 0.2)
+collision_layer = 0
 motion_mode = 1
 script = ExtResource("5_idngk")
 id = "b5b2a1d2-0980-4fc1-ade2-6e46da78b893"
@@ -692,7 +694,8 @@ metadata/_custom_type_script = ExtResource("5_idngk")
 
 [node name="Vector2Card" type="CharacterBody2D" parent="."]
 position = Vector2(1494, 537)
-scale = Vector2(0.22, 0.22)
+scale = Vector2(0.2, 0.2)
+collision_layer = 0
 motion_mode = 1
 script = ExtResource("6_u4cky")
 vector = Vector2(1340, 281)
@@ -716,6 +719,7 @@ metadata/_edit_lock_ = true
 [node name="CollisionCard" type="CharacterBody2D" parent="."]
 position = Vector2(1339, 151)
 scale = Vector2(0.2, 0.2)
+collision_layer = 0
 motion_mode = 1
 script = ExtResource("7_j6616")
 id = "05b8c001-39b8-4c02-923f-f92f64609375"
@@ -732,6 +736,7 @@ tile_set = SubResource("TileSet_pxxsx")
 [node name="WinCard" type="CharacterBody2D" parent="."]
 position = Vector2(1337, 35)
 scale = Vector2(0.2, 0.2)
+collision_layer = 0
 motion_mode = 1
 script = ExtResource("9_xj13i")
 id = "26bb3a9a-bf5b-4760-8646-bb411dc1f2f0"

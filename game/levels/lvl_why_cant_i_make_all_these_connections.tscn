@@ -666,6 +666,7 @@ metadata/cards_ignore = false
 [node name="ForwardCard" type="CharacterBody2D" parent="."]
 position = Vector2(329, 215)
 scale = Vector2(0.2, 0.2)
+collision_layer = 0
 motion_mode = 1
 script = ExtResource("4_s6sxf")
 id = "aa3091e3-8b68-493b-b5b8-73f7489c128a"
@@ -680,6 +681,7 @@ metadata/_custom_type_script = ExtResource("4_s6sxf")
 [node name="ForwardCard4" type="CharacterBody2D" parent="."]
 position = Vector2(-66, 219)
 scale = Vector2(0.2, 0.2)
+collision_layer = 0
 motion_mode = 1
 script = ExtResource("4_s6sxf")
 id = "aa3091e3-8b68-493b-b5b8-73f7489c128a"
@@ -694,6 +696,7 @@ metadata/_custom_type_script = ExtResource("4_s6sxf")
 [node name="ForwardCard2" type="CharacterBody2D" parent="."]
 position = Vector2(228, 74)
 scale = Vector2(0.2, 0.2)
+collision_layer = 0
 motion_mode = 1
 script = ExtResource("4_s6sxf")
 id = "aa3091e3-8b68-493b-b5b8-73f7489c128a"
@@ -708,6 +711,7 @@ metadata/_custom_type_script = ExtResource("4_s6sxf")
 [node name="ForwardCard3" type="CharacterBody2D" parent="."]
 position = Vector2(22, 78)
 scale = Vector2(0.2, 0.2)
+collision_layer = 0
 motion_mode = 1
 script = ExtResource("4_s6sxf")
 id = "aa3091e3-8b68-493b-b5b8-73f7489c128a"
@@ -722,6 +726,7 @@ metadata/_custom_type_script = ExtResource("4_s6sxf")
 [node name="ClockCard" type="CharacterBody2D" parent="."]
 position = Vector2(-188, 74)
 scale = Vector2(0.2, 0.2)
+collision_layer = 0
 motion_mode = 1
 script = ExtResource("6_6mt8e")
 id = "95b9b8a0-c65f-4a6c-87c0-ab27c767dbc7"
@@ -733,6 +738,7 @@ metadata/_custom_type_script = ExtResource("6_6mt8e")
 [node name="WinCard" type="CharacterBody2D" parent="."]
 position = Vector2(436, 70)
 scale = Vector2(0.2, 0.2)
+collision_layer = 0
 motion_mode = 1
 script = ExtResource("5_7kclh")
 id = "4b258029-7031-4b31-aa97-7d890ffc0c01"
