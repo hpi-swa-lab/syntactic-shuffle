@@ -723,7 +723,7 @@ tile_map_data = PackedByteArray("AADy/9P/AQAAAAAAAADy/9L/AQAAAAAAAADx/9P/AQAAAAA
 tile_set = SubResource("TileSet_me2oe")
 
 [node name="PhysicsProcessCard" type="CharacterBody2D" parent="."]
-position = Vector2(1537, 205)
+position = Vector2(1540, 202)
 scale = Vector2(0.2, 0.2)
 motion_mode = 1
 script = ExtResource("8_oj8kc")
