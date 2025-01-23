@@ -663,58 +663,63 @@ zoom = Vector2(1.93, 1.93)
 script = ExtResource("2_deai0")
 metadata/cards_ignore = false
 
-[node name="ForwardCard" type="Node2D" parent="."]
-position = Vector2(295, 75)
+[node name="ForwardCard" type="CharacterBody2D" parent="."]
+position = Vector2(200, 74)
 scale = Vector2(0.2, 0.2)
+motion_mode = 1
 script = ExtResource("3_dtmmn")
-id = "0c0fd2b0-87bd-4033-9352-40b64e954f15"
+id = "f0dadd47-5419-4409-a8b5-4ced7980dde9"
 named_outgoing = Dictionary[String, Array]({
-"data": [NodePath("../ForwardCard3")]
-})
-named_incoming = Dictionary[String, Array]({
 "data": [NodePath("../ForwardCard2")]
-})
-metadata/_custom_type_script = ExtResource("3_dtmmn")
-
-[node name="ForwardCard2" type="Node2D" parent="."]
-position = Vector2(146, 74)
-scale = Vector2(0.2, 0.2)
-script = ExtResource("3_dtmmn")
-id = "a2cee372-1cf0-4136-b660-688423556d86"
-named_outgoing = Dictionary[String, Array]({
-"data": [NodePath("../ForwardCard")]
 })
 named_incoming = Dictionary[String, Array]({
 "data": [NodePath("../ClockCard")]
 })
 metadata/_custom_type_script = ExtResource("3_dtmmn")
 
-[node name="ForwardCard3" type="Node2D" parent="."]
-position = Vector2(444, 75)
+[node name="ForwardCard2" type="CharacterBody2D" parent="."]
+position = Vector2(347, 75)
 scale = Vector2(0.2, 0.2)
+motion_mode = 1
 script = ExtResource("3_dtmmn")
-id = "46813c90-546b-41c4-ba68-dac700424e95"
+id = "f0dadd47-5419-4409-a8b5-4ced7980dde9"
 named_outgoing = Dictionary[String, Array]({
-"data": []
+"data": [NodePath("../ForwardCard3")]
 })
 named_incoming = Dictionary[String, Array]({
 "data": [NodePath("../ForwardCard")]
 })
 metadata/_custom_type_script = ExtResource("3_dtmmn")
 
-[node name="WinCard" type="Node2D" parent="."]
-position = Vector2(840, 76)
+[node name="ForwardCard3" type="CharacterBody2D" parent="."]
+position = Vector2(494, 76)
 scale = Vector2(0.2, 0.2)
+motion_mode = 1
+script = ExtResource("3_dtmmn")
+id = "f0dadd47-5419-4409-a8b5-4ced7980dde9"
+named_outgoing = Dictionary[String, Array]({
+"data": []
+})
+named_incoming = Dictionary[String, Array]({
+"data": [NodePath("../ForwardCard2")]
+})
+metadata/_custom_type_script = ExtResource("3_dtmmn")
+
+[node name="WinCard" type="CharacterBody2D" parent="."]
+position = Vector2(835, 73)
+scale = Vector2(0.2, 0.2)
+motion_mode = 1
 script = ExtResource("5_3yoo5")
-id = "c573a7cf-09d9-4a87-80eb-5ea5c2f88f80"
+id = "dfce44c8-7eea-45c4-8005-bad52d477040"
 metadata/_custom_type_script = ExtResource("5_3yoo5")
 
-[node name="ClockCard" type="Node2D" parent="."]
-position = Vector2(55, 71)
+[node name="ClockCard" type="CharacterBody2D" parent="."]
+position = Vector2(51, 71)
 scale = Vector2(0.2, 0.2)
+motion_mode = 1
 script = ExtResource("6_deai0")
-id = "7d22d1a8-c6d8-495f-baa6-381324ce9e30"
+id = "c9a97567-0f85-414c-8416-b5b7e6853ec9"
 named_outgoing = Dictionary[String, Array]({
-"data": [NodePath("../ForwardCard2")]
+"data": [NodePath("../ForwardCard")]
 })
 metadata/_custom_type_script = ExtResource("6_deai0")
