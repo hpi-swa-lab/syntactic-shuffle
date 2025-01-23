@@ -286,7 +286,6 @@ func _physics_process(delta: float) -> void:
 			velocity = get_global_mouse_position() - global_position
 			velocity /= delta * 2
 			velocity = velocity.limit_length(1500)
-			print(velocity)
 			move_and_slide()
 			velocity = Vector2.ZERO
 		#var collision = move_and_collide(velocity)
@@ -306,7 +305,7 @@ func _has_line_of_sight_to(other: Node) -> bool:
 	var space_state = PhysicsServer2D.space_get_direct_state(get_world_2d().space)
 	var query = PhysicsRayQueryParameters2D.create(global_position, other.global_position)
 	var result = space_state.intersect_ray(query)
-	return result.is_empty()
+	return result.is_empty() or result["collider"] == other
 
 func try_connect(them: Node):
 	if not _has_line_of_sight_to(them): return
