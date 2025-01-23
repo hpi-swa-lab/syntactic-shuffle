@@ -93,6 +93,7 @@ func invoke(args: Array, signature: Signature, named = "", source_out = null):
 	for name in n:
 		for p in n[name]:
 			var obj = parent.get_node_or_null(p)
+			if obj == null: continue
 			obj.invoke(args, signature, name, self)
 	for out in get_object_outgoing(parent):
 		var obj = parent.get_node_or_null(out)

@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=3 uid="uid://vee8mgyucqhd"]
 
-[ext_resource type="Texture2D" uid="uid://d2jwtc18kuor0" path="res://game/assets/confetti.png" id="1_fy4n5"]
+[ext_resource type="Texture2D" uid="uid://b0hxqytame26e" path="res://game/assets/a-rabbits-favorite-food-yummy-yummy.png" id="1_fy4n5"]
 
 [sub_resource type="Gradient" id="Gradient_fy4n5"]
 interpolation_mode = 1
@@ -22,22 +22,23 @@ curve = SubResource("Curve_fy4n5")
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_6p6ka"]
 lifetime_randomness = 0.5
 particle_flag_disable_z = true
+angle_min = 1.07288e-05
+angle_max = 360.0
 spread = 180.0
-initial_velocity_min = 2500.0
-initial_velocity_max = 3000.0
-gravity = Vector3(0, 700, 0)
-damping_min = 700.0
-damping_max = 1000.0
-scale_min = 5.0
-scale_max = 5.0
+initial_velocity_min = 1300.0
+initial_velocity_max = 1700.0
+gravity = Vector3(0, 300, 0)
+damping_min = 200.0
+damping_max = 500.0
+scale_max = 2.0
 scale_curve = SubResource("CurveTexture_6p6ka")
 color_initial_ramp = SubResource("GradientTexture1D_6p6ka")
 
 [node name="GPUParticles2D" type="GPUParticles2D"]
 z_index = 10
 emitting = false
-amount = 400
-lifetime = 0.6
+amount = 100
+lifetime = 1.2
 one_shot = true
 explosiveness = 0.7
 randomness = 0.5
