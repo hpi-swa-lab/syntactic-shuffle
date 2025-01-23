@@ -250,8 +250,7 @@ static func always_reconned():
 	return ALWAYS_RECONNECT and not Engine.is_editor_hint()
 
 func can_drag():
-	for player in get_tree().get_nodes_in_group("player"):
-		return player.can_grab()
+	return true
 
 func _process(delta: float) -> void:
 	if dragging and not Engine.is_editor_hint():
