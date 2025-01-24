@@ -664,47 +664,53 @@ script = ExtResource("3_lpo5v")
 metadata/cards_ignore = false
 
 [node name="ForwardCard4" type="CharacterBody2D" parent="."]
-position = Vector2(-112, 204)
+position = Vector2(-15, 224)
 scale = Vector2(0.2, 0.2)
 collision_layer = 0
 motion_mode = 1
 script = ExtResource("4_17mou")
 id = "aa3091e3-8b68-493b-b5b8-73f7489c128a"
 named_outgoing = Dictionary[String, Array]({
-"data": []
+"data": [],
+"trigger": []
 })
 named_incoming = Dictionary[String, Array]({
-"data": []
+"data": [],
+"trigger": []
 })
 metadata/_custom_type_script = ExtResource("4_17mou")
 
 [node name="ForwardCard3" type="CharacterBody2D" parent="."]
-position = Vector2(-8, 63)
+position = Vector2(-31, 68)
 scale = Vector2(0.2, 0.2)
 collision_layer = 0
 motion_mode = 1
 script = ExtResource("4_17mou")
 id = "aa3091e3-8b68-493b-b5b8-73f7489c128a"
 named_outgoing = Dictionary[String, Array]({
-"data": []
+"data": [],
+"trigger": []
 })
 named_incoming = Dictionary[String, Array]({
-"data": []
+"data": [],
+"trigger": []
 })
 metadata/_custom_type_script = ExtResource("4_17mou")
 
 [node name="ForwardCard5" type="CharacterBody2D" parent="."]
-position = Vector2(121, 158)
+position = Vector2(147, 207)
 scale = Vector2(0.2, 0.2)
 collision_layer = 0
 motion_mode = 1
 script = ExtResource("4_17mou")
 id = "aa3091e3-8b68-493b-b5b8-73f7489c128a"
 named_outgoing = Dictionary[String, Array]({
-"data": []
+"data": [],
+"trigger": []
 })
 named_incoming = Dictionary[String, Array]({
-"data": []
+"data": [],
+"trigger": []
 })
 metadata/_custom_type_script = ExtResource("4_17mou")
 
@@ -716,7 +722,8 @@ motion_mode = 1
 script = ExtResource("5_40u0n")
 id = "95b9b8a0-c65f-4a6c-87c0-ab27c767dbc7"
 named_outgoing = Dictionary[String, Array]({
-"data": []
+"data": [],
+"trigger": []
 })
 metadata/_custom_type_script = ExtResource("5_40u0n")
 

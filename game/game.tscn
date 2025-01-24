@@ -13,7 +13,6 @@
 [node name="Game" type="Node2D"]
 script = ExtResource("1_l1rk1")
 levels = Array[PackedScene]([ExtResource("2_l8g03"), ExtResource("2_y36n6"), ExtResource("3_4fuuu"), ExtResource("4_u5opy"), ExtResource("2_h7iqs"), ExtResource("5_y36n6"), ExtResource("6_l8g03")])
-level_index = 2
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
