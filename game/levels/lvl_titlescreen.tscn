@@ -1,0 +1,45 @@
+[gd_scene load_steps=7 format=3 uid="uid://bkam37a3pyy7f"]
+
+[ext_resource type="Texture2D" uid="uid://bex45g4va67r" path="res://addons/cards/icons/titlescreen.png" id="1_femu4"]
+[ext_resource type="Texture2D" uid="uid://db7w05wlurhon" path="res://addons/cards/icons/start.png" id="2_ngvcn"]
+[ext_resource type="Script" uid="uid://far4gtmtpxw" path="res://game/levels/start.gd" id="3_simxd"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_simxd"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_s1yak"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ngvcn"]
+
+[node name="LvlTitlescreen" type="Node2D"]
+
+[node name="Titlescreen" type="Sprite2D" parent="."]
+position = Vector2(960, 540)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("1_femu4")
+
+[node name="NextLevelButton" type="Button" parent="."]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 200)
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 1552.0
+offset_top = 121.0
+offset_right = 1752.0
+offset_bottom = 321.0
+grow_horizontal = 0
+grow_vertical = 0
+size_flags_horizontal = 8
+size_flags_vertical = 8
+theme_override_styles/hover = SubResource("StyleBoxEmpty_simxd")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_s1yak")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_ngvcn")
+icon = ExtResource("2_ngvcn")
+icon_alignment = 1
+expand_icon = true
+script = ExtResource("3_simxd")
+metadata/_edit_use_anchors_ = true
+
+[connection signal="pressed" from="NextLevelButton" to="NextLevelButton" method="start"]
