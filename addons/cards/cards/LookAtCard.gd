@@ -2,11 +2,12 @@
 extends Card
 class_name LookAtCard
 
-func s():
+func v():
 	title("Look At")
 	description("Look at the provided position.")
 	icon(preload("res://addons/cards/icons/look_at.png"))
-	
+
+func s():
 	var code_card = CodeCard.create([["body", t("Node2D")], ["position", t("Vector2")]], {}, func (card, body, position):
 		body.look_at(position))
 	

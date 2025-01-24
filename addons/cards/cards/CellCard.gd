@@ -21,11 +21,12 @@ var out_card: OutCard
 				out_card.has_static_signature = false
 var update_ui_func = null
 
-func s():
+func v():
 	title("Data Cell")
 	description("Store or piece of data.")
 	icon(preload("res://addons/cards/icons/number.png"))
-	
+
+func s():
 	out_card = OutCard.remember([data], Signature.TypeSignature.new(type))
 	# refresh type info
 	self.type = type
@@ -65,7 +66,7 @@ func get_extra_ui() -> Array[Control]:
 			return [n]
 		"bool":
 			var b = CheckButton.new()
-			if data != null: b.pressed = data
+			if data != null: b.button_pressed = data
 			b.toggled.connect(func(b): data = b)
 			update_ui_func = func(v): b.set_pressed_no_signal(v)
 			return [b]

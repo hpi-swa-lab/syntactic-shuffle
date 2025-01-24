@@ -48,7 +48,7 @@ named_incoming = Dictionary[String, Array]({
 metadata/_custom_type_script = ExtResource("4_1bvp3")
 
 [node name="NumberCard2" type="Node2D" parent="CardBoundary"]
-position = Vector2(848.159, 695.353)
+position = Vector2(851, 689)
 scale = Vector2(0.2, 0.2)
 script = ExtResource("3_h2yge")
 id = "b4dc944b-3b77-4108-8530-fe11d1615a57"
@@ -79,7 +79,7 @@ metadata/_custom_type_script = ExtResource("5_lquwl")
 metadata/_edit_lock_ = true
 
 [node name="MoveCard" type="Node2D" parent="CardBoundary"]
-position = Vector2(538.441, 669.421)
+position = Vector2(574.576, 708.221)
 scale = Vector2(0.2, 0.2)
 script = ExtResource("6_7mycd")
 id = "72710ad0-3a6e-4602-9b73-d342b25ee369"
@@ -105,7 +105,7 @@ outgoing = Array[NodePath]([NodePath("../GroupCard")])
 metadata/_custom_type_script = ExtResource("7_272bh")
 
 [node name="AxisControlsCard" type="Node2D" parent="CardBoundary"]
-position = Vector2(451.092, 640.947)
+position = Vector2(427.956, 645.954)
 scale = Vector2(0.2, 0.2)
 script = ExtResource("8_5vw27")
 id = "30b2fc2a-5464-4107-9241-8ef915cc8aff"
@@ -166,7 +166,7 @@ id = "6d58c155-5e52-495b-9cd9-234e249a91d2"
 metadata/_custom_type_script = ExtResource("13_ycdy4")
 
 [node name="CollisionCard" type="Node2D" parent="CardBoundary"]
-position = Vector2(515.677, 583.647)
+position = Vector2(522.243, 545.777)
 scale = Vector2(0.2, 0.2)
 script = ExtResource("12_ycdy4")
 id = "13c9f1aa-0917-46f6-86d5-de2035379e1d"

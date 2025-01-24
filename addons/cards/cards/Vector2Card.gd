@@ -4,11 +4,12 @@ class_name Vector2Card
 
 @export var vector: Vector2
 
-func s():
+func v():
 	title("Vector")
 	description("Store or present a vector.")
 	icon(preload("res://addons/cards/icons/vector.png"))
-	
+
+func s():
 	var out_card = OutCard.remember([vector], t("Vector2"))
 	
 	var cell_card = CellCard.new()

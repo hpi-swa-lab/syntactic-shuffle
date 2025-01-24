@@ -54,7 +54,7 @@ func get_remembered_value():
 	assert(remembered != null)
 	return remembered
 
-func s():
+func v():
 	title("Output")
 	description("Emit output.")
 	icon(preload("res://addons/cards/icons/forward.png"))

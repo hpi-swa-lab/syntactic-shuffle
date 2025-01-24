@@ -5,11 +5,12 @@ class_name PlusCard
 var remember_left_card: RememberCard
 var remember_right_card: RememberCard
 
-func s():
+func v():
 	title("Plus")
 	description("Adds two numbers.")
 	icon(preload("res://addons/cards/icons/plus.png"))
-	
+
+func s():
 	var out_card = OutCard.data()
 	
 	var code_card = CodeCard.create([["left", t("float")], ["right", t("float")]], {"out": t("float")}, func (card, l, r):

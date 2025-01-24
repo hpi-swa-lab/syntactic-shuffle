@@ -2,11 +2,12 @@
 extends Card
 class_name MoveCard
 
-func s():
+func v():
 	title("Move")
 	description("Move an object.")
 	icon(preload("res://addons/cards/icons/move.png"))
-	
+
+func s():
 	var velocity_card = Vector2Card.new()
 	var did_accelerate_card = BoolCard.new()
 	

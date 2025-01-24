@@ -2,12 +2,13 @@
 extends Card
 class_name CollisionCard
 
-func s():
+func v():
 	title("Collision")
 	description("Emit when colliding.")
 	icon(preload("res://addons/cards/icons/collision.png"))
 	allow_cycles()
-	
+
+func s():
 	var out_card = OutCard.data()
 	
 	var code_card = CodeCard.create([["body", t("CharacterBody2D")], ["trigger", trg()]], {"trigger": trg()}, func (card, body):

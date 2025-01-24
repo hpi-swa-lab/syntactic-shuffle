@@ -2,11 +2,12 @@
 extends Card
 class_name ClockCard
 
-func s():
+func v():
 	title("Clock")
 	description("Trigger a signal after a specified time.")
 	icon(preload("res://addons/cards/icons/clock.png"))
-	
+
+func s():
 	var out = OutCard.static_signature(trg())
 	
 	var elapsed_time = NumberCard.new()

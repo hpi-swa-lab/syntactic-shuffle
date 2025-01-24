@@ -4,11 +4,12 @@ class_name GroupCard
 
 @export var group_name = ""
 
-func s():
+func v():
 	title("Group")
 	description("All elements in a group.")
 	icon(preload("res://addons/cards/icons/group.png"))
-	
+
+func s():
 	var out_card = OutCard.remember()
 	
 	var code_card = CodeCard.create([["trigger", trg()]], {"out": t("Node")}, func (card):

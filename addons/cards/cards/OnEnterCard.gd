@@ -2,11 +2,12 @@
 extends Card
 class_name OnEnterCard
 
-func s():
+func v():
 	title("On Enter")
 	description("Emit when entered.")
 	icon(preload("res://addons/cards/icons/collision.png"))
-	
+
+func s():
 	var out_card = OutCard.data()
 	
 	var code_card = CodeCard.create([["body", t("Node2D")]], {"trigger": trg()}, func (card, body):

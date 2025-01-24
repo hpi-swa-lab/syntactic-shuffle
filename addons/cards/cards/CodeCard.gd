@@ -15,11 +15,12 @@ var process: Callable
 var inputs: Array[Array]
 var pull_only: Array
 
-func s():
+func v():
 	title("Code")
 	description("Run some code.")
 	icon(preload("res://addons/cards/icons/code.png"))
-	
+
+func s():
 	for output in outputs:
 		OutCard.static_signature(outputs[output])
 	

@@ -2,11 +2,12 @@
 extends Card
 class_name ReflectCard
 
-func s():
+func v():
 	title("Reflect")
 	description("Reflect a vector.")
 	icon(preload("res://addons/cards/icons/reflect.png"))
-	
+
+func s():
 	var out_card = OutCard.data()
 	
 	var code_card = CodeCard.create([["vector", t("Vector2")], ["normal", t("Vector2")]], {"out": t("Vector2")}, func (card, v, n):

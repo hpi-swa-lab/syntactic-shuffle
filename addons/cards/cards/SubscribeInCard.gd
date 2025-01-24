@@ -7,7 +7,7 @@ static func create(signature: Signature):
 	c.signature = signature
 	return c
 
-func s():
+func v():
 	title("Subscribe Input")
 	description("Trigger when an input is connected and when it's disconnected.")
 	icon(preload("res://addons/cards/icons/forward.png"))

@@ -2,11 +2,12 @@
 extends Card
 class_name AxisControlsCard
 
-func s():
+func v():
 	title("Axis Controls")
 	description("Emits signals for inputs on the four axes.")
 	icon(preload("res://addons/cards/icons/keyboard_input.png"))
-	
+
+func s():
 	var out_card = OutCard.data()
 	
 	var code_card = CodeCard.create([["trigger", trg()]], {"out": t("Vector2")}, func (card):

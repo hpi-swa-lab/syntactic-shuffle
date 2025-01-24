@@ -4,11 +4,12 @@ class_name RememberCard
 
 var out_card: OutCard
 
-func s():
+func v():
 	title("Remember")
 	description("Receives an input and makes sure it is remembered.")
 	icon(preload("res://addons/cards/icons/number.png"))
-	
+
+func s():
 	out_card = OutCard.remember()
 	
 	var in_card = InCard.data(any())

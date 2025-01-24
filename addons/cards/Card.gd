@@ -80,6 +80,7 @@ func _ready() -> void:
 	visual.dragging.connect(func (d): dragging = d)
 	visual.paused = paused
 	add_child(visual)
+	v()
 	
 	get_card_boundary().card_entered(self)
 	
@@ -94,10 +95,11 @@ var cards_parent = Node2D.new()
 
 ## Setup function DSL
 func s(): pass
-func title(t: String): if visual: visual.title(t)
-func description(t: String): if visual: visual.description(t)
-func icon(t: Texture): if visual: visual.icon(t)
-func ui(t: Control): if visual: visual.ui(t)
+func v(): pass
+func title(t: String): visual.title(t)
+func description(t: String): visual.description(t)
+func icon(t: Texture): visual.icon(t)
+func ui(t: Control): visual.ui(t)
 func c(other: Card):
 	outgoing.push_back(get_path_to(other))
 	other.incoming.push_back(other.get_path_to(self))
@@ -305,6 +307,9 @@ func editor_sync_prop(name: String):
 	editor_sync("cards:set_prop", [id, name, get(name)])
 
 func _forward_canvas_gui_input(event: InputEvent, undo_redo):
+	if event is InputEventKey and event.key_label == KEY_TAB and event.pressed:
+		visual.expanded = not visual.expanded
+		return true
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		dragging = event.pressed
 	return false

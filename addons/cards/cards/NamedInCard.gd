@@ -10,7 +10,7 @@ static func named_data(name: String, signature: Signature):
 
 @export var input_name: String
 
-func s():
+func v():
 	title("Named Input")
 	description("Receive input via a named connection.")
 	icon(preload("res://addons/cards/icons/forward.png"))

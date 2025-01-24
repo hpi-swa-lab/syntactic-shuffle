@@ -2,11 +2,12 @@
 extends Card
 class_name DeleteCard
 
-func s():
+func v():
 	title("Delete")
 	description("Delete an object.")
 	icon(preload("res://addons/cards/icons/delete.png"))
-	
+
+func s():
 	var code_card = CodeCard.create([["body", t("Node")], ["trigger", trg()]], {}, func (card, body):
 		body.queue_free())
 	

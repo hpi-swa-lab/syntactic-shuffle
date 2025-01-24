@@ -22,7 +22,7 @@ var signature: Signature
 func get_out_signatures(list: Array):
 	list.push_back(signature)
 
-func s():
+func v():
 	title("Input")
 	description("Receive input.")
 	icon(preload("res://addons/cards/icons/forward.png"))

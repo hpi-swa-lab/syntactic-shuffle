@@ -4,11 +4,12 @@ class_name BoolCard
 
 @export var value: bool
 
-func s():
+func v():
 	title("Bool")
 	description("Store or present a boolean.")
 	icon(preload("res://addons/cards/icons/bool.png"))
-	
+
+func s():
 	var out_card = OutCard.remember([value], t("bool"))
 	
 	var cell_card = CellCard.new()

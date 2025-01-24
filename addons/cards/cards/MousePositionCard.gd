@@ -2,11 +2,12 @@
 extends Card
 class_name MousePositionCard
 
-func s():
+func v():
 	title("Mouse Position")
 	description("Continously emits mouse position.")
 	icon(preload("res://addons/cards/icons/mouse_position.png"))
-	
+
+func s():
 	var out_card = OutCard.data()
 	
 	var code_card = CodeCard.create([["trigger", trg()]], {"out": t("Vector2")}, func (card):

@@ -12,11 +12,12 @@ class_name SetCard
 
 var in_object_card: NamedInCard
 
-func s():
+func v():
 	title("Set Property")
 	description("Set the property of an object.")
 	icon(preload("res://addons/cards/icons/increment.png"))
-	
+
+func s():
 	in_object_card = NamedInCard.named_data("value", any())
 	# refresh
 	self.property_name = property_name

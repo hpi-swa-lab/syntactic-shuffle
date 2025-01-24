@@ -4,11 +4,12 @@ class_name NumberCard
 
 @export var number: float
 
-func s():
+func v():
 	title("Number")
 	description("Store or present a number.")
 	icon(preload("res://addons/cards/icons/number.png"))
-	
+
+func s():
 	var out_card = OutCard.remember([number], t("float"))
 	
 	var cell_card = CellCard.new()

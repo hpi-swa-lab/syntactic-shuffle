@@ -8,11 +8,12 @@ class_name SignalCard
 var sub
 var connect_card
 
-func s():
+func v():
 	title("Signal")
 	description("Connect to a singal and trigger when it emits.")
 	icon(preload("res://addons/cards/icons/signal.png"))
-	
+
+func s():
 	var out_card = OutCard.data()
 	
 	connect_card = CodeCard.create([["obj", cmd("connect", t("Object"))]], {"trigger": trg(), "one_arg": t(type)}, func (card, obj):

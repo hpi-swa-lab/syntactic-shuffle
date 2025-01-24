@@ -2,11 +2,12 @@
 extends Card
 class_name ForwardTriggerCard
 
-func s():
+func v():
 	title("Forward Trigger")
 	description("Receives any data input, discards the data, and emits a trigger.")
 	icon(preload("res://addons/cards/icons/forward.png"))
-	
+
+func s():
 	var out_card = OutCard.data()
 	
 	var code_card = CodeCard.create([["in", any()]], {"out": trg()}, func (card, arg): card.output("out", []))
