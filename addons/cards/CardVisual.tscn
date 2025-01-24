@@ -74,6 +74,7 @@ texture = ExtResource("1_x38hd")
 expand_mode = 5
 
 [node name="DescriptionMargin" type="MarginContainer" parent="CardControl/MainColumn"]
+visible = false
 layout_mode = 2
 theme_override_constants/margin_left = 8
 theme_override_constants/margin_right = 8

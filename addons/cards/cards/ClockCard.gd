@@ -2,7 +2,7 @@
 extends Card
 class_name ClockCard
 
-const TIMEOUT = 0.6
+const TIMEOUT = 2.0
 
 func s():
 	title("Clock")

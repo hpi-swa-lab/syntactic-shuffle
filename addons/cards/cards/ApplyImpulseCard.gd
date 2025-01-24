@@ -14,4 +14,5 @@ func s():
 	trigger_card.c_named("toward", code_card)
 	
 	var in_character = InCard.data(t("RigidBody2D"))
+	in_character.invert_connection = true
 	in_character.c_named("body", code_card)

@@ -18,6 +18,7 @@ static func command(command: String, type: Signature = null):
 	return c
 
 var signature: Signature
+var invert_connection = false
 
 func get_out_signatures(list: Array):
 	list.push_back(signature)

@@ -56,6 +56,7 @@ static func object_is_dragging(object):
 	return "dragging" in object and object.dragging
 
 func draw_label_to(obj: Node2D, label: String):
+	return
 	var font = ThemeDB.fallback_font
 	var angle = global_position.angle_to_point(obj.global_position)
 	var flip = abs(angle) > PI / 2
@@ -68,6 +69,10 @@ func draw_label_to(obj: Node2D, label: String):
 
 func draw_connection(from, to, inverted):
 	if not to: return
+	var t = _tween_values.get(to, 0.0)
+	if t == 0.0:
+		draw_connection2(from, to, inverted)
+		return
 	var target = to.global_position
 	var distance = target.distance_to(from.global_position)
 	# FIXME save guard -- if this happens, we have a problem anyways
@@ -77,14 +82,13 @@ func draw_connection(from, to, inverted):
 	var angle = from.global_position.angle_to_point(target) - from.get_global_transform().get_rotation()
 	
 	const SIZE = 3
-	const GAP = SIZE * 6.2
+	const GAP = SIZE * 5
 	
 	var offset = -get_draw_offset(from, to) * GAP
 	offset = offset - int(offset)
 	var stretch = 1 - distance / Card.MAX_CONNECTION_DISTANCE
 	for i in range(0, distance / GAP):
 		#draw_arrow(Vector2(0, (i + offset) * GAP), SIZE, inverted, to, stretch)
-		var t = _tween_values.get(to, 0.0)
 		var alpha = lerp(0.4, 1.0, t)
 		var transform = (Transform2D(angle - PI / 2, Vector2.ONE / global_scale, 0.0, Vector2.ZERO) * Transform2D(0, Vector2(0, (i + offset) * GAP))
 			* Transform2D(0, Vector2(32 / -2, 32 / -2)) * Transform2D(0, Vector2(16.0 / 512, 16.0 / 512), 0, Vector2.ZERO) * Transform2D(0, Vector2(512 / 2, 512 / 2)))
@@ -93,9 +97,28 @@ func draw_connection(from, to, inverted):
 		draw_texture(preload("res://game/assets/a-rabbits-favorite-food-yummy-yummy.png"), Vector2(0, 0), Color(color, alpha))
 		#draw_texture(preload("res://game/assets/carrot.png"), Vector2(0, 0), Color(Color.WHITE, alpha))
 
+func draw_connection2(from, to, inverted):
+	if not to: return
+	var target = to.global_position
+	var distance = target.distance_to(from.global_position)
+	# FIXME save guard -- if this happens, we have a problem anyways
+	# that needs to be solved differently
+	distance = min(distance, 1000)
+	
+	var angle = from.global_position.angle_to_point(target) - from.get_global_transform().get_rotation()
+	draw_set_transform(Vector2.ZERO, angle - PI / 2, Vector2.ONE / global_scale)
+	const SIZE = 3
+	const GAP = SIZE * 2.2
+	
+	var offset = get_draw_offset(from, to) * GAP
+	offset = offset - int(offset)
+	var stretch = 1 - distance / Card.MAX_CONNECTION_DISTANCE
+	for i in range(0, distance / GAP):
+		draw_arrow(Vector2(0, (i + offset) * GAP), SIZE, inverted, to, stretch)
+
 func draw_arrow(pos, size, inverted, flash_key, stretch):
 	#var base = Color(Color.WHITE, 0.2).lerp(Color.WHITE, remap(stretch, 0.4, 0, 1, 0)) if Card.always_reconned() else Color(Color.WHITE, 1)
-	var base = Color(Color.WHITE, 0.6)
+	var base = Color(Color.WHITE, 0.9)
 	draw_polyline(
 		[pos + Vector2(-size, 0), pos + Vector2(0, -size if inverted else size), pos + Vector2(size, 0)],
 		base.lerp(Color.DARK_ORANGE, _tween_values.get(flash_key, 0.0)),

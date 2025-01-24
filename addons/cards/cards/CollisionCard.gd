@@ -16,8 +16,8 @@ func s():
 				card.output("trigger", [])
 		if body is RigidBody2D:
 			for other in body.get_colliding_bodies():
-				body.freeze = false
-				if other is RigidBody2D: other.freeze = false
+				#body.freeze = false
+				#if other is RigidBody2D: other.freeze = false
 				card.output("trigger", []))
 	code_card.c(out_card)
 	
