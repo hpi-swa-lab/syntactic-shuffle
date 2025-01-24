@@ -87,6 +87,8 @@ func try_connect(them: Node):
 					return
 
 func detect_cycles_for_new_connection(from: Card, to: Card) -> bool:
+	if (to.allows_cycles() or from.allows_cycles()) and not from.get_all_outgoing().has(to) and not to.get_all_incoming().has(from):
+		return false
 	return check_is_connected(from, to)
 
 func check_is_connected(a: Card, b: Card) -> bool:

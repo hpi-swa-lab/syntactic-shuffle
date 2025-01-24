@@ -111,11 +111,13 @@ func allow_cycles():
 	pass
 
 var parent: Node
+var _allows_cycles = false
 @export var incoming: Array[NodePath] = []
 @export var outgoing: Array[NodePath] = []
 @export var named_outgoing: Dictionary[String, Array] = {}
 @export var named_incoming: Dictionary[String, Array] = {}
 
+func allows_cycles(): return _allows_cycles
 func get_out_signatures(signatures: Array):
 	for card in cards:
 		if card is OutCard: card.get_out_signatures(signatures)
