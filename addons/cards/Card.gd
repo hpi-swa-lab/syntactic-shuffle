@@ -253,7 +253,6 @@ static func connect_to(from: Node, to: Node, named = ""):
 		get_object_incoming(to).push_back(to.get_path_to(from))
 
 func _check_disconnect(them: Node2D):
-	return
 	var my_boundary = get_card_boundary()
 	var their_boundary = get_card_boundary()
 	if (global_position.distance_to(them.global_position) > MAX_CONNECTION_DISTANCE

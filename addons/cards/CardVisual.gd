@@ -23,6 +23,7 @@ var expanded = false:
 		else: %MainColumn.remove_child(card.cards_parent)
 		
 		$CardControl.size = Vector2(197, 282) if not expanded else Vector2(800, 600) * 3
+		z_index = 100 if expanded else 0
 		
 		if expanded:
 			layout_cards(card.cards)

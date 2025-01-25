@@ -49,7 +49,7 @@ metadata/_custom_type_script = ExtResource("4_1bvp3")
 scale = Vector2(0.2, 0.2)
 script = ExtResource("3_h2yge")
 id = "b4dc944b-3b77-4108-8530-fe11d1615a57"
-incoming = Array[NodePath]([NodePath("../PlusCard")])
+incoming = Array[NodePath]([NodePath("../PlusCard"), NodePath("../OnEnterCard")])
 metadata/_custom_type_script = ExtResource("3_h2yge")
 
 [node name="NumberCard3" type="Node2D" parent="CardBoundary"]
@@ -197,6 +197,7 @@ scale = Vector2(0.2, 0.2)
 script = ExtResource("13_w48qg")
 id = "d501ac32-dbb0-499e-98db-21607c1f927c"
 incoming = Array[NodePath]([NodePath("../Area2D")])
+outgoing = Array[NodePath]([NodePath("../NumberCard2")])
 metadata/_custom_type_script = ExtResource("13_w48qg")
 
 [node name="RigidBody2D" type="RigidBody2D" parent="CardBoundary"]

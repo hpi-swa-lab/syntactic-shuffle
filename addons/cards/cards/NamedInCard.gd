@@ -14,6 +14,11 @@ func v():
 	title("Named Input")
 	description("Receive input via a named connection.")
 	icon(preload("res://addons/cards/icons/forward.png"))
+	
+	var e = TextEdit.new()
+	if input_name != null: e.text = input_name
+	e.text_changed.connect(func (): input_name = e.text)
+	ui(e)
 
 func try_connect(them: Node):
 	if parent.get_incoming().has(them): return
