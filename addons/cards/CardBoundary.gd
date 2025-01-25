@@ -50,14 +50,14 @@ static func traverse_connection_candidates(card: Card, cb: Callable):
 
 static func get_card_boundary(node: Node):
 	var b = G.closest_parent_that(node, func (n): return n is CardBoundary)
-	if not b:
-		return node.get_tree().root
+	assert(b, "card was not inside a boundary")
 	return b
 
 static func boundary_at_card(card: Card):
 	var pos = card.get_viewport().get_mouse_position()
 	var fallback = null
-	for boundary in card.get_tree().get_nodes_in_group("card_boundary").filter(func (c): return c.is_visible_in_tree()):
+	for boundary in card.get_tree().get_nodes_in_group("card_boundary").filter(func (b):
+			return b.is_visible_in_tree() and not card.is_ancestor_of(b)):
 		if boundary.is_fallback_boundary():
 			assert(fallback == null, "cannot have multiple fallback card boundaries")
 			fallback = boundary
@@ -125,6 +125,11 @@ func background_rect() -> Rect2:
 		var shape = shape_owner_get_shape(id, 0)
 		return shape_owner_get_transform(id) * shape.get_rect()
 	return Rect2()
+
+func fill_rect(rect: Rect2):
+	var id = get_shape_owners()[0]
+	shape_owner_get_owner(id).position = rect.size / 2
+	shape_owner_get_shape(id, 0).size = rect.size
 
 func _process(delta) -> void:
 	hovered = contains_screen_position(get_viewport().get_mouse_position())

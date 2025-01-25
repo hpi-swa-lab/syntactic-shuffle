@@ -11,7 +11,7 @@ func s():
 	var out_card = OutCard.data()
 	
 	var code_card = CodeCard.create([["trigger", trg()]], {"out": t("Vector2")}, func (card):
-		card.output("out", [get_global_mouse_position()]))
+		card.output("out", [card_parent_in_world().get_global_mouse_position()]))
 	code_card.c(out_card)
 	
 	var physics_card = PhysicsProcessCard.new()

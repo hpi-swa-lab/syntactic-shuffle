@@ -39,7 +39,7 @@ func try_connect(them: Node):
 func _get_remembered_for(signature: Signature):
 	for p in parent.named_incoming[input_name]:
 		var card = parent.get_node_or_null(p)
-		if is_valid_incoming(card, signature):
+		if card and is_valid_incoming(card, signature):
 			var val = get_remembered_for(card, signature)
 			if val != null: return val
 	return null

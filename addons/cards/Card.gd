@@ -11,7 +11,7 @@ static func pop_active_card_list():
 	active_card_list.pop_back()
 
 static func editor_sync(message: String, args: Array):
-	if EngineDebugger.is_active(): EngineDebugger.send_message(message, args)
+	if false and EngineDebugger.is_active(): EngineDebugger.send_message(message, args)
 
 static func get_id(node: Node):
 	if node is Card: return node.id
@@ -54,7 +54,7 @@ var dragging: bool:
 	get: return dragging
 
 var cards: Array[Node]:
-	get: return cards_parent.get_children()
+	get: return cards_parent.get_children().filter(func(s): return s is Card)
 
 func _init():
 	if not active_card_list.is_empty(): active_card_list.back().add_child(self)
@@ -80,18 +80,25 @@ func _ready() -> void:
 	visual.dragging.connect(func (d): dragging = d)
 	visual.paused = paused
 	add_child(visual)
+	
+	var collision = CollisionShape2D.new()
+	collision.shape = RectangleShape2D.new()
+	collision.shape.size = Vector2(100, 100)
+	cards_parent.add_child(collision)
+	cards_parent.card_scale = 1.1
+	
 	v()
 	
 	get_card_boundary().card_entered(self)
 	
-	setup(null)
+	if not parent: setup(null)
 	
 	for card in cards:
 		card.setup_finished()
 		if card is CellCard:
 			for element in card.get_extra_ui(): ui(element)
 
-var cards_parent = Node2D.new()
+var cards_parent = CardBoundary.new()
 
 ## Setup function DSL
 func s(): pass
@@ -178,6 +185,13 @@ func get_all_outgoing() -> Array:
 	all.append_array(get_outgoing())
 	all.append_array(get_named_outgoing())
 	return all
+func get_all_connected() -> Array:
+	var all = []
+	all.append_array(get_outgoing())
+	all.append_array(get_named_outgoing())
+	all.append_array(get_incoming())
+	all.append_array(get_named_incoming())
+	return all
 
 func disconnect_all():
 	pass
@@ -239,6 +253,7 @@ static func connect_to(from: Node, to: Node, named = ""):
 		get_object_incoming(to).push_back(to.get_path_to(from))
 
 func _check_disconnect(them: Node2D):
+	return
 	var my_boundary = get_card_boundary()
 	var their_boundary = get_card_boundary()
 	if (global_position.distance_to(them.global_position) > MAX_CONNECTION_DISTANCE
@@ -268,8 +283,8 @@ func _process(delta: float) -> void:
 	connection_draw_node.check_redraw(delta)
 
 func _physics_process(delta: float) -> void:
-	for c in cards:
-		c._physics_process(delta)
+	if not cards_parent.is_inside_tree():
+		for c in cards: c._physics_process(delta)
 
 static func _each_input_candidate(object: Node, cb: Callable, named: bool):
 	if not object is Card: return
@@ -297,6 +312,11 @@ func get_card_boundary():
 func get_base_scale():
 	var s = get_card_boundary().card_scale
 	return Vector2(s, s)
+
+func card_parent_in_world():
+	if not parent: return self
+	if not parent is Card: return parent
+	return parent.card_parent_in_world()
 
 func incoming_disconnected(obj: Node):
 	for input in cards:
