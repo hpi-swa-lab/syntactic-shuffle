@@ -1,6 +1,11 @@
 extends CanvasLayer
 
 var categories = {
+	"Abstraction": [
+		"InCard",
+		"NamedInCard",
+		"OutCard"
+	],
 	"Input": [
 		"AxisControlsCard",
 		"MousePositionCard"

@@ -29,7 +29,7 @@ var expanded = false:
 			layout_cards(card.cards)
 			card.cards_parent.fill_rect($CardControl.get_rect())
 
-func init_positions(cards: Array) -> float:
+func init_positions(cards: Array):
 	const RADIUS = 200.0 # Radius of the circular layout
 	const CENTER = Vector2(800, 600) # Center of the initial layout (arbitrary)
 	var angle_step = 2.0 * PI / cards.size()
@@ -42,17 +42,14 @@ func init_positions(cards: Array) -> float:
 	for i in range(other.size()):
 		var angle = i * angle_step
 		other[i].position = CENTER + Vector2(RADIUS * cos(angle), RADIUS * sin(angle))
-	
-	return (inputs[0].position.y + inputs[inputs.size() - 1].position.y) / 2.0
 
 func layout_cards(cards):
 	const MAX_DISTANCE = 200.0
 	const REPULSION_FORCE = 300000.0
 	const ATTRACTION_FORCE = 1.0
-	const CENTER_FORCE = 0.5
 	const ITERATIONS = 5000
 	
-	var desired_vertical = init_positions(cards)
+	init_positions(cards)
 	
 	for _i in range(ITERATIONS):
 		var forces = {}
@@ -86,13 +83,6 @@ func layout_cards(cards):
 					forces[card] += attraction
 					forces[target] -= attraction
 		
-		# center vertically (very small effect, could drop)
-		for card in cards:
-			var delta = desired_vertical - card.position.y
-			if delta > 0:
-				var attraction = CENTER_FORCE * signf(delta)
-				forces[card] += Vector2(0, attraction)
-
 		if _i % 1000 == 0: await get_tree().process_frame
 		
 		for card in cards:

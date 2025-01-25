@@ -15,13 +15,14 @@ func v():
 	description("Receive input via a named connection.")
 	icon(preload("res://addons/cards/icons/forward.png"))
 	
-	var e = TextEdit.new()
+	var e = LineEdit.new()
+	e.placeholder_text = "Input Name"
 	if input_name != null: e.text = input_name
 	e.text_changed.connect(func (): input_name = e.text)
 	ui(e)
 
 func try_connect(them: Node):
-	if parent.get_incoming().has(them): return
+	if not parent or parent.get_incoming().has(them): return
 	if them is Card and detect_cycles_for_new_connection(parent, them): return
 	
 	var named = parent.named_incoming

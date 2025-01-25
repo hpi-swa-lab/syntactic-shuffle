@@ -1,19 +1,8 @@
-[gd_scene load_steps=16 format=3 uid="uid://bqninusgeuw0i"]
+[gd_scene load_steps=5 format=3 uid="uid://bqninusgeuw0i"]
 
 [ext_resource type="Script" uid="uid://cja8ehiirmcyt" path="res://addons/cards/CardBoundary.gd" id="1_ig7tw"]
-[ext_resource type="Script" uid="uid://dtcitdmnbq585" path="res://addons/cards/cards/NumberCard.gd" id="3_h2yge"]
-[ext_resource type="Script" uid="uid://bapqs0tgxuf2o" path="res://addons/cards/cards/PlusCard.gd" id="4_1bvp3"]
-[ext_resource type="Script" uid="uid://bvr4vcw3kd72b" path="res://addons/cards/placeholder/placeholder.gd" id="5_lquwl"]
-[ext_resource type="Script" uid="uid://ctmo5roqpacap" path="res://addons/cards/cards/MoveCard.gd" id="6_7mycd"]
-[ext_resource type="Script" uid="uid://cykn2a1upyl7a" path="res://addons/cards/cards/Vector2Card.gd" id="6_272bh"]
-[ext_resource type="Script" uid="uid://37sr8xfsjcsp" path="res://addons/cards/cards/PhysicsProcessCard.gd" id="7_272bh"]
-[ext_resource type="Script" uid="uid://dkyx51jnk8cvd" path="res://addons/cards/cards/AxisControlsCard.gd" id="8_5vw27"]
+[ext_resource type="Script" uid="uid://bot0rjcw1ndbe" path="res://addons/cards/cards/BoolCard.gd" id="3_1bvp3"]
 [ext_resource type="Script" uid="uid://cxldeg24krchn" path="res://camera_2d.gd" id="9_kek77"]
-[ext_resource type="Script" uid="uid://c7aevbspikqwh" path="res://addons/cards/cards/GroupCard.gd" id="12_dg77c"]
-[ext_resource type="Script" uid="uid://bvoloc64pi1db" path="res://addons/cards/cards/CollisionCard.gd" id="12_ycdy4"]
-[ext_resource type="Script" uid="uid://ca0jjcfdgxur" path="res://addons/cards/cards/OnEnterCard.gd" id="13_w48qg"]
-[ext_resource type="Script" uid="uid://dwnls6753y3pv" path="res://addons/cards/cards/DeleteCard.gd" id="13_ycdy4"]
-[ext_resource type="Script" uid="uid://blhehm0kmlmk7" path="res://addons/cards/cards/ForwardTriggerCard.gd" id="14_vivmo"]
 [ext_resource type="Script" uid="uid://dio881dm6xtr3" path="res://hand.gd" id="15_vivmo"]
 
 [node name="main" type="Node2D"]
@@ -23,199 +12,16 @@ script = ExtResource("1_ig7tw")
 id = "4d539466-3572-4d4f-b596-fdb825ac923e"
 metadata/_custom_type_script = ExtResource("1_ig7tw")
 
-[node name="NumberCard" type="Node2D" parent="CardBoundary"]
-position = Vector2(1853.61, 619.221)
-scale = Vector2(0.2, 0.2)
-script = ExtResource("3_h2yge")
-number = 5.0
-id = "026f606c-d9a8-4875-8def-b4331fc63d23"
-named_outgoing = Dictionary[String, Array]({
-"right": [NodePath("../PlusCard")]
-})
-metadata/_custom_type_script = ExtResource("3_h2yge")
-
-[node name="PlusCard" type="Node2D" parent="CardBoundary"]
-scale = Vector2(0.2, 0.2)
-script = ExtResource("4_1bvp3")
-id = "938b6f02-632e-488f-b526-cc4508b9553f"
-outgoing = Array[NodePath]([NodePath("../NumberCard2")])
-named_incoming = Dictionary[String, Array]({
-"left": [],
-"right": [NodePath("../NumberCard")]
-})
-metadata/_custom_type_script = ExtResource("4_1bvp3")
-
-[node name="NumberCard2" type="Node2D" parent="CardBoundary"]
-scale = Vector2(0.2, 0.2)
-script = ExtResource("3_h2yge")
-id = "b4dc944b-3b77-4108-8530-fe11d1615a57"
-incoming = Array[NodePath]([NodePath("../PlusCard"), NodePath("../OnEnterCard")])
-metadata/_custom_type_script = ExtResource("3_h2yge")
-
-[node name="NumberCard3" type="Node2D" parent="CardBoundary"]
-position = Vector2(1625, 426)
-scale = Vector2(0.2, 0.2)
-script = ExtResource("3_h2yge")
-number = 3.0
-id = "e998c3c5-6478-4687-bf98-e37249d5a886"
-named_outgoing = Dictionary[String, Array]({
-"left": []
-})
-metadata/_custom_type_script = ExtResource("3_h2yge")
-
-[node name="CharacterBody2D" type="CharacterBody2D" parent="CardBoundary"]
-position = Vector2(632, 567)
-metadata/cards_outgoing = [NodePath(""), NodePath("../CollisionCard"), NodePath("../MoveCard")]
-metadata/cards_named_outgoing = {}
-
-[node name="Placeholder" type="Node2D" parent="CardBoundary/CharacterBody2D"]
-script = ExtResource("5_lquwl")
-placeholder_size = Vector2(20, 20)
-metadata/_custom_type_script = ExtResource("5_lquwl")
-metadata/_edit_lock_ = true
-
-[node name="MoveCard" type="Node2D" parent="CardBoundary"]
-position = Vector2(838.357, 1053.64)
-scale = Vector2(0.2, 0.2)
-script = ExtResource("6_7mycd")
-id = "72710ad0-3a6e-4602-9b73-d342b25ee369"
-incoming = Array[NodePath]([NodePath("../CharacterBody2D")])
-metadata/_custom_type_script = ExtResource("6_7mycd")
-
-[node name="Vector2Card" type="Node2D" parent="CardBoundary"]
-position = Vector2(66.0431, -196.016)
-scale = Vector2(0.2, 0.2)
-script = ExtResource("6_272bh")
-vector = Vector2(5, 0)
-id = "03409fab-1f41-4c2c-ae4c-c96b5c5c3e29"
-outgoing = Array[NodePath]([NodePath("../MoveCard2")])
-metadata/_custom_type_script = ExtResource("6_272bh")
-
-[node name="PhysicsProcessCard" type="Node2D" parent="CardBoundary"]
-position = Vector2(9, 417)
-scale = Vector2(0.2, 0.2)
-script = ExtResource("7_272bh")
-id = "65377cae-b483-4bbe-a469-5e7750fd47bc"
-outgoing = Array[NodePath]([NodePath("../GroupCard")])
-metadata/_custom_type_script = ExtResource("7_272bh")
-
-[node name="AxisControlsCard" type="Node2D" parent="CardBoundary"]
-position = Vector2(-268.558, 818.444)
-scale = Vector2(0.2, 0.2)
-script = ExtResource("8_5vw27")
-id = "30b2fc2a-5464-4107-9241-8ef915cc8aff"
-metadata/_custom_type_script = ExtResource("8_5vw27")
-
 [node name="Camera2D" type="Camera2D" parent="CardBoundary"]
-position = Vector2(675, 540)
+position = Vector2(947, 542)
 script = ExtResource("9_kek77")
-metadata/cards_outgoing = []
-metadata/cards_ignore = true
 
-[node name="StaticBody2D" type="StaticBody2D" parent="CardBoundary"]
-position = Vector2(460, 405)
-metadata/cards_outgoing = []
-
-[node name="Placeholder" type="Node2D" parent="CardBoundary/StaticBody2D"]
-script = ExtResource("5_lquwl")
-color = Color(0.0885599, 0.0885599, 0.0885599, 1)
-placeholder_size = Vector2(225, 52)
-metadata/_custom_type_script = ExtResource("5_lquwl")
-metadata/_edit_lock_ = true
-
-[node name="DeleteCard" type="Node2D" parent="CardBoundary"]
-position = Vector2(563.222, 154.904)
-rotation = 0.595124
+[node name="BoolCard" type="Node2D" parent="CardBoundary"]
+position = Vector2(478, 340)
 scale = Vector2(0.2, 0.2)
-script = ExtResource("13_ycdy4")
-id = "0150d4d2-3c49-4b2e-b0ac-c189a56b3e57"
-metadata/_custom_type_script = ExtResource("13_ycdy4")
-
-[node name="CharacterBody2D2" type="CharacterBody2D" parent="CardBoundary" groups=["enemy"]]
-position = Vector2(114, 633)
-metadata/cards_outgoing = []
-
-[node name="Placeholder" type="Node2D" parent="CardBoundary/CharacterBody2D2"]
-script = ExtResource("5_lquwl")
-color = Color(0, 0.756832, 0.537443, 1)
-placeholder_size = Vector2(20, 20)
-metadata/_custom_type_script = ExtResource("5_lquwl")
-metadata/_edit_lock_ = true
-
-[node name="GroupCard" type="Node2D" parent="CardBoundary"]
-position = Vector2(-141.754, 151.652)
-scale = Vector2(0.2, 0.2)
-script = ExtResource("12_dg77c")
-group_name = "enemy"
-id = "e62938f1-f01f-4d42-abf3-0b8271d5e1b3"
-incoming = Array[NodePath]([NodePath("../PhysicsProcessCard")])
-outgoing = Array[NodePath]([NodePath("../MoveCard2")])
-metadata/_custom_type_script = ExtResource("12_dg77c")
-
-[node name="DeleteCard2" type="Node2D" parent="CardBoundary"]
-position = Vector2(413.691, -75.9065)
-scale = Vector2(0.2, 0.2)
-script = ExtResource("13_ycdy4")
-id = "6d58c155-5e52-495b-9cd9-234e249a91d2"
-metadata/_custom_type_script = ExtResource("13_ycdy4")
-
-[node name="CollisionCard" type="Node2D" parent="CardBoundary"]
-scale = Vector2(0.2, 0.2)
-script = ExtResource("12_ycdy4")
-id = "13c9f1aa-0917-46f6-86d5-de2035379e1d"
-incoming = Array[NodePath]([NodePath("../CharacterBody2D")])
-metadata/_custom_type_script = ExtResource("12_ycdy4")
-
-[node name="MoveCard2" type="Node2D" parent="CardBoundary"]
-position = Vector2(247.354, 502.496)
-scale = Vector2(0.2, 0.2)
-script = ExtResource("6_7mycd")
-id = "c9bc305d-a359-4e5c-80d3-043d54c513e4"
-incoming = Array[NodePath]([NodePath("../Vector2Card"), NodePath("../GroupCard")])
-metadata/_custom_type_script = ExtResource("6_7mycd")
-
-[node name="Area2D" type="Area2D" parent="CardBoundary"]
-position = Vector2(797, 378)
-metadata/cards_outgoing = [NodePath("../OnEnterCard")]
-
-[node name="Placeholder" type="Node2D" parent="CardBoundary/Area2D"]
-script = ExtResource("5_lquwl")
-color = Color(1, 1, 1, 0.266667)
-shape_type = "Circle"
-circle_radius = 198.446
-metadata/_custom_type_script = ExtResource("5_lquwl")
-
-[node name="ForwardTriggerCard" type="Node2D" parent="CardBoundary"]
-position = Vector2(887.04, 434.118)
-scale = Vector2(0.2, 0.2)
-script = ExtResource("14_vivmo")
-id = "abbf3d33-b9bb-4503-9fd0-ae6bf6670731"
-metadata/_custom_type_script = ExtResource("14_vivmo")
-
-[node name="OnEnterCard" type="Node2D" parent="CardBoundary"]
-scale = Vector2(0.2, 0.2)
-script = ExtResource("13_w48qg")
-id = "d501ac32-dbb0-499e-98db-21607c1f927c"
-incoming = Array[NodePath]([NodePath("../Area2D")])
-outgoing = Array[NodePath]([NodePath("../NumberCard2")])
-metadata/_custom_type_script = ExtResource("13_w48qg")
-
-[node name="RigidBody2D" type="RigidBody2D" parent="CardBoundary"]
-position = Vector2(564, 157)
-rotation = 0.595124
-metadata/cards_outgoing = []
-metadata/cards_ignore = false
-
-[node name="Placeholder" type="Node2D" parent="CardBoundary/RigidBody2D"]
-script = ExtResource("5_lquwl")
-placeholder_size = Vector2(34.9605, 56.0603)
-metadata/_custom_type_script = ExtResource("5_lquwl")
-
-[node name="RemoteTransform2D" type="RemoteTransform2D" parent="CardBoundary/RigidBody2D"]
-position = Vector2(-1.81964, -1.2995)
-remote_path = NodePath("../../DeleteCard")
-update_scale = false
-metadata/cards_outgoing = [NodePath("../DeleteCard")]
+script = ExtResource("3_1bvp3")
+id = "1aa037a6-0a2e-490b-873c-a6fdd684dc0a"
+metadata/_custom_type_script = ExtResource("3_1bvp3")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 script = ExtResource("15_vivmo")
