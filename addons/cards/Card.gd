@@ -292,10 +292,10 @@ static func _each_input_candidate(object: Node, cb: Callable, named: bool):
 			not named and not card is NamedInCard and card is InCard): cb.call(card)
 
 func try_connect(them: Node):
-	_each_input_candidate(self, func (card): card.try_connect(them), true)
-	_each_input_candidate(them, func (card): card.try_connect(self), true)
-	_each_input_candidate(self, func (card): card.try_connect(them), false)
-	_each_input_candidate(them, func (card): card.try_connect(self), false)
+	_each_input_candidate(self, func (card): card.try_connect_in(them), true)
+	_each_input_candidate(them, func (card): card.try_connect_in(self), true)
+	_each_input_candidate(self, func (card): card.try_connect_in(them), false)
+	_each_input_candidate(them, func (card): card.try_connect_in(self), false)
 
 static func get_remembered_for(object: Node, signature: Signature):
 	if object is InCard or object is OutCard: return object._get_remembered_for(signature)

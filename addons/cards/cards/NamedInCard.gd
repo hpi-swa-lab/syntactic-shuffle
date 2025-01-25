@@ -14,6 +14,7 @@ func v():
 	title("Named Input")
 	description("Receive input via a named connection.")
 	icon(preload("res://addons/cards/icons/forward.png"))
+	signature_edit()
 	
 	var e = LineEdit.new()
 	e.placeholder_text = "Input Name"

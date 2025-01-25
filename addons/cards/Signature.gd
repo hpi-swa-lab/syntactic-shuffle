@@ -12,6 +12,17 @@ func compatible_with_struct(other: StructSignature): return false
 func compatible_with_group(other: GroupSignature): return false
 func compatible_with_iterator(other: IteratorSignature): return other.type.compatible_with(self)
 
+class OutputAnySignature extends Signature:
+	func get_description(): return "* -> out"
+	func compatible_with(other: Signature): return true
+	func compatible_with_command(other: CommandSignature): return true
+	func compatible_with_trigger(other: TriggerSignature): return true
+	func compatible_with_generic(other: GenericTypeSignature): return true
+	func compatible_with_type(other: TypeSignature): return true
+	func compatible_with_struct(other: StructSignature): return true
+	func compatible_with_group(other: GroupSignature): return true
+	func compatible_with_iterator(other: IteratorSignature): return true
+
 class TypeSignature extends Signature:
 	var type: String
 	func _init(type: String):

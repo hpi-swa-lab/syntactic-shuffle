@@ -10,6 +10,9 @@ var rng = RandomNumberGenerator.new()
 
 var held = false
 
+func _ready():
+	set_meta("cards_ignore", true)
+
 func _zoom(factor: float) -> void:
 	var delta = get_global_mouse_position() - global_position
 	delta = delta - delta * zoom.x / (zoom.x + factor)

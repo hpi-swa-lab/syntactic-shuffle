@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://bqninusgeuw0i"]
+[gd_scene load_steps=6 format=3 uid="uid://bqninusgeuw0i"]
 
 [ext_resource type="Script" uid="uid://cja8ehiirmcyt" path="res://addons/cards/CardBoundary.gd" id="1_ig7tw"]
 [ext_resource type="Script" uid="uid://bot0rjcw1ndbe" path="res://addons/cards/cards/BoolCard.gd" id="3_1bvp3"]
+[ext_resource type="Script" uid="uid://byy8wbjkxx0kf" path="res://addons/cards/cards/InCard.gd" id="4_lquwl"]
 [ext_resource type="Script" uid="uid://cxldeg24krchn" path="res://camera_2d.gd" id="9_kek77"]
 [ext_resource type="Script" uid="uid://dio881dm6xtr3" path="res://hand.gd" id="15_vivmo"]
 
@@ -22,6 +23,13 @@ scale = Vector2(0.2, 0.2)
 script = ExtResource("3_1bvp3")
 id = "1aa037a6-0a2e-490b-873c-a6fdd684dc0a"
 metadata/_custom_type_script = ExtResource("3_1bvp3")
+
+[node name="InCard" type="Node2D" parent="CardBoundary"]
+position = Vector2(446, 429)
+scale = Vector2(0.2, 0.2)
+script = ExtResource("4_lquwl")
+id = "7bb7eefa-9f0b-4b25-a91f-38e799fae80b"
+metadata/_custom_type_script = ExtResource("4_lquwl")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 script = ExtResource("15_vivmo")

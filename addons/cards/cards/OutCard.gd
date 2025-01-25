@@ -54,6 +54,9 @@ func get_remembered_value():
 	assert(remembered != null)
 	return remembered
 
+func s():
+	InCard.data(Signature.OutputAnySignature.new())
+
 func v():
 	title("Output")
 	description("Emit output.")

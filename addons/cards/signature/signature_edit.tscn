@@ -1,0 +1,34 @@
+[gd_scene load_steps=2 format=3 uid="uid://ctke6oqt6n5tb"]
+
+[ext_resource type="Script" uid="uid://bkdjudhbnribq" path="res://addons/cards/signature/signature_edit.gd" id="1_1bolb"]
+
+[node name="SignatureEdit" type="VBoxContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_1bolb")
+
+[node name="Subclass" type="OptionButton" parent="."]
+layout_mode = 2
+selected = 0
+item_count = 8
+popup/item_0/text = "Type"
+popup/item_0/id = 3
+popup/item_1/text = "Command"
+popup/item_1/id = 0
+popup/item_2/text = "Trigger"
+popup/item_2/id = 1
+popup/item_3/text = "Generic"
+popup/item_3/id = 2
+popup/item_4/text = "Struct"
+popup/item_4/id = 4
+popup/item_5/text = "Group"
+popup/item_5/id = 5
+popup/item_6/text = "Iterator"
+popup/item_6/id = 6
+popup/item_7/text = "Void"
+popup/item_7/id = 7
+
+[connection signal="item_selected" from="Subclass" to="." method="_on_subclass_selected"]

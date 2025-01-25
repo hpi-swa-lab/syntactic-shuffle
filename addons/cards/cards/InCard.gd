@@ -17,19 +17,39 @@ static func command(command: String, type: Signature = null):
 	c.signature = cmd(command, type)
 	return c
 
-var signature: Signature
+var signature: Signature = Signature.VoidSignature.new():
+	get: return signature
+	set(v):
+		signature = v
+		if out_card: out_card.signature = v
+var out_card
 
-func get_out_signatures(list: Array):
-	list.push_back(signature)
+func s():
+	# special InCard that the OutCard uses for connection purposes. Would yield
+	# an infinite loop if we proceeded here.
+	if signature is Signature.OutputAnySignature: return
+	out_card = OutCard.new()
+	out_card.has_static_signature = true
+	out_card.signature = signature
 
 func v():
 	title("Input")
 	description("Receive input.")
 	icon(preload("res://addons/cards/icons/forward.png"))
+	signature_edit()
+
+func signature_edit():
+	var edit = preload("res://addons/cards/signature/signature_edit.tscn").instantiate()
+	edit.on_edit.connect(func (s): signature = s)
+	edit.signature = signature
+	ui(edit)
 
 func setup_finished():
 	super.setup_finished()
 	incoming_connected(null)
+
+func get_out_signatures(list: Array):
+	list.push_back(signature)
 
 func _get_remembered_for(signature: Signature):
 	for card in parent.get_all_incoming():
@@ -72,7 +92,7 @@ func incoming_disconnected(obj: Node):
 		for input in card.cards:
 			if input is InCard: input.incoming_disconnected(obj)
 
-func try_connect(them: Node):
+func try_connect_in(them: Node):
 	if parent.get_incoming().has(them): return
 	if them is Card and detect_cycles_for_new_connection(parent, them): return
 	
@@ -82,7 +102,7 @@ func try_connect(them: Node):
 			card.get_out_signatures(their_signatures)
 			for their_signature in their_signatures:
 				if their_signature.compatible_with(signature):
-					connect_to(them, parent)
+					connect_to(them, parent if parent else self)
 					incoming_connected(them)
 					return
 
