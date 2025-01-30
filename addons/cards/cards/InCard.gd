@@ -12,11 +12,6 @@ static func data(signature: Signature):
 	c.signature = signature
 	return c
 
-static func command(command: String, type: Signature = null):
-	var c = InCard.new()
-	c.signature = cmd(command, type)
-	return c
-
 var signature: Signature = Signature.VoidSignature.new():
 	get: return signature
 	set(v):
@@ -72,11 +67,11 @@ func get_remembered():
 
 func invoke(args: Array, signature: Signature, named = "", source_out = null):
 	for card in get_outgoing():
-		card.invoke(args, signature)
+		card.invoke(args, signature, "", out_card)
 	for name in named_outgoing:
 		for p in named_outgoing[name]:
 			var card = get_node_or_null(p)
-			if card: card.invoke(args, signature, name)
+			if card: card.invoke(args, signature, name, out_card)
 
 func signature_changed(): pass
 
@@ -126,3 +121,9 @@ func check_is_connected(a: Card, b: Card) -> bool:
 				if next == b: return true
 				queue.push_back(next)
 	return false
+
+func serialize_constructor():
+	if signature is Signature.TriggerSignature:
+		return "{0}.trigger()".format([get_card_name()])
+	else:
+		return "{0}.data({1})".format([get_card_name(), signature.serialize_gdscript()])

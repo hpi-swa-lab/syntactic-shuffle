@@ -95,8 +95,11 @@ func layout_cards(cards):
 		$CardControl.self_modulate = Color(Color.WHITE, 0.5 if paused else 1.0)
 
 func title(s: String): %Name.text = s
+func get_title(): return %Name.text
 func description(s: String): %Description.text = s
+func get_description(): return %Description.text
 func icon(s: Texture): %Icon.texture = s
+func get_icon_path(): return %Icon.texture.resource_path
 func ui(c: Control): %extra_ui.add_child(c)
 
 var card: Card:

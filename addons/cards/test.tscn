@@ -4,3 +4,4 @@
 
 [node name="test" type="Area2D"]
 script = ExtResource("1_13bp3")
+light_background = null

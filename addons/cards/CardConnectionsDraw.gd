@@ -1,6 +1,8 @@
 extends Node2D
 class_name CardConnectionsDraw
 
+const LIGHT_BACKGROUND_BASE = Color(0.2, 0.2, 0.2)
+
 var card: Card
 
 var dragging:
@@ -12,15 +14,16 @@ func _ready():
 
 func _draw():
 	if not card or card.disable: return
+	var light_background = card.get_card_boundary().light_background
 	for to in card.get_incoming():
-		draw_connection(self, to, true)
+		draw_connection(self, to, true, light_background)
 	var named = card.named_incoming
 	for name in named:
 		for p in named[name]:
 			var node = card.get_node_or_null(p)
 			if node:
-				draw_connection(self, node, true)
-				draw_label_to(node, name)
+				draw_connection(self, node, true, light_background)
+				draw_label_to(node, name, light_background)
 
 func check_redraw(delta):
 	if should_redraw(): queue_redraw()
@@ -55,7 +58,7 @@ func get_draw_offset(from, to):
 static func object_is_dragging(object):
 	return "dragging" in object and object.dragging
 
-func draw_label_to(obj: Node2D, label: String):
+func draw_label_to(obj: Node2D, label: String, light_background: bool):
 	var font = ThemeDB.fallback_font
 	var angle = global_position.angle_to_point(obj.global_position)
 	var flip = abs(angle) > PI / 2
@@ -64,9 +67,9 @@ func draw_label_to(obj: Node2D, label: String):
 	
 	var a = Transform2D(angle + PI if flip else angle, Vector2.ZERO) * Transform2D(0.0, Vector2(-OFFSET - font.get_multiline_string_size(label, HORIZONTAL_ALIGNMENT_CENTER, -1, FONT_SIZE).x if flip else OFFSET, -4))
 	draw_set_transform_matrix(a.scaled(Vector2.ONE / global_scale))
-	draw_string(font, Vector2(0, 0), label, HORIZONTAL_ALIGNMENT_CENTER, -1, FONT_SIZE, Color(Color.WHITE, 1))
+	draw_string(font, Vector2(0, 0), label, HORIZONTAL_ALIGNMENT_CENTER, -1, FONT_SIZE, Color(LIGHT_BACKGROUND_BASE if light_background else Color.WHITE, 1))
 
-func draw_connection(from, to, inverted):
+func draw_connection(from, to, inverted, light_background: bool):
 	if not to: return
 	var target = to.global_position
 	var distance = target.distance_to(from.global_position)
@@ -83,10 +86,11 @@ func draw_connection(from, to, inverted):
 	offset = offset - int(offset)
 	var stretch = 1 - distance / Card.MAX_CONNECTION_DISTANCE
 	for i in range(0, distance / GAP):
-		draw_arrow(Vector2(0, (i + offset) * GAP), SIZE, inverted, to, stretch)
+		draw_arrow(Vector2(0, (i + offset) * GAP), SIZE, inverted, to, stretch, light_background)
 
-func draw_arrow(pos, size, inverted, flash_key, stretch):
-	var base = Color(Color.WHITE, 0.5).lerp(Color.GREEN, remap(stretch, 0.4, 0, 1, 0)) if Card.always_reconned() else Color(Color.WHITE, 1)
+func draw_arrow(pos, size, inverted, flash_key, stretch, light_background):
+	var orig = LIGHT_BACKGROUND_BASE if light_background else Color.WHITE
+	var base = Color(orig, 0.5).lerp(Color.GREEN, remap(stretch, 0.4, 0, 1, 0)) if Card.always_reconnect() else Color(orig, 1)
 	draw_polyline(
 		[pos + Vector2(-size, 0), pos + Vector2(0, -size if inverted else size), pos + Vector2(size, 0)],
 		base.lerp(Color.RED, _tween_values.get(flash_key, 0.0)),

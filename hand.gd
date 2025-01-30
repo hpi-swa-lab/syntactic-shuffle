@@ -13,6 +13,8 @@ var categories = {
 	"Primitives": [
 		"Vector2Card",
 		"NumberCard",
+		"BoolCard",
+		"ToggleCard"
 	],
 	"Time": [
 		"ClockCard",

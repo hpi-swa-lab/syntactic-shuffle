@@ -28,5 +28,5 @@ func s():
 	
 	var increment_code = CodeCard.create([["amount", t("Vector2")]], {"out": none()}, func (card, amount):
 		card.parent.vector += amount)
-	var increment_card = InCard.command("increment", t("Vector2"))
+	var increment_card = InCard.data(cmd("increment", t("Vector2")))
 	increment_card.c_named("amount", increment_code)

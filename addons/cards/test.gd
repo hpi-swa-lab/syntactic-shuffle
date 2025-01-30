@@ -25,6 +25,25 @@ func run():
 		if method["name"].begins_with("test_"):
 			print(method["name"])
 			run_cards_test(Callable(self, method["name"]))
+	print("Success!")
+	get_tree().quit()
+
+class TestSerializeCard extends Card:
+	func get_card_name(): return "TestSerializeCard"
+	func v():
+		title("Test Serialize")
+		description("Test Serialize Description")
+		icon(preload("res://icon.svg"))
+	func s():
+		var out_card = OutCard.command("store")
+		var out_card_2 = OutCard.new()
+		var out_card_3 = OutCard.remember()
+		var in_card = InCard.data(t("float"))
+		var named_in_card = NamedInCard.named_data("a", t("float"))
+		var plus_card = PlusCard.new()
+		
+		in_card.c(out_card)
+		in_card.c_named("left", plus_card)
 
 func assert_eq(a, b):
 	if a != b:
@@ -65,6 +84,36 @@ func test_named_addition_and_store(ready):
 	a_trigger.trigger([])
 	b_trigger.trigger([])
 	assert_eq(store.get_stored_data(), 20.0)
+
+func test_serialize_constructor(ready):
+	var c = CollisionCard.new()
+	ready.call()
+	assert_eq(c.serialize_constructor(), "CollisionCard.new()")
+
+func test_serialize_gdscript(ready):
+	var c = TestSerializeCard.new()
+	ready.call()
+	c.visual_setup()
+	assert_eq(c.serialize_gdscript(), "@tool
+extends Card
+class_name TestSerializeCard
+
+func v():
+	title(\"Test Serialize\")
+	description(\"Test Serialize Description\")
+	icon(preload(\"res://icon.svg\"))
+
+func s():
+	var out_card = OutCard.command(\"store\")
+	var out_card_2 = OutCard.new()
+	var out_card_3 = OutCard.remember()
+	var in_card = InCard.data(t(\"float\"))
+	var named_in_card = NamedInCard.named_data(\"a\", t(\"float\"))
+	var plus_card = PlusCard.new()
+	
+	in_card.c(out_card)
+	in_card.c_named(\"left\", plus_card)
+")
 
 func test_simple_named_connect(ready):
 	var l = NumberCard.new()

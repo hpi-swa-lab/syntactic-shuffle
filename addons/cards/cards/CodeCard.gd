@@ -51,9 +51,17 @@ func invoke(args: Array, signature: Signature, named = "", source_out = null):
 	# FIXME very noisy -- add extra protocol?
 	# for out in pulled_remembered: out.mark_activated(parent)
 	assert(process.get_argument_count() == combined_args.size())
+	
+	if source_out: mark_activated(source_out)
 	process.callv(combined_args)
 
 func output(name: String, args: Array):
 	var signature = outputs[name]
 	for card in get_outgoing():
-		card.invoke(args, signature)
+		var output
+		for o in cards:
+			if o.signature == signature:
+				output = o
+				break
+		assert(output)
+		card.invoke(args, signature, "", output)

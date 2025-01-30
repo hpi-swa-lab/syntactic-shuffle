@@ -71,15 +71,19 @@ func setup(parent: Card):
 	for card in cards:
 		card.setup(self)
 
+func visual_setup():
+	visual = preload("res://addons/cards/CardVisual.tscn").instantiate()
+	visual.dragging.connect(func (d): dragging = d)
+	visual.paused = paused
+	add_child(visual)
+	
+	v()
+
 func _ready() -> void:
 	connection_draw_node.card = self
 	add_child(connection_draw_node)
 	
 	scale = get_base_scale()
-	visual = preload("res://addons/cards/CardVisual.tscn").instantiate()
-	visual.dragging.connect(func (d): dragging = d)
-	visual.paused = paused
-	add_child(visual)
 	
 	var collision = CollisionShape2D.new()
 	collision.shape = RectangleShape2D.new()
@@ -87,9 +91,9 @@ func _ready() -> void:
 	set_ignore_object(collision)
 	cards_parent.add_child(collision)
 	cards_parent.card_scale = 1.1
+	cards_parent.light_background = true
 	
-	v()
-	
+	visual_setup()
 	get_card_boundary().card_entered(self)
 	
 	if not parent: setup(null)
@@ -262,7 +266,7 @@ func _check_disconnect(them: Node2D):
 		object_disconnect_from(self, them)
 
 const ALWAYS_RECONNECT = false
-static func always_reconned():
+static func always_reconnect():
 	return ALWAYS_RECONNECT and not Engine.is_editor_hint()
 
 func _process(delta: float) -> void:
@@ -271,7 +275,7 @@ func _process(delta: float) -> void:
 		editor_sync("cards:set_prop", [id, "position", position])
 	
 	if disable: return
-	if dragging or always_reconned():
+	if dragging or always_reconnect():
 		for card in get_outgoing(): _check_disconnect(card)
 		for card in get_incoming(): _check_disconnect(card)
 		for card in get_named_outgoing(): _check_disconnect(card)
@@ -307,7 +311,7 @@ static func get_remembered_for(object: Node, signature: Signature):
 			if val != null: return val
 	return null
 
-func get_card_boundary():
+func get_card_boundary() -> CardBoundary:
 	return CardBoundary.get_card_boundary(self)
 
 func get_base_scale():
@@ -335,22 +339,34 @@ func _forward_canvas_gui_input(event: InputEvent, undo_redo):
 		dragging = event.pressed
 	return false
 
-func serialize_constructor():
-	return "{0}.new()".format([get_class()])
+func get_card_name():
+	return get_script().get_global_name()
 
-func serialize_to_gdscript():
+func serialize_constructor():
+	return "{0}.new()".format([get_card_name()])
+
+func serialize_gdscript():
 	var var_names = {}
 	var count = {}
 	for c in cards:
-		var num = count.get(c.get_class(), 1) + 1
-		count.set(c.get_class(), num)
-		var name = c.get_class().replace("Card", "").to_snake_case()
-		if num > 1: name += "_" + num
+		var n = c.get_card_name()
+		var num = count.get(n, 0) + 1
+		count.set(n, num)
+		var name = n.to_snake_case()
+		if num > 1: name += "_" + str(num)
 		var_names[c] = name
 	
 	var cards_desc = ""
 	for c in cards:
 		cards_desc += "\tvar {0} = {1}\n".format([var_names.get(c), c.serialize_constructor()])
+	cards_desc += "\t\n"
+	for c in cards:
+		for them in c.get_outgoing():
+			cards_desc += "\t{0}.c({1})\n".format([var_names[c], var_names[them]])
+		for name in c.named_outgoing:
+			for their_path in c.named_outgoing[name]:
+				var them = c.get_node_or_null(their_path)
+				cards_desc += "\t{0}.c_named(\"{2}\", {1})\n".format([var_names[c], var_names[them], name])
 	
 	return "@tool
 extends Card
@@ -359,13 +375,16 @@ class_name {name}
 func v():
 	title(\"{title}\")
 	description(\"{description}\")
-	icon(preload(\"{icon}\"))
-	{allow_cycles}
+	icon(preload(\"{icon}\")){allow_cycles}
 
 func s():
 {cards}".format({
-		"name": get_class(),
-		"title": ""
+		"name": get_card_name(),
+		"title": visual.get_title(),
+		"description": visual.get_description(),
+		"icon": visual.get_icon_path(),
+		"allow_cycles": "\n\tallow_cycles()" if _allows_cycles else "",
+		"cards": cards_desc
 	})
 
 # DSL for signatures

@@ -11,6 +11,7 @@ enum Layout {
 
 @export var disable_on_enter = false
 @export var pause_on_enter = false
+@export var light_background = false
 @export var card_layout = Layout.NONE:
 	get: return card_layout
 	set(v):

@@ -36,7 +36,7 @@ func s():
 		card.output("out", [data]))
 	code_card.c(out_card)
 	
-	var override_card = InCard.command("store", any())
+	var override_card = InCard.data(cmd("store", any()))
 	override_card.c_named("arg", code_card)
 	
 	var trigger_code_card = CodeCard.create([], {"out": any()}, func (card): card.output("out", [data]))

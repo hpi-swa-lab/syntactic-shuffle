@@ -28,7 +28,7 @@ func s():
 	
 	var increment_code = CodeCard.create([["trigger", trg()]], {}, func (card, trigger):
 		card.parent.number += 1)
-	var increment_card = InCard.command("increment")
+	var increment_card = InCard.data(cmd("increment"))
 	increment_card.c(increment_code)
 
 func get_stored_data():

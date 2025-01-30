@@ -92,6 +92,8 @@ func invoke(args: Array, signature: Signature, named = "", source_out = null):
 		remembered_signature = signature
 		remembered = args
 	
+	if source_out: mark_activated(source_out)
+	
 	var n = get_object_named_outgoing(parent)
 	for name in n:
 		for p in n[name]:
@@ -100,3 +102,12 @@ func invoke(args: Array, signature: Signature, named = "", source_out = null):
 	for out in get_object_outgoing(parent):
 		var obj = parent.get_node_or_null(out)
 		if obj: obj.invoke(args, signature, named, self)
+
+func serialize_constructor():
+	if command_name:
+		return "{0}.command(\"{1}\")".format([get_card_name(), command_name])
+	elif remember_message:
+		push_error("unclear reference to init")
+		return "{0}.remember({1})".format([get_card_name(), ""])
+	else:
+		return "{0}.new()".format([get_card_name()])

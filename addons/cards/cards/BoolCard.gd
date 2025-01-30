@@ -26,11 +26,14 @@ func s():
 	var trigger_card = InCard.trigger()
 	trigger_card.c(cell_card)
 	
-	var toggle_code = CodeCard.create([["value", t("bool")], ["trigger", trg()]], {"out": cmd("store", t("bool"))},
-		func(card, value): card.output("out", [not value]),
-		["bool"])
-	cell_card.c_named("bool", toggle_code)
-	toggle_code.c(cell_card)
+	var store_card_2 = StoreCard.new()
+	store_card_2.c(cell_card)
 	
-	var toggle_card = InCard.command("toggle")
+	var toggle_code = CodeCard.create([["value", t("bool")], ["trigger", cmd("toggle", trg())]], {"out": t("bool")},
+		func(card, value): card.output("out", [not value]),
+		["value"])
+	cell_card.c_named("value", toggle_code)
+	toggle_code.c(store_card_2)
+	
+	var toggle_card = InCard.data(cmd("toggle"))
 	toggle_card.c_named("trigger", toggle_code)
