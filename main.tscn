@@ -1,8 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://bqninusgeuw0i"]
+[gd_scene load_steps=8 format=3 uid="uid://bqninusgeuw0i"]
 
 [ext_resource type="Script" uid="uid://cja8ehiirmcyt" path="res://addons/cards/CardBoundary.gd" id="1_ig7tw"]
 [ext_resource type="Script" uid="uid://bot0rjcw1ndbe" path="res://addons/cards/cards/BoolCard.gd" id="3_1bvp3"]
 [ext_resource type="Script" uid="uid://byy8wbjkxx0kf" path="res://addons/cards/cards/InCard.gd" id="4_lquwl"]
+[ext_resource type="Script" uid="uid://bapqs0tgxuf2o" path="res://addons/cards/cards/PlusCard.gd" id="5_272bh"]
+[ext_resource type="Script" uid="uid://dtcitdmnbq585" path="res://addons/cards/cards/NumberCard.gd" id="6_5vw27"]
 [ext_resource type="Script" uid="uid://cxldeg24krchn" path="res://camera_2d.gd" id="9_kek77"]
 [ext_resource type="Script" uid="uid://dio881dm6xtr3" path="res://hand.gd" id="15_vivmo"]
 
@@ -30,6 +32,22 @@ scale = Vector2(0.2, 0.2)
 script = ExtResource("4_lquwl")
 id = "7bb7eefa-9f0b-4b25-a91f-38e799fae80b"
 metadata/_custom_type_script = ExtResource("4_lquwl")
+
+[node name="PlusCard" type="Node2D" parent="CardBoundary"]
+position = Vector2(303, 192)
+scale = Vector2(0.2, 0.2)
+script = ExtResource("5_272bh")
+id = "fbe92e05-58c5-4567-aa72-78aa6e630eab"
+incoming = Array[NodePath]([NodePath("../NumberCard")])
+metadata/_custom_type_script = ExtResource("5_272bh")
+
+[node name="NumberCard" type="Node2D" parent="CardBoundary"]
+position = Vector2(194, 177)
+scale = Vector2(0.2, 0.2)
+script = ExtResource("6_5vw27")
+id = "f44afef1-f3ef-46e1-a7f2-1ecea218de81"
+outgoing = Array[NodePath]([NodePath("../PlusCard")])
+metadata/_custom_type_script = ExtResource("6_5vw27")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 script = ExtResource("15_vivmo")

@@ -9,9 +9,11 @@ class ManualTriggerCard extends Card:
 		super._init()
 		self.type = type
 	
-	func s():
+	func v():
 		title("Manual Trigger")
 		description("For testing purposes.")
+	
+	func s():
 		out_card = OutCard.data()
 	
 	func trigger(data):

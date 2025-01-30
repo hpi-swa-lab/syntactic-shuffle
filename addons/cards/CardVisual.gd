@@ -36,7 +36,7 @@ func init_positions(cards: Array):
 	
 	var inputs = cards.filter(func(c): return c.get_all_incoming().is_empty())
 	for i in range(inputs.size()):
-		inputs[i].position = Vector2(0, 200 + i * 400)
+		inputs[i].position = Vector2(0, 400 + i * 400)
 	
 	var other = cards.filter(func(c): return not (inputs.has(c)))
 	for i in range(other.size()):

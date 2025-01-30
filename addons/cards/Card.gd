@@ -169,6 +169,7 @@ func _get_named(dict) -> Array:
 	return out
 
 func get_first_named_incoming_at(name: String):
+	if not named_incoming.has(name): return null
 	var p = named_incoming.get(name)[0]
 	return get_node_or_null(p) if p else null
 
@@ -333,6 +334,39 @@ func _forward_canvas_gui_input(event: InputEvent, undo_redo):
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		dragging = event.pressed
 	return false
+
+func serialize_constructor():
+	return "{0}.new()".format([get_class()])
+
+func serialize_to_gdscript():
+	var var_names = {}
+	var count = {}
+	for c in cards:
+		var num = count.get(c.get_class(), 1) + 1
+		count.set(c.get_class(), num)
+		var name = c.get_class().replace("Card", "").to_snake_case()
+		if num > 1: name += "_" + num
+		var_names[c] = name
+	
+	var cards_desc = ""
+	for c in cards:
+		cards_desc += "\tvar {0} = {1}\n".format([var_names.get(c), c.serialize_constructor()])
+	
+	return "@tool
+extends Card
+class_name {name}
+
+func v():
+	title(\"{title}\")
+	description(\"{description}\")
+	icon(preload(\"{icon}\"))
+	{allow_cycles}
+
+func s():
+{cards}".format({
+		"name": get_class(),
+		"title": ""
+	})
 
 # DSL for signatures
 static func trg(): return Signature.TriggerSignature.new()

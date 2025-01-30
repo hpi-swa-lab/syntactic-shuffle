@@ -22,7 +22,7 @@ func v():
 	e.text_changed.connect(func (): input_name = e.text)
 	ui(e)
 
-func try_connect(them: Node):
+func try_connect_in(them: Node):
 	if not parent or parent.get_incoming().has(them): return
 	if them is Card and detect_cycles_for_new_connection(parent, them): return
 	
