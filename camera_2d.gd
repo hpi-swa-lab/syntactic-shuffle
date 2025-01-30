@@ -19,7 +19,7 @@ func _zoom(factor: float) -> void:
 	zoom += Vector2(factor, factor)
 	position += delta
 
-func _unhandled_input(event: InputEvent) -> void:
+func _input(event: InputEvent) -> void:
 	if event is InputEventPanGesture:
 		_zoom(-1 * event.delta.y * zoom.x)
 	if event is InputEventMouseButton:

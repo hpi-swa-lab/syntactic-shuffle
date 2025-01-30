@@ -84,6 +84,7 @@ func _ready() -> void:
 	var collision = CollisionShape2D.new()
 	collision.shape = RectangleShape2D.new()
 	collision.shape.size = Vector2(100, 100)
+	set_ignore_object(collision)
 	cards_parent.add_child(collision)
 	cards_parent.card_scale = 1.1
 	

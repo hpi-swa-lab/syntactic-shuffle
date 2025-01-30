@@ -29,9 +29,11 @@ script = ExtResource("1_7r0de")
 metadata/_edit_group_ = true
 
 [node name="Area2D" type="Area2D" parent="."]
+metadata/cards_ignore = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 shape = SubResource("RectangleShape2D_tbdv3")
+metadata/cards_ignore = true
 
 [node name="CardControl" type="Panel" parent="."]
 offset_left = -100.0
@@ -40,6 +42,7 @@ offset_right = 97.0
 offset_bottom = 141.0
 focus_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_i40e1")
+metadata/cards_ignore = true
 
 [node name="MainColumn" type="VBoxContainer" parent="CardControl"]
 unique_name_in_owner = true
@@ -121,3 +124,4 @@ position = Vector2(-6, -31)
 rotation = 0.382793
 scale = Vector2(9.91112, 9.91112)
 texture = ExtResource("4_odv1r")
+metadata/cards_ignore = true

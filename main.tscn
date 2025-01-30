@@ -18,14 +18,14 @@ position = Vector2(947, 542)
 script = ExtResource("9_kek77")
 
 [node name="BoolCard" type="Node2D" parent="CardBoundary"]
-position = Vector2(478, 340)
+position = Vector2(606, 361)
 scale = Vector2(0.2, 0.2)
 script = ExtResource("3_1bvp3")
 id = "1aa037a6-0a2e-490b-873c-a6fdd684dc0a"
 metadata/_custom_type_script = ExtResource("3_1bvp3")
 
 [node name="InCard" type="Node2D" parent="CardBoundary"]
-position = Vector2(446, 429)
+position = Vector2(243, 536)
 scale = Vector2(0.2, 0.2)
 script = ExtResource("4_lquwl")
 id = "7bb7eefa-9f0b-4b25-a91f-38e799fae80b"
