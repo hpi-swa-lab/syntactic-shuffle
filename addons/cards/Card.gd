@@ -352,6 +352,30 @@ func _forward_canvas_gui_input(event: InputEvent, undo_redo):
 		dragging = event.pressed
 	return false
 
+func _get_property_list():
+	var properties = []
+	
+	for card in cards:
+		if card is CellCard:
+			properties.append({
+				"name": card.data_name,
+				"type": Signature.type_signature(card.type, true),
+				"hint": PROPERTY_HINT_NONE
+			})
+	return properties
+
+func _get(property):
+	for card in cards:
+		if card is CellCard and card.data_name == property:
+			return card.data
+
+func _set(property, value):
+	for card in cards:
+		if card is CellCard and card.data_name == property:
+			card.data = value
+			return true
+	return false
+
 func can_edit(): return true
 
 func get_card_name():
@@ -377,8 +401,12 @@ func serialize_gdscript():
 	
 	var cards_desc = ""
 	for c in cards:
-		cards_desc += "\tvar {0} = {1}\n".format([var_names.get(c), c.serialize_constructor()])
-		cards_desc += "\t{0}.position = Vector2{1}\n".format([var_names.get(c), c.position])
+		var n = var_names.get(c)
+		cards_desc += "\tvar {0} = {1}\n".format([n, c.serialize_constructor()])
+		cards_desc += "\t{0}.position = Vector2{1}\n".format([n, c.position])
+		for i in range(0, c.cards.size()):
+			if c.cards[i] is CellCard:
+				cards_desc += "\t{0}.cards[{1}].data = {2}\n".format([n, i, c.cards[i].data])
 	cards_desc += "\t\n"
 	for c in cards:
 		for them in c.get_outgoing():

@@ -2,19 +2,15 @@
 extends Card
 class_name NumberCard
 
-@export var number: float
-
 func v():
 	title("Number")
 	description("Store or present a number.")
 	icon(preload("res://addons/cards/icons/number.png"))
 
 func s():
-	var out_card = OutCard.remember([number], t("float"))
+	var out_card = OutCard.remember()
 	
-	var cell_card = CellCard.new()
-	cell_card.data = number
-	cell_card.type = "float"
+	var cell_card = CellCard.create("number", "float", 0.0)
 	cell_card.c(out_card)
 	
 	var store_card = StoreCard.new()

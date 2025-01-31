@@ -126,7 +126,7 @@ class StructSignature extends Signature:
 		return true
 	func _list_has_prop(type_props, name):
 		for prop in type_props:
-			if prop["name"] == name and TypeSignature.new(type_to_string(prop["type"])).compatible_with(props[name]):
+			if prop["name"] == name and TypeSignature.new(type_signature(prop["type"])).compatible_with(props[name]):
 				return true
 		return false
 	func _list_has_method(type_methods, name):
@@ -134,45 +134,50 @@ class StructSignature extends Signature:
 			if prop["name"] == name: return true
 		return false
 
-func type_to_string(type):
-	match type:
-		TYPE_NIL: return "nil"
-		TYPE_BOOL: return "bool"
-		TYPE_INT: return "int"
-		TYPE_FLOAT: return "float"
-		TYPE_STRING: return "string"
-		TYPE_VECTOR2: return "Vector2"
-		TYPE_VECTOR2I: return "Vector2i"
-		TYPE_RECT2: return "Rect2"
-		TYPE_RECT2I: return "Rect2i"
-		TYPE_VECTOR3: return "Vector3"
-		TYPE_VECTOR3I: return "Vector3i"
-		TYPE_TRANSFORM2D: return "Transform2D"
-		TYPE_VECTOR4: return "Vector4"
-		TYPE_VECTOR4I: return "Vector4i"
-		TYPE_PLANE: return "Plane"
-		TYPE_QUATERNION: return "Quaternion"
-		TYPE_AABB: return "AABB"
-		TYPE_BASIS: return "Basis"
-		TYPE_TRANSFORM3D: return "Transform3D"
-		TYPE_PROJECTION: return "Projection"
-		TYPE_COLOR: return "Color"
-		TYPE_STRING_NAME: return "StringName"
-		TYPE_NODE_PATH: return "NodePath"
-		TYPE_RID: return "RID"
-		TYPE_OBJECT: return "Object"
-		TYPE_CALLABLE: return "Callable"
-		TYPE_SIGNAL: return "Signal"
-		TYPE_DICTIONARY: return "Dictionary"
-		TYPE_ARRAY: return "Array"
-		TYPE_PACKED_BYTE_ARRAY: return "PackedByteArray"
-		TYPE_PACKED_INT32_ARRAY: return "PackedInt32Array"
-		TYPE_PACKED_INT64_ARRAY: return "PackedInt64Array"
-		TYPE_PACKED_FLOAT32_ARRAY: return "PackedFloat32Array"
-		TYPE_PACKED_FLOAT64_ARRAY: return "PackedFloat64Array"
-		TYPE_PACKED_STRING_ARRAY: return "PackedStringArray"
-		TYPE_PACKED_VECTOR2_ARRAY: return "PackedVector2Array"
-		TYPE_PACKED_VECTOR3_ARRAY: return "packedVector3Array"
-		TYPE_PACKED_COLOR_ARRAY: return "PackedColorArray"
-		TYPE_PACKED_VECTOR4_ARRAY: return "PackedVector4Array"
-		_: assert(false, "unknown type")
+static func type_signature(type, inverse = false):
+	var mapping = {
+		TYPE_NIL: "nil",
+		TYPE_BOOL: "bool",
+		TYPE_INT: "int",
+		TYPE_FLOAT: "float",
+		TYPE_STRING: "string",
+		TYPE_VECTOR2: "Vector2",
+		TYPE_VECTOR2I: "Vector2i",
+		TYPE_RECT2: "Rect2",
+		TYPE_RECT2I: "Rect2i",
+		TYPE_VECTOR3: "Vector3",
+		TYPE_VECTOR3I: "Vector3i",
+		TYPE_TRANSFORM2D: "Transform2D",
+		TYPE_VECTOR4: "Vector4",
+		TYPE_VECTOR4I: "Vector4i",
+		TYPE_PLANE: "Plane",
+		TYPE_QUATERNION: "Quaternion",
+		TYPE_AABB: "AABB",
+		TYPE_BASIS: "Basis",
+		TYPE_TRANSFORM3D: "Transform3D",
+		TYPE_PROJECTION: "Projection",
+		TYPE_COLOR: "Color",
+		TYPE_STRING_NAME: "StringName",
+		TYPE_NODE_PATH: "NodePath",
+		TYPE_RID: "RID",
+		TYPE_OBJECT: "Object",
+		TYPE_CALLABLE: "Callable",
+		TYPE_SIGNAL: "Signal",
+		TYPE_DICTIONARY: "Dictionary",
+		TYPE_ARRAY: "Array",
+		TYPE_PACKED_BYTE_ARRAY: "PackedByteArray",
+		TYPE_PACKED_INT32_ARRAY: "PackedInt32Array",
+		TYPE_PACKED_INT64_ARRAY: "PackedInt64Array",
+		TYPE_PACKED_FLOAT32_ARRAY: "PackedFloat32Array",
+		TYPE_PACKED_FLOAT64_ARRAY: "PackedFloat64Array",
+		TYPE_PACKED_STRING_ARRAY: "PackedStringArray",
+		TYPE_PACKED_VECTOR2_ARRAY: "PackedVector2Array",
+		TYPE_PACKED_VECTOR3_ARRAY: "packedVector3Array",
+		TYPE_PACKED_COLOR_ARRAY: "PackedColorArray",
+		TYPE_PACKED_VECTOR4_ARRAY: "PackedVector4Array",
+	}
+	if inverse:
+		for key in mapping:
+			if mapping[key] == type: return key
+	else:
+		return mapping[type]

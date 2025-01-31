@@ -4,6 +4,18 @@ class_name CellCard
 
 var out_card: OutCard
 
+static func create(name: String, type: String, data: Variant):
+	var c = CellCard.new()
+	c.data_name = name
+	c.type = type
+	c.data = data
+	c.default = data
+	return c
+
+@export var default = null
+
+@export var data_name: String
+
 @export var data: Variant = null:
 	get: return data
 	set(v):
@@ -25,8 +37,26 @@ func can_edit(): return false
 
 func v():
 	title("Data Cell")
-	description("Store or piece of data.")
-	icon(preload("res://addons/cards/icons/number.png"))
+	description("Store a piece of data.")
+	icon_data("iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAF1JREFUOI3tk0sOACEIQ6nx/lfurDBVM4qfpd0ZykslAJJ2oqwPACEaSXQAANTCSOpNq82ewNOmaNOfCiD6/9ZbZqCxZlJvbgvRFK57M3iAQ8DKDpjVqw89551r/AAr3TMjmzBkfAAAAABJRU5ErkJggg==")
+	
+	var data_name_edit = LineEdit.new()
+	data_name_edit.text = data_name
+	data_name_edit.text_changed.connect(func(): data_name = data_name_edit.text)
+	data_name_edit.placeholder_text = "Name"
+	ui(data_name_edit)
+	
+	var type_edit = LineEdit.new()
+	type_edit.text = type
+	type_edit.text_changed.connect(func(): type = type_edit.text)
+	type_edit.placeholder_text = "Type"
+	ui(type_edit)
+	
+	var default_edit = LineEdit.new()
+	default_edit.text = str(default)
+	default_edit.text_changed.connect(func(): pass) # TODO
+	default_edit.placeholder_text = "Default"
+	ui(default_edit)
 
 func s():
 	out_card = OutCard.remember([data], Signature.TypeSignature.new(type))
@@ -46,6 +76,9 @@ func s():
 	
 	var trigger_card = InCard.trigger()
 	trigger_card.c(trigger_code_card)
+
+func serialize_constructor():
+	return "{0}.create(\"{1}\", \"{2}\", {3})".format([get_card_name(), type, default])
 
 func get_extra_ui() -> Array[Control]:
 	match type:

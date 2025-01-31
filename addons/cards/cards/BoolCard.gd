@@ -2,19 +2,15 @@
 extends Card
 class_name BoolCard
 
-@export var value: bool
-
 func v():
 	title("Bool")
 	description("Store or present a boolean.")
 	icon(preload("res://addons/cards/icons/bool.png"))
 
 func s():
-	var out_card = OutCard.remember([value], t("bool"))
+	var out_card = OutCard.remember()
 	
-	var cell_card = CellCard.new()
-	cell_card.data = value
-	cell_card.type = "bool"
+	var cell_card = CellCard.create("value", "bool", false)
 	cell_card.c(out_card)
 	
 	var store_card = StoreCard.new()

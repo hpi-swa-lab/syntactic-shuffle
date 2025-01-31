@@ -23,6 +23,7 @@ position = Vector2(606, 361)
 scale = Vector2(0.2, 0.2)
 script = ExtResource("3_1bvp3")
 id = "1aa037a6-0a2e-490b-873c-a6fdd684dc0a"
+value = false
 metadata/_custom_type_script = ExtResource("3_1bvp3")
 
 [node name="PlusCard" type="Node2D" parent="CardBoundary"]
@@ -43,6 +44,7 @@ id = "f44afef1-f3ef-46e1-a7f2-1ecea218de81"
 named_outgoing = Dictionary[String, Array]({
 "left": []
 })
+number = 0.0
 metadata/_custom_type_script = ExtResource("6_5vw27")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
