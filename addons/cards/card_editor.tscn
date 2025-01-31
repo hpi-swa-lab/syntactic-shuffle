@@ -1,8 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://b60kovj1bwg4i"]
+[gd_scene load_steps=4 format=3 uid="uid://b60kovj1bwg4i"]
 
 [ext_resource type="Script" uid="uid://b1i426w7aulmk" path="res://addons/cards/card_editor.gd" id="1_btd4b"]
-[ext_resource type="Texture2D" uid="uid://dcmk2qnc0sk3u" path="res://addons/cards/icons/bool.png" id="1_snpp1"]
-[ext_resource type="Script" uid="uid://dq0fiy30342u5" path="res://addons/cards/EditableCardIcon.gd" id="2_btd4b"]
+[ext_resource type="Texture2D" uid="uid://djkittmu1pxw7" path="res://addons/cards/icons/forward.png" id="2_snpp1"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_snpp1"]
 bg_color = Color(1, 1, 1, 1)
@@ -41,15 +40,15 @@ layout_mode = 2
 layout_mode = 2
 theme_override_constants/separation = 32
 
-[node name="EditableCardIcon" type="TextureRect" parent="MarginContainer/Column/HBoxContainer"]
+[node name="Icon" type="TextureButton" parent="MarginContainer/Column/HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
-texture = ExtResource("1_snpp1")
-expand_mode = 2
-script = ExtResource("2_btd4b")
-editable = true
-metadata/_custom_type_script = ExtResource("2_btd4b")
+texture_normal = ExtResource("2_snpp1")
+stretch_mode = 4
 
-[node name="LineEdit" type="LineEdit" parent="MarginContainer/Column/HBoxContainer"]
+[node name="Name" type="LineEdit" parent="MarginContainer/Column/HBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 placeholder_text = "Card Name"
 expand_to_text_length = true
@@ -62,4 +61,5 @@ size_flags_horizontal = 3
 layout_mode = 2
 text = "Save Changes"
 
+[connection signal="pressed" from="MarginContainer/Column/HBoxContainer/Icon" to="." method="_on_icon_pressed"]
 [connection signal="pressed" from="MarginContainer/Column/HBoxContainer/SaveButton" to="." method="_on_save_button_pressed"]

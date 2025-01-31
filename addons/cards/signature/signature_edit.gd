@@ -23,18 +23,17 @@ func _update_visible():
 			print(child)
 			child.queue_free()
 	
-	match _selected_name():
-		"Command":
-			text_field("command", "Command")
-			child_signature("arg", "Command Argument")
-		"Type":
-			text_field("type", "Type Name")
-		"Struct":
-			pass # TODO
-		"Group":
-			string_array("group_names", "Group Names")
-		"Iterator":
-			child_signature("type", "Iterated Type")
+	if signature is Signature.CommandSignature:
+		text_field("command", "Command")
+		child_signature("arg", "Command Argument")
+	if signature is Signature.TypeSignature:
+		text_field("type", "Type Name")
+	if signature is Signature.StructSignature:
+		pass # TODO
+	if signature is Signature.GroupSignature:
+		string_array("group_names", "Group Names")
+	if signature is Signature.IteratorSignature:
+		child_signature("type", "Iterated Type")
 
 func label(label: String):
 	var t = Label.new()
@@ -91,4 +90,5 @@ func get_type_label(s: Signature):
 	if s is Signature.IteratorSignature: return "Iterator"
 	if s is Signature.VoidSignature: return "Void"
 	if s is Signature.GenericTypeSignature: return "Generic"
+	if s is Signature.OutputAnySignature: return "Output Any"
 	assert(false, "missing signature type")

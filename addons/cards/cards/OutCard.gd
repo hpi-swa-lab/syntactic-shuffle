@@ -60,7 +60,7 @@ func s():
 func v():
 	title("Output")
 	description("Emit output.")
-	icon(preload("res://addons/cards/icons/forward.png"))
+	icon_data("iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAIZJREFUOI3FUjsOwCAIBdOlEwfx/kfxIEzdtJMEVNB06ZsMvA8RAP5EIQJ0es2pC78Q2cIgjoyxi1cGkbgnG44mS0MnOFOI9lokaNLOCNMBMTSZJui4a5X3k/wc1yASKaBnEG3CfKKOQQBomRky86Qaass16gT3kAqR6X065egSj7E5tnOTFy92Ir2sNy07AAAAAElFTkSuQmCC")
 
 func _add_command(signature: Signature) -> Signature:
 	return Signature.CommandSignature.new(command_name, signature)

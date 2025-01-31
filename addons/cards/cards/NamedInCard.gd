@@ -13,7 +13,7 @@ static func named_data(name: String, signature: Signature):
 func v():
 	title("Named Input")
 	description("Receive input via a named connection.")
-	icon(preload("res://addons/cards/icons/forward.png"))
+	icon_data("iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAALVJREFUOI3FkiEWAyEMRD/INblCV1f0/sdAoOkVMGtTAxSysO2r6RjeSzKZMAn8E1EEt8jpIt7qo8gYMOSrxq6SAfyKnOZTODtdr9TIUYQtZ+1rjqK65cwOGkVc6xhK5QMI5a1IZyF20FRiHkMwxH66KTwT1aLyFZqJwSTMBKutnE2Mb7MU4Kbqnm7kVw+OySHZNQ75Q4R7zm0Dq9EGYv1K8WQgX/3t8pT7S1ya8wl9k58RRXgB3fI5LJ/pk0UAAAAASUVORK5CYII=")
 	signature_edit()
 	
 	var e = LineEdit.new()

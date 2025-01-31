@@ -30,7 +30,7 @@ func s():
 func v():
 	title("Input")
 	description("Receive input.")
-	icon(preload("res://addons/cards/icons/forward.png"))
+	icon_data("iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAKFJREFUOI3FUjESwzAIE71OWfhCPff/T2F2vsCSlS6Oiznj5LpUi+/AQoAA/glhBiU5S+L9vzCPgUBeFaaTDACPjFznXVDszit1sjBjUzX/52iqmyoKYMJMAECJ0ky5owBWWyyOkCEVuVsgxd0CmSt4lm9ysOhc4suMdprzj8khRRspEt6q3YGstYFY21tazpNXsy1P2V9iupwr+CI/Q5jxASLeMXIHnpyNAAAAAElFTkSuQmCC")
 	signature_edit()
 
 func signature_edit():
@@ -38,6 +38,8 @@ func signature_edit():
 	edit.on_edit.connect(func (s): signature = s)
 	edit.signature = signature
 	ui(edit)
+
+func can_edit(): return false
 
 func setup_finished():
 	super.setup_finished()

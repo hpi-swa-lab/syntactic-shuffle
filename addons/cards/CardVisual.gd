@@ -23,6 +23,7 @@ var expanded = false:
 		if expanded:
 			_editor = load("res://addons/cards/card_editor.tscn").instantiate()
 			_editor.position = %CardControl.get_rect().size / -2
+			_editor.gui_input.connect(input_event)
 			add_child(_editor)
 			_editor.attach_cards(card)
 		elif _editor:
@@ -46,6 +47,8 @@ func icon_data(t: String):
 	icon(ImageTexture.create_from_image(image))
 func get_icon_data(): return Marshalls.raw_to_base64(%Icon.texture.get_image().save_png_to_buffer())
 func get_icon_path(): return %Icon.texture.resource_path
+func get_icon_texture(): return %Icon.texture
+func set_icon_texture(texture: Texture): %Icon.texture = texture
 func ui(c: Control): %extra_ui.add_child(c)
 
 var card: Card:

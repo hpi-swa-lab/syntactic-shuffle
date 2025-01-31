@@ -83,7 +83,7 @@ func draw_connection(from, to, inverted, light_background: bool):
 	const GAP = SIZE * 2.2
 	
 	var offset = get_draw_offset(from, to) * GAP
-	offset = offset - int(offset)
+	offset = 1 - (offset - int(offset))
 	var stretch = 1 - distance / Card.MAX_CONNECTION_DISTANCE
 	for i in range(0, distance / GAP):
 		draw_arrow(Vector2(0, (i + offset) * GAP), SIZE, inverted, to, stretch, light_background)

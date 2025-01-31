@@ -8,6 +8,9 @@ func attach_cards(card: Card):
 	
 	layout_cards(card.cards_parent.get_children().filter(func (c): return c is Card))
 	card.cards_parent.fill_rect(get_rect())
+	
+	%Name.text = card.visual.get_title()
+	%Icon.texture_normal = card.visual.get_icon_texture()
 
 func detach_cards():
 	%Column.remove_child(card.cards_parent)
@@ -16,8 +19,8 @@ func _on_save_button_pressed() -> void:
 	print(card.serialize_gdscript())
 
 func init_positions(cards: Array):
-	const RADIUS = 200.0 # Radius of the circular layout
-	const CENTER = Vector2(800, 600) # Center of the initial layout (arbitrary)
+	const RADIUS = 200.0
+	const CENTER = Vector2(800, 600)
 	var angle_step = 2.0 * PI / cards.size()
 	
 	var inputs = cards.filter(func(c): return c.get_all_incoming().is_empty())
@@ -73,3 +76,15 @@ func layout_cards(cards):
 		
 		for card in cards:
 			if not card.get_all_incoming().is_empty(): card.position += forces[card] * 5
+
+
+func _on_icon_pressed() -> void:
+	var editor = preload("res://addons/cards/icon_editor.tscn").instantiate()
+	get_parent().add_child(editor)
+	editor.global_position = %Icon.global_position - editor.get_rect().size / 2
+	
+	editor.texture = ImageTexture.create_from_image(%Icon.texture_normal.get_image())
+	
+	editor.save.connect(func(texture):
+		%Icon.texture_normal = texture
+		card.visual.set_icon_texture(texture))

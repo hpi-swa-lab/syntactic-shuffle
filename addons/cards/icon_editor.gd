@@ -1,5 +1,7 @@
 extends Panel
 
+signal save(texture: ImageTexture)
+
 @export var texture: ImageTexture:
 	get: return texture
 	set(v):
@@ -17,12 +19,13 @@ func _ready() -> void:
 	%Texture.texture = texture
 	%Texture.draw.connect(func():
 		var size = %Texture.get_rect().size
-		var color = Color(Color.BLACK, 0.3)
+		var color = Color(Color.BLACK, 0.1)
 		%Texture.draw_rect(Rect2(Vector2.ZERO, size), color, false, 1)
-		for y in range(0, size.y, image.get_size().y):
-			%Texture.draw_line(Vector2(0, y), Vector2(size.x, y), color, 1)
-		for x in range(0, size.x, image.get_size().x):
-			%Texture.draw_line(Vector2(x, 0), Vector2(x, size.y), color, 1))
+		var step = %Texture.get_rect().size / float(image.get_size().x)
+		for y in range(0, 16):
+			%Texture.draw_line(Vector2(0, y * step.y), Vector2(size.x, y * step.y), color, 1)
+		for x in range(0, 16):
+			%Texture.draw_line(Vector2(x * step.x, 0), Vector2(x * step.x, size.y), color, 1))
 
 func _on_color_changed(color: Color) -> void:
 	selected_color = color
@@ -59,6 +62,14 @@ func _on_texture_gui_input(event: InputEvent) -> void:
 
 func _paint(event: InputEventMouse):
 	var point = ((event.position - %Texture.position) / %Texture.get_rect().size * float(image.get_size().x)).floor()
+	if point.x < 0 or point.y < 0 or point.x >= 15 or point.y >= 15: return
 	undo[undo.size() - 1].push_back([point, image.get_pixelv(point)])
 	image.set_pixelv(point, Color.TRANSPARENT if erase else selected_color)
 	texture.update(image)
+
+func _on_save_pressed() -> void:
+	save.emit(texture)
+	_on_cancel_pressed()
+
+func _on_cancel_pressed() -> void:
+	queue_free()
