@@ -18,9 +18,9 @@ func _capture(message, data, session_id):
 			var src = data[1]
 			var s = load(path)
 			s.source_code = src
-			s.reload()
-			s.emit_changed()
-			ResourceSaver.save(s)
+			s.reload(true)
+			ResourceSaver.save(s, path)
+			editor_interface.get_resource_filesystem().update_file(path)
 		"cards:spawn":
 			var parent_path = data[0]
 			var id = data[1]

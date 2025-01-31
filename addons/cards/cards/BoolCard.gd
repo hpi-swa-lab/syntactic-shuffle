@@ -8,8 +8,6 @@ func v():
 	icon_data("iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAEhJREFUOI1jYBgFjGj8/6TqQzbgPxYD4XJddxGcMmWEXpgGojWjG8JIjmZkQ5hwSxMHKDaAKmEAV0isIdhiAdkQYgAui4YiAAATwxYLHVO/dwAAAABJRU5ErkJggg==")
 
 func s():
-	var out_card = OutCard.remember()
-	out_card.position = Vector2(1995.88, 653.725)
 	var cell_card = CellCard.create("value", "bool", false)
 	cell_card.position = Vector2(769.1019, 822.6429)
 	var store_card = StoreCard.new()
@@ -24,6 +22,8 @@ func s():
 	code_card.position = Vector2(566.4626, 1259.251)
 	var in_card_3 = InCard.data(cmd("toggle", trg()))
 	in_card_3.position = Vector2(200.0, 1200.0)
+	var out_card = OutCard.remember()
+	out_card.position = Vector2(1374.487, 421.9353)
 	
 	cell_card.c(out_card)
 	cell_card.c_named("value", code_card)
