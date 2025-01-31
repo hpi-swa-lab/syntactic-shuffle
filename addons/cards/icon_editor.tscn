@@ -1,0 +1,64 @@
+[gd_scene load_steps=4 format=3 uid="uid://m54rj776j3og"]
+
+[ext_resource type="Script" uid="uid://dl8vojrfvcgmh" path="res://addons/cards/icon_editor.gd" id="1_6mf6w"]
+[ext_resource type="Texture2D" uid="uid://dcmk2qnc0sk3u" path="res://addons/cards/icons/bool.png" id="2_6mf6w"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6mf6w"]
+bg_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[node name="icon_editor" type="Panel"]
+top_level = true
+z_index = 341
+custom_minimum_size = Vector2(290, 355)
+offset_right = 290.0
+offset_bottom = 353.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_6mf6w")
+script = ExtResource("1_6mf6w")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="Texture" type="TextureRect" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(256, 256)
+layout_mode = 2
+texture = ExtResource("2_6mf6w")
+expand_mode = 4
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Color" type="ColorPickerButton" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(32, 0)
+layout_mode = 2
+
+[node name="Undo" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Undo"
+
+[node name="Clear" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Clear"
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Left to paint. Right to erase."
+
+[connection signal="gui_input" from="MarginContainer/VBoxContainer/Texture" to="." method="_on_texture_gui_input"]
+[connection signal="color_changed" from="MarginContainer/VBoxContainer/HBoxContainer/Color" to="." method="_on_color_changed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer/Undo" to="." method="_on_undo_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer/Clear" to="." method="_on_clear_pressed"]

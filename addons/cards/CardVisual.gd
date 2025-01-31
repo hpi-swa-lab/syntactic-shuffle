@@ -18,12 +18,13 @@ var expanded = false:
 		expanded = v
 		%Description.visible = not expanded
 		%Icon.reparent(%IconMargin if not expanded else %HeaderRow)
+		%Icon.editable = expanded
 		%Icon.expand_mode = TextureRect.EXPAND_FIT_WIDTH_PROPORTIONAL if expanded else TextureRect.EXPAND_FIT_HEIGHT_PROPORTIONAL
 		if expanded: %MainColumn.add_child(card.cards_parent)
 		else: %MainColumn.remove_child(card.cards_parent)
 		
 		$CardControl.size = Vector2(197, 282) if not expanded else Vector2(800, 600) * 3
-		z_index = 100 if expanded else 0
+		z_index = 100 if expanded else 2
 		
 		if expanded:
 			layout_cards(card.cards)
