@@ -357,6 +357,10 @@ func can_edit(): return true
 func get_card_name():
 	return get_script().get_global_name()
 
+func get_stored_data():
+	for card in cards:
+		if card is CellCard: return card.data
+
 func serialize_constructor():
 	return "{0}.new()".format([get_card_name()])
 
