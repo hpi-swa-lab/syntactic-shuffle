@@ -15,7 +15,8 @@ func detach_cards():
 	%Column.remove_child(card.cards_parent)
 
 func _on_save_button_pressed() -> void:
-	print(card.serialize_gdscript())
+	var file = FileAccess.open(card.get_script().resource_path, FileAccess.WRITE)
+	file.store_string(card.serialize_gdscript())
 
 func _on_auto_layout_pressed() -> void:
 	layout_cards(card.cards_parent.get_children().filter(func (c): return c is Card))
@@ -27,7 +28,7 @@ func init_positions(cards: Array):
 	
 	var inputs = cards.filter(func(c): return c.get_all_incoming().is_empty())
 	for i in range(inputs.size()):
-		inputs[i].position = Vector2(0, 400 + i * 400)
+		inputs[i].position = Vector2(200, 400 + i * 400)
 	
 	var other = cards.filter(func(c): return not (inputs.has(c)))
 	for i in range(other.size()):

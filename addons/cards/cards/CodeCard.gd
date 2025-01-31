@@ -3,10 +3,10 @@ extends Card
 class_name CodeCard
 
 ## Returns the source code of the anonymous function at the given index in the source file.
-static func fetch_source_code_of(path: String, index: int):
-	if not _source_code_cache.has(path):
-		_source_code_cache[path] = _extract_anonymous_functions(FileAccess.get_file_as_string(path))
-	return _source_code_cache[path][index]
+static func fetch_source_code_in(src: String, index: int):
+	if not _source_code_cache.has(src):
+		_source_code_cache[src] = _extract_anonymous_functions(src)
+	return _source_code_cache[src][index]
 static var _source_code_cache = {}
 static func _extract_anonymous_functions(src: String):
 	var sources = []
@@ -104,8 +104,8 @@ func output(name: String, args: Array):
 		card.invoke(args, signature, "", output)
 
 func get_source_code():
-	return fetch_source_code_of(
-		parent.get_script().resource_path,
+	return fetch_source_code_in(
+		parent.get_script().source_code,
 		parent.cards.filter(func (c): return c is CodeCard).find(self))
 
 func serialize_constructor():
