@@ -163,6 +163,16 @@ func get_incoming() -> Array:
 func get_outgoing() -> Array:
 	return outgoing.map(func (p): return get_node_or_null(p)).filter(not_null)
 
+## Return true if this named connection can exist as part of a cycle
+func cycles_allowed_for(name: String): return false
+## Return all outgoing connections that should be considered for cycle avoidance
+func get_named_outgoing_for_cycles() -> Array:
+	var out = []
+	for name in named_outgoing:
+		for p in named_outgoing[name]:
+			var card = get_node_or_null(p)
+			if card and not card.cycles_allowed_for(name): out.append(card)
+	return out
 func get_named_outgoing() -> Array: return _get_named(named_outgoing)
 func get_named_incoming() -> Array: return _get_named(named_incoming)
 func _get_named(dict) -> Array:
@@ -283,7 +293,9 @@ func _process(delta: float) -> void:
 		for card in get_named_incoming(): _check_disconnect(card)
 		
 		CardBoundary.traverse_connection_candidates(self, func (obj):
-			if (obj is Card or obj.get_parent() == get_parent()) and global_position.distance_to(obj.global_position) <= MAX_CONNECTION_DISTANCE:
+			if ((obj is Card or obj.get_parent() == get_parent()) and
+			not obj.has_meta("cards_ignore") and
+			global_position.distance_to(obj.global_position) <= MAX_CONNECTION_DISTANCE):
 				try_connect(obj))
 	
 	connection_draw_node.check_redraw(delta)
@@ -299,10 +311,10 @@ static func _each_input_candidate(object: Node, cb: Callable, named: bool):
 			not named and not card is NamedInCard and card is InCard): cb.call(card)
 
 func try_connect(them: Node):
-	_each_input_candidate(self, func (card): card.try_connect_in(them), true)
 	_each_input_candidate(them, func (card): card.try_connect_in(self), true)
-	_each_input_candidate(self, func (card): card.try_connect_in(them), false)
+	_each_input_candidate(self, func (card): card.try_connect_in(them), true)
 	_each_input_candidate(them, func (card): card.try_connect_in(self), false)
+	_each_input_candidate(self, func (card): card.try_connect_in(them), false)
 
 static func get_remembered_for(object: Node, signature: Signature):
 	if object is InCard or object is OutCard: return object._get_remembered_for(signature)

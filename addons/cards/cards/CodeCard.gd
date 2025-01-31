@@ -62,6 +62,8 @@ func s():
 	for pair in inputs:
 		NamedInCard.named_data(pair[0], pair[1])
 
+func cycles_allowed_for(name: String): return pull_only.has(name)
+
 func invoke(args: Array, signature: Signature, named = "", source_out = null):
 	if not inputs.is_empty(): assert(named, "code cards with inputs can only have named connections")
 	if pull_only.has(named): return

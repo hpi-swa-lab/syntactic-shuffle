@@ -106,6 +106,8 @@ func try_connect_in(them: Node):
 func detect_cycles_for_new_connection(from: Card, to: Card) -> bool:
 	if (to.allows_cycles() or from.allows_cycles()) and not from.get_all_outgoing().has(to) and not to.get_all_incoming().has(from):
 		return false
+	# we never allow direct cycles
+	if from.get_all_outgoing().has(to): return true
 	return check_is_connected(from, to)
 
 func check_is_connected(a: Card, b: Card) -> bool:
@@ -118,7 +120,7 @@ func check_is_connected(a: Card, b: Card) -> bool:
 			if not visitited.has(next):
 				if next == b: return true
 				queue.push_back(next)
-		for next in node.get_named_outgoing():
+		for next in node.get_named_outgoing_for_cycles():
 			if not visitited.has(next):
 				if next == b: return true
 				queue.push_back(next)

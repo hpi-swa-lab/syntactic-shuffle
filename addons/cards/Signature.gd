@@ -61,6 +61,7 @@ class GenericTypeSignature extends Signature:
 	func serialize_gdscript(): return "any()"
 	func compatible_with(other: Signature): return other.compatible_with_generic(self)
 	func compatible_with_type(other: Signature): return true
+	func compatible_with_generic(other: GenericTypeSignature): return true
 
 class TriggerSignature extends Signature:
 	func get_description(): return "[TRIGGER]"

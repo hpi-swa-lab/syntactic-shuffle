@@ -17,7 +17,7 @@ func s():
 		if elapsed >= 1.0:
 			elapsed -= 1.0
 			card.output("out", [])
-		card.output("elapsed", [elapsed]))
+		card.output("elapsed", [elapsed]), ["elapsed"])
 	
 	code_card.c(elapsed_time)
 	code_card.c(out)

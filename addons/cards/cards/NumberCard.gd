@@ -20,6 +20,9 @@ func s():
 	var store_card = StoreCard.new()
 	store_card.c(cell_card)
 	
+	var store_in_card = InCard.data(cmd("store", any()))
+	store_in_card.c(cell_card)
+	
 	var override_card = InCard.data(t("float"))
 	override_card.c(store_card)
 	
