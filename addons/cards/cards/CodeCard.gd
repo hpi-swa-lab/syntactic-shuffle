@@ -38,12 +38,15 @@ static func _extract_anonymous_functions(src: String):
 	return sources
 
 static func create(inputs: Array[Array], outputs: Dictionary[String, Signature], process: Callable, pull_only = []):
-	var c = CodeCard.new()
-	c.outputs = outputs
-	c.process = process
-	c.inputs = inputs
-	c.pull_only = pull_only
+	var c = CodeCard.new(inputs, outputs, process, pull_only)
 	return c
+
+func _init(inputs: Array[Array], outputs: Dictionary[String, Signature], process: Callable, pull_only = []):
+	self.outputs = outputs
+	self.process = process
+	self.inputs = inputs
+	self.pull_only = pull_only
+	super._init()
 
 var outputs: Dictionary[String, Signature]
 var process: Callable
@@ -66,7 +69,7 @@ func s():
 		OutCard.static_signature(outputs[output])
 	
 	for pair in inputs:
-		NamedInCard.named_data(pair[0], pair[1])
+		NamedInCard.new(pair[0], pair[1])
 
 func setup_finished():
 	super.setup_finished()

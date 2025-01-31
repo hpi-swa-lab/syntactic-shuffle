@@ -5,12 +5,15 @@ class_name CellCard
 var out_card: OutCard
 
 static func create(name: String, type: String, data: Variant):
-	var c = CellCard.new()
-	c.data_name = name
-	c.type = type
-	c.data = data
-	c.default = data
+	var c = CellCard.new(name, type, data)
 	return c
+
+func _init(name: String, type: String, data: Variant):
+	self.data_name = name
+	self.type = type
+	self.data = data
+	self.default = data
+	super._init()
 
 @export var default = null
 

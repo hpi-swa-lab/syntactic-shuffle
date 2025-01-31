@@ -11,7 +11,7 @@ static func pop_active_card_list():
 	active_card_list.pop_back()
 
 static func editor_sync(message: String, args: Array):
-	if false and EngineDebugger.is_active(): EngineDebugger.send_message(message, args)
+	if EngineDebugger.is_active(): EngineDebugger.send_message(message, args)
 
 static func get_id(node: Node):
 	if node is Card: return node.id
@@ -57,19 +57,22 @@ var cards: Array[Node]:
 	get: return cards_parent.get_children().filter(func(s): return s is Card)
 
 func _init():
-	if not active_card_list.is_empty(): active_card_list.back().add_child(self)
+	var parent = null
+	if not active_card_list.is_empty():
+		parent = active_card_list.back()
+		parent.cards_parent.add_child(self)
+	setup(parent)
 
 func setup(parent: Card):
 	self.parent = parent
 	if not id: id = uuid.v4()
 	
-	push_active_card_list(cards_parent)
+	push_active_card_list(self)
 	s()
 	pop_active_card_list()
 	cards.append_array(cards_parent.get_children())
 	
-	for card in cards:
-		card.setup(self)
+	# for card in cards: card.setup(self)
 
 func visual_setup():
 	visual = preload("res://addons/cards/CardVisual.tscn").instantiate()
@@ -96,7 +99,7 @@ func _ready() -> void:
 	visual_setup()
 	get_card_boundary().card_entered(self)
 	
-	if not parent: setup(null)
+	#if not parent: setup(null)
 	
 	for card in cards:
 		card.setup_finished()
@@ -283,7 +286,7 @@ static func always_reconnect():
 func _process(delta: float) -> void:
 	if dragging and not Engine.is_editor_hint():
 		CardBoundary.card_moved(self)
-		editor_sync("cards:set_prop", [id, "position", position])
+		# editor_sync("cards:set_prop", [id, "position", position])
 	
 	if disable: return
 	if dragging or always_reconnect():

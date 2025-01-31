@@ -6,30 +6,31 @@ static func data():
 	return OutCard.new()
 
 static func command(command: String):
-	var c = OutCard.new()
-	c.command_name = command
+	var c = OutCard.new(false, null, command)
 	return c
 
 static func remember(init = null, init_signature: Signature = null):
-	var c = OutCard.new()
-	c.remember_message = true
+	var c = OutCard.new(true)
 	if init != null:
 		c.remembered = init
 		c.remembered_signature = init_signature
 	return c
 
 static func remember_command(command: String):
-	var c = OutCard.new()
-	c.remember_message = true
-	c.command_name = command
+	var c = OutCard.new(true, null, command)
 	return c
 
 static func static_signature(signature: Signature, remember = false):
-	var c = OutCard.new()
-	c.signature = signature
-	c.has_static_signature = true
-	c.remember_message = remember
+	var c = OutCard.new(remember, signature)
 	return c
+
+func _init(remember = false, signature: Signature = null, command = "") -> void:
+	self.command_name = command
+	self.remember_message = remember
+	if signature:
+		self.has_static_signature = true
+		self.signature = signature
+	super._init()
 
 @export var remember_message := false
 @export var command_name := ""

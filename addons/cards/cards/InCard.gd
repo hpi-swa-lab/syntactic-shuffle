@@ -3,14 +3,16 @@ extends Card
 class_name InCard
 
 static func trigger():
-	var c = InCard.new()
-	c.signature = trg()
+	var c = InCard.new(trg())
 	return c
 
 static func data(signature: Signature):
-	var c = InCard.new()
-	c.signature = signature
+	var c = InCard.new(signature)
 	return c
+
+func _init(signature: Signature):
+	self.signature = signature
+	super._init()
 
 var signature: Signature = Signature.VoidSignature.new():
 	get: return signature
@@ -23,6 +25,7 @@ func s():
 	# special InCard that the OutCard uses for connection purposes. Would yield
 	# an infinite loop if we proceeded here.
 	if signature is Signature.OutputAnySignature: return
+	
 	out_card = OutCard.new()
 	out_card.has_static_signature = true
 	out_card.signature = signature

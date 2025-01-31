@@ -20,7 +20,7 @@ func s():
 	var remember_normal_card = RememberCard.new()
 	remember_normal_card.c_named("normal", code_card)
 	
-	var vector_card = NamedInCard.named_data("vector", t("Vector2"))
+	var vector_card = NamedInCard.new("vector", t("Vector2"))
 	vector_card.c(remember_vector_card)
-	var normal_card = NamedInCard.named_data("normal", t("Vector2"))
+	var normal_card = NamedInCard.new("normal", t("Vector2"))
 	normal_card.c(remember_normal_card)

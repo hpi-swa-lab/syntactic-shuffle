@@ -13,6 +13,14 @@ func _has_capture(prefix):
 func _capture(message, data, session_id):
 	var scene = editor_interface.get_edited_scene_root().get_parent()
 	match message:
+		"cards:save":
+			var path = data[0]
+			var src = data[1]
+			var s = load(path)
+			s.source_code = src
+			s.reload()
+			s.emit_changed()
+			ResourceSaver.save(s)
 		"cards:spawn":
 			var parent_path = data[0]
 			var id = data[1]

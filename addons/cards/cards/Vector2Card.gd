@@ -2,19 +2,15 @@
 extends Card
 class_name Vector2Card
 
-@export var vector: Vector2
-
 func v():
 	title("Vector")
 	description("Store or present a vector.")
 	icon(preload("res://addons/cards/icons/vector.png"))
 
 func s():
-	var out_card = OutCard.remember([vector], t("Vector2"))
+	var out_card = OutCard.remember()
 	
-	var cell_card = CellCard.new()
-	cell_card.data = vector
-	cell_card.type = "Vector2"
+	var cell_card = CellCard.new("vector", "Vector2", Vector2.ZERO)
 	cell_card.c(out_card)
 	
 	var store_card = StoreCard.new()

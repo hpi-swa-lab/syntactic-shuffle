@@ -2,13 +2,11 @@
 extends InCard
 class_name NamedInCard
 
-static func named_data(name: String, signature: Signature):
-	var c = NamedInCard.new()
-	c.signature = signature
-	c.input_name = name
-	return c
-
 @export var input_name: String
+
+func _init(name: String, signature: Signature):
+	self.input_name = name
+	super._init(signature)
 
 func v():
 	title("Named Input")
@@ -52,4 +50,4 @@ func _get_remembered_for(signature: Signature):
 	return null
 
 func serialize_constructor():
-	return "{0}.named_data(\"{1}\", {2})".format([get_card_name(), input_name, signature.serialize_gdscript()])
+	return "{0}.new(\"{1}\", {2})".format([get_card_name(), input_name, signature.serialize_gdscript()])

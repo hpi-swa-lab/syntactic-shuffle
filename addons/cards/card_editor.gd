@@ -17,8 +17,9 @@ func detach_cards():
 	%Column.remove_child(card.cards_parent)
 
 func _on_save_button_pressed() -> void:
-	var file = FileAccess.open(card.get_script().resource_path, FileAccess.WRITE)
-	file.store_string(card.serialize_gdscript())
+	Card.editor_sync("cards:save", [card.get_script().resource_path, card.serialize_gdscript()])
+	#var file = FileAccess.open(card.get_script().resource_path, FileAccess.WRITE)
+	#file.store_string(card.serialize_gdscript())
 
 func _on_auto_layout_pressed() -> void:
 	layout_cards(card.cards_parent.get_children().filter(func (c): return c is Card))

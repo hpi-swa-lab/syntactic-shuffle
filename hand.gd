@@ -2,12 +2,12 @@ extends CanvasLayer
 
 var categories = {
 	"Abstraction": [
-		"CodeCard",
-		"CellCard",
+		CodeCard.new([], {}, func(_card): pass, []),
+		CellCard.new("value", "float", 0.0),
 		"StoreCard",
-		"InCard",
-		"NamedInCard",
-		"OutCard"
+		InCard.new(Signature.VoidSignature.new()),
+		NamedInCard.new("unnamed", Signature.VoidSignature.new()),
+		OutCard.new()
 	],
 	"Input": [
 		"AxisControlsCard",
@@ -59,7 +59,7 @@ func _ready() -> void:
 		stack.card_scale = 0.3
 		stack.position = STACK_SIZE / 2 + Vector2(20, 0)
 		for card_name in categories[category]:
-			var card = load("res://addons/cards/cards/{0}.gd".format([card_name])).new()
+			var card = load("res://addons/cards/cards/{0}.gd".format([card_name])).new() if card_name is String else card_name
 			stack.add_child(card)
 		
 		var collider = CollisionShape2D.new()
