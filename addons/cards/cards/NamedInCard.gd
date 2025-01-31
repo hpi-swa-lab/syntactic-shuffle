@@ -4,6 +4,9 @@ class_name NamedInCard
 
 @export var input_name: String
 
+static func named_data(name: String, signature: Signature):
+	return NamedInCard.new(name, signature)
+
 func _init(name: String, signature: Signature):
 	self.input_name = name
 	super._init(signature)

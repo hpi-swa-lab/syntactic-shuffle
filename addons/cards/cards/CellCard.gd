@@ -81,7 +81,7 @@ func s():
 	trigger_card.c(trigger_code_card)
 
 func serialize_constructor():
-	return "{0}.create(\"{1}\", \"{2}\", {3})".format([get_card_name(), type, default])
+	return "{0}.create(\"{1}\", \"{2}\", {3})".format([get_card_name(), data_name, type, default])
 
 func get_extra_ui() -> Array[Control]:
 	match type:

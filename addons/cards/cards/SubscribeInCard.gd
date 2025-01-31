@@ -3,8 +3,7 @@ extends InCard
 class_name SubscribeInCard
 
 static func create(signature: Signature):
-	var c = SubscribeInCard.new()
-	c.signature = signature
+	var c = SubscribeInCard.new(signature)
 	return c
 
 func v():
