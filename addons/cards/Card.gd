@@ -388,10 +388,13 @@ func get_stored_data():
 	for card in cards:
 		if card is CellCard: return card.data
 
+func clone():
+	return get_script().new()
+
 func serialize_constructor():
 	return "{0}.new()".format([get_card_name()])
 
-func serialize_gdscript():
+func serialize_gdscript(overwrite_name = ""):
 	var var_names = {}
 	var count = {}
 	for c in cards:
@@ -410,14 +413,16 @@ func serialize_gdscript():
 		for i in range(0, c.cards.size()):
 			if c.cards[i] is CellCard:
 				cards_desc += "\t{0}.cards[{1}].data = {2}\n".format([n, i, c.cards[i].data])
-	cards_desc += "\t\n"
+	if not cards.is_empty(): cards_desc += "\t\n"
+	else: cards_desc = "\tpass"
 	for c in cards:
 		for them in c.get_outgoing():
 			cards_desc += "\t{0}.c({1})\n".format([var_names[c], var_names[them]])
 		for name in c.named_outgoing:
 			for their_path in c.named_outgoing[name]:
 				var them = c.get_node_or_null(their_path)
-				cards_desc += "\t{0}.c_named(\"{2}\", {1})\n".format([var_names[c], var_names[them], name])
+				if them:
+					cards_desc += "\t{0}.c_named(\"{2}\", {1})\n".format([var_names[c], var_names[them], name])
 	
 	return "@tool
 extends Card
@@ -430,7 +435,7 @@ func v():
 
 func s():
 {cards}".format({
-		"name": get_card_name(),
+		"name": overwrite_name if overwrite_name else get_card_name(),
 		"title": visual.get_title(),
 		"description": visual.get_description(),
 		"icon_data": visual.get_icon_data(),

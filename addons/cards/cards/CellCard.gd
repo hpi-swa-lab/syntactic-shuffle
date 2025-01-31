@@ -15,6 +15,9 @@ func _init(name: String, type: String, data: Variant):
 	self.default = data
 	super._init()
 
+func clone():
+	return get_script().new(data_name, type, default)
+
 @export var default = null
 
 @export var data_name: String

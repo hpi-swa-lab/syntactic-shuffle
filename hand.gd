@@ -2,12 +2,14 @@ extends CanvasLayer
 
 var categories = {
 	"Abstraction": [
-		CodeCard.new([], {}, func(_card): pass, []),
+		CodeCard.new([], {}, func(_card): pass, [], "func(_card): pass"),
 		CellCard.new("value", "float", 0.0),
 		"StoreCard",
+		"RememberCard",
 		InCard.new(Signature.VoidSignature.new()),
 		NamedInCard.new("unnamed", Signature.VoidSignature.new()),
-		OutCard.new()
+		OutCard.new(),
+		BlankCard.new()
 	],
 	"Input": [
 		"AxisControlsCard",
@@ -33,7 +35,8 @@ var categories = {
 	"Math": [
 		"IncrementCard",
 		"ReflectCard",
-		"PlusCard"
+		"PlusCard",
+		"MinusCard"
 	],
 }
 

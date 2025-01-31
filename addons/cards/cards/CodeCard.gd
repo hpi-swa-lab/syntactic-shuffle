@@ -41,12 +41,18 @@ static func create(inputs: Array[Array], outputs: Dictionary[String, Signature],
 	var c = CodeCard.new(inputs, outputs, process, pull_only)
 	return c
 
-func _init(inputs: Array[Array], outputs: Dictionary[String, Signature], process: Callable, pull_only = []):
+func _init(inputs: Array[Array], outputs: Dictionary[String, Signature], process: Callable, pull_only = [], source_code = ""):
 	self.outputs = outputs
 	self.process = process
 	self.inputs = inputs
 	self.pull_only = pull_only
+	self.source_code = source_code
 	super._init()
+
+func clone():
+	var c = get_script().new(inputs, outputs, process, pull_only)
+	c.source_code = source_code
+	return c
 
 var outputs: Dictionary[String, Signature]
 var process: Callable

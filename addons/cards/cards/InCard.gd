@@ -14,6 +14,9 @@ func _init(signature: Signature):
 	self.signature = signature
 	super._init()
 
+func clone():
+	return get_script().new(signature)
+
 var signature: Signature = Signature.VoidSignature.new():
 	get: return signature
 	set(v):
@@ -93,6 +96,7 @@ func incoming_disconnected(obj: Node):
 			if input is InCard: input.incoming_disconnected(obj)
 
 func try_connect_in(them: Node):
+	if not parent: return
 	if parent.get_incoming().has(them): return
 	if them is Card and detect_cycles_for_new_connection(parent, them): return
 	

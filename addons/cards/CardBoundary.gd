@@ -74,10 +74,11 @@ static func card_moved(card: Card):
 		var old_index = card.get_index()
 		card.reparent(boundary)
 		card.global_position = boundary.get_global_mouse_position()
+		old_boundary.card_left(card)
 		boundary.card_entered(card)
 		
 		if old_boundary.duplicate_on_drag:
-			var dupl = card.get_script().new()
+			var dupl = card.clone()
 			old_boundary.add_child(dupl)
 			old_boundary.move_child(dupl, old_index)
 			
@@ -101,9 +102,13 @@ func contains_screen_position(pos: Vector2):
 				return true
 	return false
 
+func card_left(card: Card):
+	card.parent = null
+
 func card_entered(card: Card):
 	card.disable = disable_on_enter
 	card.paused = pause_on_enter
+	card.parent = G.closest_parent_that(self, func(n): return n is Card)
 	#card.editor_sync_prop("paused")
 	#card.editor_sync_prop("disabled")
 	#card.editor_sync("cards:move_boundary", [card.id, Card.get_id(self)])

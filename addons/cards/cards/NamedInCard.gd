@@ -11,6 +11,9 @@ func _init(name: String, signature: Signature):
 	self.input_name = name
 	super._init(signature)
 
+func clone():
+	return get_script().new(input_name, signature)
+
 func v():
 	title("Named Input")
 	description("Receive input via a named connection.")
@@ -20,7 +23,7 @@ func v():
 	var e = LineEdit.new()
 	e.placeholder_text = "Input Name"
 	if input_name != null: e.text = input_name
-	e.text_changed.connect(func (): input_name = e.text)
+	e.text_changed.connect(func (n): input_name = n)
 	ui(e)
 
 func try_connect_in(them: Node):

@@ -70,6 +70,7 @@ func _on_save_pressed() -> void:
 	var o = {}
 	for pair in outputs:
 		o[pair[0]] = pair[1]
+	card.outputs = Dictionary(o, TYPE_STRING, "", null, TYPE_OBJECT, "Object", Signature)
 	card.visual.expanded = false
 
 func _on_code_gui_input(event: InputEvent) -> void:
