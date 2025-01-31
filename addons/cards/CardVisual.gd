@@ -9,6 +9,7 @@ enum Type {
 }
 
 static var base_card_size = Vector2(10, 10)
+var _editor = null
 
 signal dragging(d: bool)
 
@@ -16,78 +17,16 @@ var expanded = false:
 	get: return expanded
 	set(v):
 		expanded = v
-		%Description.visible = not expanded
-		%Icon.reparent(%IconMargin if not expanded else %HeaderRow)
-		%Icon.editable = expanded
-		%Icon.expand_mode = TextureRect.EXPAND_FIT_WIDTH_PROPORTIONAL if expanded else TextureRect.EXPAND_FIT_HEIGHT_PROPORTIONAL
-		if expanded: %MainColumn.add_child(card.cards_parent)
-		else: %MainColumn.remove_child(card.cards_parent)
 		
-		$CardControl.size = Vector2(197, 282) if not expanded else Vector2(800, 600) * 3
-		z_index = 100 if expanded else 2
+		%CardControl.visible = not expanded
 		
 		if expanded:
-			layout_cards(card.cards)
-			card.cards_parent.fill_rect($CardControl.get_rect())
-
-func init_positions(cards: Array):
-	const RADIUS = 200.0 # Radius of the circular layout
-	const CENTER = Vector2(800, 600) # Center of the initial layout (arbitrary)
-	var angle_step = 2.0 * PI / cards.size()
-	
-	var inputs = cards.filter(func(c): return c.get_all_incoming().is_empty())
-	for i in range(inputs.size()):
-		inputs[i].position = Vector2(0, 400 + i * 400)
-	
-	var other = cards.filter(func(c): return not (inputs.has(c)))
-	for i in range(other.size()):
-		var angle = i * angle_step
-		other[i].position = CENTER + Vector2(RADIUS * cos(angle), RADIUS * sin(angle))
-
-func layout_cards(cards):
-	const MAX_DISTANCE = 200.0
-	const REPULSION_FORCE = 300000.0
-	const ATTRACTION_FORCE = 1.0
-	const ITERATIONS = 5000
-	
-	init_positions(cards)
-	
-	for _i in range(ITERATIONS):
-		var forces = {}
-		for card in cards: forces[card] = Vector2(0, 0)
-		
-		# repulsion
-		for i in range(cards.size()):
-			for j in range(i + 1, cards.size()):
-				var card_a = cards[i]
-				var card_b = cards[j]
-				var delta = card_a.position - card_b.position
-				var dist = delta.length()
-				if dist > 0:
-					var repulsion = dist * dist
-					repulsion = REPULSION_FORCE / repulsion
-					repulsion *= delta.normalized()
-					forces[card_a] += repulsion
-					forces[card_b] -= repulsion
-		
-		# attraction
-		for card in cards:
-			for target in card.get_all_outgoing():
-				var delta = target.position - card.position
-				var dist = delta.length()
-				if dist > 0:
-					# pull strongly to inputs
-					var factor = 3 if card.get_all_incoming().is_empty() else 1
-					var attraction = ATTRACTION_FORCE * factor * delta.normalized()
-					# prefer straight lines
-					attraction.y *= 2
-					forces[card] += attraction
-					forces[target] -= attraction
-		
-		if _i % 1000 == 0: await get_tree().process_frame
-		
-		for card in cards:
-			if not card.get_all_incoming().is_empty(): card.position += forces[card] * 5
+			_editor = load("res://addons/cards/card_editor.tscn").instantiate()
+			add_child(_editor)
+			_editor.attach_cards(card)
+		elif _editor:
+			_editor.detach_cards()
+			_editor.queue_free()
 
 @export var paused = false:
 	get: return paused
@@ -100,6 +39,11 @@ func get_title(): return %Name.text
 func description(s: String): %Description.text = s
 func get_description(): return %Description.text
 func icon(s: Texture): %Icon.texture = s
+func icon_data(t: String):
+	var image = Image.new()
+	image.load_png_from_buffer(Marshalls.base64_to_raw(t))
+	icon(ImageTexture.create_from_image(image))
+func get_icon_data(): return Marshalls.raw_to_base64(%Icon.texture.get_image().save_png_to_buffer())
 func get_icon_path(): return %Icon.texture.resource_path
 func ui(c: Control): %extra_ui.add_child(c)
 
@@ -107,8 +51,8 @@ var card: Card:
 	get: return get_parent()
 
 func _ready() -> void:
-	$CardControl.gui_input.connect(input_event)
-	base_card_size = $CardControl.size
+	%CardControl.gui_input.connect(input_event)
+	base_card_size = %CardControl.size
 
 var held = false
 func input_event(e: InputEvent):

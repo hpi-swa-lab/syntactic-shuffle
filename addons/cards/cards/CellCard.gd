@@ -21,6 +21,8 @@ var out_card: OutCard
 				out_card.has_static_signature = false
 var update_ui_func = null
 
+func can_edit(): return false
+
 func v():
 	title("Data Cell")
 	description("Store or piece of data.")

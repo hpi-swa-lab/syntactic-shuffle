@@ -111,6 +111,7 @@ func v(): pass
 func title(t: String): visual.title(t)
 func description(t: String): visual.description(t)
 func icon(t: Texture): visual.icon(t)
+func icon_data(t: String): visual.icon_data(t)
 func ui(t: Control): visual.ui(t)
 func c(other: Card):
 	outgoing.push_back(get_path_to(other))
@@ -339,6 +340,8 @@ func _forward_canvas_gui_input(event: InputEvent, undo_redo):
 		dragging = event.pressed
 	return false
 
+func can_edit(): return true
+
 func get_card_name():
 	return get_script().get_global_name()
 
@@ -375,14 +378,14 @@ class_name {name}
 func v():
 	title(\"{title}\")
 	description(\"{description}\")
-	icon(preload(\"{icon}\")){allow_cycles}
+	icon_data(\"{icon_data}\"){allow_cycles}
 
 func s():
 {cards}".format({
 		"name": get_card_name(),
 		"title": visual.get_title(),
 		"description": visual.get_description(),
-		"icon": visual.get_icon_path(),
+		"icon_data": visual.get_icon_data(),
 		"allow_cycles": "\n\tallow_cycles()" if _allows_cycles else "",
 		"cards": cards_desc
 	})

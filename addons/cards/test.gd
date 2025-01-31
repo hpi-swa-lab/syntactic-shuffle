@@ -28,23 +28,6 @@ func run():
 	print("Success!")
 	get_tree().quit()
 
-class TestSerializeCard extends Card:
-	func get_card_name(): return "TestSerializeCard"
-	func v():
-		title("Test Serialize")
-		description("Test Serialize Description")
-		icon(preload("res://icon.svg"))
-	func s():
-		var out_card = OutCard.command("store")
-		var out_card_2 = OutCard.new()
-		var out_card_3 = OutCard.remember()
-		var in_card = InCard.data(t("float"))
-		var named_in_card = NamedInCard.named_data("a", t("float"))
-		var plus_card = PlusCard.new()
-		
-		in_card.c(out_card)
-		in_card.c_named("left", plus_card)
-
 func assert_eq(a, b):
 	if a != b:
 		assert(false, "Was {0} but expected {1}".format([a, b]))
@@ -94,26 +77,7 @@ func test_serialize_gdscript(ready):
 	var c = TestSerializeCard.new()
 	ready.call()
 	c.visual_setup()
-	assert_eq(c.serialize_gdscript(), "@tool
-extends Card
-class_name TestSerializeCard
-
-func v():
-	title(\"Test Serialize\")
-	description(\"Test Serialize Description\")
-	icon(preload(\"res://icon.svg\"))
-
-func s():
-	var out_card = OutCard.command(\"store\")
-	var out_card_2 = OutCard.new()
-	var out_card_3 = OutCard.remember()
-	var in_card = InCard.data(t(\"float\"))
-	var named_in_card = NamedInCard.named_data(\"a\", t(\"float\"))
-	var plus_card = PlusCard.new()
-	
-	in_card.c(out_card)
-	in_card.c_named(\"left\", plus_card)
-")
+	assert_eq(c.serialize_gdscript(), load("res://addons/cards/cards/TestSerializeCard.gd").source_code)
 
 func test_simple_named_connect(ready):
 	var l = NumberCard.new()
@@ -180,3 +144,38 @@ func test_signatures():
 	assert_not_compatible(Signature.TypeSignature.new("Node2D"), Signature.TypeSignature.new("CharacterBody2D"))
 	assert_not_compatible(Signature.TypeSignature.new("float"), Signature.TypeSignature.new("Vector2"))
 	assert_compatible(Signature.GroupSignature.new([&"enemy"]), Signature.GroupSignature.new([&"enemy"]))
+
+func test_extract_code_card_source_code():
+	var src = "var code_card = CodeCard.create(
+		[[\"velocity\", t(\"Vector2\")], [\"body\", t(\"Node\")], [\"did_accelerate\", t(\"bool\")], [\"trigger\", trg()]],
+		{\"out\": t(\"Vector2\"), \"did_accelerate\": t(\"bool\")},
+		func (card, velocity, body, did_accelerate):
+			if not did_accelerate:
+				# )
+				velocity = velocity.lerp(Vector2.ZERO, min(1.0, friction * get_process_delta_time()))
+			card.output(\"out\", [velocity]), [\"body\", \"velocity\", \"did_accelerate\"])
+	code_card.c(velocity_card)
+	
+	var add_card = CodeCard.create(
+		[[\"direction\", t(\"Vector2\")], [\"velocity\", t(\"Vector2\")]],
+		{\"out\": t(\"Vector2\"), \"did_accelerate\": t(\"bool\")},
+		func (card, direction, velocity):
+			var v = a
+			\")\"
+			'\")'
+			card.output(\"did_accelerate\", [true])
+			card.output(\"out\", [v]), [\"velocity\"])
+"
+	var srcs = CodeCard._extract_anonymous_functions(src)
+	assert_eq(srcs.size(), 2)
+	assert_eq(srcs[0], "func (card, velocity, body, did_accelerate):
+			if not did_accelerate:
+				# )
+				velocity = velocity.lerp(Vector2.ZERO, min(1.0, friction * get_process_delta_time()))
+			card.output(\"out\", [velocity])")
+	assert_eq(srcs[1], "func (card, direction, velocity):
+			var v = a
+			\")\"
+			'\")'
+			card.output(\"did_accelerate\", [true])
+			card.output(\"out\", [v])")

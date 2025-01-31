@@ -107,7 +107,6 @@ func serialize_constructor():
 	if command_name:
 		return "{0}.command(\"{1}\")".format([get_card_name(), command_name])
 	elif remember_message:
-		push_error("unclear reference to init")
-		return "{0}.remember({1})".format([get_card_name(), ""])
+		return "{0}.remember()".format([get_card_name()])
 	else:
 		return "{0}.new()".format([get_card_name()])

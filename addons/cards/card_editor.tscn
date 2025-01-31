@@ -1,0 +1,65 @@
+[gd_scene load_steps=5 format=3 uid="uid://b60kovj1bwg4i"]
+
+[ext_resource type="Script" uid="uid://b1i426w7aulmk" path="res://addons/cards/card_editor.gd" id="1_btd4b"]
+[ext_resource type="Texture2D" uid="uid://dcmk2qnc0sk3u" path="res://addons/cards/icons/bool.png" id="1_snpp1"]
+[ext_resource type="Script" uid="uid://dq0fiy30342u5" path="res://addons/cards/EditableCardIcon.gd" id="2_btd4b"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_snpp1"]
+bg_color = Color(1, 1, 1, 1)
+shadow_color = Color(0, 0, 0, 0.223529)
+shadow_size = 48
+shadow_offset = Vector2(0, 10.535)
+
+[node name="card_editor" type="Panel"]
+custom_minimum_size = Vector2(2000, 1600)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_snpp1")
+script = ExtResource("1_btd4b")
+metadata/cards_ignore = true
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 32
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 32
+
+[node name="Column" type="VBoxContainer" parent="MarginContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/Column"]
+layout_mode = 2
+theme_override_constants/separation = 32
+
+[node name="EditableCardIcon" type="TextureRect" parent="MarginContainer/Column/HBoxContainer"]
+layout_mode = 2
+texture = ExtResource("1_snpp1")
+expand_mode = 2
+script = ExtResource("2_btd4b")
+editable = true
+metadata/_custom_type_script = ExtResource("2_btd4b")
+
+[node name="LineEdit" type="LineEdit" parent="MarginContainer/Column/HBoxContainer"]
+layout_mode = 2
+placeholder_text = "Card Name"
+expand_to_text_length = true
+
+[node name="Expand" type="Control" parent="MarginContainer/Column/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="SaveButton" type="Button" parent="MarginContainer/Column/HBoxContainer"]
+layout_mode = 2
+text = "Save Changes"
+
+[connection signal="pressed" from="MarginContainer/Column/HBoxContainer/SaveButton" to="." method="_on_save_button_pressed"]
