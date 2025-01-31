@@ -8,7 +8,7 @@ var remember_right_card: RememberCard
 func v():
 	title("Plus")
 	description("Adds two numbers.")
-	icon(preload("res://addons/cards/icons/plus.png"))
+	icon_data("iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAChJREFUOI1jYBj24D8U4wRMlNow8AYwovHx+hebPopdQAiMhFgYBgAA8qYFDMtT4XcAAAAASUVORK5CYII=")
 
 func s():
 	var out_card = OutCard.data()

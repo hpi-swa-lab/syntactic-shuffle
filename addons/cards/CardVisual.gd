@@ -22,6 +22,7 @@ var expanded = false:
 		
 		if expanded:
 			_editor = load("res://addons/cards/card_editor.tscn").instantiate()
+			_editor.position = %CardControl.get_rect().size / -2
 			add_child(_editor)
 			_editor.attach_cards(card)
 		elif _editor:
