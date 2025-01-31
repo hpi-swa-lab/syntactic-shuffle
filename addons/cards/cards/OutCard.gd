@@ -39,20 +39,30 @@ var signature: Signature
 var remembered
 var remembered_signature
 
+## Check if we have a compatible remembered value. If we remember values
+## in general but we don't currently a value, check our incoming connections.
 func _get_remembered_for(signature: Signature):
-	if remembered_signature and remembered_signature.compatible_with(signature):
-		for arg in remembered:
-			# guard against freed objects to which we remember references
-			if not is_instance_valid(arg) and typeof(arg) == TYPE_OBJECT:
-				remembered_signature = null
-				remembered = null
-				return
-		return self
-	return null
+	if not remember_message: return null
+	
+	if remembered_signature and get_remembered_value():
+		if remembered_signature.compatible_with(signature): return self
+		else: return null
+	else: return _try_connected_remembered(signature)
 
 func get_remembered_value():
 	assert(remembered != null)
+	for arg in remembered:
+		# guard against freed objects to which we remember references
+		if not is_instance_valid(arg) and typeof(arg) == TYPE_OBJECT:
+			remembered_signature = null
+			remembered = null
 	return remembered
+
+func _try_connected_remembered(signature: Signature):
+	for card in get_all_incoming():
+		var r = get_remembered_for(card, signature)
+		if r: return r
+	return null
 
 func s():
 	InCard.data(Signature.OutputAnySignature.new())
