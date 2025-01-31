@@ -50,10 +50,16 @@ var process: Callable
 var inputs: Array[Array]
 var pull_only: Array
 
+var source_code: String = "":
+	get: return source_code
+	set(v):
+		source_code = v
+		if visual: description(v.substr(0, 200))
+
 func v():
 	title("Code")
-	description("Run some code.")
 	icon(preload("res://addons/cards/icons/code.png"))
+	source_code = source_code
 
 func s():
 	for output in outputs:
@@ -61,6 +67,10 @@ func s():
 	
 	for pair in inputs:
 		NamedInCard.named_data(pair[0], pair[1])
+
+func setup_finished():
+	super.setup_finished()
+	get_source_code()
 
 func cycles_allowed_for(name: String): return pull_only.has(name)
 
@@ -104,9 +114,10 @@ func output(name: String, args: Array):
 		card.invoke(args, signature, "", output)
 
 func get_source_code():
-	return fetch_source_code_in(
-		parent.get_script().source_code,
-		parent.cards.filter(func (c): return c is CodeCard).find(self))
+	if not source_code:
+		var index = parent.cards.filter(func (c): return c is CodeCard).find(self)
+		source_code = fetch_source_code_in(parent.get_script().source_code, index)
+	return source_code
 
 func serialize_constructor():
 	return "CodeCard.create([{inputs}], {{outputs}}, {code}, [{pull_only}])".format({

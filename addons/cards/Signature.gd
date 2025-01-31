@@ -1,6 +1,7 @@
 extends Object
 class_name Signature
 
+func d(): return get_description()
 func compatible_with(other: Signature) -> bool: return false
 func get_description() -> String: return ""
 func serialize_gdscript() -> String: return ""

@@ -38,6 +38,8 @@ func _update_visible():
 func label(label: String):
 	var t = Label.new()
 	t.text = label
+	t.add_theme_font_size_override("font_size", 8)
+	t.add_theme_color_override("font_color", Color.BLACK)
 	add_child(t)
 
 func text_field(prop_name: String, label: String):

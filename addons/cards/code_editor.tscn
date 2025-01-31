@@ -1,0 +1,106 @@
+[gd_scene load_steps=5 format=3 uid="uid://hdmvhbx7abok"]
+
+[ext_resource type="StyleBox" uid="uid://j74ua1l732mg" path="res://addons/cards/editor_background.tres" id="1_8j6k0"]
+[ext_resource type="Script" uid="uid://b84rrltlwbto7" path="res://addons/cards/code_editor.gd" id="2_mbbix"]
+
+[sub_resource type="SystemFont" id="SystemFont_mbbix"]
+font_names = PackedStringArray("Monospace")
+hinting = 2
+multichannel_signed_distance_field = true
+
+[sub_resource type="CodeHighlighter" id="CodeHighlighter_mbbix"]
+
+[node name="code_editor" type="Panel"]
+custom_minimum_size = Vector2(775, 375)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -1145.0
+offset_bottom = -705.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = ExtResource("1_8j6k0")
+script = ExtResource("2_mbbix")
+
+[node name="Content" type="MarginContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Content"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Content/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 24
+
+[node name="inputs" type="VBoxContainer" parent="Content/HBoxContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 24
+
+[node name="AddInput" type="Button" parent="Content/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "Add Input"
+
+[node name="code" type="CodeEdit" parent="Content/HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(500, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+theme_override_colors/current_line_color = Color(0.960351, 0.960351, 0.960351, 1)
+theme_override_colors/background_color = Color(1, 1, 1, 1)
+theme_override_colors/font_placeholder_color = Color(0.625597, 0.625597, 0.625597, 1)
+theme_override_colors/font_color = Color(0.122252, 0.122252, 0.122252, 1)
+theme_override_colors/selection_color = Color(0.610642, 0.874813, 0.990653, 1)
+theme_override_colors/caret_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = SubResource("SystemFont_mbbix")
+placeholder_text = "func (card, ...):
+	card.output(\"...\", [])"
+wrap_mode = 1
+scroll_fit_content_height = true
+caret_blink = true
+syntax_highlighter = SubResource("CodeHighlighter_mbbix")
+highlight_all_occurrences = true
+highlight_current_line = true
+draw_tabs = true
+indent_automatic = true
+auto_brace_completion_enabled = true
+auto_brace_completion_highlight_matching = true
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="Content/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 24
+
+[node name="outputs" type="VBoxContainer" parent="Content/HBoxContainer/VBoxContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 24
+
+[node name="AddOutput" type="Button" parent="Content/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+text = "Add Output"
+
+[node name="Expand" type="Control" parent="Content/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+
+[node name="Save" type="Button" parent="Content/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+text = "Save"
+
+[connection signal="pressed" from="Content/HBoxContainer/VBoxContainer/AddInput" to="." method="_on_add_input_pressed"]
+[connection signal="gui_input" from="Content/HBoxContainer/code" to="." method="_on_code_gui_input"]
+[connection signal="pressed" from="Content/HBoxContainer/VBoxContainer2/AddOutput" to="." method="_on_add_output_pressed"]
+[connection signal="pressed" from="Content/HBoxContainer/VBoxContainer2/Save" to="." method="_on_save_pressed"]

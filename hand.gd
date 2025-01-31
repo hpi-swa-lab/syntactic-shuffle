@@ -2,6 +2,7 @@ extends CanvasLayer
 
 var categories = {
 	"Abstraction": [
+		"CodeCard",
 		"CellCard",
 		"StoreCard",
 		"InCard",

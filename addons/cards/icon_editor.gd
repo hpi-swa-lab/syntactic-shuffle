@@ -62,7 +62,7 @@ func _on_texture_gui_input(event: InputEvent) -> void:
 
 func _paint(event: InputEventMouse):
 	var point = ((event.position - %Texture.position) / %Texture.get_rect().size * float(image.get_size().x)).floor()
-	if point.x < 0 or point.y < 0 or point.x >= 15 or point.y >= 15: return
+	if point.x < 0 or point.y < 0 or point.x > 15 or point.y > 15: return
 	undo[undo.size() - 1].push_back([point, image.get_pixelv(point)])
 	image.set_pixelv(point, Color.TRANSPARENT if erase else selected_color)
 	texture.update(image)

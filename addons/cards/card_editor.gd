@@ -6,10 +6,12 @@ func attach_cards(card: Card):
 	self.card = card
 	%Column.add_child(card.cards_parent)
 	
-	card.cards_parent.fill_rect(get_rect())
-	
 	%Name.text = card.visual.get_title()
 	%Icon.texture_normal = card.visual.get_icon_texture()
+	
+	if card.cards_parent.get_children().filter(func (c):
+		return c is Card and c.position != Vector2.ZERO).is_empty():
+		_on_auto_layout_pressed()
 
 func detach_cards():
 	%Column.remove_child(card.cards_parent)

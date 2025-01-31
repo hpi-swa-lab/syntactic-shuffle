@@ -21,11 +21,12 @@ var expanded = false:
 		%CardControl.visible = not expanded
 		
 		if expanded:
-			_editor = load("res://addons/cards/card_editor.tscn").instantiate()
+			_editor = load("res://addons/cards/code_editor.tscn" if card is CodeCard else "res://addons/cards/card_editor.tscn").instantiate()
 			_editor.position = %CardControl.get_rect().size / -2
 			_editor.gui_input.connect(input_event)
 			add_child(_editor)
 			_editor.attach_cards(card)
+			card.cards_parent.fill_rect(_editor.get_rect())
 		elif _editor:
 			_editor.detach_cards()
 			_editor.queue_free()

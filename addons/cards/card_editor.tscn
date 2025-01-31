@@ -1,13 +1,8 @@
 [gd_scene load_steps=4 format=3 uid="uid://b60kovj1bwg4i"]
 
 [ext_resource type="Script" uid="uid://b1i426w7aulmk" path="res://addons/cards/card_editor.gd" id="1_btd4b"]
+[ext_resource type="StyleBox" uid="uid://j74ua1l732mg" path="res://addons/cards/editor_background.tres" id="1_cowbe"]
 [ext_resource type="Texture2D" uid="uid://djkittmu1pxw7" path="res://addons/cards/icons/forward.png" id="2_snpp1"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_snpp1"]
-bg_color = Color(1, 1, 1, 1)
-shadow_color = Color(0, 0, 0, 0.223529)
-shadow_size = 48
-shadow_offset = Vector2(0, 10.535)
 
 [node name="card_editor" type="Panel"]
 custom_minimum_size = Vector2(2000, 1600)
@@ -16,7 +11,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_snpp1")
+theme_override_styles/panel = ExtResource("1_cowbe")
 script = ExtResource("1_btd4b")
 metadata/cards_ignore = true
 
