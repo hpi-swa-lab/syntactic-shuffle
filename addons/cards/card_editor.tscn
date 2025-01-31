@@ -57,9 +57,14 @@ expand_to_text_length = true
 layout_mode = 2
 size_flags_horizontal = 3
 
+[node name="AutoLayout" type="Button" parent="MarginContainer/Column/HBoxContainer"]
+layout_mode = 2
+text = "Auto Layout"
+
 [node name="SaveButton" type="Button" parent="MarginContainer/Column/HBoxContainer"]
 layout_mode = 2
 text = "Save Changes"
 
 [connection signal="pressed" from="MarginContainer/Column/HBoxContainer/Icon" to="." method="_on_icon_pressed"]
+[connection signal="pressed" from="MarginContainer/Column/HBoxContainer/AutoLayout" to="." method="_on_auto_layout_pressed"]
 [connection signal="pressed" from="MarginContainer/Column/HBoxContainer/SaveButton" to="." method="_on_save_button_pressed"]

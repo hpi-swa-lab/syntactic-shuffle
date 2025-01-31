@@ -9,13 +9,22 @@ func v():
 
 func s():
 	var out_card = OutCard.command("store")
+	out_card.position = Vector2(0.0, 0.0)
 	var out_card_2 = OutCard.new()
+	out_card_2.position = Vector2(0.0, 0.0)
 	var out_card_3 = OutCard.remember()
+	out_card_3.position = Vector2(0.0, 0.0)
+	var out_card_4 = OutCard.static_signature(trg(), false)
+	out_card_4.position = Vector2(0.0, 0.0)
 	var in_card = InCard.data(t("float"))
+	in_card.position = Vector2(0.0, 0.0)
 	var named_in_card = NamedInCard.named_data("a", t("float"))
+	named_in_card.position = Vector2(0.0, 0.0)
 	var plus_card = PlusCard.new()
+	plus_card.position = Vector2(0.0, 0.0)
 	var code_card = CodeCard.create([["a", trg()], ["b", t("float")]], {"out": trg()}, func (card, a, b):
 		card.output("out", [a + b]), ["a"])
+	code_card.position = Vector2(0.0, 0.0)
 	
 	in_card.c(out_card)
 	in_card.c_named("left", plus_card)

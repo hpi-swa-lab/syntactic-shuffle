@@ -374,6 +374,7 @@ func serialize_gdscript():
 	var cards_desc = ""
 	for c in cards:
 		cards_desc += "\tvar {0} = {1}\n".format([var_names.get(c), c.serialize_constructor()])
+		cards_desc += "\t{0}.position = Vector2{1}\n".format([var_names.get(c), c.position])
 	cards_desc += "\t\n"
 	for c in cards:
 		for them in c.get_outgoing():

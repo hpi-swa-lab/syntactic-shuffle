@@ -5,23 +5,27 @@ class_name ClockCard
 func v():
 	title("Clock")
 	description("Trigger a signal after a specified time.")
-	icon(preload("res://addons/cards/icons/clock.png"))
+	icon_data("iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAIlJREFUOI2lk70ZwCAIRI8sksb9F7LJJpcmUUD8S6gU5HHAJ/DTpOPnao4HEADImi8izV3nHjqZJEjqR7hSamAPkB6gSaH2yH/UmK08MtUWjYJe5ZGSsIUdezUXpJ+4HuKZc/E3gJ58v0Yfm7Ywm4sB7GyhnG2xtS0oiIQtmAqdc6QA+PAXfv/GG1ZqSDTYmH7EAAAAAElFTkSuQmCC")
 
 func s():
-	var out = OutCard.static_signature(trg())
-	
-	var elapsed_time = NumberCard.new()
-	
+	var number_card = NumberCard.new()
+	number_card.position = Vector2(800.981, 973.1671)
 	var code_card = CodeCard.create([["elapsed", t("float")], ["delta", t("float")]], {"out": trg(), "elapsed": t("float")}, func(card, elapsed, delta):
 		elapsed += delta
 		if elapsed >= 1.0:
 			elapsed -= 1.0
 			card.output("out", [])
 		card.output("elapsed", [elapsed]), ["elapsed"])
+	code_card.position = Vector2(590.9951, 347.1498)
+	var physics_process_card = PhysicsProcessCard.new()
+	physics_process_card.position = Vector2(111.8076, 263.1322)
+	var out_card = OutCard.static_signature(trg(), false)
+	out_card.position = Vector2(1251.032, 285.5263)
+	var store_card = StoreCard.new()
+	store_card.position = Vector2(377.6326, 983.2177)
 	
-	code_card.c(elapsed_time)
-	code_card.c(out)
-	elapsed_time.c_named("elapsed", code_card)
-	
-	var process = PhysicsProcessCard.new()
-	process.c_named("delta", code_card)
+	number_card.c_named("elapsed", code_card)
+	code_card.c(out_card)
+	code_card.c(store_card)
+	physics_process_card.c_named("delta", code_card)
+	store_card.c(number_card)

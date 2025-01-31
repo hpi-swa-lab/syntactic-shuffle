@@ -108,5 +108,7 @@ func serialize_constructor():
 		return "{0}.command(\"{1}\")".format([get_card_name(), command_name])
 	elif remember_message:
 		return "{0}.remember()".format([get_card_name()])
+	elif has_static_signature:
+		return "{0}.static_signature({1}, {2})".format([get_card_name(), signature.serialize_gdscript(), remember_message])
 	else:
 		return "{0}.new()".format([get_card_name()])

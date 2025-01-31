@@ -6,7 +6,6 @@ func attach_cards(card: Card):
 	self.card = card
 	%Column.add_child(card.cards_parent)
 	
-	layout_cards(card.cards_parent.get_children().filter(func (c): return c is Card))
 	card.cards_parent.fill_rect(get_rect())
 	
 	%Name.text = card.visual.get_title()
@@ -17,6 +16,9 @@ func detach_cards():
 
 func _on_save_button_pressed() -> void:
 	print(card.serialize_gdscript())
+
+func _on_auto_layout_pressed() -> void:
+	layout_cards(card.cards_parent.get_children().filter(func (c): return c is Card))
 
 func init_positions(cards: Array):
 	const RADIUS = 200.0
