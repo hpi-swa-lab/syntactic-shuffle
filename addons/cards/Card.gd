@@ -117,6 +117,7 @@ func s(): pass
 func v(): pass
 func title(t: String): visual.title(t)
 func description(t: String): visual.description(t)
+func container_size(t: Vector2): visual.container_size(t)
 func icon(t: Texture): visual.icon(t)
 func icon_data(t: String): visual.icon_data(t)
 func ui(t: Control): visual.ui(t)
@@ -406,7 +407,7 @@ func clone():
 func serialize_constructor():
 	return "{0}.new()".format([get_card_name()])
 
-func serialize_gdscript(overwrite_name = ""):
+func serialize_gdscript(overwrite_name: String = "", size: Vector2 = Vector2.ZERO):
 	var var_names = {}
 	var count = {}
 	for c in cards:
@@ -443,7 +444,7 @@ class_name {name}
 func v():
 	title(\"{title}\")
 	description(\"{description}\")
-	icon_data(\"{icon_data}\"){allow_cycles}
+	icon_data(\"{icon_data}\"){size}{allow_cycles}
 
 func s():
 {cards}".format({
@@ -452,6 +453,7 @@ func s():
 		"description": visual.get_description(),
 		"icon_data": visual.get_icon_data(),
 		"allow_cycles": "\n\tallow_cycles()" if _allows_cycles else "",
+		"size": "\n\tcontainer_size(Vector2" + str(size) + ")" if size != Vector2.ZERO else "",
 		"cards": cards_desc
 	})
 

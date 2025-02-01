@@ -5,10 +5,13 @@
 [ext_resource type="Texture2D" uid="uid://djkittmu1pxw7" path="res://addons/cards/icons/forward.png" id="2_snpp1"]
 
 [node name="card_editor" type="Panel"]
-custom_minimum_size = Vector2(2000, 1600)
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = -40.0
+offset_top = -260.0
+offset_right = 40.0
+offset_bottom = 260.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = ExtResource("1_cowbe")
@@ -60,7 +63,22 @@ text = "Auto Layout"
 layout_mode = 2
 text = "Save Changes"
 
+[node name="Resize" type="Panel" parent="."]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -48.0
+offset_top = -48.0
+grow_horizontal = 0
+grow_vertical = 0
+mouse_default_cursor_shape = 12
+
 [connection signal="pressed" from="MarginContainer/Column/HBoxContainer/Icon" to="." method="_on_icon_pressed"]
 [connection signal="text_changed" from="MarginContainer/Column/HBoxContainer/Name" to="." method="_on_name_text_changed"]
 [connection signal="pressed" from="MarginContainer/Column/HBoxContainer/AutoLayout" to="." method="_on_auto_layout_pressed"]
 [connection signal="pressed" from="MarginContainer/Column/HBoxContainer/SaveButton" to="." method="_on_save_button_pressed"]
+[connection signal="gui_input" from="Resize" to="." method="_on_resize_gui_input"]

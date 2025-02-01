@@ -10,6 +10,7 @@ enum Type {
 
 static var base_card_size = Vector2(10, 10)
 var _editor = null
+var _container_size = Vector2(2000, 1600)
 
 signal dragging(d: bool)
 
@@ -25,7 +26,7 @@ var expanded = false:
 			_editor.position = %CardControl.get_rect().size / -2
 			_editor.gui_input.connect(input_event)
 			add_child(_editor)
-			_editor.attach_cards(card)
+			_editor.attach_cards(card, _container_size)
 			card.cards_parent.fill_rect(_editor.get_rect())
 		elif _editor:
 			_editor.detach_cards()
@@ -52,6 +53,7 @@ func get_icon_texture(): return %Icon.texture
 func set_icon_texture(texture: Texture): %Icon.texture = texture
 func ui(c: Control): %extra_ui.add_child(c)
 func short_description(): %Description.max_lines_visible = 2
+func container_size(size: Vector2): _container_size = size
 
 var card: Card:
 	get: return get_parent()

@@ -2,12 +2,14 @@ extends Panel
 
 var card
 
-func attach_cards(card: Card):
+func attach_cards(card: Card, size: Vector2):
 	self.card = card
 	%Column.add_child(card.cards_parent)
 	
 	%Name.text = card.visual.get_title()
 	%Icon.texture_normal = card.visual.get_icon_texture()
+	
+	self.size = size
 	
 	if card.cards_parent.get_children().filter(func (c):
 		return c is Card and c.position != Vector2.ZERO).is_empty():
@@ -23,11 +25,11 @@ func _on_save_button_pressed() -> void:
 		assert(%Name.text)
 		var n = %Name.text.to_camel_case().capitalize() + "Card"
 		path = "res://addons/cards/cards/{0}.gd".format([n])
-		src = card.serialize_gdscript(n)
+		src = card.serialize_gdscript(n, size)
 	else:
 		# TODO handle name change
 		path = card.get_script().resource_path
-		src = card.serialize_gdscript()
+		src = card.serialize_gdscript("", size)
 	var file = FileAccess.open(path, FileAccess.WRITE)
 	file.store_string(src)
 
@@ -106,3 +108,11 @@ func _on_icon_pressed() -> void:
 
 func _on_name_text_changed(new_text: String) -> void:
 	card.title(new_text)
+
+var resizing = false
+func _on_resize_gui_input(event: InputEvent) -> void:
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+		resizing = event.is_pressed()
+	if event is InputEventMouseMotion and resizing:
+		size += event.relative
+		card.cards_parent.fill_rect(get_rect())

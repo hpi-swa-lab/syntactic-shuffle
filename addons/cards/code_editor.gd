@@ -2,7 +2,7 @@ extends Panel
 
 var card: CodeCard
 
-func attach_cards(card: CodeCard):
+func attach_cards(card: CodeCard, size: Vector2):
 	assert(card is CodeCard)
 	
 	self.card = card
