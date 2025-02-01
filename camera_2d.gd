@@ -7,6 +7,17 @@ var held = false
 var selecting = false
 var selection = {}
 
+func clear_selection():
+	for card in selection: card.visual.on_deselected()
+	selection.clear()
+
+func set_as_selection(obj: Node):
+	clear_selection()
+	add_to_selection(obj)
+
+func is_selected(obj: Node):
+	return selection.has(obj)
+
 func add_to_selection(obj: Node):
 	selection[obj] = true
 	obj.visual.on_selected()
@@ -47,6 +58,4 @@ func _input(event: InputEvent) -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		selecting = event.is_pressed()
-		if selecting:
-			for card in selection: card.visual.on_deselected()
-			selection.clear()
+		if selecting: clear_selection()

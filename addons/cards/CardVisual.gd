@@ -64,7 +64,8 @@ var held = false
 func input_event(e: InputEvent):
 	if e is InputEventMouseButton and e.button_index == MOUSE_BUTTON_LEFT:
 		held = e.is_pressed()
-		get_selection_manager().add_to_selection(card)
+		if not get_selection_manager().is_selected(card):
+			get_selection_manager().set_as_selection(card)
 		dragging.emit(held)
 	if e is InputEventMouseMotion and held:
 		get_selection_manager().move_selected(e.screen_relative / get_viewport_transform().get_scale() / card.get_card_boundary().global_scale)
@@ -72,6 +73,7 @@ func input_event(e: InputEvent):
 		held = false
 		dragging.emit(held)
 		expanded = not expanded
+		get_selection_manager().clear_selection()
 
 # if we move from the hand to the main scene, we won't receive the mouse button up
 func _unhandled_input(e: InputEvent) -> void:
