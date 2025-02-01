@@ -38,7 +38,7 @@ func build_field(name: String, signature: Signature, is_input: bool):
 	
 	if is_input:
 		var pull = CheckBox.new()
-		pull.set_meta("input_name", name)
+		pull.set_meta("input_name", label)
 		pull.text = "Pull only"
 		pull.add_theme_color_override("font_color", Color.BLACK)
 		pull.add_theme_color_override("font_pressed_color", Color.BLACK)
@@ -71,7 +71,7 @@ func _on_save_pressed() -> void:
 	card.pull_only = (%inputs.get_children()
 		.map(func (c): return c.get_meta("pull_only"))
 		.filter(func (c): return c.button_pressed)
-		.map(func (c): return c.get_meta("input_name")))
+		.map(func (c): return c.get_meta("input_name").text))
 	card.inputs = Array(%inputs.get_children().map(func(box): return [box.get_child(0).text, box.get_child(1).signature]), TYPE_ARRAY, "", null)
 	var outputs = %outputs.get_children().map(func(box): return [box.get_child(0).text, box.get_child(1).signature])
 	var o = {}
