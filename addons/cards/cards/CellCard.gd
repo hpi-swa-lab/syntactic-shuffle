@@ -49,19 +49,19 @@ func v():
 	
 	var data_name_edit = LineEdit.new()
 	data_name_edit.text = data_name
-	data_name_edit.text_changed.connect(func(): data_name = data_name_edit.text)
+	data_name_edit.text_changed.connect(func(s): data_name = s)
 	data_name_edit.placeholder_text = "Name"
 	ui(data_name_edit)
 	
 	var type_edit = LineEdit.new()
 	type_edit.text = type
-	type_edit.text_changed.connect(func(): type = type_edit.text)
+	type_edit.text_changed.connect(func(s): type = s)
 	type_edit.placeholder_text = "Type"
 	ui(type_edit)
 	
 	var default_edit = LineEdit.new()
-	default_edit.text = str(default)
-	default_edit.text_changed.connect(func(): pass) # TODO
+	default_edit.text = Signature.data_to_expression(default)
+	default_edit.text_submitted.connect(func (s): default = G.eval_expression(s))
 	default_edit.placeholder_text = "Default"
 	ui(default_edit)
 
@@ -112,12 +112,12 @@ func get_extra_ui() -> Array[Control]:
 			b.toggled.connect(func(b): data = b)
 			update_ui_func = func(v): b.set_pressed_no_signal(v)
 			return [b]
-		"string":
-			var e = TextEdit.new()
+		"String":
+			var e = LineEdit.new()
 			if data != null: e.text = data
-			e.text_changed.connect(func (): data = e.text)
+			e.text_changed.connect(func (s): data = s)
 			update_ui_func = func(v): e.text = v
-			return e
+			return [e]
 		_:
 			return []
 

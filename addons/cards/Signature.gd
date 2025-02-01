@@ -187,4 +187,6 @@ static func type_signature(type, inverse = false):
 static func data_to_expression(data):
 	if data is Vector2:
 		return "Vector2" + str(data)
+	if data is String:
+		return "\"" + data.replace("\"", "\\\"") + "\""
 	return str(data)

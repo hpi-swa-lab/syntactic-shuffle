@@ -19,12 +19,14 @@ func s():
 	var in_card_2 = InCard.trigger()
 	in_card_2.position = Vector2(251.7033, 705.7172)
 	var named_in_card = NamedInCard.named_data("x", t("float"))
-	named_in_card.position = Vector2(247.7279, 1214.506)
-	var code_card = CodeCard.create([["x", t("float")], ["current", t("Vector2")]], {}, func(card, x, current):
-		x, [""])
-	code_card.position = Vector2(1126.809, 1448.202)
+	named_in_card.position = Vector2(283.673, 1263.764)
+	var set_card = SetCard.new()
+	set_card.position = Vector2(829.3726, 1277.211)
+	set_card.cards[3].data = "x"
 	
 	cell_card.c(out_card)
+	cell_card.c_named("object", set_card)
 	store_card.c(cell_card)
 	in_card.c(store_card)
 	in_card_2.c(cell_card)
+	named_in_card.c_named("value", set_card)

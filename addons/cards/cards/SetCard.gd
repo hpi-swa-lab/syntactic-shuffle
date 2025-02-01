@@ -2,30 +2,22 @@
 extends Card
 class_name SetCard
 
-@export var property_name := "":
-	get: return property_name
-	set(v):
-		property_name = v
-		if in_object_card:
-			#in_object_card.signature = ["@prop:{0}".format([property_name])]
-			in_object_card.signature_changed()
-
-var in_object_card: NamedInCard
-
 func v():
 	title("Set Property")
 	description("Set the property of an object.")
-	icon(preload("res://addons/cards/icons/increment.png"))
+	icon_data("iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAFhJREFUOI3Nk0EKwDAIBDsl///y9CSUJG0SLDR78qCysyjqkdGZmt5zAbAUStpBmW3sOVMpvYaoVYaL6zsAnBkMpRG+CfGNOZCesBoElbvdUR5NiKv6/xcuC/8tH+UGrC4AAAAASUVORK5CYII=")
 
 func s():
-	in_object_card = NamedInCard.named_data("value", any())
-	# refresh
-	self.property_name = property_name
+	var named_in_card = NamedInCard.named_data("value", any())
+	named_in_card.position = Vector2(200.0, 400.0)
+	var code_card = CodeCard.create([["value", any()], ["object", t("Object")], ["property_name", t("String")]], {"out": none()}, func (card, value, object, property_name):
+		object.set(property_name, value), ["object", "property_name"])
+	code_card.position = Vector2(761.4931, 837.9059)
+	var named_in_card_2 = NamedInCard.named_data("object", any())
+	named_in_card_2.position = Vector2(200.0, 800.0)
+	var cell_card = CellCard.create("property_name", "String", "")
+	cell_card.position = Vector2(1008.18, 274.9383)
 	
-	var code_card = CodeCard.create([["value", any()], ["object", any()]], {"out": none()}, func (card, value, object):
-		object.set(property_name, value))
-	
-	var in_value_card = NamedInCard.named_data("object", any())
-	in_value_card.c_named("value", code_card)
-	
-	in_object_card.c_named("object", code_card)
+	named_in_card.c_named("value", code_card)
+	named_in_card_2.c_named("object", code_card)
+	cell_card.c_named("property_name", code_card)
