@@ -77,6 +77,11 @@ func s():
 	for pair in inputs:
 		NamedInCard.new(pair[0], pair[1])
 
+func rebuild_inputs_outputs():
+	for card in cards: card.queue_free()
+	cards.clear()
+	build_cards_list()
+
 func setup_finished():
 	super.setup_finished()
 	get_source_code()

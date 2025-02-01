@@ -66,7 +66,7 @@ func input_event(e: InputEvent):
 		dragging.emit(held)
 	if e is InputEventMouseMotion and held:
 		get_parent().position += e.screen_relative / get_viewport_transform().get_scale() / card.get_card_boundary().global_scale
-	if e is InputEventMouseButton and e.double_click:
+	if e is InputEventMouseButton and e.double_click and e.button_index == MOUSE_BUTTON_LEFT:
 		held = false
 		dragging.emit(held)
 		expanded = not expanded

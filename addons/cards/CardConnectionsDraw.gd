@@ -85,17 +85,14 @@ func draw_connection(from, to, inverted, light_background: bool):
 	var offset = get_draw_offset(from, to) * GAP
 	offset = 1 - (offset - int(offset))
 	var stretch = 1 - distance / Card.MAX_CONNECTION_DISTANCE
-	for i in range(0, distance / GAP):
-		draw_arrow(Vector2(0, (i + offset) * GAP), SIZE, inverted, to, stretch, light_background)
-
-func draw_arrow(pos, size, inverted, flash_key, stretch, light_background):
+	
 	var orig = LIGHT_BACKGROUND_BASE if light_background else Color.WHITE
-	var base = Color(orig, 0.5).lerp(Color.GREEN, remap(stretch, 0.4, 0, 1, 0)) if Card.always_reconnect() else Color(orig, 1)
-	draw_polyline(
-		[pos + Vector2(-size, 0), pos + Vector2(0, -size if inverted else size), pos + Vector2(size, 0)],
-		base.lerp(Color.RED, _tween_values.get(flash_key, 0.0)),
-		size / 2,
-		true)
+	var base = Color(orig, 0.5).lerp(Color.GREEN, remap(stretch, 0.4, 0, 1, 0)) if Card.always_reconnect() else Color(orig, 3)
+	var color = base.lerp(Color.RED, _tween_values.get(to, 0.0))
+	for i in range(0, distance / GAP):
+		var pos = Vector2(0, (i + offset) * GAP)
+		var points = [pos + Vector2(-SIZE, 0), pos + Vector2(0, -SIZE if inverted else SIZE), pos + Vector2(SIZE, 0)]
+		draw_polyline(points, color, SIZE * 0.25, true)
 
 var _tween_values = {}
 var _running_tweens = {}

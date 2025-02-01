@@ -66,13 +66,13 @@ func _init():
 func setup(parent: Card):
 	self.parent = parent
 	if not id: id = uuid.v4()
-	
+	build_cards_list()
+
+func build_cards_list():
 	push_active_card_list(self)
 	s()
 	pop_active_card_list()
 	cards.append_array(cards_parent.get_children())
-	
-	# for card in cards: card.setup(self)
 
 func visual_setup():
 	visual = preload("res://addons/cards/CardVisual.tscn").instantiate()
