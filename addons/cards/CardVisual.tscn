@@ -103,11 +103,14 @@ theme_override_constants/margin_left = 8
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 8
 
-[node name="extra_ui" type="VBoxContainer" parent="CardControl/MainColumn/DescriptionMargin"]
+[node name="VBoxContainer" type="VBoxContainer" parent="CardControl/MainColumn/DescriptionMargin"]
+layout_mode = 2
+
+[node name="extra_ui" type="VBoxContainer" parent="CardControl/MainColumn/DescriptionMargin/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="Description" type="Label" parent="CardControl/MainColumn/DescriptionMargin/extra_ui"]
+[node name="Description" type="Label" parent="CardControl/MainColumn/DescriptionMargin/VBoxContainer/extra_ui"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
@@ -117,12 +120,12 @@ text = "Card Details come here, in all their detailed detail."
 autowrap_mode = 3
 max_lines_visible = 4
 
-[node name="signatures" type="HBoxContainer" parent="CardControl/MainColumn/DescriptionMargin/extra_ui"]
+[node name="signatures" type="HBoxContainer" parent="CardControl/MainColumn/DescriptionMargin/VBoxContainer"]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
 
-[node name="inputs" type="Label" parent="CardControl/MainColumn/DescriptionMargin/extra_ui/signatures"]
+[node name="inputs" type="Label" parent="CardControl/MainColumn/DescriptionMargin/VBoxContainer/signatures"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -130,7 +133,7 @@ theme_override_colors/font_color = Color(0.517184, 0.517184, 0.517184, 1)
 theme_override_font_sizes/font_size = 8
 text = "a"
 
-[node name="outputs" type="Label" parent="CardControl/MainColumn/DescriptionMargin/extra_ui/signatures"]
+[node name="outputs" type="Label" parent="CardControl/MainColumn/DescriptionMargin/VBoxContainer/signatures"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
