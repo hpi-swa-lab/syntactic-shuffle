@@ -412,7 +412,7 @@ func serialize_gdscript(overwrite_name = ""):
 		cards_desc += "\t{0}.position = Vector2{1}\n".format([n, c.position])
 		for i in range(0, c.cards.size()):
 			if c.cards[i] is CellCard:
-				cards_desc += "\t{0}.cards[{1}].data = {2}\n".format([n, i, c.cards[i].data])
+				cards_desc += "\t{0}.cards[{1}].data = {2}\n".format([n, i, Signature.data_to_expression(c.cards[i].data)])
 	if not cards.is_empty(): cards_desc += "\t\n"
 	else: cards_desc = "\tpass"
 	for c in cards:

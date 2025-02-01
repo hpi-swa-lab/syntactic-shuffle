@@ -15,8 +15,10 @@ var categories = {
 		"AxisControlsCard",
 		"MousePositionCard",
 		"ClockCard",
+		"PhysicsProcessCard"
 	],
 	"Data": [
+		"SetCard",
 		"Vector2Card",
 		"IncrementCard",
 		"NumberCard",
@@ -29,7 +31,8 @@ var categories = {
 	"Movement": [
 		"CollisionCard",
 		"MoveCard",
-		"LookAtCard"
+		"LookAtCard",
+		"GravityCard"
 	],
 	"Math": [
 		"IncrementCard",

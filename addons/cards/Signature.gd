@@ -183,3 +183,8 @@ static func type_signature(type, inverse = false):
 			if mapping[key] == type: return key
 	else:
 		return mapping[type]
+
+static func data_to_expression(data):
+	if data is Vector2:
+		return "Vector2" + str(data)
+	return str(data)

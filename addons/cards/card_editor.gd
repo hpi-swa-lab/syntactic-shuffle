@@ -22,7 +22,7 @@ func _on_save_button_pressed() -> void:
 	if card is BlankCard:
 		assert(%Name.text)
 		var n = %Name.text + "Card"
-		path = "res://addons/cards/{0}.gd".format([n])
+		path = "res://addons/cards/cards/{0}.gd".format([n])
 		src = card.serialize_gdscript(n)
 	else:
 		# TODO handle name change
@@ -93,7 +93,6 @@ func layout_cards(cards):
 		for card in cards:
 			if not card.get_all_incoming().is_empty(): card.position += forces[card] * 5
 
-
 func _on_icon_pressed() -> void:
 	var editor = preload("res://addons/cards/icon_editor.tscn").instantiate()
 	get_parent().add_child(editor)
@@ -104,3 +103,6 @@ func _on_icon_pressed() -> void:
 	editor.save.connect(func(texture):
 		%Icon.texture_normal = texture
 		card.visual.set_icon_texture(texture))
+
+func _on_name_text_changed(new_text: String) -> void:
+	card.title(new_text)

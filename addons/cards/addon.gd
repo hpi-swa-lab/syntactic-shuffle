@@ -48,7 +48,7 @@ func _exit_tree():
 	remove_autoload_singleton("G")
 
 func _handles(object: Object) -> bool:
-	return true
+	return object is Card
 
 func _edit(object: Object) -> void:
 	if selected_node:
