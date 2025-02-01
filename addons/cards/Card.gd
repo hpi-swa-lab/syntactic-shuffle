@@ -21,6 +21,10 @@ static func get_id(node: Node):
 static func set_ignore_object(node: Node):
 	node.set_meta("cards_ignore", true)
 
+## Such that the debugger shows the name at the top
+var card_name:
+	get: return get_card_name()
+
 ## Not currently able to move, connect, or emit
 @export var disable = false:
 	set(v):
