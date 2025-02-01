@@ -43,7 +43,7 @@ func try_connect_in(them: Node):
 			var their_signatures = [] as Array[Signature]
 			card.get_out_signatures(their_signatures)
 			for their_signature in their_signatures:
-				if signature.compatible_with(their_signature):
+				if their_signature.compatible_with(signature):
 					connect_to(them, parent, input_name)
 					return
 
