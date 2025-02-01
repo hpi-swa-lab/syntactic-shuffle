@@ -38,6 +38,7 @@ var categories = {
 		"IncrementCard",
 		"ReflectCard",
 		"PlusCard",
+		"MultiplyCard",
 		"MinusCard"
 	],
 }

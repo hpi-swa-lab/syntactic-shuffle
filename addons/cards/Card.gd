@@ -152,7 +152,8 @@ func setup_finished():
 
 func invoke(args: Array, signature: Signature, named = "", source_out = null):
 	for input in cards:
-		if not named and input is InCard or named and input is NamedInCard and input.input_name == named:
+		if ((not named and input is InCard and not input is NamedInCard) or
+			(named and input is NamedInCard and input.input_name == named)):
 			if signature.compatible_with(input.signature):
 				input.invoke(args, signature, "", source_out)
 				mark_activated(source_out)
