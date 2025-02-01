@@ -56,4 +56,4 @@ func _get_remembered_for(signature: Signature):
 	return null
 
 func serialize_constructor():
-	return "{0}.new(\"{1}\", {2})".format([get_card_name(), input_name, signature.serialize_gdscript()])
+	return "{0}.named_data(\"{1}\", {2})".format([get_card_name(), input_name, signature.serialize_gdscript()])

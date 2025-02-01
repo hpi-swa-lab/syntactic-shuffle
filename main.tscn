@@ -1,9 +1,7 @@
-[gd_scene load_steps=7 format=3 uid="uid://bqninusgeuw0i"]
+[gd_scene load_steps=5 format=3 uid="uid://bqninusgeuw0i"]
 
 [ext_resource type="Script" uid="uid://cja8ehiirmcyt" path="res://addons/cards/CardBoundary.gd" id="1_ig7tw"]
-[ext_resource type="Script" uid="uid://bot0rjcw1ndbe" path="res://addons/cards/cards/BoolCard.gd" id="3_1bvp3"]
-[ext_resource type="Script" uid="uid://bapqs0tgxuf2o" path="res://addons/cards/cards/PlusCard.gd" id="5_272bh"]
-[ext_resource type="Script" uid="uid://dtcitdmnbq585" path="res://addons/cards/cards/NumberCard.gd" id="6_5vw27"]
+[ext_resource type="Script" uid="uid://bvr4vcw3kd72b" path="res://addons/cards/placeholder/placeholder.gd" id="6_272bh"]
 [ext_resource type="Script" uid="uid://cxldeg24krchn" path="res://camera_2d.gd" id="9_kek77"]
 [ext_resource type="Script" uid="uid://dio881dm6xtr3" path="res://hand.gd" id="15_vivmo"]
 
@@ -18,34 +16,22 @@ metadata/_custom_type_script = ExtResource("1_ig7tw")
 position = Vector2(947, 542)
 script = ExtResource("9_kek77")
 
-[node name="BoolCard" type="Node2D" parent="CardBoundary"]
-position = Vector2(606, 361)
-scale = Vector2(0.2, 0.2)
-script = ExtResource("3_1bvp3")
-id = "1aa037a6-0a2e-490b-873c-a6fdd684dc0a"
-value = false
-metadata/_custom_type_script = ExtResource("3_1bvp3")
+[node name="StaticBody2D" type="StaticBody2D" parent="CardBoundary"]
+position = Vector2(570, 610)
 
-[node name="PlusCard" type="Node2D" parent="CardBoundary"]
-position = Vector2(303, 192)
-scale = Vector2(0.2, 0.2)
-script = ExtResource("5_272bh")
-id = "fbe92e05-58c5-4567-aa72-78aa6e630eab"
-named_incoming = Dictionary[String, Array]({
-"left": []
-})
-metadata/_custom_type_script = ExtResource("5_272bh")
+[node name="Placeholder" type="Node2D" parent="CardBoundary/StaticBody2D"]
+script = ExtResource("6_272bh")
+placeholder_size = Vector2(498, 29)
+metadata/_custom_type_script = ExtResource("6_272bh")
 
-[node name="NumberCard" type="Node2D" parent="CardBoundary"]
-position = Vector2(153, 161)
-scale = Vector2(0.2, 0.2)
-script = ExtResource("6_5vw27")
-id = "f44afef1-f3ef-46e1-a7f2-1ecea218de81"
-named_outgoing = Dictionary[String, Array]({
-"left": []
-})
-number = 0.0
-metadata/_custom_type_script = ExtResource("6_5vw27")
+[node name="CharacterBody2D" type="CharacterBody2D" parent="CardBoundary"]
+position = Vector2(449, 382)
+
+[node name="Placeholder" type="Node2D" parent="CardBoundary/CharacterBody2D"]
+script = ExtResource("6_272bh")
+color = Color(1, 0.0369013, 0.39483, 1)
+placeholder_size = Vector2(20, 20)
+metadata/_custom_type_script = ExtResource("6_272bh")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 script = ExtResource("15_vivmo")

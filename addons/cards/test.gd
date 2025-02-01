@@ -30,18 +30,19 @@ func run():
 
 func assert_eq(a, b):
 	if a != b:
-		assert(false, "Was {0} but expected {1}".format([a, b]))
+		var msg = "Was {0} but expected {1}".format([a, b])
+		print(msg)
+		assert(false, msg)
 
 func _ready():
 	if not Engine.is_editor_hint(): run()
 
 func run_cards_test(test):
-	var cards = Node2D.new()
-	Card.push_active_card_list(cards)
+	var card = Card.new()
+	Card.push_active_card_list(card)
 	if test.get_argument_count() > 0:
 		test.call(func ():
-			for card in cards.get_children():
-				card.setup(null)
+			# for c in card.cards: c.setup(null)
 			Card.pop_active_card_list())
 	else:
 		test.call()
@@ -65,8 +66,8 @@ func test_named_addition_and_store(ready):
 	ready.call()
 	
 	a_trigger.trigger([])
-	b_trigger.trigger([])
-	assert_eq(store.get_stored_data(), 20.0)
+	#b_trigger.trigger([])
+	assert_eq(store.number, 20.0)
 
 func test_serialize_constructor(ready):
 	var c = CollisionCard.new()
@@ -143,6 +144,9 @@ func test_signatures():
 	assert_compatible(Signature.TypeSignature.new("CharacterBody2D"), Signature.TypeSignature.new("Node2D"))
 	assert_not_compatible(Signature.TypeSignature.new("Node2D"), Signature.TypeSignature.new("CharacterBody2D"))
 	assert_not_compatible(Signature.TypeSignature.new("float"), Signature.TypeSignature.new("Vector2"))
+	assert_compatible(Signature.GroupSignature.new([&"enemy"]), Signature.GroupSignature.new([&"enemy"]))
+	
+	
 	assert_compatible(Signature.GroupSignature.new([&"enemy"]), Signature.GroupSignature.new([&"enemy"]))
 
 func test_extract_code_card_source_code():

@@ -26,6 +26,7 @@ func clone():
 	get: return data
 	set(v):
 		data = v
+		if out_card: out_card.remembered = [data]
 		if update_ui_func: update_ui_func.call(v)
 @export var type: String = "":
 	get: return type

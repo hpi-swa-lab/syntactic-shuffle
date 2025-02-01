@@ -13,16 +13,15 @@ var categories = {
 	],
 	"Input": [
 		"AxisControlsCard",
-		"MousePositionCard"
+		"MousePositionCard",
+		"ClockCard",
 	],
-	"Primitives": [
+	"Data": [
 		"Vector2Card",
+		"IncrementCard",
 		"NumberCard",
 		"BoolCard",
-		"ToggleCard"
-	],
-	"Time": [
-		"ClockCard",
+		"ToggleCard",
 	],
 	"Actions": [
 		"DeleteCard",
@@ -77,4 +76,9 @@ func _ready() -> void:
 		column.add_child(stack_wrapper)
 		stack._relayout()
 		
+		
 		column.add_spacer(false)
+	
+	var t = Trash.new()
+	t.position = Vector2(60, categories.size() * 145)
+	column.add_child(t)
