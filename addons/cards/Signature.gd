@@ -70,6 +70,7 @@ class TriggerSignature extends Signature:
 	func serialize_gdscript(): return "trg()"
 	func compatible_with(other: Signature): return other.compatible_with_trigger(self)
 	func compatible_with_trigger(other: TriggerSignature): return true
+	func compatible_with_command(other: CommandSignature): return other.arg and other.arg.compatible_with(self)
 
 class IteratorSignature extends Signature:
 	var type: Signature

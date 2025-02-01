@@ -146,8 +146,8 @@ func test_signatures():
 	assert_not_compatible(Signature.TypeSignature.new("float"), Signature.TypeSignature.new("Vector2"))
 	assert_compatible(Signature.GroupSignature.new([&"enemy"]), Signature.GroupSignature.new([&"enemy"]))
 	
-	
-	assert_compatible(Signature.GroupSignature.new([&"enemy"]), Signature.GroupSignature.new([&"enemy"]))
+	assert_not_compatible(Signature.TriggerSignature.new(), Signature.CommandSignature.new("cmd", Signature.TriggerSignature.new()))
+	assert_compatible(Signature.CommandSignature.new("cmd", Signature.TriggerSignature.new()), Signature.TriggerSignature.new())
 
 func test_extract_code_card_source_code():
 	var src = "var code_card = CodeCard.create(
