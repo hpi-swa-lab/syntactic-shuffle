@@ -64,9 +64,10 @@ var held = false
 func input_event(e: InputEvent):
 	if e is InputEventMouseButton and e.button_index == MOUSE_BUTTON_LEFT:
 		held = e.is_pressed()
+		get_selection_manager().add_to_selection(card)
 		dragging.emit(held)
 	if e is InputEventMouseMotion and held:
-		get_parent().position += e.screen_relative / get_viewport_transform().get_scale() / card.get_card_boundary().global_scale
+		get_selection_manager().move_selected(e.screen_relative / get_viewport_transform().get_scale() / card.get_card_boundary().global_scale)
 	if e is InputEventMouseButton and e.double_click and e.button_index == MOUSE_BUTTON_LEFT:
 		held = false
 		dragging.emit(held)
@@ -78,6 +79,12 @@ func _unhandled_input(e: InputEvent) -> void:
 		input_event(e)
 	if e is InputEventMouseButton and e.button_index == MOUSE_BUTTON_LEFT and held and not e.is_pressed():
 		input_event(e)
+
+func on_selected():
+	%CardControl.add_theme_stylebox_override("panel", preload("res://addons/cards/card_selected.tres"))
+
+func on_deselected():
+	%CardControl.add_theme_stylebox_override("panel", preload("res://addons/cards/card_normal.tres"))
 
 func _on_card_control_mouse_entered() -> void:
 	var inputs = []
@@ -91,4 +98,10 @@ func _on_card_control_mouse_entered() -> void:
 	%signatures.visible = true
 	%inputs.text = "\n".join(inputs)
 	%outputs.text = "\n".join(outputs.map(func(s): return s.get_description()))
+	
+	get_selection_manager().consider_selection(card)
+
 func _on_card_control_mouse_exited() -> void: %signatures.visible = false
+
+func get_selection_manager():
+	return get_viewport().get_camera_2d()

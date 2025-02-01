@@ -1,17 +1,23 @@
 extends Camera2D
 
-@export var initial_camera_shake_strength = 30.0
-@export var camera_shake_fade = 5.0
-var camera_shake_strength = 0.0
-var rng = RandomNumberGenerator.new()
-
 @export var zoom_speed = 0.1
 @export var pan = true
 
 var held = false
+var selecting = false
+var selection = {}
 
-func _ready():
-	set_meta("cards_ignore", true)
+func add_to_selection(obj: Node):
+	selection[obj] = true
+	obj.visual.on_selected()
+
+func consider_selection(obj: Node):
+	if selecting: add_to_selection(obj)
+
+func move_selected(delta: Vector2):
+	for card in selection: card.position += delta
+
+func _ready(): Card.set_ignore_object(self)
 
 func _zoom(factor: float) -> void:
 	var delta = get_global_mouse_position() - global_position
@@ -38,13 +44,9 @@ func _input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion and held:
 		position -= event.screen_relative / zoom
 
-func _process(delta: float) -> void:
-	if camera_shake_strength > 0.0:
-		camera_shake_strength = lerpf(camera_shake_strength, 0.0, delta * camera_shake_fade)
-		offset = get_random_camera_shake_offset()
-		
-func apply_camera_shake() -> void:
-	camera_shake_strength = initial_camera_shake_strength
-	
-func get_random_camera_shake_offset() -> Vector2:
-	return Vector2(rng.randf_range(- camera_shake_strength, camera_shake_strength), rng.randf_range(- camera_shake_strength, camera_shake_strength))
+func _unhandled_input(event: InputEvent) -> void:
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+		selecting = event.is_pressed()
+		if selecting:
+			for card in selection: card.visual.on_deselected()
+			selection.clear()

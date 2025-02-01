@@ -2,25 +2,12 @@
 
 [ext_resource type="Script" uid="uid://td86i40sy764" path="res://addons/cards/CardVisual.gd" id="1_7r0de"]
 [ext_resource type="Texture2D" uid="uid://c52trtl0cac7l" path="res://icon.svg" id="1_x38hd"]
+[ext_resource type="StyleBox" uid="uid://cjukuw32vfjm2" path="res://addons/cards/card_normal.tres" id="2_s0l1x"]
 [ext_resource type="Texture2D" uid="uid://bhh80pg8s0om5" path="res://addons/cards/icons/trigger.png" id="2_xtshy"]
 [ext_resource type="Texture2D" uid="uid://nf875nia2sti" path="res://addons/cards/icons/padlock.png" id="4_odv1r"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_tbdv3"]
 size = Vector2(194, 274)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_i40e1"]
-bg_color = Color(0.929715, 0.929715, 0.929715, 1)
-border_width_top = 1
-border_color = Color(0.996078, 0.996078, 0.996078, 0.490196)
-border_blend = true
-corner_radius_top_left = 8
-corner_radius_top_right = 8
-corner_radius_bottom_right = 8
-corner_radius_bottom_left = 8
-shadow_color = Color(0, 0, 0, 0.0823529)
-shadow_size = 3
-shadow_offset = Vector2(0, 1.43)
-anti_aliasing_size = 0.1
 
 [node name="Card" type="Node2D"]
 z_index = 2
@@ -41,7 +28,7 @@ offset_top = -141.0
 offset_right = 97.0
 offset_bottom = 141.0
 focus_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_i40e1")
+theme_override_styles/panel = ExtResource("2_s0l1x")
 metadata/cards_ignore = true
 
 [node name="MainColumn" type="VBoxContainer" parent="CardControl"]
