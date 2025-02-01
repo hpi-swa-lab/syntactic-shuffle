@@ -309,8 +309,9 @@ func _process(delta: float) -> void:
 	connection_draw_node.check_redraw(delta)
 
 func _physics_process(delta: float) -> void:
-	if not cards_parent.is_inside_tree():
-		for c in cards: c._physics_process(delta)
+	if not cards_parent.is_inside_tree() and not disable:
+		for c in cards:
+			if not c.disable: c._physics_process(delta)
 
 static func _each_input_candidate(object: Node, cb: Callable, named: bool):
 	if not object is Card: return

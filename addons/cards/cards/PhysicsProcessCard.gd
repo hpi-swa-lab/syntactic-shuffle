@@ -15,6 +15,6 @@ func s():
 	delta_out_card = OutCard.static_signature(t("float"))
 
 func _physics_process(delta: float):
-	if Engine.is_editor_hint(): return
+	if Engine.is_editor_hint() or disable: return
 	out_card.invoke([], trg())
 	delta_out_card.invoke([delta], t("float"))

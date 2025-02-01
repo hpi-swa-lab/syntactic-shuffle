@@ -5,16 +5,16 @@ class_name MoveCard
 func v():
 	title("Move")
 	description("Move an object.")
-	icon(preload("res://addons/cards/icons/move.png"))
+	icon_data("iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAFJJREFUOI1jYMAP/kMxTsBIQDNBtbgMwGUrhnomPC4gClDsBWQXEAwwbOoYkQTJAYyMFGhmYGCgYiBS5AUYgBmCy1B0cUZkQWxgpKREQoBg6gQAJZ0UCnXgLU8AAAAASUVORK5CYII=")
 
 func s():
-	var velocity_card = Vector2Card.new()
-	var did_accelerate_card = BoolCard.new()
-	
-	var code_card = CodeCard.create(
-		[["velocity", t("Vector2")], ["body", t("Node")], ["did_accelerate", t("bool")], ["trigger", trg()]],
-		{"out": t("Vector2"), "did_accelerate": t("bool")},
-		func (card, velocity, body, did_accelerate):
+	var vector_2_card = Vector2Card.new()
+	vector_2_card.position = Vector2(702.0569, 1284.834)
+	vector_2_card.cards[1].data = Vector2(0.0, 0.0)
+	var bool_card = BoolCard.new()
+	bool_card.position = Vector2(1219.58, 428.579)
+	bool_card.cards[0].data = false
+	var code_card = CodeCard.create([["velocity", t("Vector2")], ["body", t("Node")], ["did_accelerate", t("bool")], ["trigger", trg()]], {"out": t("Vector2"), "did_accelerate": t("bool")}, func (card, velocity, body, did_accelerate):
 			if not did_accelerate:
 				var friction = 20
 				velocity = velocity.lerp(Vector2.ZERO, min(1.0, friction * get_process_delta_time()))
@@ -25,30 +25,36 @@ func s():
 				body.position += velocity * get_process_delta_time()
 			card.output("did_accelerate", [false])
 			card.output("out", [velocity]), ["body", "velocity", "did_accelerate"])
-	code_card.c(velocity_card)
-	code_card.c(did_accelerate_card)
-	did_accelerate_card.c_named("did_accelerate", code_card)
-	
-	var physics_card = PhysicsProcessCard.new()
-	physics_card.c_named("trigger", code_card)
-	
-	var in_character = InCard.data(t("Node"))
-	in_character.c_named("body", code_card)
-	
-	var add_card = CodeCard.create(
-		[["direction", t("Vector2")], ["velocity", t("Vector2")]],
-		{"out": t("Vector2"), "did_accelerate": t("bool")},
-		func (card, direction, velocity):
+	code_card.position = Vector2(622.4604, 637.1277)
+	var in_card = InCard.data(t("Node"))
+	in_card.position = Vector2(161.7643, 967.2809)
+	var code_card_2 = CodeCard.create([["direction", t("Vector2")], ["velocity", t("Vector2")]], {"out": t("Vector2"), "did_accelerate": t("bool")}, func (card, direction, velocity):
 			var _accel = 10
 			var max_velocity = 500
-			if false: direction = direction.rotated(get_parent().rotation) # rotated
-			var v = velocity.lerp(direction * max_velocity, min(1.0, _accel * get_process_delta_time()))
+			# if false: direction = direction.rotated(get_parent().rotation) # rotated
+			var v = velocity.lerp(direction * max_velocity, min(1.0, _accel * card.get_process_delta_time()))
 			card.output("did_accelerate", [true])
 			card.output("out", [v]), ["velocity"])
-	add_card.c(velocity_card)
-	add_card.c(did_accelerate_card)
+	code_card_2.position = Vector2(1384.678, 1084.593)
+	var in_card_2 = InCard.data(t("Vector2"))
+	in_card_2.position = Vector2(1783.594, 1048.65)
+	var physics_process_card = PhysicsProcessCard.new()
+	physics_process_card.position = Vector2(133.5331, 301.9212)
+	var store_card = StoreCard.new()
+	store_card.position = Vector2(902.5308, 172.4603)
+	var store_card_2 = StoreCard.new()
+	store_card_2.position = Vector2(928.4341, 1137.56)
 	
-	var in_direction = InCard.data(t("Vector2"))
-	in_direction.c_named("direction", add_card)
-	velocity_card.c_named("velocity", add_card)
-	velocity_card.c_named("velocity", code_card)
+	vector_2_card.c_named("velocity", code_card)
+	vector_2_card.c_named("velocity", code_card_2)
+	bool_card.c_named("did_accelerate", code_card)
+	code_card.c(store_card)
+	code_card.c(store_card_2)
+	in_card.c_named("body", code_card)
+	code_card_2.c(bool_card)
+	code_card_2.c(store_card_2)
+	in_card_2.c_named("direction", code_card_2)
+	physics_process_card.c_named("trigger", code_card)
+	store_card.c(bool_card)
+	store_card_2.c(vector_2_card)
+	store_card_2.c_named("x", vector_2_card)
