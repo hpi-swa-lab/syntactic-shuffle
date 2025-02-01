@@ -231,11 +231,13 @@ static func get_object_out_cards(object: Node):
 	# Not sure if we will get a noticeable performance impact from recreating the
 	# card on every request.
 	if object.has_meta("cards_ignore"): return []
+	if object.has_meta("out_cards"): return object.get_meta("out_cards")
 	var c = OutCard.static_signature(t(object.get_class()), true)
 	c.parent = object
 	c.remembered = [object]
 	c.remembered_signature = c.signature
 	var g = OutCard.static_signature(grp(object.get_groups()), true)
+	if not Engine.is_editor_hint(): object.set_meta("out_cards", [c, g])
 	return [c, g]
 static func get_object_incoming(object: Node):
 	return object.incoming if object is Card else []
