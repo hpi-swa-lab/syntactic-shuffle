@@ -8,7 +8,8 @@ var selecting = false
 var selection = {}
 
 func clear_selection():
-	for card in selection: card.visual.on_deselected()
+	for card in selection:
+		if is_instance_valid(card): card.visual.on_deselected()
 	selection.clear()
 
 func set_as_selection(obj: Node):

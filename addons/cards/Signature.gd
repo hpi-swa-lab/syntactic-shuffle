@@ -70,7 +70,7 @@ class GenericTypeSignature extends Signature:
 		if incoming.is_empty(): return self
 		var out = [] as Array[Signature]
 		for card in incoming:
-			card.get_out_signatures(out)
+			Card.get_object_out_signatures(card, out)
 		out = out.filter(func (s): return s.compatible_with(self))
 		# FIXME this should probably find a compatible intersection of all matches
 		return out[0]

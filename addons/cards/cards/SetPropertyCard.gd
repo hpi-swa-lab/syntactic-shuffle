@@ -1,6 +1,6 @@
 @tool
 extends Card
-class_name SetCard
+class_name SetPropertyCard
 
 func v():
 	title("Set Property")

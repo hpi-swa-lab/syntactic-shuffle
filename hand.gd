@@ -19,7 +19,8 @@ var categories = {
 		"PhysicsProcessCard"
 	],
 	"Data": [
-		"SetCard",
+		"SetPropertyCard",
+		"GetPropertyCard",
 		"Vector2Card",
 		"IncrementCard",
 		"NumberCard",

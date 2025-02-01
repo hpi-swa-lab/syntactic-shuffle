@@ -21,7 +21,7 @@ func _on_save_button_pressed() -> void:
 	var src
 	if card is BlankCard:
 		assert(%Name.text)
-		var n = %Name.text.to_camel_case() + "Card"
+		var n = %Name.text.to_camel_case().capitalize() + "Card"
 		path = "res://addons/cards/cards/{0}.gd".format([n])
 		src = card.serialize_gdscript(n)
 	else:

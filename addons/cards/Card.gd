@@ -226,6 +226,11 @@ static func get_meta_or(object: Node, name: String, default: Callable):
 static func get_object_cards(object: Node):
 	if object is Card: return object.cards
 	else: return get_object_out_cards(object)
+static func get_object_out_signatures(object: Node, out: Array):
+	if object is Card: return object.get_out_signatures(out)
+	for card in get_object_cards(object):
+		if card is OutCard: card.get_out_signatures(out)
+	
 static func get_object_out_cards(object: Node):
 	# FIXME storing the card in meta led to serialization issues.
 	# Not sure if we will get a noticeable performance impact from recreating the

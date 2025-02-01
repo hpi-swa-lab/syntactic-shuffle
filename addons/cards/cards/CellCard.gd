@@ -116,7 +116,7 @@ func get_extra_ui() -> Array[Control]:
 			var e = LineEdit.new()
 			if data != null: e.text = data
 			e.text_changed.connect(func (s): data = s)
-			update_ui_func = func(v): e.text = v
+			update_ui_func = func(v): if e.text != v: e.text = v
 			return [e]
 		_:
 			return []
