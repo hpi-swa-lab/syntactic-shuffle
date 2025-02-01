@@ -1,6 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://bqninusgeuw0i"]
+[gd_scene load_steps=7 format=3 uid="uid://bqninusgeuw0i"]
 
 [ext_resource type="Script" uid="uid://cja8ehiirmcyt" path="res://addons/cards/CardBoundary.gd" id="1_ig7tw"]
+[ext_resource type="Script" uid="uid://ctmo5roqpacap" path="res://addons/cards/cards/MoveCard.gd" id="4_7mycd"]
+[ext_resource type="Script" uid="uid://di4xq5ftdtowh" path="res://addons/cards/cards/GravityCard.gd" id="5_7mycd"]
 [ext_resource type="Script" uid="uid://bvr4vcw3kd72b" path="res://addons/cards/placeholder/placeholder.gd" id="6_272bh"]
 [ext_resource type="Script" uid="uid://cxldeg24krchn" path="res://camera_2d.gd" id="9_kek77"]
 [ext_resource type="Script" uid="uid://dio881dm6xtr3" path="res://hand.gd" id="15_vivmo"]
@@ -26,12 +28,29 @@ metadata/_custom_type_script = ExtResource("6_272bh")
 
 [node name="CharacterBody2D" type="CharacterBody2D" parent="CardBoundary"]
 position = Vector2(449, 382)
+metadata/cards_outgoing = [NodePath("../MoveCard")]
 
 [node name="Placeholder" type="Node2D" parent="CardBoundary/CharacterBody2D"]
 script = ExtResource("6_272bh")
 color = Color(1, 0.0369013, 0.39483, 1)
 placeholder_size = Vector2(20, 20)
 metadata/_custom_type_script = ExtResource("6_272bh")
+
+[node name="MoveCard" type="Node2D" parent="CardBoundary"]
+position = Vector2(554, 342)
+scale = Vector2(0.2, 0.2)
+script = ExtResource("4_7mycd")
+id = "753a2d23-40a7-446f-82e7-164220aa2478"
+incoming = Array[NodePath]([NodePath("../CharacterBody2D"), NodePath("../GravityCard")])
+metadata/_custom_type_script = ExtResource("4_7mycd")
+
+[node name="GravityCard" type="Node2D" parent="CardBoundary"]
+position = Vector2(631, 394)
+scale = Vector2(0.2, 0.2)
+script = ExtResource("5_7mycd")
+id = "60a10d14-8d90-4965-a519-8d4606855afe"
+outgoing = [NodePath("../MoveCard")]
+metadata/_custom_type_script = ExtResource("5_7mycd")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 script = ExtResource("15_vivmo")

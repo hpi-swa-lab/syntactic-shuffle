@@ -32,7 +32,7 @@ func s():
 			var _accel = 10
 			var max_velocity = 500
 			# if false: direction = direction.rotated(get_parent().rotation) # rotated
-			var v = velocity.lerp(direction * max_velocity, min(1.0, _accel * card.get_process_delta_time()))
+			var v = velocity.lerp(direction * max_velocity, min(1.0, _accel * card.card_parent_in_world().get_process_delta_time()))
 			card.output("did_accelerate", [true])
 			card.output("out", [v]), ["velocity"])
 	code_card_2.position = Vector2(1384.678, 1084.593)
