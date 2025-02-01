@@ -186,3 +186,26 @@ func test_extract_code_card_source_code():
 			'\")'
 			card.output(\"did_accelerate\", [true])
 			card.output(\"out\", [v])")
+
+func test_casting_generic_signature(ready):
+	var store_card = StoreCard.new()
+	var number_card = NumberCard.new()
+	number_card.c(store_card)
+	ready.call()
+	
+	var signatures = [] as Array[Signature]
+	store_card.get_out_signatures(signatures)
+	assert_eq(signatures.size(), 1)
+	assert_compatible(signatures[0], Signature.TypeSignature.new("float"))
+	assert_not_compatible(signatures[0], Signature.TypeSignature.new("Vector2"))
+
+func test_cannot_connect_to_concrete_generic(ready):
+	var store_card = StoreCard.new()
+	var number_card = NumberCard.new()
+	var bool_card = BoolCard.new()
+	number_card.c(store_card)
+	ready.call()
+	
+	bool_card.try_connect(store_card)
+	assert(store_card.get_all_connected().has(number_card))
+	assert(not store_card.get_all_connected().has(bool_card))

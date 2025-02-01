@@ -63,12 +63,14 @@ var source_code: String = "":
 	get: return source_code
 	set(v):
 		source_code = v
-		if visual: description(v.substr(0, 200))
+		if visual: description(v.substr(0, 150))
 
 func v():
 	title("Code")
 	icon(preload("res://addons/cards/icons/code.png"))
 	source_code = source_code
+	
+	visual.short_description()
 
 func s():
 	for output in outputs:

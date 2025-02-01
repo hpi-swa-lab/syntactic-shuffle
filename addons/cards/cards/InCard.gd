@@ -52,7 +52,13 @@ func setup_finished():
 	incoming_connected(null)
 
 func get_out_signatures(list: Array):
-	list.push_back(signature)
+	if not parent: list.push_back(signature)
+	else: list.push_back(signature.make_concrete(parent.get_incoming()))
+
+func get_concrete_signature():
+	var l = [] as Array[Signature]
+	get_out_signatures(l)
+	return l[0]
 
 func _get_remembered_for(signature: Signature):
 	for card in parent.get_all_incoming():
@@ -100,12 +106,13 @@ func try_connect_in(them: Node):
 	if parent.get_incoming().has(them): return
 	if them is Card and detect_cycles_for_new_connection(parent, them): return
 	
+	var my_signature = get_concrete_signature()
 	for card in Card.get_object_cards(them):
 		if card is OutCard:
 			var their_signatures = [] as Array[Signature]
 			card.get_out_signatures(their_signatures)
 			for their_signature in their_signatures:
-				if their_signature.compatible_with(signature):
+				if their_signature.compatible_with(my_signature):
 					connect_to(them, parent if parent else self)
 					incoming_connected(them)
 					return

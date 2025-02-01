@@ -83,7 +83,7 @@ func get_out_signatures(signatures: Array[Signature]):
 		return
 	var incoming = get_incoming()
 	if incoming.is_empty(): return
-	# assert(not incoming.is_empty(), "out cards without static signature require connections to infer their signature")
+	
 	for i in incoming:
 		if command_name:
 			var list = []

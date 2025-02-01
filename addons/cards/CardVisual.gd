@@ -51,6 +51,7 @@ func get_icon_path(): return %Icon.texture.resource_path
 func get_icon_texture(): return %Icon.texture
 func set_icon_texture(texture: Texture): %Icon.texture = texture
 func ui(c: Control): %extra_ui.add_child(c)
+func short_description(): %Description.max_lines_visible = 2
 
 var card: Card:
 	get: return get_parent()
@@ -77,3 +78,17 @@ func _unhandled_input(e: InputEvent) -> void:
 		input_event(e)
 	if e is InputEventMouseButton and e.button_index == MOUSE_BUTTON_LEFT and held and not e.is_pressed():
 		input_event(e)
+
+func _on_card_control_mouse_entered() -> void:
+	var inputs = []
+	for c in card.cards:
+		if c is InCard:
+			var s = c.get_concrete_signature().get_description()
+			inputs.push_back(c.input_name + ": " + s if c is NamedInCard else s)
+	var outputs = [] as Array[Signature]
+	card.get_out_signatures(outputs)
+	
+	%signatures.visible = true
+	%inputs.text = "\n".join(inputs)
+	%outputs.text = "\n".join(outputs.map(func(s): return s.get_description()))
+func _on_card_control_mouse_exited() -> void: %signatures.visible = false

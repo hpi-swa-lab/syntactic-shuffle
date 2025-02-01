@@ -196,9 +196,8 @@ func get_first_named_incoming_at(name: String):
 	var p = named_incoming.get(name)[0]
 	return get_node_or_null(p) if p else null
 
-func get_named_outcoming_at(name: String):
-	var p = named_outgoing.get(name)
-	return get_node_or_null(p) if p else null
+func get_named_incoming_at(name: String):
+	return named_incoming.get(name, []).map(func (p): return get_node_or_null(p)).filter(not_null)
 
 func get_all_incoming() -> Array:
 	var all = []

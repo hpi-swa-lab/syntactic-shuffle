@@ -14,6 +14,8 @@ func compatible_with_type(other: TypeSignature): return false
 func compatible_with_struct(other: StructSignature): return false
 func compatible_with_group(other: GroupSignature): return false
 func compatible_with_iterator(other: IteratorSignature): return other.type.compatible_with(self)
+## Given a set of incoming cards, make this Signature concrete, i.e., non-generic
+func make_concrete(incoming: Array): return self
 
 class OutputAnySignature extends Signature:
 	func get_description(): return "* -> out"
@@ -64,6 +66,14 @@ class GenericTypeSignature extends Signature:
 	func compatible_with(other: Signature): return other.compatible_with_generic(self)
 	func compatible_with_type(other: Signature): return true
 	func compatible_with_generic(other: GenericTypeSignature): return true
+	func make_concrete(incoming: Array):
+		if incoming.is_empty(): return self
+		var out = [] as Array[Signature]
+		for card in incoming:
+			card.get_out_signatures(out)
+		out = out.filter(func (s): return s.compatible_with(self))
+		# FIXME this should probably find a compatible intersection of all matches
+		return out[0]
 
 class TriggerSignature extends Signature:
 	func get_description(): return "[TRIGGER]"
