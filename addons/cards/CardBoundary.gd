@@ -55,6 +55,13 @@ static func get_card_boundary(node: Node):
 	return b
 
 static func boundary_at_card(card: Card):
+	#var intersect = PhysicsPointQueryParameters2D.new()
+	#intersect.collide_with_areas = true
+	#intersect.collide_with_bodies = false
+	#intersect.position = card.get_global_mouse_position()
+	#var candidates = card.get_world_2d().direct_space_state.intersect_point(intersect)
+	
+	var candidates = []
 	var pos = card.get_viewport().get_mouse_position()
 	var fallback = null
 	for boundary in card.get_tree().get_nodes_in_group("card_boundary").filter(func (b):
@@ -63,9 +70,16 @@ static func boundary_at_card(card: Card):
 			assert(fallback == null, "cannot have multiple fallback card boundaries")
 			fallback = boundary
 		if boundary.contains_screen_position(pos):
-			return boundary
-	assert(fallback, "did not find fallback boundary")
-	return fallback
+			candidates.push_back(boundary)
+	
+	if candidates.is_empty():
+		assert(fallback, "did not find fallback boundary")
+		return fallback
+	
+	var best: Node2D = candidates[0]
+	for candidate in candidates:
+		if best.is_ancestor_of(candidate): best = candidate
+	return best
 
 static func card_moved(card: Card):
 	var boundary = boundary_at_card(card)
