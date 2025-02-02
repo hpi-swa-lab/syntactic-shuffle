@@ -16,10 +16,6 @@ func v():
 	signature_edit()
 
 func s():
-	# special InCard that the OutCard uses for connection purposes. Would yield
-	# an infinite loop if we proceeded here.
-	if signature is Signature.OutputAnySignature: return
-	
 	out_card = OutCard.static_signature(signature)
 	connect_card = OutCard.static_signature(signature)
 	connect_card.command_name = "connect"

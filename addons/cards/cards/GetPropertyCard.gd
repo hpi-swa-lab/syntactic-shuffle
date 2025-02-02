@@ -11,18 +11,31 @@ func v():
 func s():
 	var code_card = CodeCard.create([["property", t("String")], ["object", any()], ["trigger", trg()]], {"out": any()}, func(card, property, object):
 		card.output("out", [object.get(property)]), ["property", "object"])
-	code_card.position = Vector2(994.4725, 682.2709)
+	code_card.position = Vector2(1003.648, 263.8711)
 	var cell_card = CellCard.create("property_name", "String", "")
-	cell_card.position = Vector2(1004.691, 167.0592)
+	cell_card.position = Vector2(1010.196, 833.1957)
 	var in_card = InCard.trigger()
-	in_card.position = Vector2(446.0674, 700.6288)
-	var out_card = OutCard.new()
-	out_card.position = Vector2(1565.832, 700.7935)
-	var subscribe_in_card = SubscribeInCard.data(any())
-	subscribe_in_card.position = Vector2(427.4276, 1407.701)
-	var code_card_2 = CodeCard.create([["obj", cmd("connect", any())]], {}, func(_card): pass, [])
-	code_card_2.position = Vector2(1008.34, 1336.877)
+	in_card.position = Vector2(409.3658, 227.1764)
+	var out_card = OutCard.static_signature(t("Vector2"), false)
+	out_card.position = Vector2(1486.923, 218.1656)
+	var code_card_2 = CodeCard.create([["obj", any()], ["prop_name", t("String")]], {}, func(card, obj, prop_name):
+		if not obj is Object: return
+		for prop in obj.get_property_list():
+			if prop["name"] == prop_name:
+				var t = Signature.type_signature(prop["type"])
+				for c in card.parent.cards:
+					if c is OutCard:
+						print(c)
+						c.has_static_signature = true
+						c.signature = Signature.TypeSignature.new(t)
+				return, ["prop_name"])
+	code_card_2.position = Vector2(809.9025, 1322.814)
+	var subscribe_in_card = SubscribeInCard.new(t("Object"))
+	subscribe_in_card.position = Vector2(499.1244, 767.828)
 	
 	code_card.c(out_card)
 	cell_card.c_named("property", code_card)
+	cell_card.c_named("prop_name", code_card_2)
 	in_card.c_named("trigger", code_card)
+	subscribe_in_card.c_named("obj", code_card_2)
+	subscribe_in_card.c_named("object", code_card)

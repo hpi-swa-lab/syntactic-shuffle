@@ -63,7 +63,8 @@ func _on_code_gui_input(event: InputEvent) -> void:
 	if (event is InputEventKey and
 		event.pressed and
 		not event.is_echo() and
-		event.keycode == KEY_S):
+		event.keycode == KEY_S
+		and event.ctrl_pressed):
 			_on_save_pressed()
 
 func _on_save_pressed() -> void:
