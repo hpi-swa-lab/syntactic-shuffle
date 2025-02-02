@@ -55,6 +55,13 @@ func _input(event: InputEvent) -> void:
 		held = event.is_pressed()
 	if event is InputEventMouseMotion and held:
 		position -= event.screen_relative / zoom
+	
+	if event is InputEventKey and event.key_label == KEY_DELETE and event.pressed:
+		for card in selection:
+			if is_instance_valid(card):
+				card.queue_free()
+		selection.clear()
+		
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
