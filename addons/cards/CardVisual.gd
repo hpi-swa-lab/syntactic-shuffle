@@ -94,8 +94,9 @@ func _on_card_control_mouse_entered() -> void:
 	var inputs = []
 	for c in card.cards:
 		if c is InCard:
-			var s = c.get_concrete_signature().get_description()
-			inputs.push_back(c.input_name + ": " + s if c is NamedInCard else s)
+			for signature in c.get_concrete_signatures():
+				var s = signature.get_description()
+				inputs.push_back(c.input_name + ": " + s if c is NamedInCard else s)
 	var outputs = [] as Array[Signature]
 	card.get_out_signatures(outputs)
 	

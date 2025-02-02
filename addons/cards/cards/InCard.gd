@@ -53,15 +53,15 @@ func setup_finished():
 
 func get_out_signatures(list: Array):
 	if not parent: list.push_back(signature)
-	else: list.push_back(signature.make_concrete(_get_incoming_list()))
+	else: list.append_array(signature.make_concrete(_get_incoming_list()))
 
 func _get_incoming_list():
 	return parent.get_incoming()
 
-func get_concrete_signature():
+func get_concrete_signatures():
 	var l = [] as Array[Signature]
 	get_out_signatures(l)
-	return l[0]
+	return l
 
 func _get_remembered_for(signature: Signature):
 	for card in parent.get_all_incoming():
@@ -84,12 +84,15 @@ func get_remembered():
 
 func get_connected_incoming():
 	var connected = []
-	var my_signature = get_concrete_signature()
+	var my_signatures = get_concrete_signatures()
 	for c in _get_incoming_list():
 		var out = [] as Array[Signature]
 		c.get_out_signatures(out)
-		for s in out:
-			if s.compatible_with(my_signature): connected.push_back(s)
+		for their_signature in out:
+			for my_signature in my_signatures:
+				if their_signature.compatible_with(my_signature):
+					connected.push_back(s)
+					break
 	return connected
 
 func invoke(args: Array, signature: Signature, named = "", source_out = null):
@@ -119,16 +122,17 @@ func try_connect_in(them: Node):
 	if parent.get_incoming().has(them): return
 	if them is Card and detect_cycles_for_new_connection(parent, them): return
 	
-	var my_signature = get_concrete_signature()
+	var my_signatures = get_concrete_signatures()
 	for card in Card.get_object_cards(them):
 		if card is OutCard:
 			var their_signatures = [] as Array[Signature]
 			card.get_out_signatures(their_signatures)
 			for their_signature in their_signatures:
-				if their_signature.compatible_with(my_signature):
-					connect_to(them, parent if parent else self)
-					incoming_connected(them)
-					return
+				for my_signature in my_signatures:
+					if their_signature.compatible_with(my_signature):
+						connect_to(them, parent if parent else self)
+						incoming_connected(them)
+						return
 
 func detect_cycles_for_new_connection(from: Card, to: Card) -> bool:
 	if (to.allows_cycles() or from.allows_cycles()) and not from.get_all_outgoing().has(to) and not to.get_all_incoming().has(from):

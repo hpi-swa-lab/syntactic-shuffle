@@ -275,3 +275,14 @@ func test_cannot_connect_to_concrete_generic(ready):
 	bool_card.try_connect(store_card)
 	assert(store_card.get_all_connected().has(number_card))
 	assert(not store_card.get_all_connected().has(bool_card))
+
+func test_derive_type_from_code_card():
+	var code_card = CodeCard.new([],
+		{"out_float": Signature.TypeSignature.new("float"), "out_vec": Signature.TypeSignature.new("Vector2")},
+		func(card): pass)
+	var store_card = StoreCard.new()
+	code_card.c(store_card)
+	
+	var out = [] as Array[Signature]
+	store_card.get_out_signatures(out)
+	assert_eq(out.size(), 2)
