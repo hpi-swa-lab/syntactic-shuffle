@@ -419,34 +419,6 @@ func serialize_constructor():
 	return "{0}.new()".format([get_card_name()])
 
 func serialize_gdscript(overwrite_name: String = "", size: Vector2 = Vector2.ZERO):
-	var var_names = {}
-	var count = {}
-	for c in cards:
-		var n = c.get_card_name()
-		var num = count.get(n, 0) + 1
-		count.set(n, num)
-		var name = n.to_snake_case()
-		if num > 1: name += "_" + str(num)
-		var_names[c] = name
-	
-	var cards_desc = ""
-	for c in cards:
-		var n = var_names.get(c)
-		cards_desc += "\tvar {0} = {1}\n".format([n, c.serialize_constructor()])
-		cards_desc += "\t{0}.position = Vector2{1}\n".format([n, c.position])
-		for i in range(0, c.cards.size()):
-			if c.cards[i] is CellCard:
-				cards_desc += "\t{0}.cards[{1}].data = {2}\n".format([n, i, Signature.data_to_expression(c.cards[i].data)])
-	if not cards.is_empty(): cards_desc += "\t\n"
-	else: cards_desc = "\tpass"
-	for c in cards:
-		for them in c.get_outgoing():
-			cards_desc += "\t{0}.c({1})\n".format([var_names[c], var_names[them]])
-		for name in c.named_outgoing:
-			for their_path in c.named_outgoing[name]:
-				var them = c.get_node_or_null(their_path)
-				if them:
-					cards_desc += "\t{0}.c_named(\"{2}\", {1})\n".format([var_names[c], var_names[them], name])
 	
 	return "@tool
 extends Card
@@ -465,8 +437,39 @@ func s():
 		"icon_data": visual.get_icon_data(),
 		"allow_cycles": "\n\tallow_cycles()" if _allows_cycles else "",
 		"size": "\n\tcontainer_size(Vector2" + str(size) + ")" if size != Vector2.ZERO else "",
-		"cards": cards_desc
+		"cards": serialize_card_construction(cards)
 	})
+
+static func serialize_card_construction(cards: Array):
+	var cards_desc = ""
+	var var_names = {}
+	var count = {}
+	for c in cards:
+		var n = c.get_card_name()
+		var num = count.get(n, 0) + 1
+		count.set(n, num)
+		var name = n.to_snake_case()
+		if num > 1: name += "_" + str(num)
+		var_names[c] = name
+	
+	for c in cards:
+		var n = var_names.get(c)
+		cards_desc += "\tvar {0} = {1}\n".format([n, c.serialize_constructor()])
+		cards_desc += "\t{0}.position = Vector2{1}\n".format([n, c.position])
+		for i in range(0, c.cards.size()):
+			if c.cards[i] is CellCard:
+				cards_desc += "\t{0}.cards[{1}].data = {2}\n".format([n, i, Signature.data_to_expression(c.cards[i].data)])
+	if not cards.is_empty(): cards_desc += "\t\n"
+	else: cards_desc = "\tpass"
+	for c in cards:
+		for them in c.get_outgoing():
+			if cards.has(them): cards_desc += "\t{0}.c({1})\n".format([var_names[c], var_names[them]])
+		for name in c.named_outgoing:
+			for their_path in c.named_outgoing[name]:
+				var them = c.get_node_or_null(their_path)
+				if them and cards.has(them):
+					cards_desc += "\t{0}.c_named(\"{2}\", {1})\n".format([var_names[c], var_names[them], name])
+	return cards_desc
 
 # DSL for signatures
 static func trg(): return Signature.TriggerSignature.new()

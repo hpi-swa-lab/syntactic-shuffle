@@ -29,6 +29,23 @@ func consider_selection(obj: Node):
 func move_selected(delta: Vector2):
 	for card in selection: card.position += delta
 
+func delete_selected():
+	for card in selection:
+		if is_instance_valid(card): card.queue_free()
+	selection.clear()
+
+func duplicate_selected():
+	var src = Card.serialize_card_construction(selection.keys())
+	
+	var container = G.eval_object("@tool\nextends Card\nfunc s():\n{0}".format([src]), func(): return Card.new())
+	
+	var parent = selection.keys()[0].get_parent()
+	clear_selection()
+	for c in container.cards:
+		container.cards_parent.remove_child(c)
+		parent.add_child(c)
+		add_to_selection(c)
+
 func _ready(): Card.set_ignore_object(self)
 
 func _zoom(factor: float) -> void:
@@ -57,11 +74,9 @@ func _input(event: InputEvent) -> void:
 		position -= event.screen_relative / zoom
 	
 	if event is InputEventKey and event.key_label == KEY_DELETE and event.pressed:
-		for card in selection:
-			if is_instance_valid(card):
-				card.queue_free()
-		selection.clear()
-		
+		delete_selected()
+	if event is InputEventKey and event.key_label == KEY_D and event.ctrl_pressed and event.pressed:
+		duplicate_selected()
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
