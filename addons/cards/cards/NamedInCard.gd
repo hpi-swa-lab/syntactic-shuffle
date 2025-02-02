@@ -26,9 +26,8 @@ func v():
 	e.text_changed.connect(func (n): input_name = n)
 	ui(e)
 
-func get_out_signatures(list: Array):
-	if not parent: list.push_back(signature)
-	else: list.push_back(signature.make_concrete(parent.get_named_incoming_at(input_name)))
+func _get_incoming_list():
+	return parent.get_named_incoming_at(input_name)
 
 func try_connect_in(them: Node):
 	if not parent or parent.get_incoming().has(them): return

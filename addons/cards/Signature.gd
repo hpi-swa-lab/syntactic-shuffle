@@ -73,7 +73,7 @@ class GenericTypeSignature extends Signature:
 			Card.get_object_out_signatures(card, out)
 		out = out.filter(func (s): return s.compatible_with(self))
 		# FIXME this should probably find a compatible intersection of all matches
-		return out[0]
+		return VoidSignature.new() if out.is_empty() else out[0]
 
 class TriggerSignature extends Signature:
 	func get_description(): return "[TRIGGER]"

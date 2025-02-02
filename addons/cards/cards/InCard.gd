@@ -53,7 +53,10 @@ func setup_finished():
 
 func get_out_signatures(list: Array):
 	if not parent: list.push_back(signature)
-	else: list.push_back(signature.make_concrete(parent.get_incoming()))
+	else: list.push_back(signature.make_concrete(_get_incoming_list()))
+
+func _get_incoming_list():
+	return parent.get_incoming()
 
 func get_concrete_signature():
 	var l = [] as Array[Signature]
@@ -78,6 +81,16 @@ func is_valid_incoming(card, signature):
 
 func get_remembered():
 	return _get_remembered_for(signature)
+
+func get_connected_incoming():
+	var connected = []
+	var my_signature = get_concrete_signature()
+	for c in _get_incoming_list():
+		var out = [] as Array[Signature]
+		c.get_out_signatures(out)
+		for s in out:
+			if s.compatible_with(my_signature): connected.push_back(s)
+	return connected
 
 func invoke(args: Array, signature: Signature, named = "", source_out = null):
 	for card in get_outgoing():

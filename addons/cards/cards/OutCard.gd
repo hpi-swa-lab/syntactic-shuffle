@@ -78,6 +78,8 @@ func _add_command(signature: Signature) -> Signature:
 	return Signature.CommandSignature.new(command_name, signature)
 
 func get_out_signatures(signatures: Array[Signature]):
+	if not is_reachable(): return
+	
 	if has_static_signature:
 		signatures.push_back(signature)
 		return
@@ -115,6 +117,24 @@ func invoke(args: Array, signature: Signature, named = "", source_out = null):
 	for out in get_object_outgoing(parent):
 		var obj = parent.get_node_or_null(out)
 		if obj: obj.invoke(args, signature, named, self)
+
+## Check if this OutCard is connected to an InCard that could currently
+## receive input (since its parent is connected to a card of a matching
+## signature). Note that if the parent has no connected cards, we assume
+## all cards to be reachable.
+## The method over-approximates the answer: as soon as at least one input
+## of a connected component is reachable, it answers true.
+func is_reachable():
+	if not parent is Card or parent.get_all_incoming().is_empty(): return true
+	# CodeCard out's are not connected
+	if parent is CodeCard: return true
+	
+	var inputs = []
+	get_connected_inputs(inputs, {})
+	for input in inputs:
+		if not input.get_connected_incoming().is_empty():
+			return true
+	return false
 
 func serialize_constructor():
 	if command_name:

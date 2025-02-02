@@ -60,21 +60,22 @@ var dragging: bool:
 var cards: Array[Node]:
 	get: return cards_parent.get_children().filter(func(s): return s is Card)
 
-func _init():
+func _init(custom_build = null):
 	var parent = null
 	if not active_card_list.is_empty():
 		parent = active_card_list.back()
 		parent.cards_parent.add_child(self)
-	setup(parent)
+	setup(parent, custom_build)
 
-func setup(parent: Card):
+func setup(parent: Card, custom_build = null):
 	self.parent = parent
 	if not id: id = uuid.v4()
-	build_cards_list()
+	build_cards_list(custom_build)
 
-func build_cards_list():
+func build_cards_list(custom_build = null):
 	push_active_card_list(self)
-	s()
+	if custom_build: custom_build.call()
+	else: s()
 	pop_active_card_list()
 	cards.append_array(cards_parent.get_children())
 
@@ -102,8 +103,6 @@ func _ready() -> void:
 	
 	visual_setup()
 	get_card_boundary().card_entered(self)
-	
-	#if not parent: setup(null)
 	
 	for card in cards:
 		card.setup_finished()
@@ -218,8 +217,17 @@ func get_all_connected() -> Array:
 	all.append_array(get_named_incoming())
 	return all
 
+## Trace from this card to any inputs
+func get_connected_inputs(out: Array, seen: Dictionary):
+	if seen.has(self): return
+	seen[self] = true
+	for i in get_all_incoming():
+		if i is InCard: out.push_back(i)
+		else: i.get_connected_inputs(out, seen)
+
 func disconnect_all():
-	pass
+	for c in get_all_connected():
+		object_disconnect_from(self, c)
 
 static func get_meta_or(object: Node, name: String, default: Callable):
 	if not object.has_meta(name) or not object.get_meta(name): object.set_meta(name, default.call())

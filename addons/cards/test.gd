@@ -199,6 +199,72 @@ func test_casting_generic_signature(ready):
 	assert_compatible(signatures[0], Signature.TypeSignature.new("float"))
 	assert_not_compatible(signatures[0], Signature.TypeSignature.new("Vector2"))
 
+func test_derive_output_types_from_incoming():
+	var num = NumberCard.new()
+	var vector = Vector2Card.new()
+	var c = Card.new(func ():
+		var in1 = InCard.new(Signature.TypeSignature.new("float"))
+		var out1 = OutCard.new()
+		in1.c(out1)
+		
+		var in2 = InCard.new(Signature.TypeSignature.new("Vector2"))
+		var out2 = OutCard.new()
+		in2.c(out2))
+	
+	num.c(c)
+	
+	var out = [] as Array[Signature]
+	c.get_out_signatures(out)
+	assert_eq(out.size(), 1)
+	assert_eq(out[0].get_description(), "float")
+	
+	c.disconnect_all()
+	
+	out.clear()
+	c.get_out_signatures(out)
+	assert_eq(out.size(), 2)
+	
+	vector.c(c)
+	
+	out.clear()
+	c.get_out_signatures(out)
+	assert_eq(out.size(), 1)
+	assert_eq(out[0].get_description(), "Vector2")
+
+func test_derive_output_types_no_incoming():
+	var c = Card.new(func ():
+		var process = PhysicsProcessCard.new()
+		var vec = Vector2Card.new()
+		var out = OutCard.new()
+		process.c(vec)
+		vec.c(out))
+	
+	var out = [] as Array[Signature]
+	c.get_out_signatures(out)
+	assert_eq(out.size(), 1)
+	assert_eq(out[0].get_description(), "Vector2")
+
+func test_derive_output_types_axis_controls():
+	var c = AxisControlsCard.new()
+	
+	var out = [] as Array[Signature]
+	c.get_out_signatures(out)
+	assert_eq(out.size(), 1)
+	assert_eq(out[0].get_description(), "Vector2")
+
+
+func test_derive_output_types_minus():
+	var v1 = Vector2Card.new()
+	var v2 = Vector2Card.new()
+	var c = MinusCard.new()
+	v1.c_named("left_vector", c)
+	v2.c_named("right_vector", c)
+	
+	var out = [] as Array[Signature]
+	c.get_out_signatures(out)
+	assert_eq(out.size(), 1)
+	assert_eq(out[0].get_description(), "Vector2")
+
 func test_cannot_connect_to_concrete_generic(ready):
 	var store_card = StoreCard.new()
 	var number_card = NumberCard.new()
