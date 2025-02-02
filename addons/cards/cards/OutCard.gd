@@ -74,6 +74,7 @@ func v():
 	icon_data("iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAIZJREFUOI3FUjsOwCAIBdOlEwfx/kfxIEzdtJMEVNB06ZsMvA8RAP5EIQJ0es2pC78Q2cIgjoyxi1cGkbgnG44mS0MnOFOI9lokaNLOCNMBMTSZJui4a5X3k/wc1yASKaBnEG3CfKKOQQBomRky86Qaass16gT3kAqR6X065egSj7E5tnOTFy92Ir2sNy07AAAAAElFTkSuQmCC")
 
 func _add_command(signature: Signature) -> Signature:
+	if not command_name: return signature
 	if signature is Signature.CommandSignature and signature.command == command_name: return signature
 	return Signature.CommandSignature.new(command_name, signature)
 
@@ -81,7 +82,7 @@ func get_out_signatures(signatures: Array[Signature]):
 	if not is_reachable(): return
 	
 	if has_static_signature:
-		signatures.push_back(signature)
+		signatures.push_back(_add_command(signature))
 		return
 	var incoming = get_incoming()
 	if incoming.is_empty(): return

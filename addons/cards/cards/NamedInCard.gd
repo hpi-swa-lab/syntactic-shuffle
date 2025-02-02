@@ -41,16 +41,19 @@ func try_connect_in(them: Node):
 		# only allow one connection to us
 		if name == input_name and not named[name].is_empty(): return
 	
+	var my_signatures = get_concrete_signatures()
 	for card in get_object_cards(them):
 		if card is OutCard:
 			var their_signatures = [] as Array[Signature]
 			card.get_out_signatures(their_signatures)
 			for their_signature in their_signatures:
-				if their_signature.compatible_with(signature):
-					connect_to(them, parent, input_name)
-					return
+				for my_signature in my_signatures:
+					if their_signature.compatible_with(my_signature):
+						connect_to(them, parent, input_name)
+						return
 
 func _get_remembered_for(signature: Signature):
+	if not parent: return null
 	for p in parent.named_incoming.get(input_name, []):
 		var card = parent.get_node_or_null(p)
 		if card and is_valid_incoming(card, signature):

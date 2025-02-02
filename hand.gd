@@ -9,6 +9,7 @@ var categories = {
 		"RememberCard",
 		InCard.new(Signature.VoidSignature.new()),
 		NamedInCard.new("unnamed", Signature.VoidSignature.new()),
+		SubscribeInCard.new(Signature.VoidSignature.new()),
 		OutCard.new(),
 		BlankCard.new(),
 	],

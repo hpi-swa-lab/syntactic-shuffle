@@ -21,7 +21,7 @@ var signature: Signature = Signature.VoidSignature.new():
 	get: return signature
 	set(v):
 		signature = v
-		if out_card: out_card.signature = v
+		signature_changed()
 var out_card
 
 func s():
@@ -32,6 +32,9 @@ func s():
 	out_card = OutCard.new()
 	out_card.has_static_signature = true
 	out_card.signature = signature
+
+func signature_changed():
+	if out_card: out_card.signature = signature
 
 func v():
 	title("Input")
@@ -56,7 +59,7 @@ func get_out_signatures(list: Array):
 	else: list.append_array(signature.make_concrete(_get_incoming_list()))
 
 func _get_incoming_list():
-	return parent.get_incoming()
+	return parent.get_incoming() if parent else []
 
 func get_concrete_signatures():
 	var l = [] as Array[Signature]
@@ -64,6 +67,7 @@ func get_concrete_signatures():
 	return l
 
 func _get_remembered_for(signature: Signature):
+	if not parent: return null
 	for card in parent.get_all_incoming():
 		if is_valid_incoming(card, signature):
 			var val = get_remembered_for(card, signature)
@@ -87,7 +91,7 @@ func get_connected_incoming():
 	var my_signatures = get_concrete_signatures()
 	for c in _get_incoming_list():
 		var out = [] as Array[Signature]
-		c.get_out_signatures(out)
+		get_object_out_signatures(c, out)
 		for their_signature in out:
 			for my_signature in my_signatures:
 				if their_signature.compatible_with(my_signature):
@@ -102,8 +106,6 @@ func invoke(args: Array, signature: Signature, named = "", source_out = null):
 		for p in named_outgoing[name]:
 			var card = get_node_or_null(p)
 			if card: card.invoke(args, signature, name, out_card)
-
-func signature_changed(): pass
 
 ## An incoming connection from [obj] was established. [obj] is [null]
 ## when this is called from the initialization of pre-existing connections.

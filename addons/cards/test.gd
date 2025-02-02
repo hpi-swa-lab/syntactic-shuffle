@@ -286,3 +286,12 @@ func test_derive_type_from_code_card():
 	var out = [] as Array[Signature]
 	store_card.get_out_signatures(out)
 	assert_eq(out.size(), 2)
+
+func test_type_of_subscribe_in_card():
+	var subscribe_card = SubscribeInCard.new(Signature.TypeSignature.new("float"))
+	
+	var out = [] as Array[Signature]
+	subscribe_card.get_out_signatures(out)
+	assert_eq(out.size(), 3)
+	assert_eq(out[1].command, "connect")
+	assert_eq(out[2].command, "disconnect")
