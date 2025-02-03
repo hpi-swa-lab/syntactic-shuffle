@@ -17,7 +17,7 @@ func s():
 	var code_card = CodeCard.create([["velocity", t("Vector2")], ["body", t("Node")], ["did_accelerate", t("bool")], ["trigger", trg()]], {"out": t("Vector2"), "did_accelerate": t("bool")}, func (card, velocity, body, did_accelerate):
 			if not did_accelerate:
 				var friction = 20
-				velocity = velocity.lerp(Vector2.ZERO, min(1.0, friction * get_process_delta_time()))
+				velocity = velocity.lerp(Vector2.ZERO, min(1.0, friction * card.card_parent_in_world().get_process_delta_time()))
 			if body is CharacterBody2D:
 				body.velocity = velocity
 				body.move_and_slide()

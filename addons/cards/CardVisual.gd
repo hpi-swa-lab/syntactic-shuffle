@@ -8,9 +8,10 @@ enum Type {
 	Store
 }
 
+const DEFAULT_EDITOR_SIZE = Vector2(2000, 1600)
 static var base_card_size = Vector2(10, 10)
 var _editor = null
-var _container_size = Vector2(2000, 1600)
+var _container_size = DEFAULT_EDITOR_SIZE
 
 signal dragging(d: bool)
 
@@ -63,17 +64,24 @@ func _ready() -> void:
 	base_card_size = %CardControl.size
 
 var held = false
+var is_dragging = false
 func input_event(e: InputEvent):
-	if e is InputEventMouseButton and e.button_index == MOUSE_BUTTON_LEFT:
-		held = e.is_pressed()
+	if e is InputEventMouseButton and e.button_index == MOUSE_BUTTON_LEFT and e.is_pressed():
+		held = true
 		if not get_selection_manager().is_selected(card):
 			get_selection_manager().set_as_selection(card)
-		dragging.emit(held)
+	if e is InputEventMouseButton and e.button_index == MOUSE_BUTTON_LEFT and not e.is_pressed():
+		held = false
+		is_dragging = false
+		dragging.emit(false)
 	if e is InputEventMouseMotion and held:
+		if not is_dragging:
+			is_dragging = true
+			dragging.emit(true)
 		get_selection_manager().move_selected(e.screen_relative / get_viewport_transform().get_scale() / card.get_card_boundary().global_scale)
 	if e is InputEventMouseButton and e.double_click and e.button_index == MOUSE_BUTTON_LEFT:
 		held = false
-		dragging.emit(held)
+		is_dragging = false
 		expanded = not expanded
 		get_selection_manager().clear_selection()
 

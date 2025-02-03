@@ -81,13 +81,14 @@ static func boundary_at_card(card: Card):
 		if best.is_ancestor_of(candidate): best = candidate
 	return best
 
-static func card_moved(card: Card):
-	var boundary = boundary_at_card(card)
+static func card_moved(card: Card, new_boundary = null):
+	var boundary = new_boundary if new_boundary else boundary_at_card(card)
 	var old_boundary = get_card_boundary(card)
 	if old_boundary != boundary:
 		var old_index = card.get_index()
+		var old_position = card.global_position
 		card.reparent(boundary)
-		card.global_position = boundary.get_global_mouse_position()
+		card.global_position = old_position if new_boundary else boundary.get_global_mouse_position()
 		old_boundary.card_left(card)
 		boundary.card_entered(card)
 		

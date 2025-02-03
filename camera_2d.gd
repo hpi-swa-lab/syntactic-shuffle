@@ -46,6 +46,55 @@ func duplicate_selected():
 		parent.add_child(c)
 		add_to_selection(c)
 
+func group_selected():
+	var cards = selection.keys()
+	clear_selection()
+	
+	var parent = BlankCard.new()
+	cards[0].get_parent().add_child(parent)
+	parent.position = cards.map(func(c): return c.position).reduce(func (sum, v): return sum + v) / cards.size() - CardVisual.DEFAULT_EDITOR_SIZE * parent.get_base_scale() * 0.25
+	parent.visual.expanded = true
+	var then = []
+	var add_input = func(from, to, named):
+		var sig = [] as Array[Signature]
+		Card.get_object_out_signatures(from, sig)
+		# FIXME choosing first
+		var input = NamedInCard.named_data(named, sig[0]) if named else InCard.data(sig[0])
+		input.parent = parent.cards_parent
+		parent.cards_parent.add_child(input)
+		then.push_back(func ():
+			Card.connect_to(from, parent, named)
+			Card.object_disconnect_from(to, from)
+			Card.connect_to(input, to, named))
+	var add_output = func(from, to, named):
+		var output = OutCard.new()
+		output.parent = parent.cards_parent
+		parent.cards_parent.add_child(output)
+		then.push_back(func ():
+			Card.connect_to(parent, to, named)
+			Card.object_disconnect_from(from, to)
+			from.c(output))
+	
+	var incoming = []
+	var outgoing = []
+	for c in cards:
+		for i in c.get_incoming(): if not cards.has(i): incoming.push_back([i, c, ""])
+		for i in c.get_outgoing(): if not cards.has(i): outgoing.push_back([c, i, ""])
+		for n in c.named_incoming:
+			for p in c.named_incoming[n]:
+				var i = c.get_node(p)
+				if not cards.has(i): incoming.push_back([i, c, n])
+		for n in c.named_outgoing:
+			for p in c.named_outgoing[n]:
+				var i = c.get_node(p)
+				if not cards.has(i): outgoing.push_back([c, i, n])
+	for c in cards:
+		CardBoundary.card_moved(c, parent.cards_parent)
+	
+	for pair in incoming: add_input.call(pair[0], pair[1], pair[2])
+	for pair in outgoing: add_output.call(pair[0], pair[1], pair[2])
+	for t in then: t.call()
+
 func _ready(): Card.set_ignore_object(self)
 
 func _zoom(factor: float) -> void:
@@ -72,13 +121,14 @@ func _input(event: InputEvent) -> void:
 		held = event.is_pressed()
 	if event is InputEventMouseMotion and held:
 		position -= event.screen_relative / zoom
-	
-	if event is InputEventKey and event.key_label == KEY_DELETE and event.pressed:
-		delete_selected()
-	if event is InputEventKey and event.key_label == KEY_D and event.ctrl_pressed and event.pressed:
-		duplicate_selected()
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		selecting = event.is_pressed()
 		if selecting: clear_selection()
+	if event is InputEventKey and event.key_label == KEY_DELETE and event.pressed:
+		delete_selected()
+	if event is InputEventKey and event.key_label == KEY_D and event.ctrl_pressed and event.pressed:
+		duplicate_selected()
+	if event is InputEventKey and event.key_label == KEY_G and event.ctrl_pressed and event.pressed:
+		group_selected()
