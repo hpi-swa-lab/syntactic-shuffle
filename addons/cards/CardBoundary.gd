@@ -173,8 +173,8 @@ func _apply_card_transform(card: Node2D, new_transform: Transform2D):
 		var tween = get_tree().create_tween()
 		tween\
 			.set_ease(Tween.EASE_OUT) \
-			.set_trans(Tween.TRANS_ELASTIC) \
-			.tween_property(card, "transform", new_transform, 0.25)
+			.set_trans(Tween.TRANS_QUINT) \
+			.tween_property(card, "transform", new_transform, 0.15)
 
 func _relayout_row(spacing = 30, stacked = false, extra_zoom = 1):
 	var horizontal_spacing = spacing

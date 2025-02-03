@@ -1,6 +1,8 @@
 @tool
 extends CardBoundary
 
+var execute_only = null
+
 class ManualTriggerCard extends Card:
 	var type: Signature
 	var out_card: OutCard
@@ -22,7 +24,7 @@ class ManualTriggerCard extends Card:
 @export_tool_button("Run") var _run = run
 func run():
 	for method in get_method_list():
-		if method["name"].begins_with("test_"):
+		if method["name"].begins_with("test_") and (not execute_only or method["name"].contains(execute_only)):
 			print(method["name"])
 			run_cards_test(Callable(self, method["name"]))
 	print("Success!")

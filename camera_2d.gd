@@ -50,13 +50,13 @@ func duplicate_selected():
 func group_selected():
 	var cards = selection.keys()
 	clear_selection()
-	
 	var parent = BlankCard.new()
 	cards[0].get_parent().add_child(parent)
 	parent.position = cards.map(func(c): return c.position).reduce(func (sum, v): return sum + v) / cards.size() - CardVisual.DEFAULT_EDITOR_SIZE * parent.get_base_scale() * 0.25
 	if parent.visual: parent.visual.expanded = true
 	
-	var then = []
+	var before = []
+	var after = []
 	var incoming = []
 	var outgoing = []
 	var add_input = func(from, to, named):
@@ -66,16 +66,18 @@ func group_selected():
 		var input = NamedInCard.named_data(named, sig[0]) if named else InCard.data(sig[0])
 		input.parent = parent.cards_parent
 		parent.cards_parent.add_child(input)
-		then.push_back(func ():
+		before.push_back(func ():
+			Card.object_disconnect_from(to, from))
+		after.push_back(func ():
 			Card.connect_to(from, parent, named)
-			Card.object_disconnect_from(to, from)
 			Card.connect_to(input, to, named))
 	var add_output = func(from, to, named, output):
 		output.parent = parent.cards_parent
-		parent.cards_parent.add_child(output)
-		then.push_back(func ():
+		if not output.get_parent(): parent.cards_parent.add_child(output)
+		before.push_back(func ():
+			Card.object_disconnect_from(from, to))
+		after.push_back(func ():
 			Card.connect_to(parent, to, named)
-			Card.object_disconnect_from(from, to)
 			from.c(output))
 	
 	for c in cards:
@@ -99,9 +101,38 @@ func group_selected():
 				outgoing[j][3] = outgoing[i][3]
 				break
 	
+	# Check for unnamed inputs that have identical signature and give then names
+	var groups = {}
+	for i in incoming:
+		if i[2]: continue
+		# FIXME using only first one
+		var sig = [] as Array[Signature]; Card.get_object_out_signatures(i[0], sig); sig = sig[0]
+		var found = false
+		for g in groups:
+			if sig.eq(g):
+				groups[g].push_back(i)
+				found = true
+				break
+		if not found:
+			groups[sig] = [i]
+	# if there are groups with more than, add names
+	for sig in groups:
+		var list = groups[sig]
+		if list.size() > 1:
+			for i in range(0, list.size()):
+				list[i][2] = sig.get_description() + "_" + str(i)
+	
+	for i in range(0, incoming.size()):
+		if incoming[i][2]: continue
+		for j in range(i + 1, incoming.size()):
+			if incoming[j][2]: continue
+			if Card.objects_have_same_out_signatures(incoming[i][0], incoming[j][0]):
+				pass
+	
+	for t in before: t.call()
 	for pair in incoming: add_input.call(pair[0], pair[1], pair[2])
 	for pair in outgoing: add_output.call(pair[0], pair[1], pair[2], pair[3])
-	for t in then: t.call()
+	for t in after: t.call()
 	var i_y = 0
 	var o_y = 0
 	for i in parent.cards:
