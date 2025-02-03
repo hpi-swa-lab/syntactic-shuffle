@@ -67,8 +67,9 @@ func _init(custom_build = null):
 		parent.cards_parent.add_child(self)
 	setup(parent, custom_build)
 
-func _exit_tree() -> void:
-	disconnect_all()
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_PREDELETE:
+		disconnect_all()
 
 func setup(parent: Card, custom_build = null):
 	self.parent = parent

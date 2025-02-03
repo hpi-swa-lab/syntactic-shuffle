@@ -1,8 +1,9 @@
-[gd_scene load_steps=7 format=3 uid="uid://bqninusgeuw0i"]
+[gd_scene load_steps=8 format=3 uid="uid://bqninusgeuw0i"]
 
 [ext_resource type="Script" uid="uid://cja8ehiirmcyt" path="res://addons/cards/CardBoundary.gd" id="1_ig7tw"]
 [ext_resource type="Script" uid="uid://ctmo5roqpacap" path="res://addons/cards/cards/MoveCard.gd" id="4_lquwl"]
 [ext_resource type="Script" uid="uid://dkyx51jnk8cvd" path="res://addons/cards/cards/AxisControlsCard.gd" id="5_7mycd"]
+[ext_resource type="Script" uid="uid://cykn2a1upyl7a" path="res://addons/cards/cards/Vector2Card.gd" id="6_5vw27"]
 [ext_resource type="Script" uid="uid://bvr4vcw3kd72b" path="res://addons/cards/placeholder/placeholder.gd" id="6_272bh"]
 [ext_resource type="Script" uid="uid://cxldeg24krchn" path="res://camera_2d.gd" id="9_kek77"]
 [ext_resource type="Script" uid="uid://dio881dm6xtr3" path="res://hand.gd" id="15_vivmo"]
@@ -28,7 +29,7 @@ metadata/_custom_type_script = ExtResource("6_272bh")
 
 [node name="CharacterBody2D" type="CharacterBody2D" parent="CardBoundary"]
 position = Vector2(449, 382)
-metadata/cards_outgoing = []
+metadata/cards_outgoing = [NodePath("../MoveCard")]
 
 [node name="Placeholder" type="Node2D" parent="CardBoundary/CharacterBody2D"]
 script = ExtResource("6_272bh")
@@ -37,20 +38,29 @@ placeholder_size = Vector2(20, 20)
 metadata/_custom_type_script = ExtResource("6_272bh")
 
 [node name="MoveCard" type="Node2D" parent="CardBoundary"]
-position = Vector2(252, 236)
+position = Vector2(341, 285)
 scale = Vector2(0.2, 0.2)
 script = ExtResource("4_lquwl")
-id = "3ced249e-3e8d-4cf5-881c-58472be075cc"
-incoming = Array[NodePath]([NodePath("../AxisControlsCard")])
+id = "02e51268-9ead-4e9c-8bfc-1aec28b27ad0"
+incoming = Array[NodePath]([NodePath("../CharacterBody2D"), NodePath("../AxisControlsCard"), NodePath("../Vector2Card")])
 metadata/_custom_type_script = ExtResource("4_lquwl")
 
 [node name="AxisControlsCard" type="Node2D" parent="CardBoundary"]
-position = Vector2(173, 302)
+position = Vector2(239, 289)
 scale = Vector2(0.2, 0.2)
 script = ExtResource("5_7mycd")
-id = "c270c882-df89-4d77-a760-2c7f67854f2b"
-outgoing = Array[NodePath]([NodePath("../MoveCard")])
+id = "90e87c78-49f0-438b-9ede-5504febd3271"
+outgoing = [NodePath("../MoveCard")]
 metadata/_custom_type_script = ExtResource("5_7mycd")
+
+[node name="Vector2Card" type="Node2D" parent="CardBoundary"]
+position = Vector2(410, 204)
+scale = Vector2(0.2, 0.2)
+script = ExtResource("6_5vw27")
+id = "190083a7-166a-4fea-a237-e9fa76f98494"
+outgoing = [NodePath("../MoveCard")]
+vector = Vector2(0, 0)
+metadata/_custom_type_script = ExtResource("6_5vw27")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 script = ExtResource("15_vivmo")

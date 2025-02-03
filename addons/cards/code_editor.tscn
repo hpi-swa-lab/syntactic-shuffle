@@ -11,6 +11,7 @@ multichannel_signed_distance_field = true
 [sub_resource type="CodeHighlighter" id="CodeHighlighter_mbbix"]
 
 [node name="code_editor" type="Panel"]
+z_index = 1
 custom_minimum_size = Vector2(775, 375)
 anchors_preset = 15
 anchor_right = 1.0

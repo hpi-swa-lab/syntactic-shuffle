@@ -48,6 +48,7 @@ func _init(inputs: Array[Array], outputs: Dictionary[String, Signature], process
 	self.pull_only = pull_only
 	self.source_code = source_code
 	super._init()
+	get_source_code()
 
 func clone():
 	var c = get_script().new(inputs, outputs, process, pull_only)

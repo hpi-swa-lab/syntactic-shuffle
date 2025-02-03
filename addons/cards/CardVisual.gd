@@ -26,7 +26,7 @@ var expanded = false:
 			_editor.position = %CardControl.get_rect().size / -2
 			_editor.gui_input.connect(input_event)
 			add_child(_editor)
-			_editor.attach_cards(card, _container_size)
+			await _editor.attach_cards(card, _container_size)
 			card.cards_parent.fill_rect(_editor.get_rect())
 		elif _editor:
 			_editor.detach_cards()

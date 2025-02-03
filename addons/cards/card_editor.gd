@@ -9,11 +9,12 @@ func attach_cards(card: Card, size: Vector2):
 	%Name.text = card.visual.get_title()
 	%Icon.texture_normal = card.visual.get_icon_texture()
 	
-	self.size = size
-	
 	if card.cards_parent.get_children().filter(func (c):
 		return c is Card and c.position != Vector2.ZERO).is_empty():
 		_on_auto_layout_pressed()
+	
+	await get_tree().process_frame
+	self.size = size
 
 func detach_cards():
 	%Column.remove_child(card.cards_parent)
