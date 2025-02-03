@@ -243,7 +243,15 @@ static func get_object_out_signatures(object: Node, out: Array):
 	if object is Card: return object.get_out_signatures(out)
 	for card in get_object_cards(object):
 		if card is OutCard: card.get_out_signatures(out)
-	
+static func objects_have_same_out_signatures(a: Node, b: Node):
+	var a_sig = [] as Array[Signature]
+	var b_sig = [] as Array[Signature]
+	get_object_out_signatures(a, a_sig)
+	get_object_out_signatures(b, b_sig)
+	for s1 in a_sig:
+		if not b_sig.any(func(s2): return s1.eq(s2)): return false
+	return true
+
 static func get_object_out_cards(object: Node):
 	# FIXME storing the card in meta led to serialization issues.
 	# Not sure if we will get a noticeable performance impact from recreating the

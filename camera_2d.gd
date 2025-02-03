@@ -70,8 +70,7 @@ func group_selected():
 			Card.connect_to(from, parent, named)
 			Card.object_disconnect_from(to, from)
 			Card.connect_to(input, to, named))
-	var add_output = func(from, to, named):
-		var output = OutCard.new()
+	var add_output = func(from, to, named, output):
 		output.parent = parent.cards_parent
 		parent.cards_parent.add_child(output)
 		then.push_back(func ():
@@ -81,7 +80,7 @@ func group_selected():
 	
 	for c in cards:
 		for i in c.get_incoming(): if not cards.has(i): incoming.push_back([i, c, ""])
-		for i in c.get_outgoing(): if not cards.has(i): outgoing.push_back([c, i, ""])
+		for i in c.get_outgoing(): if not cards.has(i): outgoing.push_back([c, i, "", OutCard.new()])
 		for n in c.named_incoming:
 			for p in c.named_incoming[n]:
 				var i = c.get_node(p)
@@ -89,11 +88,19 @@ func group_selected():
 		for n in c.named_outgoing:
 			for p in c.named_outgoing[n]:
 				var i = c.get_node(p)
-				if not cards.has(i): outgoing.push_back([c, i, n])
+				if not cards.has(i): outgoing.push_back([c, i, n, OutCard.new()])
 	for c in cards: CardBoundary.card_moved(c, parent.cards_parent)
 	
+	# Check for outputs that have an identical signature and merge them
+	for i in range(0, outgoing.size()):
+		for j in range(i + 1, outgoing.size()):
+			if Card.objects_have_same_out_signatures(outgoing[i][0], outgoing[j][0]):
+				outgoing[j][3].free()
+				outgoing[j][3] = outgoing[i][3]
+				break
+	
 	for pair in incoming: add_input.call(pair[0], pair[1], pair[2])
-	for pair in outgoing: add_output.call(pair[0], pair[1], pair[2])
+	for pair in outgoing: add_output.call(pair[0], pair[1], pair[2], pair[3])
 	for t in then: t.call()
 	var i_y = 0
 	var o_y = 0

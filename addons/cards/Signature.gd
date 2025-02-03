@@ -7,6 +7,7 @@ func compatible_with(other: Signature) -> bool: return false
 func get_description() -> String: return ""
 func serialize_gdscript() -> String: return ""
 func provides_data() -> bool: return false
+func eq(other: Signature): return false
 func compatible_with_command(other: CommandSignature): return other.arg and other.arg.compatible_with(self)
 func compatible_with_trigger(other: TriggerSignature): return false
 func compatible_with_generic(other: GenericTypeSignature): return false
@@ -20,6 +21,7 @@ func make_concrete(incoming: Array): return [self]
 class OutputAnySignature extends Signature:
 	func get_description(): return "* -> out"
 	func compatible_with(other: Signature): return true
+	func eq(other: Signature): return other is OutputAnySignature
 	func compatible_with_command(other: CommandSignature): return true
 	func compatible_with_trigger(other: TriggerSignature): return true
 	func compatible_with_generic(other: GenericTypeSignature): return true
@@ -35,6 +37,7 @@ class TypeSignature extends Signature:
 	func get_description(): return type
 	func serialize_gdscript(): return "t(\"{0}\")".format([type])
 	func provides_data(): return true
+	func eq(other: Signature): return other is TypeSignature and other.type == type
 	func compatible_with(other: Signature): return other.compatible_with_type(self)
 	func compatible_with_generic(other: GenericTypeSignature): return true
 	func compatible_with_type(other: TypeSignature):
@@ -54,6 +57,7 @@ class CommandSignature extends Signature:
 		self.arg = arg if arg else TriggerSignature.new()
 	func serialize_gdscript(): return "cmd(\"{0}\"{1})".format([command, ", " + arg.serialize_gdscript() if arg else ""])
 	func provides_data(): return arg.provides_data()
+	func eq(other: Signature): return other is CommandSignature and other.arg.eq(arg)
 	func get_description(): return ">{0}[{1}]".format([command, arg.get_description()]) if arg else ">{0}".format([command])
 	func compatible_with(other: Signature): return other.compatible_with_command(self)
 	func compatible_with_command(other: CommandSignature):
@@ -63,6 +67,7 @@ class GenericTypeSignature extends Signature:
 	func get_description(): return "*"
 	func provides_data(): return true
 	func serialize_gdscript(): return "any()"
+	func eq(other: Signature): return other is GenericTypeSignature
 	func compatible_with(other: Signature): return other.compatible_with_generic(self)
 	func compatible_with_type(other: Signature): return true
 	func compatible_with_generic(other: GenericTypeSignature): return true
@@ -76,6 +81,7 @@ class GenericTypeSignature extends Signature:
 class TriggerSignature extends Signature:
 	func get_description(): return "[TRIGGER]"
 	func serialize_gdscript(): return "trg()"
+	func eq(other: Signature): return other is TriggerSignature
 	func compatible_with(other: Signature): return other.compatible_with_trigger(self)
 	func compatible_with_trigger(other: TriggerSignature): return true
 
@@ -84,11 +90,13 @@ class IteratorSignature extends Signature:
 	func _init(type: Signature):
 		self.type = type
 	func serialize_gdscript(): return ""
+	func eq(other: Signature): return other is IteratorSignature and type.eq(other.type)
 	func compatible_with(other: Signature): return other.compatible_with_iterator(self)
 	func get_description(): return "Iterator<{0}>".format([type.get_description()])
 	func compatible_with_iterator(other: IteratorSignature): return other.type.compatible_with(type)
 
 class VoidSignature extends Signature:
+	func eq(other: Signature): return other is VoidSignature
 	func get_description(): return "<void>"
 	func serialize_gdscript(): return "none()"
 	func compatible_with(other: Signature): return false
@@ -99,6 +107,7 @@ class GroupSignature extends Signature:
 	func get_description(): return "Group({0})".format([",".join(group_names)])
 	func serialize_gdscript(): return "grp(" + ", ".join(group_names) + ")"
 	func provides_data(): return true
+	func eq(other: Signature): return other is GroupSignature and other.group_names == group_names
 	func compatible_with(other: Signature): return other.compatible_with_group(self)
 	func compatible_with_group(other: GroupSignature): return group_names.any(func(g): return other.group_names.has(g))
 
@@ -109,6 +118,7 @@ class StructSignature extends Signature:
 		self.props = props
 		self.methods = methods
 	func provides_data(): return true
+	func eq(other: Signature): return other is StructSignature and other.props == props and other.methods == methods
 	func serialize_gdscript(): push_error("not yet implemented")
 	func get_description():
 		var out = "@"

@@ -297,8 +297,30 @@ func test_type_of_subscribe_in_card():
 	assert_eq(out[1].command, "connect")
 	assert_eq(out[2].command, "disconnect")
 
+func test_group_with_overlapping_outputs_merges(ready):
+	var a_minus_card = MinusCard.new()
+	var b_minus_card = MinusCard.new()
+	var a_r = RememberCard.new()
+	var b_r = RememberCard.new()
+	var a = NumberCard.new()
+	var b = NumberCard.new()
+	a.c(a_r)
+	b.c(b_r)
+	a_r.c(a_minus_card)
+	b_r.c(b_minus_card)
+	ready.call()
+	
+	var cam = CardCamera.new()
+	cam.add_to_selection(a_r)
+	cam.add_to_selection(b_r)
+	cam.add_to_selection(a)
+	cam.add_to_selection(b)
+	
+	var container = cam.group_selected()
+	assert_eq(container.cards.filter(func (c): return c is OutCard).size(), 1)
+
 func test_group_with_overlapping_inputs_produces_named_inputs(ready):
-	var minus_card = MoveCard.new()
+	var minus_card = MinusCard.new()
 	var a_r = RememberCard.new()
 	var b_r = RememberCard.new()
 	var a = NumberCard.new()
