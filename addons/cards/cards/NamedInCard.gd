@@ -39,7 +39,7 @@ func try_connect_in(them: Node):
 		# don't allow them to appear in multiple connections to us
 		if named[name].has(p): return
 		# only allow one connection to us
-		if name == input_name and not named[name].is_empty(): return
+		if name == input_name and not parent.get_named_incoming_at(name).is_empty(): return
 	
 	var my_signatures = get_concrete_signatures()
 	for card in get_object_cards(them):

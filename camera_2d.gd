@@ -1,4 +1,5 @@
 extends Camera2D
+class_name CardCamera
 
 @export var zoom_speed = 0.1
 @export var pan = true
@@ -9,7 +10,7 @@ var selection = {}
 
 func clear_selection():
 	for card in selection:
-		if is_instance_valid(card): card.visual.on_deselected()
+		if is_instance_valid(card) and card.visual: card.visual.on_deselected()
 	selection.clear()
 
 func set_as_selection(obj: Node):
@@ -21,7 +22,7 @@ func is_selected(obj: Node):
 
 func add_to_selection(obj: Node):
 	selection[obj] = true
-	obj.visual.on_selected()
+	if obj.visual: obj.visual.on_selected()
 
 func consider_selection(obj: Node):
 	if selecting: add_to_selection(obj)
@@ -53,8 +54,11 @@ func group_selected():
 	var parent = BlankCard.new()
 	cards[0].get_parent().add_child(parent)
 	parent.position = cards.map(func(c): return c.position).reduce(func (sum, v): return sum + v) / cards.size() - CardVisual.DEFAULT_EDITOR_SIZE * parent.get_base_scale() * 0.25
-	parent.visual.expanded = true
+	if parent.visual: parent.visual.expanded = true
+	
 	var then = []
+	var incoming = []
+	var outgoing = []
 	var add_input = func(from, to, named):
 		var sig = [] as Array[Signature]
 		Card.get_object_out_signatures(from, sig)
@@ -75,8 +79,6 @@ func group_selected():
 			Card.object_disconnect_from(from, to)
 			from.c(output))
 	
-	var incoming = []
-	var outgoing = []
 	for c in cards:
 		for i in c.get_incoming(): if not cards.has(i): incoming.push_back([i, c, ""])
 		for i in c.get_outgoing(): if not cards.has(i): outgoing.push_back([c, i, ""])
@@ -88,12 +90,22 @@ func group_selected():
 			for p in c.named_outgoing[n]:
 				var i = c.get_node(p)
 				if not cards.has(i): outgoing.push_back([c, i, n])
-	for c in cards:
-		CardBoundary.card_moved(c, parent.cards_parent)
+	for c in cards: CardBoundary.card_moved(c, parent.cards_parent)
 	
 	for pair in incoming: add_input.call(pair[0], pair[1], pair[2])
 	for pair in outgoing: add_output.call(pair[0], pair[1], pair[2])
 	for t in then: t.call()
+	var i_y = 0
+	var o_y = 0
+	for i in parent.cards:
+		if i is InCard:
+			i.position = Vector2(100, 400 * i_y + 400)
+			i_y += 1
+		if i is OutCard:
+			i.position = Vector2(CardVisual.DEFAULT_EDITOR_SIZE.x - 100, 400 * o_y + 400)
+			o_y += 1
+	
+	return parent
 
 func _ready(): Card.set_ignore_object(self)
 

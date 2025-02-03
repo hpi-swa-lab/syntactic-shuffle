@@ -38,12 +38,10 @@ func _ready():
 	if not Engine.is_editor_hint(): run()
 
 func run_cards_test(test):
-	var card = Card.new()
-	Card.push_active_card_list(card)
 	if test.get_argument_count() > 0:
-		test.call(func ():
-			# for c in card.cards: c.setup(null)
-			Card.pop_active_card_list())
+		var card = Card.new()
+		Card.push_active_card_list(card)
+		test.call(func (): Card.pop_active_card_list())
 	else:
 		test.call()
 
@@ -199,7 +197,7 @@ func test_casting_generic_signature(ready):
 	assert_compatible(signatures[0], Signature.TypeSignature.new("float"))
 	assert_not_compatible(signatures[0], Signature.TypeSignature.new("Vector2"))
 
-func test_derive_output_types_from_incoming():
+func test_derive_output_types_from_incoming(ready):
 	var num = NumberCard.new()
 	var vector = Vector2Card.new()
 	var c = Card.new(func ():
@@ -212,6 +210,7 @@ func test_derive_output_types_from_incoming():
 		in2.c(out2))
 	
 	num.c(c)
+	ready.call()
 	
 	var out = [] as Array[Signature]
 	c.get_out_signatures(out)
@@ -253,12 +252,13 @@ func test_derive_output_types_axis_controls():
 	assert_eq(out[0].get_description(), "Vector2")
 
 
-func test_derive_output_types_minus():
+func test_derive_output_types_minus(ready):
 	var v1 = Vector2Card.new()
 	var v2 = Vector2Card.new()
 	var c = MinusCard.new()
 	v1.c_named("left_vector", c)
 	v2.c_named("right_vector", c)
+	ready.call()
 	
 	var out = [] as Array[Signature]
 	c.get_out_signatures(out)
@@ -276,12 +276,13 @@ func test_cannot_connect_to_concrete_generic(ready):
 	assert(store_card.get_all_connected().has(number_card))
 	assert(not store_card.get_all_connected().has(bool_card))
 
-func test_derive_type_from_code_card():
+func test_derive_type_from_code_card(ready):
 	var code_card = CodeCard.new([],
 		{"out_float": Signature.TypeSignature.new("float"), "out_vec": Signature.TypeSignature.new("Vector2")},
 		func(card): pass)
 	var store_card = StoreCard.new()
 	code_card.c(store_card)
+	ready.call()
 	
 	var out = [] as Array[Signature]
 	store_card.get_out_signatures(out)
@@ -295,3 +296,24 @@ func test_type_of_subscribe_in_card():
 	assert_eq(out.size(), 3)
 	assert_eq(out[1].command, "connect")
 	assert_eq(out[2].command, "disconnect")
+
+func test_group_with_overlapping_inputs_produces_named_inputs(ready):
+	var minus_card = MoveCard.new()
+	var a_r = RememberCard.new()
+	var b_r = RememberCard.new()
+	var a = NumberCard.new()
+	var b = NumberCard.new()
+	a.c(a_r)
+	b.c(b_r)
+	a_r.c(minus_card)
+	b_r.c(minus_card)
+	ready.call()
+	
+	var cam = CardCamera.new()
+	cam.add_to_selection(a_r)
+	cam.add_to_selection(b_r)
+	cam.add_to_selection(minus_card)
+	
+	var container = cam.group_selected()
+	assert_eq(container.cards.filter(func (c): return c is InCard).size(), 2)
+	assert_eq(container.cards.filter(func (c): return c is NamedInCard).size(), 2)

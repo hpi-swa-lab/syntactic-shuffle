@@ -127,9 +127,10 @@ func card_entered(card: Card):
 	#card.editor_sync_prop("paused")
 	#card.editor_sync_prop("disabled")
 	#card.editor_sync("cards:move_boundary", [card.id, Card.get_id(self)])
-	var tween = card.visual.create_tween()
-	tween.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC) \
-		.tween_property(card, "scale", Vector2(card_scale, card_scale), 0.25)
+	if card.visual:
+		var tween = card.visual.create_tween()
+		tween.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC) \
+			.tween_property(card, "scale", Vector2(card_scale, card_scale), 0.25)
 
 func card_picked_up(card: Card):
 	card.create_tween().tween_property(card, "rotation", 0, 0.1).set_trans(Tween.TRANS_EXPO)
