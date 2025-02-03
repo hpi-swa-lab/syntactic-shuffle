@@ -341,3 +341,13 @@ func test_group_with_overlapping_inputs_produces_named_inputs(ready):
 	var container = cam.group_selected()
 	assert_eq(container.cards.filter(func (c): return c is InCard).size(), 2)
 	assert_eq(container.cards.filter(func (c): return c is NamedInCard).size(), 2)
+
+func test_dedent():
+	assert_eq(CodeEditor.dedent("a
+		b
+			c
+		d"), "a
+b
+	c
+d
+")

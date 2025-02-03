@@ -1,4 +1,5 @@
-extends Panel
+extends PanelContainer
+class_name CodeEditor
 
 var card: CodeCard
 
@@ -12,15 +13,30 @@ func attach_cards(card: CodeCard, size: Vector2):
 	for output in card.outputs:
 		%outputs.add_child(build_field(output, card.outputs[output], false))
 	
-	%code.text = dedent(card.get_source_code())
+	var regex = RegEx.new()
+	regex.compile(r"^\s*func\s*\(.+\):\s*")
+	
+	%code.text = dedent(regex.sub(card.get_source_code(), ""))
 	fake_a_godot_highlighter()
 	
+	update_function_signature()
 	_resize()
 
 func detach_cards(): pass
 
 func _resize():
 	custom_minimum_size = %Content.get_combined_minimum_size()
+
+func get_current_inputs():
+	return Array(%inputs.get_children().map(func(box): return [box.get_child(0).text, box.get_child(1).signature]), TYPE_ARRAY, "", null)
+
+func get_function_signature():
+	var inputs = get_current_inputs().filter(func (pair): return pair[1].provides_data()).map(func (pair): return pair[0])
+	inputs.push_front("card")
+	return "func ({0}):".format([", ".join(inputs)])
+
+func update_function_signature():
+	%FunctionSignature.text = get_function_signature()
 
 func build_field(name: String, signature: Signature, is_input: bool):
 	var box = VBoxContainer.new()
@@ -32,8 +48,12 @@ func build_field(name: String, signature: Signature, is_input: bool):
 	label.add_theme_color_override("font_color", Color.BLACK)
 	box.add_child(label)
 	
+	if is_input:
+		label.text_changed.connect(func (s): update_function_signature())
+	
 	var editor = preload("res://addons/cards/signature/signature_edit.tscn").instantiate()
 	editor.signature = signature
+	editor.on_edit.connect(func (s): update_function_signature())
 	box.add_child(editor)
 	
 	if is_input:
@@ -53,10 +73,11 @@ func build_field(name: String, signature: Signature, is_input: bool):
 
 func _on_add_input_pressed() -> void:
 	%inputs.add_child(build_field("", Signature.VoidSignature.new(), true))
+	update_function_signature()
 	_resize()
 
 func _on_add_output_pressed() -> void:
-	%outputs.add_child(build_field("", Signature.VoidSignature.new(), false))
+	%outputs.add_child(build_field("out", Signature.TypeSignature.new(""), false))
 	_resize()
 
 func _on_code_gui_input(event: InputEvent) -> void:
@@ -73,7 +94,7 @@ func _on_save_pressed() -> void:
 		.map(func (c): return c.get_meta("pull_only"))
 		.filter(func (c): return c.button_pressed)
 		.map(func (c): return c.get_meta("input_name").text))
-	card.inputs = Array(%inputs.get_children().map(func(box): return [box.get_child(0).text, box.get_child(1).signature]), TYPE_ARRAY, "", null)
+	card.inputs = get_current_inputs()
 	var outputs = %outputs.get_children().map(func(box): return [box.get_child(0).text, box.get_child(1).signature])
 	var o = {}
 	for pair in outputs:
@@ -85,7 +106,7 @@ func _on_save_pressed() -> void:
 
 func save_process_callable():
 	var s = GDScript.new()
-	var src = indent(%code.text)
+	var src = indent(get_function_signature() + %code.text)
 	s.source_code = "extends Object\nfunc build():\n\treturn {0}".format([src])
 	if s.reload() != OK:
 		return null
@@ -97,8 +118,32 @@ func save_process_callable():
 func indent(src: String):
 	return "\n".join(Array(src.split("\n")).map(func (l): return "\t" + l if not l.begins_with("func(") else l))
 
-func dedent(src: String):
-	return "\n".join(Array(src.split("\n")).map(func (l): return l.substr(1) if l.begins_with("\t") else l))
+static func dedent(src: String):
+	var prefix_length = RegEx.new()
+	prefix_length.compile(r"^\s*")
+	
+	var lines = Array(src.split("\n"))
+	var min_indent = 9e8
+	var first = true
+	for line in lines:
+		if first:
+			first = false
+			continue
+		var m = prefix_length.search(line)
+		if m.strings[0].length() == line.length(): continue
+		min_indent = min(min_indent, m.strings[0].length())
+	
+	first = true
+	var out = ""
+	for line in lines:
+		if first:
+			first = false
+			out += line + "\n"
+			continue
+		if line.length() > min_indent:
+			out += line.substr(min_indent) + "\n"
+	
+	return out
 
 func fake_a_godot_highlighter():
 	var h = CodeHighlighter.new()

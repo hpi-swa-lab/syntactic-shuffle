@@ -2,15 +2,11 @@
 
 [ext_resource type="StyleBox" uid="uid://j74ua1l732mg" path="res://addons/cards/editor_background.tres" id="1_8j6k0"]
 [ext_resource type="Script" uid="uid://b84rrltlwbto7" path="res://addons/cards/code_editor.gd" id="2_mbbix"]
-
-[sub_resource type="SystemFont" id="SystemFont_mbbix"]
-font_names = PackedStringArray("Monospace")
-hinting = 2
-multichannel_signed_distance_field = true
+[ext_resource type="SystemFont" uid="uid://bdyq6rfvc0fcm" path="res://addons/cards/monospace_font.tres" id="3_mx76x"]
 
 [sub_resource type="CodeHighlighter" id="CodeHighlighter_mbbix"]
 
-[node name="code_editor" type="Panel"]
+[node name="code_editor" type="PanelContainer"]
 z_index = 1
 custom_minimum_size = Vector2(775, 375)
 anchors_preset = 15
@@ -25,12 +21,7 @@ script = ExtResource("2_mbbix")
 
 [node name="Content" type="MarginContainer" parent="."]
 unique_name_in_owner = true
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+layout_mode = 2
 theme_override_constants/margin_left = 12
 theme_override_constants/margin_top = 12
 theme_override_constants/margin_right = 12
@@ -53,7 +44,21 @@ theme_override_constants/separation = 24
 layout_mode = 2
 text = "Add Input"
 
-[node name="code" type="CodeEdit" parent="Content/HBoxContainer"]
+[node name="VBoxContainer3" type="VBoxContainer" parent="Content/HBoxContainer"]
+layout_mode = 2
+
+[node name="FunctionSignature" type="Label" parent="Content/HBoxContainer/VBoxContainer3"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("3_mx76x")
+text = "func (card):"
+
+[node name="MarginContainer" type="MarginContainer" parent="Content/HBoxContainer/VBoxContainer3"]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+
+[node name="code" type="CodeEdit" parent="Content/HBoxContainer/VBoxContainer3/MarginContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(500, 0)
 layout_mode = 2
@@ -65,9 +70,8 @@ theme_override_colors/font_placeholder_color = Color(0.625597, 0.625597, 0.62559
 theme_override_colors/font_color = Color(0.122252, 0.122252, 0.122252, 1)
 theme_override_colors/selection_color = Color(0.610642, 0.874813, 0.990653, 1)
 theme_override_colors/caret_color = Color(0, 0, 0, 1)
-theme_override_fonts/font = SubResource("SystemFont_mbbix")
-placeholder_text = "func (card, ...):
-	card.output(\"...\", [])"
+theme_override_fonts/font = ExtResource("3_mx76x")
+placeholder_text = "card.output(\"...\", [])"
 wrap_mode = 1
 scroll_fit_content_height = true
 caret_blink = true
@@ -102,6 +106,6 @@ layout_mode = 2
 text = "Save"
 
 [connection signal="pressed" from="Content/HBoxContainer/VBoxContainer/AddInput" to="." method="_on_add_input_pressed"]
-[connection signal="gui_input" from="Content/HBoxContainer/code" to="." method="_on_code_gui_input"]
+[connection signal="gui_input" from="Content/HBoxContainer/VBoxContainer3/MarginContainer/code" to="." method="_on_code_gui_input"]
 [connection signal="pressed" from="Content/HBoxContainer/VBoxContainer2/AddOutput" to="." method="_on_add_output_pressed"]
 [connection signal="pressed" from="Content/HBoxContainer/VBoxContainer2/Save" to="." method="_on_save_pressed"]

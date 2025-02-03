@@ -65,7 +65,9 @@ func child_signature(prop_name: String, label: String):
 	
 	var l = preload("res://addons/cards/signature/signature_edit.tscn").instantiate()
 	l.signature = signature.get(prop_name)
-	l.on_edit.connect(func (s): signature.set(prop_name, s))
+	l.on_edit.connect(func (s):
+		signature.set(prop_name, s)
+		on_edit.emit(signature))
 	add_child(l)
 
 func _selected_name(): return $Subclass.get_item_text($Subclass.selected)

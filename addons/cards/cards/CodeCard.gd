@@ -51,9 +51,7 @@ func _init(inputs: Array[Array], outputs: Dictionary[String, Signature], process
 	get_source_code()
 
 func clone():
-	var c = get_script().new(inputs, outputs, process, pull_only)
-	c.source_code = source_code
-	return c
+	return get_script().new(inputs, outputs, process, pull_only, source_code)
 
 var outputs: Dictionary[String, Signature]
 var process: Callable
