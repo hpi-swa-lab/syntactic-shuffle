@@ -72,11 +72,11 @@ func v():
 	visual.short_description()
 
 func s():
-	for output in outputs:
-		OutCard.static_signature(outputs[output])
-	
 	for pair in inputs:
 		NamedInCard.new(pair[0], pair[1])
+	
+	for output in outputs:
+		OutCard.static_signature(outputs[output])
 
 func rebuild_inputs_outputs():
 	for card in cards: card.queue_free()

@@ -13,6 +13,9 @@ func clear_selection():
 		if is_instance_valid(card) and card.visual: card.visual.on_deselected()
 	selection.clear()
 
+func get_selection():
+	return selection.keys().filter(func (k): return is_instance_valid(k))
+
 func set_as_selection(obj: Node):
 	clear_selection()
 	add_to_selection(obj)

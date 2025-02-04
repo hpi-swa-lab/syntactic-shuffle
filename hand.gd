@@ -2,7 +2,7 @@ extends CanvasLayer
 
 var categories = {
 	"Abstraction": [
-		CodeCard.new([], {}, func(_card): pass, [], "func(_card): pass"),
+		CodeCard.new([], {"out": Signature.TypeSignature.new("")}, func(_card): pass, [], "func(_card): card.output(\"out\", [null])"),
 		CellCard.new("value", "float", 0.0),
 		FilterSignaturesCard.new(Signature.VoidSignature.new()),
 		"StoreCard",

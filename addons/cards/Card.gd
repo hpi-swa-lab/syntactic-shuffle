@@ -115,6 +115,11 @@ func _ready() -> void:
 
 var cards_parent = CardBoundary.new()
 
+func add_card(card: Card):
+	cards_parent.add_child(card)
+	card.parent = self
+	return card
+
 ## Setup function DSL
 func s(): pass
 func v(): pass
@@ -413,6 +418,9 @@ func _set(property, value):
 	return false
 
 func can_edit(): return true
+
+func get_selection_manager() -> CardCamera:
+	return visual.get_selection_manager()
 
 func get_card_name():
 	return get_script().get_global_name()

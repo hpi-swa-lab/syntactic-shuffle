@@ -1,17 +1,19 @@
 extends PanelContainer
 class_name CodeEditor
 
-var card: CodeCard
+var code_card: CodeCard
 
 func attach_cards(card: CodeCard, size: Vector2):
 	assert(card is CodeCard)
 	
-	self.card = card
+	self.code_card = card
 	
-	for input in card.inputs:
-		%inputs.add_child(build_field(input[0], input[1], true))
-	for output in card.outputs:
-		%outputs.add_child(build_field(output, card.outputs[output], false))
+	for input in card.cards:
+		if input is NamedInCard:
+			%inputs.add_child(build_field(input.input_name, input))
+	for name in card.outputs:
+		var output = card.cards.filter(func (c): return c is OutCard and c.signature.eq(card.outputs[name]))[0]
+		%outputs.add_child(build_field(name, output))
 	
 	var regex = RegEx.new()
 	regex.compile(r"^\s*func\s*\(.+\):\s*")
@@ -28,7 +30,7 @@ func _resize():
 	custom_minimum_size = %Content.get_combined_minimum_size()
 
 func get_current_inputs():
-	return Array(%inputs.get_children().map(func(box): return [box.get_child(0).text, box.get_child(1).signature]), TYPE_ARRAY, "", null)
+	return Array(%inputs.get_children().map(func(box): return [box.get_meta("name").text, box.get_meta("signature").signature]), TYPE_ARRAY, "", null)
 
 func get_function_signature():
 	var inputs = get_current_inputs().filter(func (pair): return pair[1].provides_data()).map(func (pair): return pair[0])
@@ -37,26 +39,66 @@ func get_function_signature():
 
 func update_function_signature():
 	%FunctionSignature.text = get_function_signature()
+	save_inputs_outputs()
 
-func build_field(name: String, signature: Signature, is_input: bool):
+func build_field(name: String, card: Card):
 	var box = VBoxContainer.new()
 	
 	var label = LineEdit.new()
 	label.text = name
-	label.placeholder_text = "Input..." if is_input else "Output..."
-	label.add_theme_font_size_override("font_size", 30)
+	label.placeholder_text = "Input..." if card is InCard else "Output..."
+	label.add_theme_font_size_override("font_size", 22)
 	label.add_theme_color_override("font_color", Color.BLACK)
 	box.add_child(label)
+	box.set_meta("name", label)
 	
-	if is_input:
-		label.text_changed.connect(func (s): update_function_signature())
+	if card is InCard:
+		label.text_changed.connect(func (s):
+			card.rename(s)
+			update_function_signature())
+	
+	var sig = VBoxContainer.new()
+	sig.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	
 	var editor = preload("res://addons/cards/signature/signature_edit.tscn").instantiate()
-	editor.signature = signature
-	editor.on_edit.connect(func (s): update_function_signature())
-	box.add_child(editor)
+	editor.signature = card.signature
+	editor.on_edit.connect(func (s):
+		update_function_signature()
+		card.signature = s)
+	box.set_meta("signature", editor)
 	
-	if is_input:
+	sig.add_child(editor)
+	
+	var row = HBoxContainer.new()
+	row.add_child(sig)
+	var buttons = VBoxContainer.new()
+	var remove = Button.new()
+	remove.focus_mode = Control.FOCUS_CLICK
+	remove.text = "×"
+	remove.pressed.connect(func():
+		box.queue_free()
+		await get_tree().process_frame
+		update_function_signature())
+	buttons.add_child(remove)
+	var up = Button.new()
+	up.text = "↑"
+	up.focus_mode = Control.FOCUS_CLICK
+	up.pressed.connect(func():
+		box.get_parent().move_child(box, box.get_index() - 1)
+		update_function_signature())
+	buttons.add_child(up)
+	var down = Button.new()
+	down.focus_mode = Control.FOCUS_CLICK
+	down.text = "↓"
+	down.pressed.connect(func():
+		box.get_parent().move_child(box, box.get_index() + 1)
+		update_function_signature())
+	buttons.add_child(down)
+	row.add_child(buttons)
+	
+	box.add_child(row)
+	
+	if card is InCard:
 		var pull = CheckBox.new()
 		pull.set_meta("input_name", label)
 		pull.text = "Pull only"
@@ -65,19 +107,44 @@ func build_field(name: String, signature: Signature, is_input: bool):
 		pull.add_theme_color_override("font_focus_color", Color.BLACK)
 		pull.add_theme_color_override("font_hover_color", Color.BLACK)
 		pull.add_theme_color_override("font_hover_pressed_color", Color.BLACK)
-		pull.button_pressed = card.pull_only.has(name)
-		box.add_child(pull)
+		pull.button_pressed = card.parent.pull_only.has(name)
+		pull.pressed.connect(func(): save_pull_list())
+		sig.add_child(pull)
 		box.set_meta("pull_only", pull)
+	
+	box.add_child(HSeparator.new())
 	
 	return box
 
 func _on_add_input_pressed() -> void:
-	%inputs.add_child(build_field("", Signature.VoidSignature.new(), true))
+	%inputs.add_child(build_field("", code_card.add_card(NamedInCard.named_data("", Signature.TypeSignature.new("")))))
 	update_function_signature()
 	_resize()
 
+func _on_add_selected_pressed() -> void:
+	var names = {}
+	var connections = []
+	for selected in code_card.get_selection_manager().get_selection():
+		if selected == code_card: continue
+		var sig = [] as Array[Signature]
+		Card.get_object_out_signatures(selected, sig)
+		# FIXME picking first
+		sig = sig[0]
+		
+		var name = sig.get_description().to_snake_case()
+		var counter = names.get(name, 0)
+		names.set(name, counter + 1)
+		if counter > 0: name = name + "_" + str(counter)
+		
+		%inputs.add_child(build_field(name, code_card.add_card(NamedInCard.named_data(name, sig))))
+		connections.push_back([name, selected])
+	
+	update_function_signature()
+	_resize()
+	for pair in connections: pair[1].c_named(pair[0], code_card)
+
 func _on_add_output_pressed() -> void:
-	%outputs.add_child(build_field("out", Signature.TypeSignature.new(""), false))
+	%outputs.add_child(build_field("out", code_card.add_card(OutCard.static_signature(Signature.TypeSignature.new("")))))
 	_resize()
 
 func _on_code_gui_input(event: InputEvent) -> void:
@@ -90,19 +157,22 @@ func _on_code_gui_input(event: InputEvent) -> void:
 
 func _on_save_pressed() -> void:
 	save_process_callable()
-	card.pull_only = (%inputs.get_children()
+	save_inputs_outputs()
+	code_card.visual.expanded = false
+
+func save_pull_list():
+	code_card.pull_only = (%inputs.get_children()
 		.map(func (c): return c.get_meta("pull_only"))
 		.filter(func (c): return c.button_pressed)
 		.map(func (c): return c.get_meta("input_name").text))
-	card.inputs = get_current_inputs()
-	var outputs = %outputs.get_children().map(func(box): return [box.get_child(0).text, box.get_child(1).signature])
+
+func save_inputs_outputs():
+	code_card.inputs = get_current_inputs()
+	var outputs = %outputs.get_children().map(func(box): return [box.get_meta("name").text, box.get_meta("signature").signature])
 	var o = {}
 	for pair in outputs:
 		o[pair[0]] = pair[1]
-	card.outputs = Dictionary(o, TYPE_STRING, "", null, TYPE_OBJECT, "Object", Signature)
-	card.rebuild_inputs_outputs()
-	
-	card.visual.expanded = false
+	code_card.outputs = Dictionary(o, TYPE_STRING, "", null, TYPE_OBJECT, "Object", Signature)
 
 func save_process_callable():
 	var s = GDScript.new()
@@ -112,8 +182,8 @@ func save_process_callable():
 		return null
 	var obj = Object.new()
 	obj.set_script(s)
-	card.process = obj.build()
-	card.source_code = src
+	code_card.process = obj.build()
+	code_card.source_code = src
 
 func indent(src: String):
 	return "\n".join(Array(src.split("\n")).map(func (l): return "\t" + l if not l.begins_with("func(") else l))
