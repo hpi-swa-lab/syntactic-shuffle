@@ -25,6 +25,9 @@ func _on_save_button_pressed() -> void:
 	if card is BlankCard:
 		assert(%Name.text)
 		var n = %Name.text.to_camel_case().capitalize() + "Card"
+		var regex = RegEx.new()
+		regex.compile(r"[^A-Za-z0-9]")
+		n = regex.sub(n, "", true)
 		path = "res://addons/cards/cards/{0}.gd".format([n])
 		src = card.serialize_gdscript(n, size)
 	else:

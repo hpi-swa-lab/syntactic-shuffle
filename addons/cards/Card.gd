@@ -458,6 +458,7 @@ func s():
 	})
 
 static func serialize_card_construction(cards: Array):
+	if cards.is_empty(): return "pass"
 	var cards_desc = ""
 	var var_names = {}
 	var count = {}

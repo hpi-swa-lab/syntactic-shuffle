@@ -157,19 +157,6 @@ func _zoom(factor: float) -> void:
 	position += delta
 
 func _input(event: InputEvent) -> void:
-	if event is InputEventPanGesture:
-		_zoom(-1 * event.delta.y * zoom.x)
-	if event is InputEventMouseButton:
-		var factor = 0
-		match event.button_index:
-			MOUSE_BUTTON_WHEEL_DOWN: factor = -1
-			MOUSE_BUTTON_WHEEL_UP: factor = 1
-			_: factor = 0
-		
-		if factor != 0:
-			factor *= event.factor * zoom_speed * zoom.x
-			_zoom(factor)
-	
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and pan:
 		held = event.is_pressed()
 	if event is InputEventMouseMotion and held:
@@ -179,9 +166,20 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		selecting = event.is_pressed()
 		if selecting: clear_selection()
-	if event is InputEventKey and event.key_label == KEY_DELETE and event.pressed:
+	if event is InputEventKey and (event.key_label == KEY_DELETE or event.key_label == KEY_BACKSPACE) and event.pressed:
 		delete_selected()
 	if event is InputEventKey and event.key_label == KEY_D and event.ctrl_pressed and event.pressed:
 		duplicate_selected()
 	if event is InputEventKey and event.key_label == KEY_G and event.ctrl_pressed and event.pressed:
 		group_selected()
+	if event is InputEventKey and event.key_label == KEY_0 and event.ctrl_pressed and event.pressed:
+		G.at("search").grab_focus()
+	if event is InputEventPanGesture:
+		_zoom(-1 * event.delta.y * zoom.x)
+	if event is InputEventMouseButton:
+		var factor = 0
+		match event.button_index:
+			MOUSE_BUTTON_WHEEL_DOWN: factor = -1
+			MOUSE_BUTTON_WHEEL_UP: factor = 1
+			_: factor = 0
+		if factor != 0: _zoom(factor * event.factor * zoom_speed * zoom.x)

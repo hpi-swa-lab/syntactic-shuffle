@@ -49,8 +49,23 @@ var categories = {
 
 func _ready() -> void:
 	var column = VBoxContainer.new()
-	column.position = Vector2(0, 80)
+	column.position = Vector2(0, 0)
 	add_child(column)
+	
+	var items = []
+	var list = ItemList.new()
+	G.put("search", list)
+	list.item_activated.connect(func (index):
+		var card = load(items[index]).new()
+		card.position = get_viewport().get_camera_2d().position
+		# FIXME
+		get_node("/root/main/CardBoundary").add_child(card))
+	list.custom_minimum_size = Vector2(300, 80)
+	for info in ProjectSettings.get_global_class_list():
+		if info["base"] == "Card":
+			list.add_item(info["class"])
+			items.push_back(info["path"])
+	column.add_child(list)
 	
 	for category in categories:
 		var label = Label.new()
@@ -88,5 +103,14 @@ func _ready() -> void:
 		column.add_spacer(false)
 	
 	var t = Trash.new()
-	t.position = Vector2(60, categories.size() * 145)
+	t.position = Vector2(60, 80 + categories.size() * 145)
 	column.add_child(t)
+
+func find_classes():
+	var classes = []
+	var regex = RegEx.new()
+	for file in DirAccess.get_files_at("res://addons/cards/cards"):
+		if file.get_extension() != "gd": continue
+		var name = file.get_basename()
+		classes.push_back(name)
+	return classes
