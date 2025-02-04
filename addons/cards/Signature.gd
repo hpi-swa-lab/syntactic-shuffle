@@ -206,4 +206,6 @@ static func data_to_expression(data):
 		return "Vector2" + str(data)
 	if data is String:
 		return "\"" + data.replace("\"", "\\\"") + "\""
+	if data == null:
+		return "null"
 	return str(data)

@@ -29,6 +29,9 @@ func detach_cards(): pass
 func _resize():
 	custom_minimum_size = %Content.get_combined_minimum_size()
 
+func report_error(s: String):
+	%Error.text = s
+
 func get_current_inputs():
 	return Array(%inputs.get_children().map(func(box): return [box.get_meta("name").text, box.get_meta("signature").signature]), TYPE_ARRAY, "", null)
 
@@ -56,6 +59,8 @@ func build_field(name: String, card: Card):
 		label.text_changed.connect(func (s):
 			card.rename(s)
 			update_function_signature())
+	else:
+		label.text_changed.connect(func (s): save_outputs())
 	
 	var sig = VBoxContainer.new()
 	sig.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -156,7 +161,7 @@ func _on_code_gui_input(event: InputEvent) -> void:
 			_on_save_pressed()
 
 func _on_save_pressed() -> void:
-	save_process_callable()
+	if not save_process_callable(): return
 	save_inputs_outputs()
 	code_card.visual.expanded = false
 
@@ -168,6 +173,9 @@ func save_pull_list():
 
 func save_inputs_outputs():
 	code_card.inputs = get_current_inputs()
+	save_outputs()
+
+func save_outputs():
 	var outputs = %outputs.get_children().map(func(box): return [box.get_meta("name").text, box.get_meta("signature").signature])
 	var o = {}
 	for pair in outputs:
@@ -176,14 +184,16 @@ func save_inputs_outputs():
 
 func save_process_callable():
 	var s = GDScript.new()
-	var src = indent(get_function_signature() + %code.text)
+	var src = get_function_signature() + "\n" + %code.text.indent("\t\t")
+	print(src)
 	s.source_code = "extends Object\nfunc build():\n\treturn {0}".format([src])
 	if s.reload() != OK:
-		return null
+		return false
 	var obj = Object.new()
 	obj.set_script(s)
 	code_card.process = obj.build()
 	code_card.source_code = src
+	return true
 
 func indent(src: String):
 	return "\n".join(Array(src.split("\n")).map(func (l): return "\t" + l if not l.begins_with("func(") else l))

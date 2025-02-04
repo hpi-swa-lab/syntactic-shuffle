@@ -3,6 +3,7 @@ extends Card
 class_name CellCard
 
 var out_card: OutCard
+var type_signature: Signature.CommandSignature
 
 static func create(name: String, type: String, data: Variant):
 	var c = CellCard.new(name, type, data)
@@ -36,8 +37,10 @@ func clone():
 			if v:
 				out_card.has_static_signature = true
 				out_card.signature = Signature.TypeSignature.new(v)
+				type_signature.arg = out_card.signature
 			else:
 				out_card.has_static_signature = false
+				type_signature.arg = Signature.GenericTypeSignature.new()
 var update_ui_func = null
 
 func can_edit(): return false
@@ -67,15 +70,14 @@ func v():
 
 func s():
 	out_card = OutCard.remember([data], Signature.TypeSignature.new(type))
-	# refresh type info
-	self.type = type
 	
 	var code_card = CodeCard.create([["arg", cmd("store", any())]], {"out": any()}, func (card, arg):
 		data = arg
 		card.output("out", [data]))
 	code_card.c(out_card)
 	
-	var override_card = InCard.data(cmd("store", any()))
+	type_signature = cmd("store", any())
+	var override_card = InCard.data(type_signature)
 	override_card.c_named("arg", code_card)
 	
 	var trigger_code_card = CodeCard.create([], {"out": any()}, func (card): card.output("out", [data]))
@@ -83,6 +85,9 @@ func s():
 	
 	var trigger_card = InCard.trigger()
 	trigger_card.c(trigger_code_card)
+	
+	# refresh type info
+	self.type = type
 
 func serialize_constructor():
 	return "{0}.create(\"{1}\", \"{2}\", {3})".format([get_card_name(), data_name, type, Signature.data_to_expression(default)])
@@ -104,6 +109,13 @@ func get_extra_ui() -> Array[Control]:
 			var n = get_number_input()
 			if data != null: n.value = data
 			n.value_changed.connect(func(v): data = v)
+			update_ui_func = func(val): n.set_value_no_signal(val)
+			return [n]
+		"int":
+			var n = get_number_input()
+			n.step = 1
+			if data != null: n.value = data
+			n.value_changed.connect(func(v): data = int(v))
 			update_ui_func = func(val): n.set_value_no_signal(val)
 			return [n]
 		"bool":

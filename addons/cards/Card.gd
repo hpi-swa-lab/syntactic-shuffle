@@ -341,7 +341,7 @@ func _process(delta: float) -> void:
 	connection_draw_node.check_redraw(delta)
 
 func _physics_process(delta: float) -> void:
-	if not cards_parent.is_inside_tree() and not disable:
+	if not cards_parent.is_inside_tree() and not disable and not Engine.is_editor_hint():
 		for c in cards:
 			if not c.disable: c._physics_process(delta)
 

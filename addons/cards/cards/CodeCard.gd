@@ -58,6 +58,8 @@ var process: Callable
 var inputs: Array[Array]
 var pull_only: Array
 
+var error_label: Label
+
 var source_code: String = "":
 	get: return source_code
 	set(v):
@@ -70,6 +72,11 @@ func v():
 	source_code = source_code
 	
 	visual.short_description()
+	
+	error_label = Label.new()
+	error_label.autowrap_mode = TextServer.AUTOWRAP_WORD
+	error_label.add_theme_color_override("font_color", Color.DARK_RED)
+	ui(error_label)
 
 func s():
 	for pair in inputs:
@@ -88,6 +95,11 @@ func setup_finished():
 	get_source_code()
 
 func cycles_allowed_for(name: String): return pull_only.has(name)
+
+func report_error(s: String):
+	if error_label: error_label.text = s
+	if visual and visual.editor:
+		visual.editor.report_error(s)
 
 func invoke(args: Array, signature: Signature, named = "", source_out = null):
 	if not inputs.is_empty(): assert(named, "code cards with inputs can only have named connections")
@@ -112,13 +124,18 @@ func invoke(args: Array, signature: Signature, named = "", source_out = null):
 			pulled_remembered.push_back(remembered)
 	# FIXME very noisy -- add extra protocol?
 	# for out in pulled_remembered: out.mark_activated(parent)
-	assert(process.get_argument_count() == combined_args.size())
+	if process.get_argument_count() != combined_args.size():
+		report_error("Need {0} arguments to invoke (received {1}).".format([process.get_argument_count(), combined_args.size()]))
+		return
 	
 	if source_out: mark_activated(source_out)
 	process.callv(combined_args)
 
 func output(name: String, args: Array):
-	var signature = outputs[name]
+	var signature = outputs.get(name)
+	if not signature:
+		report_error("Attempted to send to unkown output '{0}'.".format([name]))
+		return
 	for card in get_outgoing():
 		var output
 		for o in cards:

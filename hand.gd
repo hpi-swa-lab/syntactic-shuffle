@@ -7,9 +7,9 @@ var categories = {
 		FilterSignaturesCard.new(Signature.VoidSignature.new()),
 		"StoreCard",
 		"RememberCard",
-		InCard.new(Signature.VoidSignature.new()),
-		NamedInCard.new("unnamed", Signature.VoidSignature.new()),
-		SubscribeInCard.new(Signature.VoidSignature.new()),
+		InCard.new(Signature.TypeSignature.new("")),
+		NamedInCard.new("unnamed", Signature.TypeSignature.new("")),
+		SubscribeInCard.new(Signature.TypeSignature.new("")),
 		OutCard.new(),
 		BlankCard.new(),
 	],
@@ -57,6 +57,7 @@ func _ready() -> void:
 	G.put("search", list)
 	list.item_activated.connect(func (index):
 		var card = load(items[index]).new()
+		#list.deselect_all()
 		card.position = get_viewport().get_camera_2d().position
 		# FIXME
 		get_node("/root/main/CardBoundary").add_child(card))
@@ -108,9 +109,7 @@ func _ready() -> void:
 
 func find_classes():
 	var classes = []
-	var regex = RegEx.new()
 	for file in DirAccess.get_files_at("res://addons/cards/cards"):
 		if file.get_extension() != "gd": continue
-		var name = file.get_basename()
-		classes.push_back(name)
+		classes.push_back(file.get_basename())
 	return classes

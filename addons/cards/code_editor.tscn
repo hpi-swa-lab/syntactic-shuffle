@@ -88,6 +88,11 @@ indent_automatic = true
 auto_brace_completion_enabled = true
 auto_brace_completion_highlight_matching = true
 
+[node name="Error" type="Label" parent="Content/HBoxContainer/VBoxContainer3"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.813557, 0, 0.212706, 1)
+
 [node name="VBoxContainer2" type="VBoxContainer" parent="Content/HBoxContainer"]
 layout_mode = 2
 
@@ -108,13 +113,6 @@ mouse_filter = 2
 [node name="Save" type="Button" parent="Content/HBoxContainer/VBoxContainer2"]
 layout_mode = 2
 text = "Save"
-
-[node name="ItemList" type="ItemList" parent="."]
-layout_mode = 2
-item_count = 3
-item_0/text = "a"
-item_1/text = "b"
-item_2/text = "c"
 
 [connection signal="pressed" from="Content/HBoxContainer/VBoxContainer/AddInput" to="." method="_on_add_input_pressed"]
 [connection signal="pressed" from="Content/HBoxContainer/VBoxContainer/AddSelected" to="." method="_on_add_selected_pressed"]

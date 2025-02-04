@@ -1,11 +1,12 @@
-[gd_scene load_steps=9 format=3 uid="uid://bqninusgeuw0i"]
+[gd_scene load_steps=10 format=3 uid="uid://bqninusgeuw0i"]
 
 [ext_resource type="Script" uid="uid://cja8ehiirmcyt" path="res://addons/cards/CardBoundary.gd" id="1_ig7tw"]
 [ext_resource type="Script" uid="uid://ctmo5roqpacap" path="res://addons/cards/cards/MoveCard.gd" id="4_lquwl"]
 [ext_resource type="Script" uid="uid://dkyx51jnk8cvd" path="res://addons/cards/cards/AxisControlsCard.gd" id="5_7mycd"]
 [ext_resource type="Script" uid="uid://cykn2a1upyl7a" path="res://addons/cards/cards/Vector2Card.gd" id="6_5vw27"]
 [ext_resource type="Script" uid="uid://bvr4vcw3kd72b" path="res://addons/cards/placeholder/placeholder.gd" id="6_272bh"]
-[ext_resource type="Script" uid="uid://df0f80t2h8n2" path="res://addons/cards/cards/MinusCard.gd" id="7_5vw27"]
+[ext_resource type="Script" uid="uid://cnghmd83iaxjx" path="res://addons/cards/cards/OnServerRequestCard.gd" id="7_5vw27"]
+[ext_resource type="Script" uid="uid://bssbsrhuotjx4" path="res://addons/cards/cards/ParseHttpCard.gd" id="8_kek77"]
 [ext_resource type="Script" uid="uid://cxldeg24krchn" path="res://camera_2d.gd" id="9_kek77"]
 [ext_resource type="Script" uid="uid://dio881dm6xtr3" path="res://hand.gd" id="15_vivmo"]
 
@@ -63,47 +64,27 @@ outgoing = [NodePath("../MoveCard")]
 vector = Vector2(0, 0)
 metadata/_custom_type_script = ExtResource("6_5vw27")
 
-[node name="Vector2Card2" type="Node2D" parent="CardBoundary"]
-position = Vector2(723, 148)
-scale = Vector2(0.2, 0.2)
-script = ExtResource("6_5vw27")
-id = "8ff067cf-acc3-4068-a810-63d7cf9d2a07"
-named_outgoing = Dictionary[String, Array]({
-"left_vector": [NodePath("../MinusCard")]
-})
-named_incoming = Dictionary[String, Array]({
-"x": []
-})
-vector = Vector2(0, 0)
-metadata/_custom_type_script = ExtResource("6_5vw27")
-
-[node name="Vector2Card3" type="Node2D" parent="CardBoundary"]
-position = Vector2(884, 139)
-scale = Vector2(0.2, 0.2)
-script = ExtResource("6_5vw27")
-id = "278b5f11-131f-4e5b-a415-08532d343cbc"
-named_outgoing = Dictionary[String, Array]({
-"right_vector": [NodePath("../MinusCard")]
-})
-named_incoming = Dictionary[String, Array]({
-"x": []
-})
-vector = Vector2(0, 0)
-metadata/_custom_type_script = ExtResource("6_5vw27")
-
-[node name="MinusCard" type="Node2D" parent="CardBoundary"]
-position = Vector2(793, 41)
+[node name="OnServerRequestCard" type="Node2D" parent="CardBoundary"]
+position = Vector2(655, 215)
 scale = Vector2(0.2, 0.2)
 script = ExtResource("7_5vw27")
-id = "912c490a-be49-462b-861f-0aabc4079a63"
+id = "7bd98d27-7e92-4d1d-a891-aa09d195f218"
 named_outgoing = Dictionary[String, Array]({
-"x": []
+"peer": [NodePath("../ParseHttpCard")]
 })
-named_incoming = Dictionary[String, Array]({
-"left_vector": [NodePath("../Vector2Card2")],
-"right_vector": [NodePath("../Vector2Card3")]
-})
+server = null
+port = 8080
 metadata/_custom_type_script = ExtResource("7_5vw27")
+
+[node name="ParseHttpCard" type="Node2D" parent="CardBoundary"]
+position = Vector2(761, 229)
+scale = Vector2(0.2, 0.2)
+script = ExtResource("8_kek77")
+id = "21ddf3af-2c13-47d6-bc6e-3fde7c6f1de9"
+named_incoming = Dictionary[String, Array]({
+"peer": [NodePath("../OnServerRequestCard")]
+})
+metadata/_custom_type_script = ExtResource("8_kek77")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 script = ExtResource("15_vivmo")
