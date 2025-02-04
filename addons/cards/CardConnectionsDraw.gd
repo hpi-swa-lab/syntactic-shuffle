@@ -25,8 +25,39 @@ func _draw():
 				draw_connection(self, node, true, light_background)
 				draw_label_to(node, name, light_background)
 
+var _feedback = {}
+func show_feedback_for(to: Node, args: Array):
+	if args.is_empty(): return
+	if not _feedback.has(to):
+		_feedback[to] = preload("res://addons/cards/feedback_card.tscn").instantiate()
+		_feedback[to].position = Vector2(100, 100)
+		add_child(_feedback[to])
+	_feedback[to].report_object(args[0])
+	reposition_feedback()
+
+func outgoing_disconnected(obj: Node):
+	for to in _feedback.duplicate():
+		if to == obj:
+			_feedback[to].queue_free()
+			_feedback.erase(to)
+
 func check_redraw(delta):
-	if should_redraw(): queue_redraw()
+	if should_redraw():
+		queue_redraw()
+		reposition_feedback()
+
+func reposition_feedback():
+	for to in _feedback:
+		var offset = 50 * global_scale.x
+		var size = card.visual.get_rect().size
+		var top_left = global_position - size / 2 - Vector2(offset, offset)
+		var dir = global_position - to.global_position
+		var a = AABB(Vector3(top_left.x, top_left.y, 0), Vector3(size.x + offset * 2, size.y + offset * 2, 0))
+		var x = a.intersects_ray(Vector3(to.global_position.x, to.global_position.y, 0.0), Vector3(dir.x, dir.y, 0.0))
+		var x2 = Vector2(x.x, x.y)
+		
+		var r2 = _feedback[to].get_global_transform() * _feedback[to].get_rect()
+		_feedback[to].global_position = x2 - r2.size / 2
 
 var last_deps = null
 func should_redraw():

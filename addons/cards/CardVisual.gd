@@ -63,6 +63,9 @@ func _ready() -> void:
 	%CardControl.gui_input.connect(input_event)
 	base_card_size = %CardControl.size
 
+func get_rect():
+	return global_transform * %CardControl.get_rect()
+
 var held = false
 var is_dragging = false
 func input_event(e: InputEvent):

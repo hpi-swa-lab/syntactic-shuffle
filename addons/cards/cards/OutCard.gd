@@ -108,7 +108,7 @@ func invoke(args: Array, signature: Signature, named = "", source_out = null):
 		remembered_signature = signature
 		remembered = args
 	
-	if source_out: mark_activated(source_out)
+	if source_out: mark_activated(source_out, args)
 	
 	var n = get_object_named_outgoing(parent)
 	for name in n:

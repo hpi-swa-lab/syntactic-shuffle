@@ -128,7 +128,7 @@ func invoke(args: Array, signature: Signature, named = "", source_out = null):
 		report_error("Need {0} arguments to invoke (received {1}).".format([process.get_argument_count(), combined_args.size()]))
 		return
 	
-	if source_out: mark_activated(source_out)
+	if source_out: mark_activated(source_out, args)
 	process.callv(combined_args)
 
 func output(name: String, args: Array):

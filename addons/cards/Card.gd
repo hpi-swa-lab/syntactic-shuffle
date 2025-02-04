@@ -157,11 +157,16 @@ func get_in_signatures(signatures: Array):
 	for card in cards:
 		if card is InCard: signatures.push_back(card.signature)
 
-func mark_activated(from):
-	if from: connection_draw_node.on_activated(from.parent)
-
 func setup_finished():
 	pass
+
+func mark_activated(from, args):
+	if from and is_inside_tree():
+		connection_draw_node.on_activated(from.parent)
+		from.parent.show_feedback_for(self, args)
+
+func show_feedback_for(to: Node, args: Array):
+	connection_draw_node.show_feedback_for(to, args)
 
 func invoke(args: Array, signature: Signature, named = "", source_out = null):
 	for input in cards:
@@ -169,7 +174,7 @@ func invoke(args: Array, signature: Signature, named = "", source_out = null):
 			(named and input is NamedInCard and input.input_name == named)):
 			if signature.compatible_with(input.signature):
 				input.invoke(args, signature, "", source_out)
-				mark_activated(source_out)
+				mark_activated(source_out, args)
 
 static func get_or_put(dict, key):
 	if not dict.has(key): dict.set(key, [])
@@ -380,7 +385,8 @@ func card_parent_in_world():
 func incoming_disconnected(obj: Node):
 	for input in cards:
 		if input is InCard: input.incoming_disconnected(obj)
-func outgoing_disconnected(obj: Node): pass
+func outgoing_disconnected(obj: Node):
+	connection_draw_node.outgoing_disconnected(obj)
 
 func editor_sync_prop(name: String):
 	editor_sync("cards:set_prop", [id, name, get(name)])
