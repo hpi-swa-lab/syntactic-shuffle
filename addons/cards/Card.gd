@@ -138,8 +138,7 @@ func c_named(name: String, other: Card):
 ## If your Card defers delivery of outputs you can signal here that it is
 ## possible to connect it in a cycle. (Otherwise, if inputs are synchronously
 ## delivered to outputs we get an infinite loop).
-func allow_cycles():
-	pass
+func allow_cycles(): _allows_cycles = true
 
 var parent: Node
 var _allows_cycles = false
@@ -358,8 +357,8 @@ static func _each_input_candidate(object: Node, cb: Callable, named: bool):
 
 func try_connect(them: Node):
 	_each_input_candidate(them, func (card): card.try_connect_in(self), true)
-	_each_input_candidate(self, func (card): card.try_connect_in(them), true)
 	_each_input_candidate(them, func (card): card.try_connect_in(self), false)
+	_each_input_candidate(self, func (card): card.try_connect_in(them), true)
 	_each_input_candidate(self, func (card): card.try_connect_in(them), false)
 
 static func get_remembered_for(object: Node, signature: Signature):

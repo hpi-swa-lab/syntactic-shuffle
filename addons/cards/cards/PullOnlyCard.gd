@@ -15,8 +15,9 @@ func s():
 	out_card.position = Vector2(1062.398, 629.3748)
 	var code_card = CodeCard.create([["input", any()]], {"out": any()}, func (card, input):
 		card.output("out", [input])
-, ["*"])
+, ["input"])
 	code_card.position = Vector2(667.4587, 623.6648)
 	
 	in_card.c_named("input", code_card)
 	code_card.c(out_card)
+	allow_cycles()

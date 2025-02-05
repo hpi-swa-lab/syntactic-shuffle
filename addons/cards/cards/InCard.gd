@@ -141,7 +141,11 @@ func detect_cycles_for_new_connection(from: Card, to: Card) -> bool:
 		return false
 	# we never allow direct cycles
 	if from.get_all_outgoing().has(to): return true
+	if should_allow_connection(from, to): return false
 	return check_is_connected(from, to)
+
+func should_allow_connection(from: Card, to: Card):
+	return false
 
 func check_is_connected(a: Card, b: Card) -> bool:
 	var queue = [a]
@@ -150,11 +154,11 @@ func check_is_connected(a: Card, b: Card) -> bool:
 		var node: Card = queue.pop_front()
 		visitited[node] = true
 		for next in node.get_outgoing():
-			if not visitited.has(next):
+			if not visitited.has(next) and not next.allows_cycles():
 				if next == b: return true
 				queue.push_back(next)
 		for next in node.get_named_outgoing_for_cycles():
-			if not visitited.has(next):
+			if not visitited.has(next) and not next.allows_cycles():
 				if next == b: return true
 				queue.push_back(next)
 	return false

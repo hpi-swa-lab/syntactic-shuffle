@@ -52,6 +52,9 @@ func try_connect_in(them: Node):
 						connect_to(them, parent, input_name)
 						return
 
+func should_allow_connection(from: Card, to: Card):
+	return from.cycles_allowed_for(input_name)
+
 func rename(new_name: String):
 	for connected in parent.get_named_incoming_at(input_name):
 		var list = connected.named_outgoing[input_name]

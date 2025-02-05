@@ -304,6 +304,18 @@ func test_make_concrete_pull_only(ready):
 	pull_only_card.get_out_signatures(out)
 	assert_eq(out[0].get_description(), "Vector2")
 
+func test_pull_only_in_loop(ready):
+	var vector_card = Vector2Card.new()
+	var store_card = StoreCard.new()
+	var pull_only_card = PullOnlyCard.new()
+	
+	vector_card.c(pull_only_card)
+	pull_only_card.c(store_card)
+	ready.call()
+	
+	store_card.try_connect(vector_card)
+	assert(store_card.get_outgoing().has(vector_card))
+
 func test_type_of_subscribe_in_card():
 	var subscribe_card = SubscribeInCard.new(Signature.TypeSignature.new("float"))
 	
