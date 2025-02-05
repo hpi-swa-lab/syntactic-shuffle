@@ -91,10 +91,10 @@ func get_out_signatures(signatures: Array[Signature], visited = []):
 	for i in incoming:
 		if command_name:
 			var list = []
-			get_object_out_signatures(i, list)
+			get_object_out_signatures(i, list, visited)
 			for item in list: signatures.push_back(_add_command(item))
 		else:
-			get_object_out_signatures(i, signatures)
+			get_object_out_signatures(i, signatures, visited)
 
 func invoke(args: Array, signature: Signature, named = "", source_out = null):
 	if Engine.is_editor_hint(): return
