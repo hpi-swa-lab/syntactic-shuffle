@@ -110,10 +110,15 @@ func _on_card_control_mouse_entered() -> void:
 				inputs.push_back(c.input_name + ": " + s if c is NamedInCard else s)
 	var outputs = [] as Array[Signature]
 	card.get_out_signatures(outputs)
+	var remembered = ""
+	for c in card.cards:
+		if c is OutCard:
+			var r = c.get_remembered_value()
+			if r: remembered += "\nR: " + str(r)
 	
 	%signatures.visible = true
 	%inputs.text = "\n".join(inputs)
-	%outputs.text = "\n".join(outputs.map(func(s): return s.get_description()))
+	%outputs.text = "\n".join(outputs.map(func(s): return s.get_description())) + remembered
 	
 	get_selection_manager().consider_selection(card)
 

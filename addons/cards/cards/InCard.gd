@@ -54,16 +54,16 @@ func setup_finished():
 	super.setup_finished()
 	incoming_connected(null)
 
-func get_out_signatures(list: Array):
+func get_out_signatures(list: Array, visited = []):
 	if not parent: list.push_back(signature)
-	else: list.append_array(signature.make_concrete(_get_incoming_list()))
+	else: list.append_array(signature.make_concrete(_get_incoming_list(), visited))
 
 func _get_incoming_list():
 	return parent.get_incoming() if parent else []
 
-func get_concrete_signatures():
+func get_concrete_signatures(visited = []):
 	var l = [] as Array[Signature]
-	get_out_signatures(l)
+	get_out_signatures(l, visited)
 	return l
 
 func _get_remembered_for(signature: Signature):
@@ -86,12 +86,12 @@ func is_valid_incoming(card, signature):
 func get_remembered():
 	return _get_remembered_for(signature)
 
-func get_connected_incoming():
+func get_connected_incoming(visited = []):
 	var connected = []
-	var my_signatures = get_concrete_signatures()
+	var my_signatures = get_concrete_signatures(visited)
 	for c in _get_incoming_list():
 		var out = [] as Array[Signature]
-		get_object_out_signatures(c, out)
+		get_object_out_signatures(c, out, visited)
 		for their_signature in out:
 			for my_signature in my_signatures:
 				if their_signature.compatible_with(my_signature):

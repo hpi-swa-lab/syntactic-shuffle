@@ -1,7 +1,7 @@
 @tool
 extends CardBoundary
 
-var execute_only = null
+var execute_only = ""
 
 class ManualTriggerCard extends Card:
 	var type: Signature
@@ -315,6 +315,20 @@ func test_pull_only_in_loop(ready):
 	
 	store_card.try_connect(vector_card)
 	assert(store_card.get_outgoing().has(vector_card))
+
+func test_get_description_with_cycle(ready):
+	var vector_card = Vector2Card.new()
+	var store_card = StoreCard.new()
+	var pull_only_card = PullOnlyCard.new()
+	
+	vector_card.c(pull_only_card)
+	pull_only_card.c(store_card)
+	store_card.c(vector_card)
+	ready.call()
+	
+	# test that this does not cause an infinite loop
+	for i in store_card.cards:
+		if i is InCard: i.get_concrete_signatures()
 
 func test_type_of_subscribe_in_card():
 	var subscribe_card = SubscribeInCard.new(Signature.TypeSignature.new("float"))

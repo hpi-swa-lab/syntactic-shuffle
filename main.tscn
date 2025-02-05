@@ -21,22 +21,33 @@ metadata/_custom_type_script = ExtResource("1_ig7tw")
 position = Vector2(947, 542)
 script = ExtResource("9_kek77")
 
-[node name="StaticBody2D" type="StaticBody2D" parent="CardBoundary"]
+[node name="wall" type="StaticBody2D" parent="CardBoundary"]
 position = Vector2(570, 610)
 
-[node name="Placeholder" type="Node2D" parent="CardBoundary/StaticBody2D"]
+[node name="Placeholder" type="Node2D" parent="CardBoundary/wall"]
 script = ExtResource("6_272bh")
 placeholder_size = Vector2(498, 29)
 metadata/_custom_type_script = ExtResource("6_272bh")
 
-[node name="CharacterBody2D" type="CharacterBody2D" parent="CardBoundary"]
+[node name="character" type="CharacterBody2D" parent="CardBoundary"]
 position = Vector2(449, 382)
 metadata/cards_outgoing = [NodePath("../MoveCard")]
 
-[node name="Placeholder" type="Node2D" parent="CardBoundary/CharacterBody2D"]
+[node name="Placeholder" type="Node2D" parent="CardBoundary/character"]
 script = ExtResource("6_272bh")
 color = Color(1, 0.0369013, 0.39483, 1)
 placeholder_size = Vector2(20, 20)
+metadata/_custom_type_script = ExtResource("6_272bh")
+
+[node name="pickup" type="CharacterBody2D" parent="CardBoundary"]
+position = Vector2(541, 102)
+metadata/cards_outgoing = [NodePath("../MoveCard")]
+
+[node name="Placeholder" type="Node2D" parent="CardBoundary/pickup"]
+script = ExtResource("6_272bh")
+color = Color(0.974666, 0.76677, 1.15514e-06, 1)
+shape_type = "Circle"
+circle_radius = 10.0
 metadata/_custom_type_script = ExtResource("6_272bh")
 
 [node name="MoveCard" type="Node2D" parent="CardBoundary"]
@@ -44,7 +55,7 @@ position = Vector2(341, 285)
 scale = Vector2(0.2, 0.2)
 script = ExtResource("4_lquwl")
 id = "02e51268-9ead-4e9c-8bfc-1aec28b27ad0"
-incoming = Array[NodePath]([NodePath("../CharacterBody2D"), NodePath("../AxisControlsCard"), NodePath("../Vector2Card")])
+incoming = Array[NodePath]([NodePath("../character"), NodePath("../AxisControlsCard"), NodePath("../Vector2Card")])
 metadata/_custom_type_script = ExtResource("4_lquwl")
 
 [node name="AxisControlsCard" type="Node2D" parent="CardBoundary"]

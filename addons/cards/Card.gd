@@ -148,9 +148,9 @@ var _allows_cycles = false
 @export var named_incoming: Dictionary[String, Array] = {}
 
 func allows_cycles(): return _allows_cycles
-func get_out_signatures(signatures: Array):
+func get_out_signatures(signatures: Array, visited = []):
 	for card in cards:
-		if card is OutCard: card.get_out_signatures(signatures)
+		if card is OutCard: card.get_out_signatures(signatures, visited)
 
 func get_in_signatures(signatures: Array):
 	for card in cards:
@@ -248,10 +248,10 @@ static func get_meta_or(object: Node, name: String, default: Callable):
 static func get_object_cards(object: Node):
 	if object is Card: return object.cards
 	else: return get_object_out_cards(object)
-static func get_object_out_signatures(object: Node, out: Array):
-	if object is Card: return object.get_out_signatures(out)
+static func get_object_out_signatures(object: Node, out: Array, visited = []):
+	if object is Card: return object.get_out_signatures(out, visited)
 	for card in get_object_cards(object):
-		if card is OutCard: card.get_out_signatures(out)
+		if card is OutCard: card.get_out_signatures(out, visited)
 static func objects_have_same_out_signatures(a: Node, b: Node):
 	var a_sig = [] as Array[Signature]
 	var b_sig = [] as Array[Signature]

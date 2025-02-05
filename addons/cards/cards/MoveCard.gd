@@ -6,11 +6,12 @@ func v():
 	title("Move")
 	description("Move an object.")
 	icon_data("iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAFJJREFUOI1jYMAP/kMxTsBIQDNBtbgMwGUrhnomPC4gClDsBWQXEAwwbOoYkQTJAYyMFGhmYGCgYiBS5AUYgBmCy1B0cUZkQWxgpKREQoBg6gQAJZ0UCnXgLU8AAAAASUVORK5CYII=")
+	container_size(Vector2(2269.79, 2935.291))
 
 func s():
 	var vector_2_card = Vector2Card.new()
-	vector_2_card.position = Vector2(881.1189, 1318.908)
-	vector_2_card.cards[1].data = Vector2(0.0, 0.0)
+	vector_2_card.position = Vector2(869.269, 1318.908)
+	vector_2_card.cards[1].data = Vector2(0.0, 490.5)
 	var bool_card = BoolCard.new()
 	bool_card.position = Vector2(1219.58, 428.579)
 	bool_card.cards[0].data = false
@@ -21,6 +22,7 @@ func s():
 			if body is CharacterBody2D:
 				body.velocity = velocity
 				body.move_and_slide()
+				velocity = body.velocity
 			elif body is Node2D:
 				body.position += velocity * get_process_delta_time()
 			card.output("did_accelerate", [false])
@@ -37,14 +39,23 @@ func s():
 			card.output("out", [v]), ["velocity"])
 	code_card_2.position = Vector2(1386.606, 1125.075)
 	var in_card_2 = InCard.data(t("Vector2"))
-	in_card_2.position = Vector2(1773.955, 1012.023)
+	in_card_2.position = Vector2(341.0815, 2687.129)
 	var physics_process_card = PhysicsProcessCard.new()
 	physics_process_card.position = Vector2(133.5331, 301.9212)
 	var store_card = StoreCard.new()
 	store_card.position = Vector2(902.5308, 172.4603)
 	var store_card_2 = StoreCard.new()
 	store_card_2.position = Vector2(1000.191, 928.6358)
+	var pull_only_card = PullOnlyCard.new()
+	pull_only_card.position = Vector2(454.9027, 1920.42)
+	var plus_card = PlusCard.new()
+	plus_card.position = Vector2(900.6112, 2479.565)
+	var store_card_3 = StoreCard.new()
+	store_card_3.position = Vector2(1304.446, 1927.079)
+	var in_card_3 = InCard.data(cmd("direction", t("Vector2")))
+	in_card_3.position = Vector2(1856.695, 1127.132)
 	
+	vector_2_card.c(pull_only_card)
 	vector_2_card.c_named("velocity", code_card_2)
 	vector_2_card.c_named("velocity", code_card)
 	bool_card.c_named("did_accelerate", code_card)
@@ -53,7 +64,11 @@ func s():
 	in_card.c_named("body", code_card)
 	code_card_2.c(store_card_2)
 	code_card_2.c(bool_card)
-	in_card_2.c_named("direction", code_card_2)
+	in_card_2.c_named("left_vector", plus_card)
 	physics_process_card.c_named("trigger", code_card)
 	store_card.c(bool_card)
 	store_card_2.c(vector_2_card)
+	pull_only_card.c_named("right_vetor", plus_card)
+	plus_card.c(store_card_3)
+	store_card_3.c(vector_2_card)
+	in_card_3.c_named("direction", code_card_2)

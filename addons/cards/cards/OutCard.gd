@@ -51,7 +51,7 @@ func _get_remembered_for(signature: Signature):
 	else: return _try_connected_remembered(signature)
 
 func get_remembered_value():
-	assert(remembered != null)
+	if not remembered: return null
 	for arg in remembered:
 		# guard against freed objects to which we remember references
 		if not is_instance_valid(arg) and typeof(arg) == TYPE_OBJECT:
@@ -78,8 +78,8 @@ func _add_command(signature: Signature) -> Signature:
 	if signature is Signature.CommandSignature and signature.command == command_name: return signature
 	return Signature.CommandSignature.new(command_name, signature)
 
-func get_out_signatures(signatures: Array[Signature]):
-	if not is_reachable(): return
+func get_out_signatures(signatures: Array[Signature], visited = []):
+	if not is_reachable(visited): return
 	
 	if has_static_signature:
 		for s in signature.make_concrete(get_incoming()): signatures.push_back(_add_command(s))
@@ -126,7 +126,9 @@ func invoke(args: Array, signature: Signature, named = "", source_out = null):
 ## all cards to be reachable.
 ## The method over-approximates the answer: as soon as at least one input
 ## of a connected component is reachable, it answers true.
-func is_reachable():
+func is_reachable(visited = []):
+	if visited.has(self): return true
+	visited.push_back(self)
 	if not parent is Card or parent.get_all_incoming().is_empty(): return true
 	# CodeCard out's are not connected
 	if parent is CodeCard: return true
@@ -134,7 +136,7 @@ func is_reachable():
 	var inputs = []
 	get_connected_inputs(inputs, {})
 	for input in inputs:
-		if not input.get_connected_incoming().is_empty():
+		if not input.get_connected_incoming(visited).is_empty():
 			return true
 	return false
 

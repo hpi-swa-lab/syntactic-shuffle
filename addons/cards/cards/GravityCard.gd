@@ -22,7 +22,7 @@ func s():
 	multiply_card.position = Vector2(1409.965, 1111.612)
 	var vector_2_card_2 = Vector2Card.new()
 	vector_2_card_2.position = Vector2(956.0118, 1446.213)
-	vector_2_card_2.cards[1].data = Vector2(1000.0, 1000.0)
+	vector_2_card_2.cards[1].data = Vector2(50.0, 50.0)
 	
 	vector_2_card.c_named("b_vector", multiply_card)
 	filter_signatures_card.c(vector_2_card)

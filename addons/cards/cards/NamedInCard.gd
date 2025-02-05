@@ -26,7 +26,7 @@ func v():
 	e.text_changed.connect(func (n): input_name = n)
 	ui(e)
 
-func _get_incoming_list():
+func _get_incoming_list(visited = []):
 	return parent.get_named_incoming_at(input_name)
 
 func try_connect_in(them: Node):
