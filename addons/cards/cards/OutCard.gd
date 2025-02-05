@@ -82,7 +82,8 @@ func get_out_signatures(signatures: Array[Signature]):
 	if not is_reachable(): return
 	
 	if has_static_signature:
-		signatures.push_back(_add_command(signature))
+		for s in signature.make_concrete(get_incoming()): signatures.push_back(_add_command(s))
+		# signatures.push_back(_add_command(signature))
 		return
 	var incoming = get_incoming()
 	if incoming.is_empty(): return

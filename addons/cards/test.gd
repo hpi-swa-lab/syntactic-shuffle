@@ -42,8 +42,12 @@ func _ready():
 func run_cards_test(test):
 	if test.get_argument_count() > 0:
 		var card = Card.new()
+		var was_called = {"was": false}
 		Card.push_active_card_list(card)
-		test.call(func (): Card.pop_active_card_list())
+		test.call(func ():
+			was_called["was"] = true
+			Card.pop_active_card_list())
+		assert(was_called["was"], "ready was not called")
 	else:
 		test.call()
 
@@ -251,8 +255,7 @@ func test_derive_output_types_axis_controls():
 	var out = [] as Array[Signature]
 	c.get_out_signatures(out)
 	assert_eq(out.size(), 1)
-	assert_eq(out[0].get_description(), "Vector2")
-
+	assert_eq(out[0].get_description(), ">direction[Vector2]")
 
 func test_derive_output_types_minus(ready):
 	var v1 = Vector2Card.new()
@@ -289,6 +292,17 @@ func test_derive_type_from_code_card(ready):
 	var out = [] as Array[Signature]
 	store_card.get_out_signatures(out)
 	assert_eq(out.size(), 2)
+
+func test_make_concrete_pull_only(ready):
+	var vector_card = Vector2Card.new()
+	var pull_only_card = PullOnlyCard.new()
+	
+	vector_card.c(pull_only_card)
+	ready.call()
+	
+	var out = [] as Array[Signature]
+	pull_only_card.get_out_signatures(out)
+	assert_eq(out[0].get_description(), "Vector2")
 
 func test_type_of_subscribe_in_card():
 	var subscribe_card = SubscribeInCard.new(Signature.TypeSignature.new("float"))
