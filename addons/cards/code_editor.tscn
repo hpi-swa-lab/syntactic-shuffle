@@ -36,6 +36,11 @@ theme_override_constants/separation = 12
 [node name="VBoxContainer" type="VBoxContainer" parent="Content/HBoxContainer"]
 layout_mode = 2
 
+[node name="Label" type="Label" parent="Content/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Inputs"
+
 [node name="inputs" type="VBoxContainer" parent="Content/HBoxContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
@@ -52,12 +57,23 @@ text = "Add Selected"
 [node name="VBoxContainer3" type="VBoxContainer" parent="Content/HBoxContainer"]
 layout_mode = 2
 
-[node name="FunctionSignature" type="Label" parent="Content/HBoxContainer/VBoxContainer3"]
+[node name="HBoxContainer2" type="HBoxContainer" parent="Content/HBoxContainer/VBoxContainer3"]
+layout_mode = 2
+
+[node name="FunctionSignature" type="Label" parent="Content/HBoxContainer/VBoxContainer3/HBoxContainer2"]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.270222, 0.270222, 0.270222, 1)
 theme_override_fonts/font = ExtResource("3_mx76x")
 text = "func (card):"
+
+[node name="Unsaved" type="Label" parent="Content/HBoxContainer/VBoxContainer3/HBoxContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.255659, 0.255659, 0.255659, 1)
+theme_override_font_sizes/font_size = 9
+text = "* Unsaved Changes"
 
 [node name="MarginContainer" type="MarginContainer" parent="Content/HBoxContainer/VBoxContainer3"]
 layout_mode = 2
@@ -88,13 +104,25 @@ indent_automatic = true
 auto_brace_completion_enabled = true
 auto_brace_completion_highlight_matching = true
 
-[node name="Error" type="Label" parent="Content/HBoxContainer/VBoxContainer3"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Content/HBoxContainer/VBoxContainer3"]
+layout_mode = 2
+
+[node name="Error" type="Label" parent="Content/HBoxContainer/VBoxContainer3/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.813557, 0, 0.212706, 1)
 
+[node name="ErrorUI" type="MarginContainer" parent="Content/HBoxContainer/VBoxContainer3/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
 [node name="VBoxContainer2" type="VBoxContainer" parent="Content/HBoxContainer"]
 layout_mode = 2
+
+[node name="Label" type="Label" parent="Content/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Outputs"
 
 [node name="outputs" type="VBoxContainer" parent="Content/HBoxContainer/VBoxContainer2"]
 unique_name_in_owner = true
@@ -117,5 +145,6 @@ text = "Save"
 [connection signal="pressed" from="Content/HBoxContainer/VBoxContainer/AddInput" to="." method="_on_add_input_pressed"]
 [connection signal="pressed" from="Content/HBoxContainer/VBoxContainer/AddSelected" to="." method="_on_add_selected_pressed"]
 [connection signal="gui_input" from="Content/HBoxContainer/VBoxContainer3/MarginContainer/code" to="." method="_on_code_gui_input"]
-[connection signal="pressed" from="Content/HBoxContainer/VBoxContainer2/AddOutput" to="." method="_on_add_output_pressed"]
+[connection signal="text_changed" from="Content/HBoxContainer/VBoxContainer3/MarginContainer/code" to="." method="_on_code_text_changed"]
+[connection signal="pressed" from="Content/HBoxContainer/VBoxContainer2/AddOutput" to="." method="add_output"]
 [connection signal="pressed" from="Content/HBoxContainer/VBoxContainer2/Save" to="." method="_on_save_pressed"]

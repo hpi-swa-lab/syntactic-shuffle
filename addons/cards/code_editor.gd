@@ -7,6 +7,7 @@ func attach_cards(card: CodeCard, size: Vector2):
 	assert(card is CodeCard)
 	
 	self.code_card = card
+	%Unsaved.visible = false
 	
 	for input in card.cards:
 		if input is NamedInCard:
@@ -29,8 +30,20 @@ func detach_cards(): pass
 func _resize():
 	custom_minimum_size = %Content.get_combined_minimum_size()
 
-func report_error(s: String):
-	%Error.text = s
+var _current_error: Error = null
+func report_error(s: Error):
+	if _current_error:
+		_current_error.close.disconnect(close_error)
+	_current_error = s
+	s.close.connect(close_error)
+	%Error.text = s.get_message()
+	var ui = s.fix_ui()
+	if %ErrorUI.get_child_count() > 0: %ErrorUI.remove_child(%ErrorUI.get_child(0))
+	if ui: %ErrorUI.add_child(ui)
+
+func close_error():
+	%Error.text = ""
+	if %ErrorUI.get_child_count() > 0: %ErrorUI.remove_child(%ErrorUI.get_child(0))
 
 func get_current_inputs():
 	return Array(%inputs.get_children().map(func(box): return [box.get_meta("name").text, box.get_meta("signature").signature]), TYPE_ARRAY, "", null)
@@ -148,8 +161,10 @@ func _on_add_selected_pressed() -> void:
 	_resize()
 	for pair in connections: pair[1].c_named(pair[0], code_card)
 
-func _on_add_output_pressed() -> void:
-	%outputs.add_child(build_field("out", code_card.add_card(OutCard.static_signature(Signature.TypeSignature.new("")))))
+func add_output(name = "out", signature = null) -> void:
+	if not signature: signature = Signature.TypeSignature.new("")
+	%outputs.add_child(build_field(name, code_card.add_card(OutCard.static_signature(signature))))
+	save_outputs()
 	_resize()
 
 func _on_code_gui_input(event: InputEvent) -> void:
@@ -159,11 +174,12 @@ func _on_code_gui_input(event: InputEvent) -> void:
 		event.keycode == KEY_S
 		and event.ctrl_pressed):
 			_on_save_pressed()
+			get_viewport().set_input_as_handled()
 
 func _on_save_pressed() -> void:
 	if not save_process_callable(): return
 	save_inputs_outputs()
-	code_card.visual.expanded = false
+	# code_card.visual.expanded = false
 
 func save_pull_list():
 	code_card.pull_only = (%inputs.get_children()
@@ -193,6 +209,7 @@ func save_process_callable():
 	obj.set_script(s)
 	code_card.process = obj.build()
 	code_card.source_code = src
+	%Unsaved.visible = false
 	return true
 
 func indent(src: String):
@@ -287,3 +304,6 @@ func fake_a_godot_highlighter():
 		"var": keyword_color,
 	}
 	%code.syntax_highlighter = h
+
+func _on_code_text_changed() -> void:
+	%Unsaved.visible = true

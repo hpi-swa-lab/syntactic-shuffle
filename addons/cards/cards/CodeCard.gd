@@ -96,10 +96,17 @@ func setup_finished():
 
 func cycles_allowed_for(name: String): return pull_only.has(name)
 
-func report_error(s: String):
-	if error_label: error_label.text = s
+var _current_error: Error = null
+func report_error(s: Error):
+	if _current_error:
+		_current_error.close.disconnect(close_error)
+	_current_error = s
+	s.close.connect(close_error)
+	if error_label: error_label.text = s.get_message()
 	if visual and visual.editor:
 		visual.editor.report_error(s)
+func close_error():
+	if error_label: error_label.text = ""
 
 func invoke(args: Array, signature: Signature, named = "", source_out = null):
 	if not inputs.is_empty(): assert(named, "code cards with inputs can only have named connections")
@@ -125,7 +132,7 @@ func invoke(args: Array, signature: Signature, named = "", source_out = null):
 	# FIXME very noisy -- add extra protocol?
 	# for out in pulled_remembered: out.mark_activated(parent)
 	if process.get_argument_count() != combined_args.size():
-		report_error("Need {0} arguments to invoke (received {1}).".format([process.get_argument_count(), combined_args.size()]))
+		report_error(Error.Generic.new("Need {0} arguments to invoke (received {1}).".format([process.get_argument_count(), combined_args.size()])))
 		return
 	
 	if source_out: mark_activated(source_out, args)
@@ -134,7 +141,7 @@ func invoke(args: Array, signature: Signature, named = "", source_out = null):
 func output(name: String, args: Array):
 	var signature = outputs.get(name)
 	if not signature:
-		report_error("Attempted to send to unkown output '{0}'.".format([name]))
+		report_error(Error.CodeCardMissingOutput.new(self, name, args))
 		return
 	for card in get_outgoing():
 		var output
