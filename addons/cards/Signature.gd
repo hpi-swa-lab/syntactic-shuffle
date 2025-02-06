@@ -89,7 +89,7 @@ class IteratorSignature extends Signature:
 	var type: Signature
 	func _init(type: Signature):
 		self.type = type
-	func serialize_gdscript(): return ""
+	func serialize_gdscript(): return "it({0})".format([type.serialize_gdscript()])
 	func eq(other: Signature): return other is IteratorSignature and type.eq(other.type)
 	func compatible_with(other: Signature): return other.compatible_with_iterator(self)
 	func get_description(): return "Iterator<{0}>".format([type.get_description()])
@@ -159,7 +159,7 @@ static func type_signature(type, inverse = false):
 		TYPE_BOOL: "bool",
 		TYPE_INT: "int",
 		TYPE_FLOAT: "float",
-		TYPE_STRING: "string",
+		TYPE_STRING: "String",
 		TYPE_VECTOR2: "Vector2",
 		TYPE_VECTOR2I: "Vector2i",
 		TYPE_RECT2: "Rect2",
@@ -201,11 +201,15 @@ static func type_signature(type, inverse = false):
 	else:
 		return mapping[type]
 
-static func data_to_expression(data):
+static func data_to_expression(data) -> String:
 	if data is Vector2:
 		return "Vector2" + str(data)
 	if data is String:
 		return "\"" + data.replace("\"", "\\\"") + "\""
 	if data == null:
 		return "null"
+	if data is Array:
+		return "[" + ", ".join(data.map(data_to_expression)) + "]"
+	if data is Signature:
+		return data.serialize_gdscript()
 	return str(data)

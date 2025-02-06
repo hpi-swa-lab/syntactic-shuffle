@@ -1,7 +1,7 @@
 @tool
 extends CardBoundary
 
-var execute_only = ""
+var execute_only = "iterator"
 
 class ManualTriggerCard extends Card:
 	var type: Signature
@@ -31,8 +31,9 @@ func run():
 	get_tree().quit()
 
 func assert_eq(a, b):
-	if a != b:
-		var msg = "Was {0} but expected {1}".format([a, b])
+	var equal = a.eq(b) if a is Signature else a == b
+	if not equal:
+		var msg = "Was " + Signature.data_to_expression(a) + " but expected " + Signature.data_to_expression(b)
 		print(msg)
 		assert(false, msg)
 
@@ -391,3 +392,34 @@ b
 	c
 d
 ")
+
+func test_iterator_invoke(ready):
+	var reported = {"reported": null}
+	var array_card = Card.new(func():
+		var out = OutCard.static_signature(Signature.IteratorSignature.new(Signature.TypeSignature.new("Node"))))
+	var get_prop = GetPropertyCard.new()
+	get_prop.property_name = "position"
+	var report_card = CodeCard.new([["data", Signature.GenericTypeSignature.new()]], {}, func (card, out, data):
+		reported["reported"] = data)
+	array_card.c(get_prop)
+	get_prop.c_named("data", report_card)
+	ready.call()
+	
+	#var sig = [] as Array[Signature]
+	#get_prop.get_out_signatures(sig)
+	#assert_eq(sig[0], Signature.IteratorSignature.new(Signature.TypeSignature.new("Vector2")))
+	
+	for c in array_card.cards:
+		if c is OutCard:
+			c.invoke([[CharacterBody2D.new(), CharacterBody2D.new()]], Signature.IteratorSignature.new(Signature.TypeSignature.new("Node")))
+	assert_eq(reported["reported"], [Vector2.ZERO, Vector2.ZERO])
+	
+	for c in get_prop.cards:
+		if c is OutCard:
+			var r = []
+			c.is_reachable(r)
+			print(r.map(func (c):
+				var x = [] as Array[Signature]
+				c.get_out_signatures(x)
+				return x[0].d))
+	

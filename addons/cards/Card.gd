@@ -512,3 +512,4 @@ static func grp(group_names: Array[StringName]): return Signature.GroupSignature
 static func cmd(name: String, arg = null): return Signature.CommandSignature.new(name, arg)
 static func any(): return Signature.GenericTypeSignature.new()
 static func struct(props, methods): return Signature.StructSignature.new(props, methods)
+static func it(arg: Signature): return Signature.IteratorSignature.new(arg)

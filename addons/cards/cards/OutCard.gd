@@ -50,14 +50,20 @@ func _get_remembered_for(signature: Signature):
 		else: return null
 	else: return _try_connected_remembered(signature)
 
-func get_remembered_value():
-	if not remembered: return null
+func _ensure_remembered():
 	for arg in remembered:
 		# guard against freed objects to which we remember references
 		if not is_instance_valid(arg) and typeof(arg) == TYPE_OBJECT:
 			remembered_signature = null
 			remembered = null
+
+func get_remembered_value():
+	_ensure_remembered()
 	return remembered
+
+func get_remembered_signature():
+	_ensure_remembered()
+	return remembered_signature
 
 func _try_connected_remembered(signature: Signature):
 	for card in get_all_incoming():

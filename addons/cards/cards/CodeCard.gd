@@ -126,13 +126,15 @@ func invoke(args: Array, signature: Signature, named = "", source_out = null):
 	if not inputs.is_empty(): assert(named, "code cards with inputs can only have named connections")
 	if pull_only.has(named): return
 	
-	var combined_args = [self]
+	var combined_args = [self, null]
+	var signatures = [null, null]
 	var pulled_remembered = []
 	for pair in inputs:
 		if pair[0] == named:
 			if not signature.compatible_with(pair[1]): return
 			if not pair[1].provides_data(): continue
 			combined_args.append_array(args)
+			signatures.push_back(signature)
 		else:
 			if not pair[1].provides_data(): continue
 			var card
@@ -142,6 +144,7 @@ func invoke(args: Array, signature: Signature, named = "", source_out = null):
 			# not enough args yet
 			if remembered == null: return
 			combined_args.append_array(remembered.get_remembered_value())
+			signatures.push_back(remembered.get_remembered_signature())
 			pulled_remembered.push_back(remembered)
 	# FIXME very noisy -- add extra protocol?
 	# for out in pulled_remembered: out.mark_activated(parent)
@@ -150,7 +153,40 @@ func invoke(args: Array, signature: Signature, named = "", source_out = null):
 		return
 	
 	if source_out: mark_activated(source_out, args)
-	process.callv(combined_args)
+	
+	if signatures.any(func (s): return s is Signature.IteratorSignature): hyper_invoke(combined_args, signatures)
+	else:
+		combined_args[1] = func (name, args):
+			if not args is Array: report_error(Error.Generic.new("Must pass an array of outputs to out.call()"))
+			output(name, args)
+		process.callv(combined_args)
+
+# Inspiration from https://github.com/jmoenig/Snap/blob/724297b6391f3d8d964a45b2bc7d0ea29cb8c75e/src/threads.js#L4807
+func hyper_invoke(args, signatures):
+	assert(signatures.filter(func (s): return s is Signature.IteratorSignature).size() == 1, "TODO no support yet for more than one iterator")
+	var iterator_index = -1
+	for i in range(0, signatures.size()):
+		if signatures[i] is Signature.IteratorSignature: iterator_index = i
+	var list = args[iterator_index]
+	
+	var result = {}
+	var count = {}
+	for out in outputs:
+		result[out] = range(0, list.size())
+		count[out] = 0
+	var report_result = func (name, args, index):
+			if not args is Array: report_error(Error.Generic.new("Must pass an array of outputs to out.call()"))
+			# FIXME taking first arg, as we currently always report single values...
+			result[name][index] = args[0]
+			count[name] += 1
+			if count[name] == list.size():
+				output(name, [result[name]])
+	
+	for i in range(0, list.size()):
+		var item = list[i]
+		args[iterator_index] = item
+		args[1] = report_result.bind(i)
+		process.callv(args)
 
 func output(name: String, args: Array):
 	var signature = outputs.get(name)

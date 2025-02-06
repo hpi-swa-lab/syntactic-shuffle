@@ -203,10 +203,10 @@ func save_process_callable():
 	var s = GDScript.new()
 	var src = get_function_signature() + "\n" + %code.text.indent("\t\t")
 	print(src)
-	s.source_code = "extends Object\nfunc build():\n\treturn {0}".format([src])
+	s.source_code = "@tool\nextends Card\nfunc build():\n\treturn {0}".format([src])
 	if s.reload() != OK:
 		return false
-	var obj = Object.new()
+	var obj = Card.new()
 	obj.set_script(s)
 	code_card.process = obj.build()
 	code_card.source_code = src

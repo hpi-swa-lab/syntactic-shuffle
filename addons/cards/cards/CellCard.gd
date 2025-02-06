@@ -64,7 +64,9 @@ func v():
 	
 	var default_edit = LineEdit.new()
 	default_edit.text = Signature.data_to_expression(default)
-	default_edit.text_submitted.connect(func (s): default = G.eval_expression(s))
+	default_edit.text_submitted.connect(func (s):
+		default = G.eval_expression(s)
+		data = default)
 	default_edit.placeholder_text = "Default"
 	ui(default_edit)
 
