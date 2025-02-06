@@ -27,7 +27,7 @@ func s():
 					if c is OutCard:
 						c.has_static_signature = true
 						c.signature = Signature.TypeSignature.new(t)
-				return , ["prop_name"])
+				return, ["prop_name"])
 	code_card_2.position = Vector2(809.9025, 1322.814)
 	var subscribe_in_card = SubscribeInCard.new(t("Object"))
 	subscribe_in_card.position = Vector2(499.1244, 767.828)

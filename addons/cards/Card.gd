@@ -60,8 +60,9 @@ var dragging: bool:
 			CardBoundary.get_card_boundary(self).card_picked_up(self)
 	get: return dragging
 
-var cards: Array[Node]:
-	get: return cards_parent.get_children().filter(func(s): return s is Card)
+var cards: Array[Card]:
+	get: return Array(cards_parent.get_children().filter(func(s): return s is Card),
+		TYPE_OBJECT, "Node2D", Card)
 
 var visual: CardVisual
 var cards_parent = CardBoundary.new()
@@ -127,6 +128,9 @@ func _ready() -> void:
 		card.setup_finished()
 		if card is CellCard:
 			for element in card.get_extra_ui(): ui(element)
+	
+	if not disable and get_all_incoming().is_empty():
+		propagate_incoming_connected({})
 
 func setup_finished():
 	pass
@@ -257,13 +261,36 @@ func outgoing_connected(obj: Card):
 	connection_draw_node.outgoing_disconnected(obj)
 func incoming_connected(obj: Card):
 	connection_draw_node.incoming_connected(obj)
+	propagate_incoming_connected({})
+func propagate_incoming_connected(seen):
+	if seen.has(self): return
+	seen[self] = true
+	var has_no_incoming = get_all_incoming().is_empty()
+	for c in cards:
+		# InCards are only considered when they are connected or when
+		# this card is entirely unconnected (should then show the default
+		# connection options). Other cards are considered entry points when
+		# they have no incoming cards (e.g., the PhysicsProcessCard)
+		if (c is InCard and (c.has_connected() or has_no_incoming)
+			or not c is InCard and c.get_all_incoming().is_empty()): c.propagate_incoming_connected(seen)
+	for c in get_all_outgoing():
+		c.propagate_incoming_connected(seen)
 
 ########################
 ## SIGNATURES AND INVOKE
 ########################
 
-var _input_signatures: Array[Signature] = []
-var _output_signatures: Array[Signature] = []
+var output_signatures: Array[Signature]:
+	get:
+		var s = [] as Array[Signature]
+		for card in cards: if card is OutCard: s.append_array(card.actual_signatures)
+		return s
+
+var input_signatures: Array[Signature]:
+	get:
+		var s = [] as Array[Signature]
+		for card in cards: if card is InCard: s.append_array(card.actual_signatures)
+		return s
 
 func get_out_signatures(signatures: Array, visited = []):
 	for card in cards:
@@ -315,6 +342,16 @@ func get_remembered_for(signature: Signature):
 			var val = card.get_remembered_for(signature)
 			if val != null: return val
 	return null
+
+## Compute actual signature based on connected nodes.
+## Meant for use in OutCard and InCard, the other classes
+## defer to these to figure out their signatures.
+func _compute_actual_signatures(base: Signature) -> Array[Signature]:
+	var s = [] as Array[Signature]
+	for card in _get_incoming_list():
+		s.append_array(card.output_signatures)
+	return base.make_concrete(s, []) if base else s
+func _get_incoming_list(): return get_all_incoming()
 
 ########################
 # UPDATING PER FRAME AND MOVE

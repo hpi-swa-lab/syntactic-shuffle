@@ -36,9 +36,26 @@ func _init(remember = false, signature: Signature = null, command = "") -> void:
 @export var command_name := ""
 @export var has_static_signature := false
 var signature: Signature
+var actual_signatures: Array[Signature] = []
 
 var remembered
 var remembered_signature
+
+func _get_incoming_list():
+	# OutCards in a CodeCard are not connected to their inputs
+	# TODO consider generic type names
+	if parent is CodeCard:
+		var s = []
+		for c in parent.cards: if c is InCard: s.push_back(c)
+		return s
+	return get_all_incoming()
+
+func propagate_incoming_connected(seen):
+	super.propagate_incoming_connected(seen)
+	# if we are the OutCard of an InCard, the InCard sets a signature
+	# directly that we would override here since we don't have any connections
+	if not parent is InCard:
+		actual_signatures = _compute_actual_signatures(signature if has_static_signature else null)
 
 ## Check if we have a compatible remembered value. If we remember values
 ## in general but we don't currently a value, check our incoming connections.
@@ -89,7 +106,7 @@ func get_out_signatures(signatures: Array[Signature], visited = []):
 	if not is_reachable(visited): return
 	
 	if has_static_signature:
-		for s in signature.make_concrete(get_incoming()): signatures.push_back(_add_command(s))
+		signatures.push_back(_add_command(signature))
 		# signatures.push_back(_add_command(signature))
 		return
 	var incoming = get_incoming()

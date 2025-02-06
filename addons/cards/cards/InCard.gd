@@ -23,6 +23,11 @@ var signature: Signature = Signature.VoidSignature.new():
 		signature = v
 		signature_changed()
 var out_card
+var actual_signatures: Array[Signature] = []:
+	get: return actual_signatures
+	set(a):
+		actual_signatures = a
+		if not signature is Signature.OutputAnySignature: out_card.actual_signatures = a
 
 func s():
 	# special InCard that the OutCard uses for connection purposes. Would yield
@@ -32,9 +37,6 @@ func s():
 	out_card = OutCard.new()
 	out_card.has_static_signature = true
 	out_card.signature = signature
-
-func signature_changed():
-	if out_card: out_card.signature = signature
 
 func v():
 	title("Input")
@@ -50,13 +52,18 @@ func signature_edit():
 
 func can_edit(): return false
 
-func setup_finished():
-	super.setup_finished()
-	incoming_connected(null)
+func signature_changed():
+	if parent: # FIXME this fine?
+		actual_signatures = _compute_actual_signatures(signature)
+	if out_card: out_card.signature = signature
+
+func propagate_incoming_connected(seen):
+	actual_signatures = _compute_actual_signatures(signature)
+	super.propagate_incoming_connected(seen)
 
 func get_out_signatures(list: Array, visited = []):
 	if not parent: list.push_back(signature)
-	else: list.append_array(signature.make_concrete(_get_incoming_list(), visited))
+	else: list.push_back(signature)
 
 func _get_incoming_list():
 	return parent.get_incoming() if parent else []
@@ -86,6 +93,13 @@ func is_valid_incoming(card, signature):
 func get_remembered():
 	return get_remembered_for(signature)
 
+func has_connected():
+	# NOTE: cannot use self.actual_signatures here since since is used during the
+	# forward pass in propagate_input_connected
+	for c in _get_incoming_list():
+		if c.output_signatures.any(func (s): return s.compatible_with(signature)): return true
+	return false
+
 func get_connected_incoming(visited = []):
 	var connected = []
 	var my_signatures = get_concrete_signatures(visited)
@@ -106,18 +120,6 @@ func invoke(args: Array, signature: Signature, named = "", source_out = null):
 		for p in named_outgoing[name]:
 			var card = get_node_or_null(p)
 			if card: card.invoke(args, signature, name, out_card)
-
-## An incoming connection from [obj] was established. [obj] is [null]
-## when this is called from the initialization of pre-existing connections.
-func incoming_connected(obj: Card):
-	for card in get_all_outgoing():
-		for input in card.cards:
-			if input is InCard: input.incoming_connected(obj)
-
-func incoming_disconnected(obj: Card):
-	for card in get_all_outgoing():
-		for input in card.cards:
-			if input is InCard: input.incoming_disconnected(obj)
 
 func try_connect_in(them: Card):
 	if not parent: return

@@ -103,13 +103,10 @@ func on_deselected():
 
 func _on_card_control_mouse_entered() -> void:
 	var inputs = []
-	for c in card.cards:
-		if c is InCard:
-			for signature in c.get_concrete_signatures():
-				var s = signature.get_description()
-				inputs.push_back(c.input_name + ": " + s if c is NamedInCard else s)
-	var outputs = [] as Array[Signature]
-	card.get_out_signatures(outputs)
+	for signature in card.input_signatures:
+		var s = signature.get_description()
+		inputs.push_back(s)
+		# inputs.push_back(c.input_name + ": " + s if c is NamedInCard else s)
 	var remembered = ""
 	for c in card.cards:
 		if c is OutCard:
@@ -118,7 +115,7 @@ func _on_card_control_mouse_entered() -> void:
 	
 	%signatures.visible = true
 	%inputs.text = "\n".join(inputs)
-	%outputs.text = "\n".join(outputs.map(func(s): return s.get_description())) + remembered
+	%outputs.text = "\n".join(card.output_signatures.map(func(s): return s.get_description())) + remembered
 	
 	get_selection_manager().consider_selection(card)
 

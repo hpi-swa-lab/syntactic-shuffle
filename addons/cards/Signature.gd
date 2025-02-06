@@ -16,7 +16,9 @@ func compatible_with_struct(other: StructSignature): return false
 func compatible_with_group(other: GroupSignature): return false
 func compatible_with_iterator(other: IteratorSignature): return other.type.compatible_with(self)
 ## Given a set of incoming cards, make this Signature concrete, i.e., non-generic
-func make_concrete(incoming: Array, visited = []): return [self]
+func make_concrete(incoming: Array[Signature], visited = []) -> Array[Signature]:
+	var has_iterator = incoming.any(func(s): return s is IteratorSignature)
+	return Array([IteratorSignature.new(self)] if has_iterator else [self], TYPE_OBJECT, &"RefCounted", Signature)
 
 class OutputAnySignature extends Signature:
 	func get_description(): return "* -> out"
@@ -29,6 +31,8 @@ class OutputAnySignature extends Signature:
 	func compatible_with_struct(other: StructSignature): return true
 	func compatible_with_group(other: GroupSignature): return true
 	func compatible_with_iterator(other: IteratorSignature): return true
+	func make_concrete(incoming: Array[Signature], visited = []) -> Array[Signature]:
+		return incoming
 
 class TypeSignature extends Signature:
 	var type: String
@@ -74,12 +78,14 @@ class GenericTypeSignature extends Signature:
 	func compatible_with(other: Signature): return other.compatible_with_generic(self)
 	func compatible_with_type(other: Signature): return true
 	func compatible_with_generic(other: GenericTypeSignature): return true
-	func make_concrete(incoming: Array, visited = []):
-		if incoming.is_empty(): return [self]
-		var out = [] as Array[Signature]
-		for card in incoming:
-			card.get_out_signatures(out, visited)
-		return out.filter(func(s): return s.compatible_with(self))
+	func make_concrete(incoming: Array[Signature], visited = []):
+		if incoming.is_empty(): return super.make_concrete(incoming, visited)
+		
+		var matching = incoming.filter(func(s): return s.compatible_with(self))
+		var has_iterator = incoming.any(func(s): return s is IteratorSignature)
+		if has_iterator:
+			matching = matching.map(func (s): return s if s is IteratorSignature else IteratorSignature.new(s))
+		return Array(matching, TYPE_OBJECT, &"RefCounted", Signature)
 
 class TriggerSignature extends Signature:
 	func get_description(): return "[TRIGGER]"
