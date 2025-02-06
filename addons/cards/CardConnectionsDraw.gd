@@ -42,7 +42,6 @@ func outgoing_disconnected(obj: Node):
 	for to in _feedback.duplicate():
 		if to == obj: _delete_feedback_for(to)
 func _delete_feedback_for(to):
-	assert(_feedback[to].is_inside_tree())
 	remove_child(_feedback[to])
 	_feedback[to].queue_free()
 	_feedback.erase(to)
