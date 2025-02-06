@@ -23,7 +23,7 @@ func v():
 	var e = LineEdit.new()
 	e.placeholder_text = "Input Name"
 	if input_name != null: e.text = input_name
-	e.text_changed.connect(func (n): input_name = n)
+	e.text_changed.connect(func(n): input_name = n)
 	ui(e)
 
 func _get_incoming_list(visited = []):
@@ -42,14 +42,14 @@ func try_connect_in(them: Node):
 		if name == input_name and not parent.get_named_incoming_at(name).is_empty(): return
 	
 	var my_signatures = get_concrete_signatures()
-	for card in get_object_cards(them):
+	for card in them.cards:
 		if card is OutCard:
 			var their_signatures = [] as Array[Signature]
 			card.get_out_signatures(their_signatures)
 			for their_signature in their_signatures:
 				for my_signature in my_signatures:
 					if their_signature.compatible_with(my_signature):
-						connect_to(them, parent, input_name)
+						them.connect_to(parent, input_name)
 						return
 
 func should_allow_connection(from: Card, to: Card):
@@ -71,9 +71,9 @@ func _get_remembered_for(signature: Signature):
 	for p in parent.named_incoming.get(input_name, []):
 		var card = parent.get_node_or_null(p)
 		if card and is_valid_incoming(card, signature):
-			var val = get_remembered_for(card, signature)
+			var val = card.get_remembered_for(signature)
 			if val != null: return val
 	return null
 
 func serialize_constructor():
-	return "{0}.named_data(\"{1}\", {2})".format([get_card_name(), input_name, signature.serialize_gdscript()])
+	return "{0}.named_data(\"{1}\", {2})".format([card_name, input_name, signature.serialize_gdscript()])

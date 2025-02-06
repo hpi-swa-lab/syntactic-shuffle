@@ -162,6 +162,9 @@ func can_edit(): return true
 func get_selection_manager() -> CardCamera:
 	return visual.get_selection_manager()
 
+func get_card_global_position():
+	return global_position
+
 ########################
 ## CONNECTIONS
 ########################
@@ -191,15 +194,14 @@ func get_all_connected() -> Array:
 	all.append_array(get_incoming())
 	all.append_array(get_named_incoming())
 	return all
-func connect_to(to: Node, named = ""):
+func connect_to(to: Node, named = "", skip_notify = false):
 	if named:
-		get_or_put(named_outgoing, named).push_back(self.get_path_to(to))
-		get_or_put(to.named_incoming, named).push_back(to.get_path_to(self))
-		self.outgoing_connected(to)
-		to.incoming_connected(self)
+		get_or_put(named_outgoing, named).push_back(self.get_path_to_card(to))
+		get_or_put(to.named_incoming, named).push_back(to.get_path_to_card(self))
 	else:
-		self.outgoing.push_back(self.get_path_to(to))
-		to.incoming.push_back(to.get_path_to(self))
+		self.outgoing.push_back(self.get_path_to_card(to))
+		to.incoming.push_back(to.get_path_to_card(self))
+	if not skip_notify:
 		self.outgoing_connected(to)
 		to.incoming_connected(self)
 func disconnect_all():
@@ -207,6 +209,11 @@ func disconnect_all():
 func disconnect_from(to: Card):
 	self._disconnect_from(to)
 	to._disconnect_from(self)
+
+func get_path_to_card(card: Card):
+	var from = self.node if self is NodeCard else self
+	var to = card.node if card is NodeCard else card
+	return from.get_path_to(to)
 
 func _get_named(dict) -> Array:
 	var out = []
@@ -216,12 +223,14 @@ func _get_named(dict) -> Array:
 			if card: out.append(card)
 	return out
 func lookup_card(path: NodePath):
-	var card = get_node_or_null(path)
-	if not card: return null
-	if card is Card: return card
-	if not card.has_meta("node_card"):
-		card.set_meta("node_card", NodeCard.new(card))
-	return card.get_meta("node_card")
+	return ensure_card(get_node_or_null(path))
+static func ensure_card(object: Node) -> Card:
+	if object == null: return null
+	if object is Card: return object
+	if Engine.is_editor_hint(): return null
+	if not object.has_meta("node_card"):
+		object.set_meta("node_card", NodeCard.new(object))
+	return object.get_meta("node_card")
 
 static func delete_from_dict_list(dict: Dictionary, value: NodePath):
 	for key in dict:
@@ -231,22 +240,22 @@ static func try_erase(array: Array, value: NodePath):
 	if array.has(value): array.erase(value); return true
 	return false
 func _disconnect_from(to: Card):
-	var p = get_path_to(to)
+	var p = get_path_to_card(to)
 	if try_erase(incoming, p): return incoming_disconnected(to)
 	if try_erase(outgoing, p): return outgoing_disconnected(to)
 	if delete_from_dict_list(named_outgoing, p): return outgoing_disconnected(to)
 	if delete_from_dict_list(named_incoming, p): return incoming_disconnected(to)
 	assert("node to disconnect from not found")
 
-func incoming_disconnected(obj: Node):
+func incoming_disconnected(obj: Card):
 	connection_draw_node.incoming_disconnected(obj)
 	for input in cards:
 		if input is InCard: input.incoming_disconnected(obj)
-func outgoing_disconnected(obj: Node):
+func outgoing_disconnected(obj: Card):
 	connection_draw_node.outgoing_disconnected(obj)
-func outgoing_connected(obj: Node):
+func outgoing_connected(obj: Card):
 	connection_draw_node.outgoing_disconnected(obj)
-func incoming_connected(obj: Node):
+func incoming_connected(obj: Card):
 	connection_draw_node.incoming_connected(obj)
 
 ########################
@@ -337,7 +346,8 @@ func _process(delta: float) -> void:
 			if ((obj is Card or obj.get_parent() == get_parent()) and
 			not obj.has_meta("cards_ignore") and
 			global_position.distance_to(obj.global_position) <= MAX_CONNECTION_DISTANCE):
-				try_connect(obj))
+				var c = ensure_card(obj)
+				if c: try_connect(c))
 	
 	connection_draw_node.check_redraw(delta)
 
@@ -347,12 +357,11 @@ func _physics_process(delta: float) -> void:
 			if not c.disable: c._physics_process(delta)
 
 static func _each_input_candidate(object: Node, cb: Callable, named: bool):
-	if not object is Card: return
 	for card in object.cards:
 		if (named and card is NamedInCard or
 			not named and not card is NamedInCard and card is InCard): cb.call(card)
 
-func try_connect(them: Node):
+func try_connect(them: Card):
 	_each_input_candidate(them, func(card): card.try_connect_in(self), true)
 	_each_input_candidate(them, func(card): card.try_connect_in(self), false)
 	_each_input_candidate(self, func(card): card.try_connect_in(them), true)
@@ -481,12 +490,8 @@ func container_size(t: Vector2): visual.container_size(t)
 func icon(t: Texture): visual.icon(t)
 func icon_data(t: String): visual.icon_data(t)
 func ui(t: Control): visual.ui(t)
-func c(other: Card):
-	outgoing.push_back(get_path_to(other))
-	other.incoming.push_back(other.get_path_to(self))
-func c_named(name: String, other: Card):
-	get_or_put(named_outgoing, name).push_back(get_path_to(other))
-	get_or_put(other.named_incoming, name).push_back(other.get_path_to(self))
+func c(other: Card): connect_to(other, "", true)
+func c_named(name: String, other: Card): connect_to(other, name, true)
 ## If your Card defers delivery of outputs you can signal here that it is
 ## possible to connect it in a cycle. (Otherwise, if inputs are synchronously
 ## delivered to outputs we get an infinite loop).

@@ -14,7 +14,7 @@ func clear_selection():
 	selection.clear()
 
 func get_selection():
-	return selection.keys().filter(func (k): return is_instance_valid(k))
+	return selection.keys().filter(func(k): return is_instance_valid(k))
 
 func set_as_selection(obj: Node):
 	clear_selection()
@@ -55,7 +55,7 @@ func group_selected():
 	clear_selection()
 	var parent = BlankCard.new()
 	cards[0].get_parent().add_child(parent)
-	parent.position = cards.map(func(c): return c.position).reduce(func (sum, v): return sum + v) / cards.size() - CardVisual.DEFAULT_EDITOR_SIZE * parent.get_base_scale() * 0.25
+	parent.position = cards.map(func(c): return c.position).reduce(func(sum, v): return sum + v) / cards.size() - CardVisual.DEFAULT_EDITOR_SIZE * parent.get_base_scale() * 0.25
 	if parent.visual: parent.visual.expanded = true
 	
 	var before = []
@@ -64,23 +64,23 @@ func group_selected():
 	var outgoing = []
 	var add_input = func(from, to, named):
 		var sig = [] as Array[Signature]
-		Card.get_object_out_signatures(from, sig)
+		from.get_out_signatures(from, sig)
 		# FIXME choosing first
 		var input = NamedInCard.named_data(named, sig[0]) if named else InCard.data(sig[0])
 		input.parent = parent.cards_parent
 		parent.cards_parent.add_child(input)
-		before.push_back(func ():
-			Card.object_disconnect_from(to, from))
-		after.push_back(func ():
-			Card.connect_to(from, parent, named)
-			Card.connect_to(input, to, named))
+		before.push_back(func():
+			to.disconnect_from(from))
+		after.push_back(func():
+			from.connect_to(parent, named)
+			input.connect_to(to, named))
 	var add_output = func(from, to, named, output):
 		output.parent = parent.cards_parent
 		if not output.get_parent(): parent.cards_parent.add_child(output)
-		before.push_back(func ():
-			Card.object_disconnect_from(from, to))
-		after.push_back(func ():
-			Card.connect_to(parent, to, named)
+		before.push_back(func():
+			from.disconnect_from(to))
+		after.push_back(func():
+			parent.connect_to(to, named)
 			from.c(output))
 	
 	for c in cards:
@@ -99,7 +99,7 @@ func group_selected():
 	# Check for outputs that have an identical signature and merge them
 	for i in range(0, outgoing.size()):
 		for j in range(i + 1, outgoing.size()):
-			if Card.objects_have_same_out_signatures(outgoing[i][0], outgoing[j][0]):
+			if outgoing[i][0].has_same_out_signatures(outgoing[j][0]):
 				outgoing[j][3].free()
 				outgoing[j][3] = outgoing[i][3]
 				break
@@ -109,7 +109,7 @@ func group_selected():
 	for i in incoming:
 		if i[2]: continue
 		# FIXME using only first one
-		var sig = [] as Array[Signature]; Card.get_object_out_signatures(i[0], sig); sig = sig[0]
+		var sig = [] as Array[Signature]; i[0].get_out_signatures(sig); sig = sig[0]
 		var found = false
 		for g in groups:
 			if sig.eq(g):
@@ -129,7 +129,7 @@ func group_selected():
 		if incoming[i][2]: continue
 		for j in range(i + 1, incoming.size()):
 			if incoming[j][2]: continue
-			if Card.objects_have_same_out_signatures(incoming[i][0], incoming[j][0]):
+			if incoming[i][0].has_same_out_signatures(incoming[j][0]):
 				pass
 	
 	for t in before: t.call()

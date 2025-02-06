@@ -54,27 +54,24 @@ circle_radius = 10.0
 metadata/_custom_type_script = ExtResource("6_272bh")
 
 [node name="MoveCard" type="Node2D" parent="CardBoundary"]
-position = Vector2(341, 285)
+position = Vector2(302, 267)
 scale = Vector2(0.2, 0.2)
 script = ExtResource("4_lquwl")
 id = "02e51268-9ead-4e9c-8bfc-1aec28b27ad0"
-incoming = Array[NodePath]([NodePath("../character"), NodePath("../AxisControlsCard"), NodePath("../Vector2Card")])
 metadata/_custom_type_script = ExtResource("4_lquwl")
 
 [node name="AxisControlsCard" type="Node2D" parent="CardBoundary"]
-position = Vector2(239, 289)
+position = Vector2(178, 318)
 scale = Vector2(0.2, 0.2)
 script = ExtResource("5_7mycd")
 id = "90e87c78-49f0-438b-9ede-5504febd3271"
-outgoing = [NodePath("../MoveCard")]
 metadata/_custom_type_script = ExtResource("5_7mycd")
 
 [node name="Vector2Card" type="Node2D" parent="CardBoundary"]
-position = Vector2(410, 204)
+position = Vector2(378, 168)
 scale = Vector2(0.2, 0.2)
 script = ExtResource("6_5vw27")
 id = "190083a7-166a-4fea-a237-e9fa76f98494"
-outgoing = [NodePath("../MoveCard")]
 metadata/_custom_type_script = ExtResource("6_5vw27")
 
 [node name="OnServerRequestCard" type="Node2D" parent="CardBoundary"]
@@ -104,7 +101,6 @@ script = ExtResource("9_efxa6")
 id = "a295d25d-633c-4969-adc0-987123a3bf2f"
 incoming = Array[NodePath]([NodePath("../ClockCard")])
 outgoing = Array[NodePath]([NodePath("../GetPropertyCard")])
-group_name = "enemy"
 metadata/_custom_type_script = ExtResource("9_efxa6")
 
 [node name="GetPropertyCard" type="Node2D" parent="CardBoundary"]
@@ -113,7 +109,6 @@ scale = Vector2(0.2, 0.2)
 script = ExtResource("10_dg77c")
 id = "f24dc8fe-8bc5-4838-bd52-f2086ff51cb8"
 incoming = Array[NodePath]([NodePath("../NodesInGroupCard")])
-property_name = "name"
 metadata/_custom_type_script = ExtResource("10_dg77c")
 
 [node name="ClockCard" type="Node2D" parent="CardBoundary"]

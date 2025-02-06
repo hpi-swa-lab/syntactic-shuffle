@@ -51,11 +51,12 @@ func get_remembered_for(signature: Signature):
 	else: return _try_connected_remembered(signature)
 
 func _ensure_remembered():
-	for arg in remembered:
-		# guard against freed objects to which we remember references
-		if not is_instance_valid(arg) and typeof(arg) == TYPE_OBJECT:
-			remembered_signature = null
-			remembered = null
+	if remembered:
+		for arg in remembered:
+			# guard against freed objects to which we remember references
+			if not is_instance_valid(arg) and typeof(arg) == TYPE_OBJECT:
+				remembered_signature = null
+				remembered = null
 
 func get_remembered_value():
 	_ensure_remembered()
@@ -97,10 +98,10 @@ func get_out_signatures(signatures: Array[Signature], visited = []):
 	for i in incoming:
 		if command_name:
 			var list = []
-			get_object_out_signatures(i, list, visited)
+			i.get_out_signatures(list, visited)
 			for item in list: signatures.push_back(_add_command(item))
 		else:
-			get_object_out_signatures(i, signatures, visited)
+			i.get_out_signatures(signatures, visited)
 
 func invoke(args: Array, signature: Signature, named = "", source_out = null):
 	if Engine.is_editor_hint(): return
@@ -117,13 +118,13 @@ func invoke(args: Array, signature: Signature, named = "", source_out = null):
 	
 	if source_out: mark_activated(source_out, args)
 	
-	var n = get_object_named_outgoing(parent)
+	var n = parent.named_outgoing
 	_feedback_signaled = false
 	for name in n:
 		for p in n[name]:
 			var obj = parent.get_node_or_null(p)
 			if obj: obj.invoke(args, signature, name, self)
-	for out in get_object_outgoing(parent):
+	for out in parent.outgoing:
 		var obj = parent.get_node_or_null(out)
 		if obj: obj.invoke(args, signature, named, self)
 	
@@ -156,10 +157,10 @@ func is_reachable(visited = []):
 
 func serialize_constructor():
 	if command_name:
-		return "{0}.command(\"{1}\")".format([get_card_name(), command_name])
+		return "{0}.command(\"{1}\")".format([card_name, command_name])
 	elif remember_message:
-		return "{0}.remember()".format([get_card_name()])
+		return "{0}.remember()".format([card_name])
 	elif has_static_signature:
-		return "{0}.static_signature({1}, {2})".format([get_card_name(), signature.serialize_gdscript(), remember_message])
+		return "{0}.static_signature({1}, {2})".format([card_name, signature.serialize_gdscript(), remember_message])
 	else:
-		return "{0}.new()".format([get_card_name()])
+		return "{0}.new()".format([card_name])

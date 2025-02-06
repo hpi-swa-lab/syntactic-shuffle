@@ -41,7 +41,7 @@ func signature_edit():
 	ui(edit)
 
 func serialize_constructor():
-	return "{0}.new({1})".format([get_card_name(), signature.serialize_gdscript()])
+	return "{0}.new({1})".format([card_name, signature.serialize_gdscript()])
 
 func clone():
 	return get_script().new(signature)

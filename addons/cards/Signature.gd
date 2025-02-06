@@ -78,8 +78,8 @@ class GenericTypeSignature extends Signature:
 		if incoming.is_empty(): return [self]
 		var out = [] as Array[Signature]
 		for card in incoming:
-			Card.get_object_out_signatures(card, out, visited)
-		return out.filter(func (s): return s.compatible_with(self))
+			card.get_out_signatures(out, visited)
+		return out.filter(func(s): return s.compatible_with(self))
 
 class TriggerSignature extends Signature:
 	func get_description(): return "[TRIGGER]"

@@ -27,11 +27,11 @@ func signature_changed():
 	if connect_card: connect_card.signature = signature
 	if disconnect_card: disconnect_card.signature = signature
 
-func incoming_connected(obj: Node):
-	var remembered = get_remembered_for(obj, signature) if obj else get_remembered()
+func incoming_connected(obj: Card):
+	var remembered = obj.get_remembered_for(signature) if obj else get_remembered()
 	if remembered: invoke(remembered.get_remembered_value(), cmd("connect", signature))
 
-func incoming_disconnected(obj: Node):
+func incoming_disconnected(obj: Card):
 	invoke([obj], cmd("disconnect", signature))
 
 func get_out_signatures(list: Array, visited = []):
@@ -39,4 +39,4 @@ func get_out_signatures(list: Array, visited = []):
 	for c in cards: c.get_out_signatures(list, visited)
 
 func serialize_constructor():
-	return "{0}.new({1})".format([get_card_name(), signature.serialize_gdscript()])
+	return "{0}.new({1})".format([card_name, signature.serialize_gdscript()])

@@ -91,7 +91,7 @@ func get_connected_incoming(visited = []):
 	var my_signatures = get_concrete_signatures(visited)
 	for c in _get_incoming_list():
 		var out = [] as Array[Signature]
-		get_object_out_signatures(c, out, visited)
+		c.get_out_signatures(out, visited)
 		for their_signature in out:
 			for my_signature in my_signatures:
 				if their_signature.compatible_with(my_signature):
@@ -109,35 +109,35 @@ func invoke(args: Array, signature: Signature, named = "", source_out = null):
 
 ## An incoming connection from [obj] was established. [obj] is [null]
 ## when this is called from the initialization of pre-existing connections.
-func incoming_connected(obj: Node):
+func incoming_connected(obj: Card):
 	for card in get_all_outgoing():
 		for input in card.cards:
 			if input is InCard: input.incoming_connected(obj)
 
-func incoming_disconnected(obj: Node):
+func incoming_disconnected(obj: Card):
 	for card in get_all_outgoing():
 		for input in card.cards:
 			if input is InCard: input.incoming_disconnected(obj)
 
-func try_connect_in(them: Node):
+func try_connect_in(them: Card):
 	if not parent: return
 	if parent.get_incoming().has(them): return
-	if them is Card and detect_cycles_for_new_connection(parent, them): return
+	if detect_cycles_for_new_connection(parent, them): return
 	
 	var my_signatures = get_concrete_signatures()
-	for card in Card.get_object_cards(them):
+	for card in them.cards:
 		if card is OutCard:
 			var their_signatures = [] as Array[Signature]
 			card.get_out_signatures(their_signatures)
 			for their_signature in their_signatures:
 				for my_signature in my_signatures:
 					if their_signature.compatible_with(my_signature):
-						connect_to(them, parent if parent else self)
+						them.connect_to(parent if parent else self)
 						incoming_connected(them)
 						return
 
 func detect_cycles_for_new_connection(from: Card, to: Card) -> bool:
-	if (to.allows_cycles() or from.allows_cycles()) and not from.get_all_outgoing().has(to) and not to.get_all_incoming().has(from):
+	if (to.allows_cycles or from.allows_cycles) and not from.get_all_outgoing().has(to) and not to.get_all_incoming().has(from):
 		return false
 	# we never allow direct cycles
 	if from.get_all_outgoing().has(to): return true
@@ -154,17 +154,17 @@ func check_is_connected(a: Card, b: Card) -> bool:
 		var node: Card = queue.pop_front()
 		visitited[node] = true
 		for next in node.get_outgoing():
-			if not visitited.has(next) and not next.allows_cycles():
+			if not visitited.has(next) and not next.allows_cycles:
 				if next == b: return true
 				queue.push_back(next)
 		for next in node.get_named_outgoing_for_cycles():
-			if not visitited.has(next) and not next.allows_cycles():
+			if not visitited.has(next) and not next.allows_cycles:
 				if next == b: return true
 				queue.push_back(next)
 	return false
 
 func serialize_constructor():
 	if signature is Signature.TriggerSignature:
-		return "{0}.trigger()".format([get_card_name()])
+		return "{0}.trigger()".format([card_name])
 	else:
-		return "{0}.data({1})".format([get_card_name(), signature.serialize_gdscript()])
+		return "{0}.data({1})".format([card_name, signature.serialize_gdscript()])

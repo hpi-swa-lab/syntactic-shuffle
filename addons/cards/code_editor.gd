@@ -13,7 +13,7 @@ func attach_cards(card: CodeCard, size: Vector2):
 		if input is NamedInCard:
 			%inputs.add_child(build_field(input.input_name, input))
 	for name in card.outputs:
-		var output = card.cards.filter(func (c): return c is OutCard and c.signature.eq(card.outputs[name]))[0]
+		var output = card.cards.filter(func(c): return c is OutCard and c.signature.eq(card.outputs[name]))[0]
 		%outputs.add_child(build_field(name, output))
 	
 	var regex = RegEx.new()
@@ -49,7 +49,7 @@ func get_current_inputs():
 	return Array(%inputs.get_children().map(func(box): return [box.get_meta("name").text, box.get_meta("signature").signature]), TYPE_ARRAY, "", null)
 
 func get_function_signature():
-	var inputs = get_current_inputs().filter(func (pair): return pair[1].provides_data()).map(func (pair): return pair[0])
+	var inputs = get_current_inputs().filter(func(pair): return pair[1].provides_data()).map(func(pair): return pair[0])
 	inputs.push_front("card")
 	return "func ({0}):".format([", ".join(inputs)])
 
@@ -69,19 +69,19 @@ func build_field(name: String, card: Card):
 	box.set_meta("name", label)
 	
 	if card is InCard:
-		label.text_changed.connect(func (s):
+		label.text_changed.connect(func(s):
 			card.rename(s)
 			update_function_signature()
 			save_pull_list())
 	else:
-		label.text_changed.connect(func (s): save_outputs())
+		label.text_changed.connect(func(s): save_outputs())
 	
 	var sig = VBoxContainer.new()
 	sig.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	
 	var editor = preload("res://addons/cards/signature/signature_edit.tscn").instantiate()
 	editor.signature = card.signature
-	editor.on_edit.connect(func (s):
+	editor.on_edit.connect(func(s):
 		update_function_signature()
 		card.signature = s)
 	box.set_meta("signature", editor)
@@ -146,7 +146,7 @@ func _on_add_selected_pressed() -> void:
 	for selected in code_card.get_selection_manager().get_selection():
 		if selected == code_card: continue
 		var sig = [] as Array[Signature]
-		Card.get_object_out_signatures(selected, sig)
+		selected.get_out_signatures(sig)
 		# FIXME picking first
 		sig = sig[0]
 		
@@ -184,9 +184,9 @@ func _on_save_pressed() -> void:
 
 func save_pull_list():
 	code_card.pull_only = (%inputs.get_children()
-		.map(func (c): return c.get_meta("pull_only"))
-		.filter(func (c): return c.button_pressed)
-		.map(func (c): return c.get_meta("input_name").text))
+		.map(func(c): return c.get_meta("pull_only"))
+		.filter(func(c): return c.button_pressed)
+		.map(func(c): return c.get_meta("input_name").text))
 
 func save_inputs_outputs():
 	code_card.inputs = get_current_inputs()
@@ -214,7 +214,7 @@ func save_process_callable():
 	return true
 
 func indent(src: String):
-	return "\n".join(Array(src.split("\n")).map(func (l): return "\t" + l if not l.begins_with("func(") else l))
+	return "\n".join(Array(src.split("\n")).map(func(l): return "\t" + l if not l.begins_with("func(") else l))
 
 static func dedent(src: String):
 	var prefix_length = RegEx.new()

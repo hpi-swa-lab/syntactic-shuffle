@@ -6,6 +6,10 @@ var node: Node
 
 func _init(node):
 	self.node = node
+	super._init()
+
+func get_card_global_position():
+	return node.global_position
 
 func v():
 	title("Node Proxy")

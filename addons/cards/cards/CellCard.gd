@@ -64,7 +64,7 @@ func v():
 	
 	var default_edit = LineEdit.new()
 	default_edit.text = Signature.data_to_expression(default)
-	default_edit.text_submitted.connect(func (s):
+	default_edit.text_submitted.connect(func(s):
 		default = G.eval_expression(s)
 		data = default)
 	default_edit.placeholder_text = "Default"
@@ -73,7 +73,7 @@ func v():
 func s():
 	out_card = OutCard.remember([data], Signature.TypeSignature.new(type))
 	
-	var code_card = CodeCard.create([["arg", cmd("store", any())]], {"out": any()}, func (card, arg):
+	var code_card = CodeCard.create([["arg", cmd("store", any())]], {"out": any()}, func(card, arg):
 		data = arg
 		card.output("out", [data]))
 	code_card.c(out_card)
@@ -82,7 +82,7 @@ func s():
 	var override_card = InCard.data(type_signature)
 	override_card.c_named("arg", code_card)
 	
-	var trigger_code_card = CodeCard.create([], {"out": any()}, func (card): card.output("out", [data]))
+	var trigger_code_card = CodeCard.create([], {"out": any()}, func(card): card.output("out", [data]))
 	trigger_code_card.c(out_card)
 	
 	var trigger_card = InCard.trigger()
@@ -92,7 +92,7 @@ func s():
 	self.type = type
 
 func serialize_constructor():
-	return "{0}.create(\"{1}\", \"{2}\", {3})".format([get_card_name(), data_name, type, Signature.data_to_expression(default)])
+	return "{0}.create(\"{1}\", \"{2}\", {3})".format([card_name, data_name, type, Signature.data_to_expression(default)])
 
 func get_extra_ui() -> Array[Control]:
 	match type:
@@ -129,7 +129,7 @@ func get_extra_ui() -> Array[Control]:
 		"String":
 			var e = LineEdit.new()
 			if data != null: e.text = data
-			e.text_changed.connect(func (s): data = s)
+			e.text_changed.connect(func(s): data = s)
 			update_ui_func = func(v): if e.text != v: e.text = v
 			return [e]
 		_:

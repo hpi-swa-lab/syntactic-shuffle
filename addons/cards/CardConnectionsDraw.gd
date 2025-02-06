@@ -79,12 +79,12 @@ func should_redraw():
 	var dragging = card.dragging
 	var deps = []
 	for to in card.get_incoming():
-		deps.push_back(to.global_position)
+		deps.push_back(to.get_card_global_position())
 		dragging = dragging or object_is_dragging(to)
 	for node in card.get_named_incoming():
-		deps.push_back(node.global_position)
+		deps.push_back(node.get_card_global_position())
 		dragging = dragging or object_is_dragging(node)
-	if not deps.is_empty(): deps.push_back(global_position)
+	if not deps.is_empty(): deps.push_back(card.get_card_global_position())
 	
 	var comp_deps = last_deps
 	last_deps = deps
@@ -102,9 +102,9 @@ func get_draw_offset(from, to):
 static func object_is_dragging(object):
 	return "dragging" in object and object.dragging
 
-func draw_label_to(obj: Node2D, label: String, light_background: bool):
+func draw_label_to(obj: Card, label: String, light_background: bool):
 	var font = ThemeDB.fallback_font
-	var angle = global_position.angle_to_point(obj.global_position)
+	var angle = global_position.angle_to_point(obj.get_card_global_position())
 	var flip = abs(angle) > PI / 2
 	const FONT_SIZE = 10
 	const OFFSET = 32
@@ -113,9 +113,9 @@ func draw_label_to(obj: Node2D, label: String, light_background: bool):
 	draw_set_transform_matrix(a.scaled(Vector2.ONE / global_scale))
 	draw_string(font, Vector2(0, 0), label, HORIZONTAL_ALIGNMENT_CENTER, -1, FONT_SIZE, Color(LIGHT_BACKGROUND_BASE if light_background else Color.WHITE, 1))
 
-func draw_connection(from, to, inverted, light_background: bool):
+func draw_connection(from: CardConnectionsDraw, to: Card, inverted, light_background: bool):
 	if not to: return
-	var target = to.global_position
+	var target = to.get_card_global_position()
 	var distance = target.distance_to(from.global_position)
 	# FIXME save guard -- if this happens, we have a problem anyways
 	# that needs to be solved differently
