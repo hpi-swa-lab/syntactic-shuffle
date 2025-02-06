@@ -10,8 +10,8 @@ func v():
 func s():
 	var out_card = OutCard.data()
 	
-	var code_card = CodeCard.create([["body", t("Node2D")]], {"trigger": trg()}, func (card, body):
-		card.output("trigger", []))
+	var code_card = CodeCard.create([["body", t("Node2D")]], [["trigger", trg()]], func (card, out, body):
+		out.call(null))
 	code_card.c(out_card)
 	
 	var signal_card = SignalCard.new()

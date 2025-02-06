@@ -72,6 +72,7 @@ position = Vector2(378, 168)
 scale = Vector2(0.2, 0.2)
 script = ExtResource("6_5vw27")
 id = "190083a7-166a-4fea-a237-e9fa76f98494"
+vector = Vector2(0, 0)
 metadata/_custom_type_script = ExtResource("6_5vw27")
 
 [node name="OnServerRequestCard" type="Node2D" parent="CardBoundary"]
@@ -82,6 +83,8 @@ id = "7bd98d27-7e92-4d1d-a891-aa09d195f218"
 named_outgoing = Dictionary[String, Array]({
 "peer": [NodePath("../ParseHttpCard")]
 })
+server = null
+port = 8080
 metadata/_custom_type_script = ExtResource("7_5vw27")
 
 [node name="ParseHttpCard" type="Node2D" parent="CardBoundary"]
@@ -101,6 +104,7 @@ script = ExtResource("9_efxa6")
 id = "a295d25d-633c-4969-adc0-987123a3bf2f"
 incoming = Array[NodePath]([NodePath("../ClockCard")])
 outgoing = Array[NodePath]([NodePath("../GetPropertyCard")])
+group_name = ""
 metadata/_custom_type_script = ExtResource("9_efxa6")
 
 [node name="GetPropertyCard" type="Node2D" parent="CardBoundary"]
@@ -109,6 +113,7 @@ scale = Vector2(0.2, 0.2)
 script = ExtResource("10_dg77c")
 id = "f24dc8fe-8bc5-4838-bd52-f2086ff51cb8"
 incoming = Array[NodePath]([NodePath("../NodesInGroupCard")])
+property_name = ""
 metadata/_custom_type_script = ExtResource("10_dg77c")
 
 [node name="ClockCard" type="Node2D" parent="CardBoundary"]

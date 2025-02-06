@@ -16,13 +16,13 @@ func v():
 func s():
 	var out_card = OutCard.data()
 	
-	connect_card = CodeCard.create([["obj", cmd("connect", t("Object"))]], {"trigger": trg(), "one_arg": t(type)}, func (card, obj):
+	connect_card = CodeCard.create([["obj", cmd("connect", t("Object"))]], [["trigger", trg()], ["one_arg", t(type)]], func (card, trigger, one_arg, obj):
 		if not signal_name: return
-		sub = func (arg): card.output("one_arg", [arg]) if type else func (): card.output("trigger", [])
+		sub = func (arg): one_arg.call(arg) if type else func (): trigger.call(null)
 		obj.connect(signal_name, sub))
 	connect_card.c(out_card)
 	
-	var disconnect_card = CodeCard.create([["obj", cmd("disconnect", t("Object"))]], {}, func (card, obj):
+	var disconnect_card = CodeCard.create([["obj", cmd("disconnect", t("Object"))]], [], func (card, obj):
 		if sub: obj.disconnect(signal_name, sub)
 		sub = null)
 	

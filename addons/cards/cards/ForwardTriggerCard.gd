@@ -10,7 +10,7 @@ func v():
 func s():
 	var out_card = OutCard.data()
 	
-	var code_card = CodeCard.create([["in", any()]], {"out": trg()}, func (card, arg): card.output("out", []))
+	var code_card = CodeCard.create([["in", any()]], [["out", trg()]], func (card, out, arg): out.call(null))
 	code_card.c(out_card)
 	
 	var in_card = NamedInCard.named_data("data", any())
