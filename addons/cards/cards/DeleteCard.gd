@@ -8,7 +8,7 @@ func v():
 	icon(preload("res://addons/cards/icons/delete.png"))
 
 func s():
-	var code_card = CodeCard.create([["body", t("Node")], ["trigger", trg()]], {}, func (card, body):
+	var code_card = CodeCard.create([["body", t("Node")], ["trigger", trg()]], [], func(card, body):
 		body.queue_free())
 	
 	var trigger_card = InCard.trigger()

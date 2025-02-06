@@ -9,8 +9,8 @@ func v():
 	container_size(Vector2(2000.0, 1600.0))
 
 func s():
-	var code_card = CodeCard.create([["property", t("String")], ["object", any()], ["trigger", trg()]], {"out": any()}, func(card, out, property, object):
-		out.call("out", [object.get(property)]), ["property"])
+	var code_card = CodeCard.create([["property", t("String")], ["object", any()], ["trigger", trg()]], [["out", any()]], func(card, out, property, object):
+		out.call(object.get(property)), ["property"])
 	code_card.position = Vector2(1003.648, 263.8711)
 	var cell_card = CellCard.create("property_name", "String", "")
 	cell_card.position = Vector2(1010.196, 833.1957)
@@ -18,7 +18,7 @@ func s():
 	in_card.position = Vector2(409.3658, 227.1764)
 	var out_card = OutCard.static_signature(t("Vector2"), false)
 	out_card.position = Vector2(1486.923, 218.1656)
-	var code_card_2 = CodeCard.create([["obj", any()], ["prop_name", t("String")]], {}, func(card, out, obj, prop_name):
+	var code_card_2 = CodeCard.create([["obj", any()], ["prop_name", t("String")]], [], func(card, obj, prop_name):
 		if not obj is Object: return
 		for prop in obj.get_property_list():
 			if prop["name"] == prop_name:
@@ -27,7 +27,7 @@ func s():
 					if c is OutCard:
 						c.has_static_signature = true
 						c.signature = Signature.TypeSignature.new(t)
-				return, ["prop_name"])
+				return , ["prop_name"])
 	code_card_2.position = Vector2(809.9025, 1322.814)
 	var subscribe_in_card = SubscribeInCard.new(t("Object"))
 	subscribe_in_card.position = Vector2(499.1244, 767.828)

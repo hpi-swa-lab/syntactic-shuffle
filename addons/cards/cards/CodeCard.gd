@@ -37,11 +37,11 @@ static func _extract_anonymous_functions(src: String):
 	
 	return sources
 
-static func create(inputs: Array[Array], outputs: Dictionary[String, Signature], process: Callable, pull_only = []):
+static func create(inputs: Array[Array], outputs: Array[Array], process: Callable, pull_only = []):
 	var c = CodeCard.new(inputs, outputs, process, pull_only)
 	return c
 
-func _init(inputs: Array[Array], outputs: Dictionary[String, Signature], process: Callable, pull_only = [], source_code = ""):
+func _init(inputs: Array[Array], outputs: Array[Array], process: Callable, pull_only = [], source_code = ""):
 	self.outputs = outputs
 	self.process = process
 	self.inputs = inputs
@@ -53,7 +53,7 @@ func _init(inputs: Array[Array], outputs: Dictionary[String, Signature], process
 func clone():
 	return get_script().new(inputs, outputs, process, pull_only, source_code)
 
-var outputs: Dictionary[String, Signature]
+var outputs: Array[Array]
 var process: Callable
 var inputs: Array[Array]
 var pull_only: Array
@@ -82,8 +82,8 @@ func s():
 	for pair in inputs:
 		NamedInCard.new(pair[0], pair[1])
 	
-	for output in outputs:
-		OutCard.static_signature(outputs[output])
+	for pair in outputs:
+		OutCard.static_signature(pair[1])
 
 func rebuild_inputs_outputs():
 	for card in cards: card.queue_free()
@@ -126,8 +126,8 @@ func invoke(args: Array, signature: Signature, named = "", source_out = null):
 	if not inputs.is_empty(): assert(named, "code cards with inputs can only have named connections")
 	if pull_only.has(named): return
 	
-	var combined_args = [self, null]
-	var signatures = [null, null]
+	var combined_args = []
+	var signatures = []
 	var pulled_remembered = []
 	for pair in inputs:
 		if pair[0] == named:
@@ -148,22 +148,22 @@ func invoke(args: Array, signature: Signature, named = "", source_out = null):
 			pulled_remembered.push_back(remembered)
 	# FIXME very noisy -- add extra protocol?
 	# for out in pulled_remembered: out.mark_activated(parent)
-	if process.get_argument_count() != combined_args.size():
+	if process.get_argument_count() - outputs.size() - 1 != combined_args.size():
 		report_error(Error.Generic.new("Need {0} arguments to invoke (received {1}).".format([process.get_argument_count(), combined_args.size()])))
 		return
 	
 	if source_out: mark_activated(source_out, args)
 	
-	if signatures.any(func (s): return s is Signature.IteratorSignature): hyper_invoke(combined_args, signatures)
+	if signatures.any(func(s): return s is Signature.IteratorSignature): hyper_invoke(combined_args, signatures)
 	else:
-		combined_args[1] = func (name, args):
-			if not args is Array: report_error(Error.Generic.new("Must pass an array of outputs to out.call()"))
-			output(name, args)
+		for i in range(outputs.size() - 1, -1, -1):
+			combined_args.push_front(_output.bind(outputs[i][0]))
+		combined_args.push_front(self)
 		process.callv(combined_args)
 
 # Inspiration from https://github.com/jmoenig/Snap/blob/724297b6391f3d8d964a45b2bc7d0ea29cb8c75e/src/threads.js#L4807
 func hyper_invoke(args, signatures):
-	assert(signatures.filter(func (s): return s is Signature.IteratorSignature).size() == 1, "TODO no support yet for more than one iterator")
+	assert(signatures.filter(func(s): return s is Signature.IteratorSignature).size() == 1, "TODO no support yet for more than one iterator")
 	var iterator_index = -1
 	for i in range(0, signatures.size()):
 		if signatures[i] is Signature.IteratorSignature: iterator_index = i
@@ -174,22 +174,26 @@ func hyper_invoke(args, signatures):
 	for out in outputs:
 		result[out] = range(0, list.size())
 		count[out] = 0
-	var report_result = func (name, args, index):
-			if not args is Array: report_error(Error.Generic.new("Must pass an array of outputs to out.call()"))
-			# FIXME taking first arg, as we currently always report single values...
-			result[name][index] = args[0]
-			count[name] += 1
-			if count[name] == list.size():
-				output(name, [result[name]])
+	var report_result = func(arg, name, index):
+		result[name][index] = arg
+		count[name] += 1
+		if count[name] == list.size():
+			_output(result[name], name)
 	
 	for i in range(0, list.size()):
 		var item = list[i]
 		args[iterator_index] = item
-		args[1] = report_result.bind(i)
+		var combined_args = [self]
+		for pair in outputs: combined_args.push_back(report_result.bind(pair[1], i))
+		combined_args.append_array(args)
 		process.callv(args)
 
-func output(name: String, args: Array):
-	var signature = outputs.get(name)
+func _output(arg: Variant, name: String):
+	var signature: Signature
+	for pair in outputs:
+		if pair[0] == name: signature = pair[1]
+	var args = [arg] if arg else []
+	# FIXME no longer needed?
 	if not signature:
 		report_error(Error.CodeCardMissingOutput.new(self, name, args))
 		return
@@ -204,14 +208,14 @@ func output(name: String, args: Array):
 
 func get_source_code():
 	if not source_code:
-		var index = parent.cards.filter(func (c): return c is CodeCard).find(self)
+		var index = parent.cards.filter(func(c): return c is CodeCard).find(self)
 		source_code = fetch_source_code_in(parent.get_script().source_code, index)
 	return source_code
 
 func serialize_constructor():
 	return "CodeCard.create([{inputs}], {{outputs}}, {code}, [{pull_only}])".format({
 		"inputs": ", ".join(inputs.map(func(pair): return '["{0}", {1}]'.format([pair[0], pair[1].serialize_gdscript()]))),
-		"outputs": ", ".join(outputs.keys().map(func(key): return '"{0}": {1}'.format([key, outputs[key].serialize_gdscript()]))),
+		"outputs": ", ".join(outputs.map(func(pair): return '["{0}", {1}]'.format([pair[0], pair[1].serialize_gdscript()]))),
 		"code": get_source_code(),
 		"pull_only": ", ".join(pull_only.map(func(p): return '"{0}"'.format([p]))),
 	})

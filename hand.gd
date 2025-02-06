@@ -2,7 +2,7 @@ extends CanvasLayer
 
 var categories = {
 	"Abstraction": [
-		CodeCard.new([], {"out": Signature.TypeSignature.new("")}, func(_card): pass, [], "func(_card): card.output(\"out\", [null])"),
+		CodeCard.new([], [["out", Signature.TypeSignature.new("")]], func(_card, out): pass , [], "func(_card): out.call(null)"),
 		CellCard.new("value", "float", 0.0),
 		FilterSignaturesCard.new(Signature.VoidSignature.new()),
 		"StoreCard",
@@ -55,7 +55,7 @@ func _ready() -> void:
 	var items = []
 	var list = ItemList.new()
 	G.put("search", list)
-	list.item_activated.connect(func (index):
+	list.item_activated.connect(func(index):
 		var card = load(items[index]).new()
 		#list.deselect_all()
 		card.position = get_viewport().get_camera_2d().position

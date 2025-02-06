@@ -13,8 +13,8 @@ func s():
 	remember_card.position = Vector2(559.931, 305.6451)
 	var remember_card_2 = RememberCard.new()
 	remember_card_2.position = Vector2(559.9337, 894.3524)
-	var code_card = CodeCard.create([["left", t("float")], ["right", t("float")]], {"out": t("float")}, func(card, left, right):
-		card.output("out", [left / right]), [])
+	var code_card = CodeCard.create([["left", t("float")], ["right", t("float")]], [["out", t("float")]], func(card, out, left, right):
+		out.call(left / right), [])
 	code_card.position = Vector2(1280.26, 599.9943)
 	var in_card = InCard.data(t("float"))
 	in_card.position = Vector2(200.0, 400.0)

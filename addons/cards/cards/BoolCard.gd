@@ -18,7 +18,7 @@ func s():
 	in_card_2.position = Vector2(242.4098, 1019.76)
 	var store_card_2 = StoreCard.new()
 	store_card_2.position = Vector2(986.5932, 1397.264)
-	var code_card = CodeCard.create([["value", t("bool")], ["trigger", cmd("toggle", trg())]], {"out": t("bool")}, func(card, value): card.output("out", [not value]), ["value"])
+	var code_card = CodeCard.create([["value", t("bool")], ["trigger", cmd("toggle", trg())]], [["out", t("bool")]], func(card, out, value): out.call(not value), ["value"])
 	code_card.position = Vector2(572.2458, 1388.409)
 	var in_card_3 = InCard.data(cmd("toggle", trg()))
 	in_card_3.position = Vector2(165.3011, 1415.906)

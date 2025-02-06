@@ -22,15 +22,15 @@ func s():
 	named_in_card.position = Vector2(227.7688, 1034.294)
 	var named_in_card_2 = NamedInCard.named_data("y", t("float"))
 	named_in_card_2.position = Vector2(1830.787, 960.4446)
-	var code_card = CodeCard.create([["number", t("float")], ["current", t("Vector2")]], {"out": t("Vector2")}, func(card, number, current):
+	var code_card = CodeCard.create([["number", t("float")], ["current", t("Vector2")]], [["out", t("Vector2")]], func(card, out, number, current):
 		current.x = number
-		card.output("out", [current]), ["current"])
+		out.call(current), ["current"])
 	code_card.position = Vector2(695.4229, 1064.738)
 	var store_card_2 = StoreCard.new()
 	store_card_2.position = Vector2(1034.13, 1092.902)
-	var code_card_2 = CodeCard.create([["number", t("float")], ["current", t("Vector2")]], {"out": t("Vector2")}, func(card, number, current):
+	var code_card_2 = CodeCard.create([["number", t("float")], ["current", t("Vector2")]], [["out", t("Vector2")]], func(card, out, number, current):
 		current.y = number
-		card.output("out", [current]), ["current"])
+		out.call(current), ["current"])
 	code_card_2.position = Vector2(1453.33, 953.097)
 	
 	cell_card.c(out_card)

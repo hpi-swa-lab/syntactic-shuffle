@@ -8,7 +8,7 @@ func v():
 	icon(preload("res://addons/cards/icons/look_at.png"))
 
 func s():
-	var code_card = CodeCard.create([["body", t("Node2D")], ["position", t("Vector2")]], {}, func (card, body, position):
+	var code_card = CodeCard.create([["body", t("Node2D")], ["position", t("Vector2")]], [], func(card, body, position):
 		body.look_at(position))
 	
 	var in_card = InCard.data(t("Vector2"))

@@ -12,8 +12,8 @@ func attach_cards(card: CodeCard, size: Vector2):
 	for input in card.cards:
 		if input is NamedInCard:
 			%inputs.add_child(build_field(input.input_name, input))
-	for name in card.outputs:
-		var output = card.cards.filter(func(c): return c is OutCard and c.signature.eq(card.outputs[name]))[0]
+	for pair in card.outputs:
+		var output = card.cards.filter(func(c): return c is OutCard and c.signature.eq(pair[1]))[0]
 		%outputs.add_child(build_field(name, output))
 	
 	var regex = RegEx.new()
@@ -48,6 +48,9 @@ func close_error():
 func get_current_inputs():
 	return Array(%inputs.get_children().map(func(box): return [box.get_meta("name").text, box.get_meta("signature").signature]), TYPE_ARRAY, "", null)
 
+func get_current_outputs():
+	return Array(%outputs.get_children().map(func(box): return [box.get_meta("name").text, box.get_meta("signature").signature]), TYPE_ARRAY, "", null)
+
 func get_function_signature():
 	var inputs = get_current_inputs().filter(func(pair): return pair[1].provides_data()).map(func(pair): return pair[0])
 	inputs.push_front("card")
@@ -74,7 +77,7 @@ func build_field(name: String, card: Card):
 			update_function_signature()
 			save_pull_list())
 	else:
-		label.text_changed.connect(func(s): save_outputs())
+		label.text_changed.connect(func(s): save_inputs_outputs())
 	
 	var sig = VBoxContainer.new()
 	sig.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -165,7 +168,7 @@ func _on_add_selected_pressed() -> void:
 func add_output(name = "out", signature = null) -> void:
 	if not signature: signature = Signature.TypeSignature.new("")
 	%outputs.add_child(build_field(name, code_card.add_card(OutCard.static_signature(signature))))
-	save_outputs()
+	save_inputs_outputs()
 	_resize()
 
 func _on_code_gui_input(event: InputEvent) -> void:
@@ -190,14 +193,7 @@ func save_pull_list():
 
 func save_inputs_outputs():
 	code_card.inputs = get_current_inputs()
-	save_outputs()
-
-func save_outputs():
-	var outputs = %outputs.get_children().map(func(box): return [box.get_meta("name").text, box.get_meta("signature").signature])
-	var o = {}
-	for pair in outputs:
-		o[pair[0]] = pair[1]
-	code_card.outputs = Dictionary(o, TYPE_STRING, "", null, TYPE_OBJECT, "Object", Signature)
+	code_card.outputs = get_current_outputs()
 
 func save_process_callable():
 	var s = GDScript.new()

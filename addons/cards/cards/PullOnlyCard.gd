@@ -14,7 +14,7 @@ func s():
 	in_card.position = Vector2(263.7976, 633.5124)
 	var out_card = OutCard.remember()
 	out_card.position = Vector2(1062.398, 629.3748)
-	var code_card = CodeCard.create([["input", any()]], {"out": any()}, func (card, input):
+	var code_card = CodeCard.create([["input", any()]], [["out", any()]], func(card, out, input):
 		var sig = [] as Array[Signature]
 		card.get_out_signatures(sig)
 		for o in card.get_outgoing():

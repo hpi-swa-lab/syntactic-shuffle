@@ -13,14 +13,14 @@ func s():
 	cell_card.position = Vector2(571.4874, 360.6539)
 	var physics_process_card = PhysicsProcessCard.new()
 	physics_process_card.position = Vector2(519.3989, 1342.285)
-	var code_card = CodeCard.create([["[trigger]", trg()], ["server", t("Object")], ["port", t("int")]], {"server": cmd("store", t("TCPServer")), "peer": t("StreamPeerTCP")}, func (card, server, port):
+	var code_card = CodeCard.create([["[trigger]", trg()], ["server", t("Object")], ["port", t("int")]], [["server", cmd("store", t("TCPServer"))], ["peer", t("StreamPeerTCP")]], func(card, out_server, out_peer, server, port):
 		if not server:
 			server = TCPServer.new()
 			server.listen(port)
-			card.output("server", [server])
+			out_server.call(server)
 		if server.is_connection_available():
 			var peer = server.take_connection()
-			card.output("peer", [peer])
+			out_peer.call(peer)
 , ["server", "port"])
 	code_card.position = Vector2(906.1457, 972.6456)
 	var store_card = StoreCard.new()

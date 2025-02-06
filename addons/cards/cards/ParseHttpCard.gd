@@ -9,9 +9,9 @@ func v():
 	container_size(Vector2(2000.0, 1600.0))
 
 func s():
-	var code_card = CodeCard.create([["peer", t("StreamPeerTCP")]], {"out": t("String")}, func (card, peer):
+	var code_card = CodeCard.create([["peer", t("StreamPeerTCP")]], [["out", t("String")]], func(card, out, peer):
 		var data = peer.get_utf8_string(peer.get_available_bytes())
-		card.output("out", [data])
+		out.call(data)
 , [])
 	code_card.position = Vector2(842.5, 541.0)
 	var named_in_card = NamedInCard.named_data("peer", t("StreamPeerTCP"))

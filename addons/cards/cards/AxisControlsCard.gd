@@ -11,13 +11,13 @@ func v():
 func s():
 	var out_card = OutCard.new()
 	out_card.position = Vector2(1190.92, 400.0026)
-	var code_card = CodeCard.create([["trigger", trg()]], {"out": cmd("direction", t("Vector2"))}, func (card):
+	var code_card = CodeCard.create([["trigger", trg()]], [["out", cmd("direction", t("Vector2"))]], func(card, out):
 		var input_direction = Vector2.ZERO
 		if Input.is_action_pressed("ui_left"): input_direction += Vector2.LEFT
 		if Input.is_action_pressed("ui_right"): input_direction += Vector2.RIGHT
 		if Input.is_action_pressed("ui_up"): input_direction += Vector2.UP
 		if Input.is_action_pressed("ui_down"): input_direction += Vector2.DOWN
-		if input_direction.length() > 0: card.output("out", [input_direction.normalized()])
+		if input_direction.length() > 0: out.call(input_direction.normalized())
 , [])
 	code_card.position = Vector2(581.647, 398.63)
 	var physics_process_card = PhysicsProcessCard.new()

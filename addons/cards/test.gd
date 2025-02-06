@@ -284,7 +284,7 @@ func test_cannot_connect_to_concrete_generic(ready):
 
 func test_derive_type_from_code_card(ready):
 	var code_card = CodeCard.new([],
-		{"out_float": Signature.TypeSignature.new("float"), "out_vec": Signature.TypeSignature.new("Vector2")},
+		[["out_float", Signature.TypeSignature.new("float")], ["out_vec", Signature.TypeSignature.new("Vector2")]],
 		func(card): pass)
 	var store_card = StoreCard.new()
 	code_card.c(store_card)
@@ -399,7 +399,7 @@ func test_iterator_invoke(ready):
 		var out = OutCard.static_signature(Signature.IteratorSignature.new(Signature.TypeSignature.new("Node"))))
 	var get_prop = GetPropertyCard.new()
 	get_prop.property_name = "position"
-	var report_card = CodeCard.new([["data", Signature.GenericTypeSignature.new()]], {}, func (card, out, data):
+	var report_card = CodeCard.new([["data", Signature.GenericTypeSignature.new()]], [], func (card, out, data):
 		reported["reported"] = data)
 	array_card.c(get_prop)
 	get_prop.c_named("data", report_card)

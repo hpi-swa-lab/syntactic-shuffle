@@ -10,9 +10,9 @@ func v():
 func s():
 	var out_card = OutCard.data()
 	
-	var code_card = CodeCard.create([["vector", t("Vector2")], ["normal", t("Vector2")]], {"out": t("Vector2")}, func (card, v, n):
+	var code_card = CodeCard.create([["vector", t("Vector2")], ["normal", t("Vector2")]], [["out", t("Vector2")]], func(card, out, v, n):
 		# FIXME n != Vector.ZERO
-		card.output([v.reflect(n)]))
+		out.call(v.reflect(n)))
 	code_card.c(out_card)
 	
 	var remember_vector_card = RememberCard.new()

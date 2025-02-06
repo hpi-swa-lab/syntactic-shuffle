@@ -11,12 +11,12 @@ func s():
 	var number_card = NumberCard.new()
 	number_card.position = Vector2(800.981, 973.1671)
 	number_card.cards[1].data = 0.40000000000004
-	var code_card = CodeCard.create([["elapsed", t("float")], ["delta", t("float")]], {"out": trg(), "elapsed": t("float")}, func(card, elapsed, delta):
+	var code_card = CodeCard.create([["elapsed", t("float")], ["delta", t("float")]], [["out", trg()], ["elapsed", t("float")]], func(card, out, out_elapsed, elapsed, delta):
 		elapsed += delta
 		if elapsed >= 1.0:
 			elapsed -= 1.0
-			card.output("out", [])
-		card.output("elapsed", [elapsed]), ["elapsed"])
+			out.call(null)
+		out_elapsed.call(elapsed), ["elapsed"])
 	code_card.position = Vector2(590.9951, 347.1498)
 	var physics_process_card = PhysicsProcessCard.new()
 	physics_process_card.position = Vector2(111.8076, 263.1322)

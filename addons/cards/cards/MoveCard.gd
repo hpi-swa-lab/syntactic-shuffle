@@ -15,7 +15,7 @@ func s():
 	var bool_card = BoolCard.new()
 	bool_card.position = Vector2(1219.58, 428.579)
 	bool_card.cards[0].data = false
-	var code_card = CodeCard.create([["velocity", t("Vector2")], ["body", t("Node")], ["did_accelerate", t("bool")], ["trigger", trg()]], {"out": t("Vector2"), "did_accelerate": t("bool")}, func (card, velocity, body, did_accelerate):
+	var code_card = CodeCard.create([["velocity", t("Vector2")], ["body", t("Node")], ["did_accelerate", t("bool")], ["trigger", trg()]], [["out", t("Vector2")], ["did_accelerate", t("bool")]], func(card, out, out_accelerated, velocity, body, did_accelerate):
 			if not did_accelerate:
 				var friction = 20
 				velocity = velocity.lerp(Vector2.ZERO, min(1.0, friction * card.card_parent_in_world().get_process_delta_time()))
@@ -25,18 +25,18 @@ func s():
 				velocity = body.velocity
 			elif body is Node2D:
 				body.position += velocity * get_process_delta_time()
-			card.output("did_accelerate", [false])
-			card.output("out", [velocity]), ["body", "velocity", "did_accelerate"])
+			out_accelerated.call(false)
+			out.call(velocity), ["body", "velocity", "did_accelerate"])
 	code_card.position = Vector2(622.4604, 637.1277)
 	var in_card = InCard.data(t("Node"))
 	in_card.position = Vector2(161.7643, 967.2809)
-	var code_card_2 = CodeCard.create([["direction", t("Vector2")], ["velocity", t("Vector2")]], {"out": t("Vector2"), "did_accelerate": t("bool")}, func (card, direction, velocity):
+	var code_card_2 = CodeCard.create([["direction", t("Vector2")], ["velocity", t("Vector2")]], [["out", t("Vector2")], ["did_accelerate", t("bool")]], func(card, out, did_accelerate, direction, velocity):
 			var _accel = 10
 			var max_velocity = 500
 			# if false: direction = direction.rotated(get_parent().rotation) # rotated
 			var v = velocity.lerp(direction * max_velocity, min(1.0, _accel * card.card_parent_in_world().get_process_delta_time()))
-			card.output("did_accelerate", [true])
-			card.output("out", [v]), ["velocity"])
+			did_accelerate.call(true)
+			out.call(v), ["velocity"])
 	code_card_2.position = Vector2(1386.606, 1125.075)
 	var in_card_2 = InCard.data(t("Vector2"))
 	in_card_2.position = Vector2(341.0815, 2687.129)

@@ -10,7 +10,7 @@ func v():
 func s():
 	var named_in_card = NamedInCard.named_data("value", any())
 	named_in_card.position = Vector2(200.0, 400.0)
-	var code_card = CodeCard.create([["value", any()], ["object", t("Object")], ["property_name", t("String")]], {"out": none()}, func (card, value, object, property_name):
+	var code_card = CodeCard.create([["value", any()], ["object", t("Object")], ["property_name", t("String")]], [], func(card, value, object, property_name):
 		object.set(property_name, value), ["object", "property_name"])
 	code_card.position = Vector2(761.4931, 837.9059)
 	var named_in_card_2 = NamedInCard.named_data("object", any())

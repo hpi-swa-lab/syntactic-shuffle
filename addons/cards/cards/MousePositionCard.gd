@@ -10,8 +10,8 @@ func v():
 func s():
 	var out_card = OutCard.new()
 	out_card.position = Vector2(1190.92, 400.0026)
-	var code_card = CodeCard.create([["trigger", trg()]], {"out": t("Vector2")}, func (card):
-		card.output("out", [card_parent_in_world().get_global_mouse_position()]), [])
+	var code_card = CodeCard.create([["trigger", trg()]], [["out", t("Vector2")]], func(card, out):
+		out.call(card_parent_in_world().get_global_mouse_position()), [])
 	code_card.position = Vector2(694.5817, 587.9924)
 	var physics_process_card = PhysicsProcessCard.new()
 	physics_process_card.position = Vector2(200.0, 400.0)

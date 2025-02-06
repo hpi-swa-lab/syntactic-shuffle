@@ -11,8 +11,8 @@ func v():
 func s():
 	var cell_card = CellCard.create("group_name", "String", "")
 	cell_card.position = Vector2(808.8936, 225.9817)
-	var code_card = CodeCard.create([["group_name", t("String")], ["[trigger]", trg()]], {"out": it(t("Node"))}, func (card, group_name):
-		card.output("out", [card.card_parent_in_world().get_tree().get_nodes_in_group(group_name)])
+	var code_card = CodeCard.create([["group_name", t("String")], ["[trigger]", trg()]], [["out", it(t("Node"))]], func(card, out, group_name):
+		out.call(card.card_parent_in_world().get_tree().get_nodes_in_group(group_name))
 , ["group_name"])
 	code_card.position = Vector2(876.1069, 856.0184)
 	var out_card = OutCard.new()

@@ -11,7 +11,7 @@ func v():
 func s():
 	var out_card = OutCard.new()
 	out_card.position = Vector2(1719.345, 839.3982)
-	var code_card = CodeCard.create([["left", t("float")], ["right", t("float")]], {"out": t("float")}, func(card, left, right):
+	var code_card = CodeCard.create([["left", t("float")], ["right", t("float")]], [["out", t("float")]], func(card, left, right):
 		card.output("out", [left - right]), [])
 	code_card.position = Vector2(1306.77, 786.0563)
 	var named_in_card = NamedInCard.named_data("right", t("float"))
@@ -30,7 +30,7 @@ func s():
 	remember_card_3.position = Vector2(887.2119, 1724.705)
 	var remember_card_4 = RememberCard.new()
 	remember_card_4.position = Vector2(865.3576, 2492.021)
-	var code_card_2 = CodeCard.create([["left", t("Vector2")], ["right", t("Vector2")]], {"out": t("Vector2")}, func(card, l, r):
+	var code_card_2 = CodeCard.create([["left", t("Vector2")], ["right", t("Vector2")]], [["out", t("Vector2")]], func(card, l, r):
 		if l != null and r != null:
 			card.output("out", [l - r]), [])
 	code_card_2.position = Vector2(1360.715, 2035.667)
