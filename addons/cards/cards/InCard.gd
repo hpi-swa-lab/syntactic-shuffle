@@ -44,7 +44,7 @@ func v():
 
 func signature_edit():
 	var edit = preload("res://addons/cards/signature/signature_edit.tscn").instantiate()
-	edit.on_edit.connect(func (s): signature = s)
+	edit.on_edit.connect(func(s): signature = s)
 	edit.signature = signature
 	ui(edit)
 
@@ -66,11 +66,11 @@ func get_concrete_signatures(visited = []):
 	get_out_signatures(l, visited)
 	return l
 
-func _get_remembered_for(signature: Signature):
+func get_remembered_for(signature: Signature):
 	if not parent: return null
 	for card in parent.get_all_incoming():
 		if is_valid_incoming(card, signature):
-			var val = get_remembered_for(card, signature)
+			var val = card.get_remembered_for(signature)
 			if val: return val
 	return null
 
@@ -84,7 +84,7 @@ func is_valid_incoming(card, signature):
 	#return false
 
 func get_remembered():
-	return _get_remembered_for(signature)
+	return get_remembered_for(signature)
 
 func get_connected_incoming(visited = []):
 	var connected = []

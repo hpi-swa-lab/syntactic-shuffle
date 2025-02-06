@@ -34,6 +34,8 @@ func show_feedback_for(to: Node, args: Array):
 		add_child(_feedback[to])
 	_feedback[to].report_object(args[0])
 	reposition_feedback()
+func incoming_connected(obj: Node):
+	pass
 func outgoing_connected(obj: Node):
 	if _feedback.has(null): _delete_feedback_for(null)
 func incoming_disconnected(obj: Node):

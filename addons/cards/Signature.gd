@@ -64,9 +64,12 @@ class CommandSignature extends Signature:
 		return other.command == command and arg.compatible_with(other.arg)
 
 class GenericTypeSignature extends Signature:
+	var name: String
+	func _init(name = "T"):
+		self.name = name
 	func get_description(): return "*"
 	func provides_data(): return true
-	func serialize_gdscript(): return "any()"
+	func serialize_gdscript(): return "any(\"{0}\")".format([name])
 	func eq(other: Signature): return other is GenericTypeSignature
 	func compatible_with(other: Signature): return other.compatible_with_generic(self)
 	func compatible_with_type(other: Signature): return true

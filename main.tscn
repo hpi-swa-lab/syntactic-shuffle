@@ -75,7 +75,6 @@ scale = Vector2(0.2, 0.2)
 script = ExtResource("6_5vw27")
 id = "190083a7-166a-4fea-a237-e9fa76f98494"
 outgoing = [NodePath("../MoveCard")]
-vector = Vector2(0, 0)
 metadata/_custom_type_script = ExtResource("6_5vw27")
 
 [node name="OnServerRequestCard" type="Node2D" parent="CardBoundary"]
@@ -86,8 +85,6 @@ id = "7bd98d27-7e92-4d1d-a891-aa09d195f218"
 named_outgoing = Dictionary[String, Array]({
 "peer": [NodePath("../ParseHttpCard")]
 })
-server = null
-port = 8080
 metadata/_custom_type_script = ExtResource("7_5vw27")
 
 [node name="ParseHttpCard" type="Node2D" parent="CardBoundary"]

@@ -42,7 +42,7 @@ var remembered_signature
 
 ## Check if we have a compatible remembered value. If we remember values
 ## in general but we don't currently a value, check our incoming connections.
-func _get_remembered_for(signature: Signature):
+func get_remembered_for(signature: Signature):
 	if not remember_message: return null
 	
 	if remembered_signature and get_remembered_value():
@@ -67,7 +67,7 @@ func get_remembered_signature():
 
 func _try_connected_remembered(signature: Signature):
 	for card in get_all_incoming():
-		var r = get_remembered_for(card, signature)
+		var r = card.get_remembered_for(signature)
 		if r: return r
 	return null
 
