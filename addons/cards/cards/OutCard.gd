@@ -112,6 +112,7 @@ func invoke(args: Array, signature: Signature, named = "", source_out = null):
 	if source_out: mark_activated(source_out, args)
 	
 	var n = get_object_named_outgoing(parent)
+	_feedback_signaled = false
 	for name in n:
 		for p in n[name]:
 			var obj = parent.get_node_or_null(p)
@@ -119,6 +120,13 @@ func invoke(args: Array, signature: Signature, named = "", source_out = null):
 	for out in get_object_outgoing(parent):
 		var obj = parent.get_node_or_null(out)
 		if obj: obj.invoke(args, signature, named, self)
+	
+	if not _feedback_signaled: parent.show_feedback_for(null, args)
+
+var _feedback_signaled = false
+
+func mark_signaled_feedback():
+	_feedback_signaled = true
 
 ## Check if this OutCard is connected to an InCard that could currently
 ## receive input (since its parent is connected to a card of a matching

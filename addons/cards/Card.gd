@@ -163,6 +163,7 @@ func mark_activated(from, args):
 	if from and is_inside_tree():
 		connection_draw_node.on_activated(from.parent)
 		from.parent.show_feedback_for(self, args)
+		from.mark_signaled_feedback()
 
 func show_feedback_for(to: Node, args: Array):
 	connection_draw_node.show_feedback_for(to, args)
@@ -309,9 +310,13 @@ static func connect_to(from: Node, to: Node, named = ""):
 	if named:
 		get_or_put(get_object_named_outgoing(from), named).push_back(from.get_path_to(to))
 		get_or_put(get_object_named_incoming(to), named).push_back(to.get_path_to(from))
+		if from is Card: from.outgoing_connected(to)
+		if to is Card: to.incoming_connected(to)
 	else:
 		get_object_outgoing(from).push_back(from.get_path_to(to))
 		get_object_incoming(to).push_back(to.get_path_to(from))
+		if from is Card: from.outgoing_connected(to)
+		if to is Card: to.incoming_connected(to)
 
 func _check_disconnect(them: Node2D):
 	var my_boundary = get_card_boundary()
@@ -382,10 +387,15 @@ func card_parent_in_world():
 	return parent.card_parent_in_world()
 
 func incoming_disconnected(obj: Node):
+	connection_draw_node.incoming_disconnected(obj)
 	for input in cards:
 		if input is InCard: input.incoming_disconnected(obj)
 func outgoing_disconnected(obj: Node):
 	connection_draw_node.outgoing_disconnected(obj)
+func outgoing_connected(obj: Node):
+	connection_draw_node.outgoing_disconnected(obj)
+func incoming_connected(obj: Node):
+	pass
 
 func editor_sync_prop(name: String):
 	editor_sync("cards:set_prop", [id, name, get(name)])

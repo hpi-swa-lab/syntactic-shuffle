@@ -10,9 +10,10 @@ func v():
 func s():
 	var out_card = OutCard.new()
 	out_card.position = Vector2(1253.09, 599.9952)
-	var code_card = CodeCard.create([["body", t("CharacterBody2D")], ["trigger", trg()]], {"trigger": trg()}, func (card, body):
+	var code_card = CodeCard.create([["body", t("CharacterBody2D")], ["trigger", trg()]], {"trigger": trg(), "collision": t("KinematicCollision2D")}, func (card, body):
 		if body is CharacterBody2D:
 			for collision_index in body.get_slide_collision_count():
+				card.output("collision", [body.get_slide_collision(collision_index)])
 				card.output("trigger", []), [])
 	code_card.position = Vector2(748.1183, 588.3369)
 	var physics_process_card = PhysicsProcessCard.new()
