@@ -34,7 +34,7 @@ func try_connect_in(them: Node):
 	if them is Card and detect_cycles_for_new_connection(parent, them): return
 	
 	var named = parent.named_incoming
-	var p = parent.get_path_to(them)
+	var p = parent.get_path_to_card(them)
 	for name in named:
 		# don't allow them to appear in multiple connections to us
 		if named[name].has(p): return

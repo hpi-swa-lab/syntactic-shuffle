@@ -192,7 +192,7 @@ func _output(arg: Variant, name: String):
 	var signature: Signature
 	for pair in outputs:
 		if pair[0] == name: signature = pair[1]
-	var args = [arg] if arg else []
+	var args = [arg] if arg != null else []
 	# FIXME no longer needed?
 	if not signature:
 		report_error(Error.CodeCardMissingOutput.new(self, name, args))

@@ -14,7 +14,7 @@ func attach_cards(card: CodeCard, size: Vector2):
 			%inputs.add_child(build_field(input.input_name, input))
 	for pair in card.outputs:
 		var output = card.cards.filter(func(c): return c is OutCard and c.signature.eq(pair[1]))[0]
-		%outputs.add_child(build_field(name, output))
+		%outputs.add_child(build_field(pair[0], output))
 	
 	var regex = RegEx.new()
 	regex.compile(r"^\s*func\s*\(.+\):\s*")
