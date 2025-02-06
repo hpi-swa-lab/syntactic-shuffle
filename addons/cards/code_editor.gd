@@ -71,7 +71,8 @@ func build_field(name: String, card: Card):
 	if card is InCard:
 		label.text_changed.connect(func (s):
 			card.rename(s)
-			update_function_signature())
+			update_function_signature()
+			save_pull_list())
 	else:
 		label.text_changed.connect(func (s): save_outputs())
 	
