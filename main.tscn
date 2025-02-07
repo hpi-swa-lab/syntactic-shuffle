@@ -104,6 +104,7 @@ position = Vector2(-84, 109)
 scale = Vector2(0.2, 0.2)
 script = ExtResource("9_dg77c")
 id = "906b4418-ddfc-4d12-bf4e-561d1449eaee"
+seconds = 1.0
 metadata/_custom_type_script = ExtResource("9_dg77c")
 
 [node name="NodesInGroupCard" type="Node2D" parent="CardBoundary"]

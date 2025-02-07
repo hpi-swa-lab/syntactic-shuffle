@@ -53,7 +53,7 @@ func get_current_outputs():
 
 func get_function_signature():
 	var inputs = ["card"]
-	inputs.append_array(get_current_outputs().filter(func(pair): return pair[1].provides_data()).map(func(pair): return pair[0]))
+	inputs.append_array(get_current_outputs().map(func(pair): return pair[0]))
 	inputs.append_array(get_current_inputs().filter(func(pair): return pair[1].provides_data()).map(func(pair): return pair[0]))
 	return "func ({0}):".format([", ".join(inputs)])
 

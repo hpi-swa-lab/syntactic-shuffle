@@ -144,14 +144,13 @@ var flash_value = 0.0
 func on_activated(them):
 	var current = _running_tweens.get(them)
 	if current != null and not current.is_running(): current = null
-	if current != null:
-		if current.get_total_elapsed_time() < 0.1: return
-		else: current.kill()
+	if current and current.get_total_elapsed_time() < 0.1: return
+	if current != null: current.kill()
 	var t = create_tween()
 	_running_tweens[them] = t
-	if current == null:
-		t.tween_method(flash_line.bind(them), 0.0, 1.0, 0.2)
-	t.tween_method(flash_line.bind(them), 1.0, 0.0, 0.2)
+	var from = 0.6 if current and current.get_total_elapsed_time() < 0.4 else _tween_values.get(them, 0.0)
+	t.tween_method(flash_line.bind(them), from, 1.0, 0.15)
+	t.tween_method(flash_line.bind(them), 1.0, 0.0, 0.2).set_delay(0.15)
 
 func flash_line(value: float, them):
 	_tween_values[them] = value
