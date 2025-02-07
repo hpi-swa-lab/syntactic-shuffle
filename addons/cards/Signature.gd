@@ -98,6 +98,7 @@ class IteratorSignature extends Signature:
 	var type: Signature
 	func _init(type: Signature):
 		self.type = type
+	func provides_data(): return type.provides_data()
 	func serialize_gdscript(): return "it({0})".format([type.serialize_gdscript()])
 	func eq(other: Signature): return other is IteratorSignature and type.eq(other.type)
 	func compatible_with(other: Signature): return other.compatible_with_iterator(self)

@@ -143,12 +143,18 @@ func invoke(args: Array, signature: Signature, named = "", source_out = null):
 	
 	if source_out: mark_activated(source_out, args)
 	
-	if signatures.any(func(s): return s is Signature.IteratorSignature): hyper_invoke(combined_args, signatures)
+	if should_hyper_invoke(signatures): hyper_invoke(combined_args, signatures)
 	else:
 		for i in range(outputs.size() - 1, -1, -1):
 			combined_args.push_front(_output.bind(outputs[i][0]))
 		combined_args.push_front(self)
 		process.callv(combined_args)
+
+func should_hyper_invoke(signatures):
+	for i in range(signatures.size()):
+		if signatures[i] is Signature.IteratorSignature and not inputs[i][1] is Signature.IteratorSignature:
+			return true
+	return false
 
 # Inspiration from https://github.com/jmoenig/Snap/blob/724297b6391f3d8d964a45b2bc7d0ea29cb8c75e/src/threads.js#L4807
 func hyper_invoke(args, signatures):
@@ -182,7 +188,6 @@ func _output(arg: Variant, name: String):
 	var output = output_for_name(name)
 	assert(output.output_signatures.size() == 1)
 	output.invoke(args, output.output_signatures[0], "", output)
-	#output.invoke(args, output.signature, "", output)
 
 func get_source_code():
 	if not source_code:
