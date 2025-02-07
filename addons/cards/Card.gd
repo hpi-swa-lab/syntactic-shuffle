@@ -69,6 +69,7 @@ var cards_parent = CardBoundary.new()
 var connection_draw_node = CardConnectionsDraw.new()
 var parent: Card
 var allows_cycles = false
+var initialized_signatures = false
 @export var incoming: Array[NodePath] = []
 @export var outgoing: Array[NodePath] = []
 @export var named_outgoing: Dictionary[String, Array] = {}
@@ -129,15 +130,15 @@ func _ready() -> void:
 		if card is CellCard:
 			for element in card.get_extra_ui(): ui(element)
 	
-	if not disable and get_all_incoming().is_empty():
-		propagate_incoming_connected({})
+	if not disable and not initialized_signatures and get_all_incoming().is_empty():
+		start_propagate_incoming_connected()
 
 func setup_finished():
 	pass
 
 func add_card(card: Card):
-	cards_parent.add_child(card)
 	card.parent = self
+	cards_parent.add_child(card)
 	return card
 
 func mark_activated(from, args):
@@ -261,18 +262,36 @@ func outgoing_connected(obj: Card):
 	connection_draw_node.outgoing_disconnected(obj)
 func incoming_connected(obj: Card):
 	connection_draw_node.incoming_connected(obj)
-	propagate_incoming_connected({})
+	start_propagate_incoming_connected()
+
+func start_propagate_incoming_connected():
+	var seen = {}
+	var previous_seen = null
+	propagate_incoming_connected(seen)
+	while seen != previous_seen:
+		previous_seen = seen
+		seen = {}
+		for node in previous_seen:
+			if previous_seen[node] == &"recheck":
+				node.parent.propagate_incoming_connected(seen)
+
 func propagate_incoming_connected(seen):
 	if seen.has(self): return
-	seen[self] = true
-	var has_no_incoming = get_all_incoming().is_empty()
+	seen[self] = &"done"
+	initialized_signatures = true
+	var parent_has_no_incoming = get_all_incoming().is_empty()
 	for c in cards:
 		# InCards are only considered when they are connected or when
 		# this card is entirely unconnected (should then show the default
 		# connection options). Other cards are considered entry points when
 		# they have no incoming cards (e.g., the PhysicsProcessCard)
-		if (c is InCard and (c.has_connected() or has_no_incoming)
-			or not c is InCard and c.get_all_incoming().is_empty()): c.propagate_incoming_connected(seen)
+		if c is InCard:
+			if c.has_connected() or parent_has_no_incoming: c.propagate_incoming_connected(seen)
+			else:
+				c.propagate_unreachable()
+				seen[c] = &"recheck"
+		else:
+			if c.get_all_incoming().is_empty(): c.propagate_incoming_connected(seen)
 	for c in get_all_outgoing():
 		c.propagate_incoming_connected(seen)
 
@@ -292,8 +311,8 @@ var input_signatures: Array[Signature]:
 		for card in get_inputs(): s.append_array(card.actual_signatures)
 		return s
 
-func get_outputs() -> Array[Card]: return cards.filter(func (c): return c is OutCard)
-func get_inputs() -> Array[Card]: return cards.filter(func (c): return c is InCard)
+func get_outputs() -> Array[Card]: return cards.filter(func(c): return c is OutCard)
+func get_inputs() -> Array[Card]: return cards.filter(func(c): return c is InCard)
 
 func invoke(args: Array, signature: Signature, named = "", source_out = null):
 	for input in cards:

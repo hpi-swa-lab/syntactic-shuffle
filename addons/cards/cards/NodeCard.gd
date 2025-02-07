@@ -7,6 +7,8 @@ var node: Node
 func _init(node):
 	self.node = node
 	super._init()
+	# We are never shown, so we need to trigger signature discovery manually
+	start_propagate_incoming_connected()
 
 func get_card_global_position():
 	return node.global_position

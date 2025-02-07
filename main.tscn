@@ -1,17 +1,11 @@
-[gd_scene load_steps=14 format=3 uid="uid://bqninusgeuw0i"]
+[gd_scene load_steps=8 format=3 uid="uid://bqninusgeuw0i"]
 
 [ext_resource type="Script" uid="uid://cja8ehiirmcyt" path="res://addons/cards/CardBoundary.gd" id="1_ig7tw"]
-[ext_resource type="Script" uid="uid://ctmo5roqpacap" path="res://addons/cards/cards/MoveCard.gd" id="4_lquwl"]
 [ext_resource type="Script" uid="uid://dkyx51jnk8cvd" path="res://addons/cards/cards/AxisControlsCard.gd" id="5_7mycd"]
 [ext_resource type="Script" uid="uid://cykn2a1upyl7a" path="res://addons/cards/cards/Vector2Card.gd" id="6_5vw27"]
 [ext_resource type="Script" uid="uid://bvr4vcw3kd72b" path="res://addons/cards/placeholder/placeholder.gd" id="6_272bh"]
-[ext_resource type="Script" uid="uid://cnghmd83iaxjx" path="res://addons/cards/cards/OnServerRequestCard.gd" id="7_5vw27"]
-[ext_resource type="Script" uid="uid://bssbsrhuotjx4" path="res://addons/cards/cards/ParseHttpCard.gd" id="8_kek77"]
-[ext_resource type="Script" uid="uid://dj1u5natr5pv3" path="res://addons/cards/cards/NodesInGroupCard.gd" id="9_efxa6"]
+[ext_resource type="Script" uid="uid://ctmo5roqpacap" path="res://addons/cards/cards/MoveCard.gd" id="6_kek77"]
 [ext_resource type="Script" uid="uid://cxldeg24krchn" path="res://camera_2d.gd" id="9_kek77"]
-[ext_resource type="Script" uid="uid://bbls2cpisjntj" path="res://addons/cards/cards/GetPropertyCard.gd" id="10_dg77c"]
-[ext_resource type="Script" uid="uid://dpn0hnjmcwudf" path="res://addons/cards/cards/ClockCard.gd" id="11_dg77c"]
-[ext_resource type="Script" uid="uid://wdnibt3soxmd" path="res://addons/cards/cards/StoreCard.gd" id="12_ycdy4"]
 [ext_resource type="Script" uid="uid://dio881dm6xtr3" path="res://hand.gd" id="15_vivmo"]
 
 [node name="main" type="Node2D"]
@@ -35,7 +29,7 @@ metadata/_custom_type_script = ExtResource("6_272bh")
 
 [node name="character" type="CharacterBody2D" parent="CardBoundary" groups=["enemy"]]
 position = Vector2(449, 382)
-metadata/cards_outgoing = [NodePath("../MoveCard")]
+metadata/cards_outgoing = [NodePath("")]
 
 [node name="Placeholder" type="Node2D" parent="CardBoundary/character"]
 script = ExtResource("6_272bh")
@@ -45,7 +39,7 @@ metadata/_custom_type_script = ExtResource("6_272bh")
 
 [node name="pickup" type="CharacterBody2D" parent="CardBoundary"]
 position = Vector2(541, 102)
-metadata/cards_outgoing = [NodePath("../MoveCard")]
+metadata/cards_outgoing = [NodePath("")]
 
 [node name="Placeholder" type="Node2D" parent="CardBoundary/pickup"]
 script = ExtResource("6_272bh")
@@ -53,21 +47,6 @@ color = Color(0.974666, 0.76677, 1.15514e-06, 1)
 shape_type = "Circle"
 circle_radius = 10.0
 metadata/_custom_type_script = ExtResource("6_272bh")
-
-[node name="MoveCard" type="Node2D" parent="CardBoundary"]
-position = Vector2(302, 267)
-scale = Vector2(0.2, 0.2)
-script = ExtResource("4_lquwl")
-id = "02e51268-9ead-4e9c-8bfc-1aec28b27ad0"
-metadata/_custom_type_script = ExtResource("4_lquwl")
-
-[node name="AxisControlsCard" type="Node2D" parent="CardBoundary"]
-position = Vector2(178, 318)
-scale = Vector2(0.2, 0.2)
-script = ExtResource("5_7mycd")
-id = "90e87c78-49f0-438b-9ede-5504febd3271"
-outgoing = Array[NodePath]([NodePath("../StoreCard")])
-metadata/_custom_type_script = ExtResource("5_7mycd")
 
 [node name="Vector2Card" type="Node2D" parent="CardBoundary"]
 position = Vector2(378, 168)
@@ -77,62 +56,21 @@ id = "190083a7-166a-4fea-a237-e9fa76f98494"
 vector = Vector2(0, 0)
 metadata/_custom_type_script = ExtResource("6_5vw27")
 
-[node name="OnServerRequestCard" type="Node2D" parent="CardBoundary"]
-position = Vector2(655, 215)
+[node name="AxisControlsCard" type="Node2D" parent="CardBoundary"]
+position = Vector2(213, 329)
 scale = Vector2(0.2, 0.2)
-script = ExtResource("7_5vw27")
-id = "7bd98d27-7e92-4d1d-a891-aa09d195f218"
-named_outgoing = Dictionary[String, Array]({
-"peer": [NodePath("../ParseHttpCard")]
-})
-server = null
-port = 8080
-metadata/_custom_type_script = ExtResource("7_5vw27")
+script = ExtResource("5_7mycd")
+id = "5d248181-b1ca-4e41-8889-b3f6f07e559e"
+outgoing = Array[NodePath]([NodePath("../MoveCard")])
+metadata/_custom_type_script = ExtResource("5_7mycd")
 
-[node name="ParseHttpCard" type="Node2D" parent="CardBoundary"]
-position = Vector2(761, 229)
+[node name="MoveCard" type="Node2D" parent="CardBoundary"]
+position = Vector2(305, 431)
 scale = Vector2(0.2, 0.2)
-script = ExtResource("8_kek77")
-id = "21ddf3af-2c13-47d6-bc6e-3fde7c6f1de9"
-named_incoming = Dictionary[String, Array]({
-"peer": [NodePath("../OnServerRequestCard")]
-})
-metadata/_custom_type_script = ExtResource("8_kek77")
-
-[node name="NodesInGroupCard" type="Node2D" parent="CardBoundary"]
-position = Vector2(617, 497)
-scale = Vector2(0.2, 0.2)
-script = ExtResource("9_efxa6")
-id = "a295d25d-633c-4969-adc0-987123a3bf2f"
-incoming = Array[NodePath]([NodePath("../ClockCard")])
-outgoing = Array[NodePath]([NodePath("../GetPropertyCard")])
-group_name = "enemy"
-metadata/_custom_type_script = ExtResource("9_efxa6")
-
-[node name="GetPropertyCard" type="Node2D" parent="CardBoundary"]
-position = Vector2(729, 441)
-scale = Vector2(0.2, 0.2)
-script = ExtResource("10_dg77c")
-id = "f24dc8fe-8bc5-4838-bd52-f2086ff51cb8"
-incoming = Array[NodePath]([NodePath("../NodesInGroupCard")])
-property_name = "position"
-metadata/_custom_type_script = ExtResource("10_dg77c")
-
-[node name="ClockCard" type="Node2D" parent="CardBoundary"]
-position = Vector2(514, 494)
-scale = Vector2(0.2, 0.2)
-script = ExtResource("11_dg77c")
-id = "5bf482f0-db94-48be-a938-fc6da57dc2b6"
-outgoing = Array[NodePath]([NodePath("../NodesInGroupCard")])
-metadata/_custom_type_script = ExtResource("11_dg77c")
-
-[node name="StoreCard" type="Node2D" parent="CardBoundary"]
-position = Vector2(125, 185)
-scale = Vector2(0.2, 0.2)
-script = ExtResource("12_ycdy4")
-id = "6f124a4d-225b-4913-aa69-29a5ea3ac492"
+script = ExtResource("6_kek77")
+id = "38bb0cf3-ba85-4161-8c7e-445c5d90f201"
 incoming = Array[NodePath]([NodePath("../AxisControlsCard")])
-metadata/_custom_type_script = ExtResource("12_ycdy4")
+metadata/_custom_type_script = ExtResource("6_kek77")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 script = ExtResource("15_vivmo")
