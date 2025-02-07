@@ -44,18 +44,17 @@ var remembered_signature
 func _get_incoming_list():
 	# OutCards in a CodeCard are not connected to their inputs
 	# TODO consider generic type names
-	if parent is CodeCard:
-		var s = []
-		for c in parent.cards: if c is InCard: s.push_back(c)
-		return s
+	if parent is CodeCard: return parent.cards.filter(func(c): return c is InCard)
 	return get_all_incoming()
+
+func get_outputs() -> Array[Card]: return [self] as Array[Card]
 
 func propagate_incoming_connected(seen):
 	super.propagate_incoming_connected(seen)
 	# if we are the OutCard of an InCard, the InCard sets a signature
 	# directly that we would override here since we don't have any connections
 	if not parent is InCard:
-		actual_signatures = _compute_actual_signatures(signature if has_static_signature else null)
+		actual_signatures = _compute_actual_signatures(_add_command(signature) if has_static_signature else null)
 
 ## Check if we have a compatible remembered value. If we remember values
 ## in general but we don't currently a value, check our incoming connections.
@@ -102,24 +101,6 @@ func _add_command(signature: Signature) -> Signature:
 	if signature is Signature.CommandSignature and signature.command == command_name: return signature
 	return Signature.CommandSignature.new(command_name, signature)
 
-func get_out_signatures(signatures: Array[Signature], visited = []):
-	if not is_reachable(visited): return
-	
-	if has_static_signature:
-		signatures.push_back(_add_command(signature))
-		# signatures.push_back(_add_command(signature))
-		return
-	var incoming = get_incoming()
-	if incoming.is_empty(): return
-	
-	for i in incoming:
-		if command_name:
-			var list = []
-			i.get_out_signatures(list, visited)
-			for item in list: signatures.push_back(_add_command(item))
-		else:
-			i.get_out_signatures(signatures, visited)
-
 func invoke(args: Array, signature: Signature, named = "", source_out = null):
 	if Engine.is_editor_hint(): return
 	
@@ -151,26 +132,6 @@ var _feedback_signaled = false
 
 func mark_signaled_feedback():
 	_feedback_signaled = true
-
-## Check if this OutCard is connected to an InCard that could currently
-## receive input (since its parent is connected to a card of a matching
-## signature). Note that if the parent has no connected cards, we assume
-## all cards to be reachable.
-## The method over-approximates the answer: as soon as at least one input
-## of a connected component is reachable, it answers true.
-func is_reachable(visited = []):
-	if visited.has(self): return true
-	visited.push_back(self)
-	if not parent is Card or parent.get_all_incoming().is_empty(): return true
-	# CodeCard out's are not connected
-	if parent is CodeCard: return true
-	
-	var inputs = []
-	get_connected_inputs(inputs, {})
-	for input in inputs:
-		if not input.get_connected_incoming(visited).is_empty():
-			return true
-	return false
 
 func serialize_constructor():
 	if command_name:

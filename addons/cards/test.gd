@@ -45,7 +45,7 @@ func run_cards_test(test):
 		var card = Card.new()
 		var was_called = {"was": false}
 		Card.push_active_card_list(card)
-		test.call(func ():
+		test.call(func():
 			was_called["was"] = true
 			Card.pop_active_card_list())
 		assert(was_called["was"], "ready was not called")
@@ -198,8 +198,7 @@ func test_casting_generic_signature(ready):
 	number_card.c(store_card)
 	ready.call()
 	
-	var signatures = [] as Array[Signature]
-	store_card.get_out_signatures(signatures)
+	var signatures = store_card.output_signatures
 	assert_eq(signatures.size(), 1)
 	assert_compatible(signatures[0], Signature.TypeSignature.new("float"))
 	assert_not_compatible(signatures[0], Signature.TypeSignature.new("Vector2"))
@@ -207,7 +206,7 @@ func test_casting_generic_signature(ready):
 func test_derive_output_types_from_incoming(ready):
 	var num = NumberCard.new()
 	var vector = Vector2Card.new()
-	var c = Card.new(func ():
+	var c = Card.new(func():
 		var in1 = InCard.new(Signature.TypeSignature.new("float"))
 		var out1 = OutCard.new()
 		in1.c(out1)
@@ -219,44 +218,32 @@ func test_derive_output_types_from_incoming(ready):
 	num.c(c)
 	ready.call()
 	
-	var out = [] as Array[Signature]
-	c.get_out_signatures(out)
-	assert_eq(out.size(), 1)
-	assert_eq(out[0].get_description(), "float")
+	assert_eq(c.output_signatures.size(), 1)
+	assert_eq(c.output_signatures[0].get_description(), "float")
 	
 	c.disconnect_all()
 	
-	out.clear()
-	c.get_out_signatures(out)
-	assert_eq(out.size(), 2)
+	assert_eq(c.output_signatures.size(), 2)
 	
 	vector.c(c)
 	
-	out.clear()
-	c.get_out_signatures(out)
-	assert_eq(out.size(), 1)
-	assert_eq(out[0].get_description(), "Vector2")
+	assert_eq(c.output_signatures.size(), 1)
+	assert_eq(c.output_signatures[0].get_description(), "Vector2")
 
 func test_derive_output_types_no_incoming():
-	var c = Card.new(func ():
+	var c = Card.new(func():
 		var process = PhysicsProcessCard.new()
 		var vec = Vector2Card.new()
 		var out = OutCard.new()
 		process.c(vec)
 		vec.c(out))
-	
-	var out = [] as Array[Signature]
-	c.get_out_signatures(out)
-	assert_eq(out.size(), 1)
-	assert_eq(out[0].get_description(), "Vector2")
+	assert_eq(c.output_signatures.size(), 1)
+	assert_eq(c.output_signatures[0].get_description(), "Vector2")
 
 func test_derive_output_types_axis_controls():
 	var c = AxisControlsCard.new()
-	
-	var out = [] as Array[Signature]
-	c.get_out_signatures(out)
-	assert_eq(out.size(), 1)
-	assert_eq(out[0].get_description(), ">direction[Vector2]")
+	assert_eq(c.output_signatures.size(), 1)
+	assert_eq(c.output_signatures[0].get_description(), ">directionVector2")
 
 func test_derive_output_types_minus(ready):
 	var v1 = Vector2Card.new()
@@ -265,11 +252,8 @@ func test_derive_output_types_minus(ready):
 	v1.c_named("left_vector", c)
 	v2.c_named("right_vector", c)
 	ready.call()
-	
-	var out = [] as Array[Signature]
-	c.get_out_signatures(out)
-	assert_eq(out.size(), 1)
-	assert_eq(out[0].get_description(), "Vector2")
+	assert_eq(c.output_signatures.size(), 1)
+	assert_eq(c.output_signatures[0].get_description(), "Vector2")
 
 func test_cannot_connect_to_concrete_generic(ready):
 	var store_card = StoreCard.new()
@@ -285,14 +269,11 @@ func test_cannot_connect_to_concrete_generic(ready):
 func test_derive_type_from_code_card(ready):
 	var code_card = CodeCard.new([],
 		[["out_float", Signature.TypeSignature.new("float")], ["out_vec", Signature.TypeSignature.new("Vector2")]],
-		func(card): pass)
+		func(card): pass )
 	var store_card = StoreCard.new()
 	code_card.c(store_card)
 	ready.call()
-	
-	var out = [] as Array[Signature]
-	store_card.get_out_signatures(out)
-	assert_eq(out.size(), 2)
+	assert_eq(store_card.output_signatures.size(), 2)
 
 func test_make_concrete_pull_only(ready):
 	var vector_card = Vector2Card.new()
@@ -301,9 +282,7 @@ func test_make_concrete_pull_only(ready):
 	vector_card.c(pull_only_card)
 	ready.call()
 	
-	var out = [] as Array[Signature]
-	pull_only_card.get_out_signatures(out)
-	assert_eq(out[0].get_description(), "Vector2")
+	assert_eq(pull_only_card.output_signatures[0].get_description(), "Vector2")
 
 func test_pull_only_in_loop(ready):
 	var vector_card = Vector2Card.new()
@@ -334,11 +313,9 @@ func test_get_description_with_cycle(ready):
 func test_type_of_subscribe_in_card():
 	var subscribe_card = SubscribeInCard.new(Signature.TypeSignature.new("float"))
 	
-	var out = [] as Array[Signature]
-	subscribe_card.get_out_signatures(out)
-	assert_eq(out.size(), 3)
-	assert_eq(out[1].command, "connect")
-	assert_eq(out[2].command, "disconnect")
+	assert_eq(subscribe_card.output_signatures.size(), 3)
+	assert_eq(subscribe_card.output_signatures[1].command, "connect")
+	assert_eq(subscribe_card.output_signatures[2].command, "disconnect")
 
 func test_group_with_overlapping_outputs_merges(ready):
 	var a_minus_card = MinusCard.new()
@@ -360,7 +337,7 @@ func test_group_with_overlapping_outputs_merges(ready):
 	cam.add_to_selection(b)
 	
 	var container = cam.group_selected()
-	assert_eq(container.cards.filter(func (c): return c is OutCard).size(), 1)
+	assert_eq(container.cards.filter(func(c): return c is OutCard).size(), 1)
 
 func test_group_with_overlapping_inputs_produces_named_inputs(ready):
 	var minus_card = MinusCard.new()
@@ -380,8 +357,8 @@ func test_group_with_overlapping_inputs_produces_named_inputs(ready):
 	cam.add_to_selection(minus_card)
 	
 	var container = cam.group_selected()
-	assert_eq(container.cards.filter(func (c): return c is InCard).size(), 2)
-	assert_eq(container.cards.filter(func (c): return c is NamedInCard).size(), 2)
+	assert_eq(container.cards.filter(func(c): return c is InCard).size(), 2)
+	assert_eq(container.cards.filter(func(c): return c is NamedInCard).size(), 2)
 
 func test_dedent():
 	assert_eq(CodeEditor.dedent("a
@@ -399,15 +376,13 @@ func test_iterator_invoke(ready):
 		var out = OutCard.static_signature(Signature.IteratorSignature.new(Signature.TypeSignature.new("Node"))))
 	var get_prop = GetPropertyCard.new()
 	get_prop.property_name = "position"
-	var report_card = CodeCard.new([["data", Signature.GenericTypeSignature.new()]], [], func (card, out, data):
+	var report_card = CodeCard.new([["data", Signature.GenericTypeSignature.new()]], [], func(card, out, data):
 		reported["reported"] = data)
 	array_card.c(get_prop)
 	get_prop.c_named("data", report_card)
 	ready.call()
 	
-	#var sig = [] as Array[Signature]
-	#get_prop.get_out_signatures(sig)
-	#assert_eq(sig[0], Signature.IteratorSignature.new(Signature.TypeSignature.new("Vector2")))
+	assert_eq(get_prop.output_signatures[0], Signature.IteratorSignature.new(Signature.TypeSignature.new("Vector2")))
 	
 	for c in array_card.cards:
 		if c is OutCard:
@@ -418,8 +393,5 @@ func test_iterator_invoke(ready):
 		if c is OutCard:
 			var r = []
 			c.is_reachable(r)
-			print(r.map(func (c):
-				var x = [] as Array[Signature]
-				c.get_out_signatures(x)
-				return x[0].d))
-	
+			print(r.map(func(c):
+				return c.output_signatures[0].get_description()))

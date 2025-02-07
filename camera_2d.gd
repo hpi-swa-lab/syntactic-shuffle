@@ -63,8 +63,7 @@ func group_selected():
 	var incoming = []
 	var outgoing = []
 	var add_input = func(from, to, named):
-		var sig = [] as Array[Signature]
-		from.get_out_signatures(from, sig)
+		var sig = from.output_signatures
 		# FIXME choosing first
 		var input = NamedInCard.named_data(named, sig[0]) if named else InCard.data(sig[0])
 		input.parent = parent.cards_parent
@@ -109,7 +108,7 @@ func group_selected():
 	for i in incoming:
 		if i[2]: continue
 		# FIXME using only first one
-		var sig = [] as Array[Signature]; i[0].get_out_signatures(sig); sig = sig[0]
+		var sig = i[0].output_signatures[0]
 		var found = false
 		for g in groups:
 			if sig.eq(g):
@@ -118,7 +117,7 @@ func group_selected():
 				break
 		if not found:
 			groups[sig] = [i]
-	# if there are groups with more than, add names
+	# if there are groups of identical inputs, add names
 	for sig in groups:
 		var list = groups[sig]
 		if list.size() > 1:

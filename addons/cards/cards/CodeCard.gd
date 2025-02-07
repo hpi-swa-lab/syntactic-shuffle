@@ -96,20 +96,6 @@ func setup_finished():
 
 func cycles_allowed_for(name: String): return pull_only.has(name)
 
-## Our outputs are not connected but also have static signatures, so we only have
-## to handle special cases.
-func get_out_signatures(signatures: Array, visited = []):
-	for output in cards:
-		if output is OutCard:
-			var matched = false
-			# FIXME: wrong assumption but useful for now: the incoming generic = the outgoing generic
-			if output.signature is Signature.GenericTypeSignature:
-				for input in cards:
-					if input is NamedInCard and input.signature is Signature.GenericTypeSignature:
-						input.get_out_signatures(signatures, visited)
-						matched = true
-			if not matched: output.get_out_signatures(signatures, visited)
-
 var _current_error: Error = null
 func report_error(s: Error):
 	if _current_error:

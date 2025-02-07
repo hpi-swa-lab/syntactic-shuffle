@@ -34,9 +34,5 @@ func incoming_connected(obj: Card):
 func incoming_disconnected(obj: Card):
 	invoke([obj], cmd("disconnect", signature))
 
-func get_out_signatures(list: Array, visited = []):
-	var incoming = _get_incoming_list()
-	for c in cards: c.get_out_signatures(list, visited)
-
 func serialize_constructor():
 	return "{0}.new({1})".format([card_name, signature.serialize_gdscript()])

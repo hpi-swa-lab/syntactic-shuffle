@@ -283,22 +283,17 @@ func propagate_incoming_connected(seen):
 var output_signatures: Array[Signature]:
 	get:
 		var s = [] as Array[Signature]
-		for card in cards: if card is OutCard: s.append_array(card.actual_signatures)
+		for card in get_outputs(): s.append_array(card.actual_signatures)
 		return s
 
 var input_signatures: Array[Signature]:
 	get:
 		var s = [] as Array[Signature]
-		for card in cards: if card is InCard: s.append_array(card.actual_signatures)
+		for card in get_inputs(): s.append_array(card.actual_signatures)
 		return s
 
-func get_out_signatures(signatures: Array, visited = []):
-	for card in cards:
-		if card is OutCard: card.get_out_signatures(signatures, visited)
-
-func get_in_signatures(signatures: Array):
-	for card in cards:
-		if card is InCard: signatures.push_back(card.signature)
+func get_outputs() -> Array[Card]: return cards.filter(func (c): return c is OutCard)
+func get_inputs() -> Array[Card]: return cards.filter(func (c): return c is InCard)
 
 func invoke(args: Array, signature: Signature, named = "", source_out = null):
 	for input in cards:
@@ -320,10 +315,8 @@ func get_named_outgoing_for_cycles() -> Array:
 	return out
 
 func has_same_out_signatures(b: Card):
-	var a_sig = [] as Array[Signature]
-	var b_sig = [] as Array[Signature]
-	self.get_out_signatures(a_sig)
-	b.get_out_signatures(b_sig)
+	var a_sig = output_signatures
+	var b_sig = b.output_signatures
 	for s1 in a_sig:
 		if not b_sig.any(func(s2): return s1.eq(s2)): return false
 	return true

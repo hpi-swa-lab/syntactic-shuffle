@@ -148,8 +148,7 @@ func _on_add_selected_pressed() -> void:
 	var connections = []
 	for selected in code_card.get_selection_manager().get_selection():
 		if selected == code_card: continue
-		var sig = [] as Array[Signature]
-		selected.get_out_signatures(sig)
+		var sig = selected.output_signatures
 		# FIXME picking first
 		sig = sig[0]
 		

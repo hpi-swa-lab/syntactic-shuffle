@@ -1,8 +1,9 @@
 extends CanvasLayer
+@warning_ignore("unused_parameter")
 
 var categories = {
 	"Abstraction": [
-		CodeCard.new([], [["out", Signature.TypeSignature.new("")]], func(_card, out): pass , [], "func(_card): out.call(null)"),
+		CodeCard.new([], [["out", Signature.TypeSignature.new("")]], func(card, out): pass , [], "func(card, out): out.call(null)"),
 		CellCard.new("value", "float", 0.0),
 		FilterSignaturesCard.new(Signature.VoidSignature.new()),
 		"StoreCard",

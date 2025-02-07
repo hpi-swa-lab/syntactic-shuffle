@@ -61,17 +61,8 @@ func propagate_incoming_connected(seen):
 	actual_signatures = _compute_actual_signatures(signature)
 	super.propagate_incoming_connected(seen)
 
-func get_out_signatures(list: Array, visited = []):
-	if not parent: list.push_back(signature)
-	else: list.push_back(signature)
-
 func _get_incoming_list():
 	return parent.get_incoming() if parent else []
-
-func get_concrete_signatures(visited = []):
-	var l = [] as Array[Signature]
-	get_out_signatures(l, visited)
-	return l
 
 func get_remembered_for(signature: Signature):
 	if not parent: return null
@@ -84,11 +75,11 @@ func get_remembered_for(signature: Signature):
 func is_valid_incoming(card, signature):
 	return true
 	# FIXME this needed?
-	#var s = []
-	#card.get_out_signatures(s)
-	#for sig in s:
+	#for sig in card.output_signatures:
 		#if signature_match(sig, signature): return true
 	#return false
+
+func get_inputs() -> Array[Card]: return [self] as Array[Card]
 
 func get_remembered():
 	return get_remembered_for(signature)
@@ -97,21 +88,8 @@ func has_connected():
 	# NOTE: cannot use self.actual_signatures here since since is used during the
 	# forward pass in propagate_input_connected
 	for c in _get_incoming_list():
-		if c.output_signatures.any(func (s): return s.compatible_with(signature)): return true
+		if c.output_signatures.any(func(s): return s.compatible_with(signature)): return true
 	return false
-
-func get_connected_incoming(visited = []):
-	var connected = []
-	var my_signatures = get_concrete_signatures(visited)
-	for c in _get_incoming_list():
-		var out = [] as Array[Signature]
-		c.get_out_signatures(out, visited)
-		for their_signature in out:
-			for my_signature in my_signatures:
-				if their_signature.compatible_with(my_signature):
-					connected.push_back(s)
-					break
-	return connected
 
 func invoke(args: Array, signature: Signature, named = "", source_out = null):
 	for card in get_outgoing():
@@ -126,12 +104,10 @@ func try_connect_in(them: Card):
 	if parent.get_incoming().has(them): return
 	if detect_cycles_for_new_connection(parent, them): return
 	
-	var my_signatures = get_concrete_signatures()
+	var my_signatures = actual_signatures
 	for card in them.cards:
 		if card is OutCard:
-			var their_signatures = [] as Array[Signature]
-			card.get_out_signatures(their_signatures)
-			for their_signature in their_signatures:
+			for their_signature in card.output_signatures:
 				for my_signature in my_signatures:
 					if their_signature.compatible_with(my_signature):
 						them.connect_to(parent if parent else self)
