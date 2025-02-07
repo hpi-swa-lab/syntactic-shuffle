@@ -90,7 +90,9 @@ class GenericTypeSignature extends Signature:
 		var has_iterator = not aggregate and incoming.any(func(s): return s is IteratorSignature)
 		if has_iterator:
 			matching = matching.map(func (s): return s if s is IteratorSignature else IteratorSignature.new(s))
-		return Array(matching, TYPE_OBJECT, &"RefCounted", Signature)
+		elif aggregate:
+			matching = matching.map(func (s): return s.unwrap_iterator())
+		return sig_array(matching)
 
 class TriggerSignature extends Signature:
 	func get_description(): return "[TRIGGER]"

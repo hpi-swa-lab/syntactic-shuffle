@@ -458,6 +458,13 @@ func test_iterator_make_concrete():
 	assert_eq(res.size(), 1)
 	assert_eq(res[0], a)
 
+func test_iterator_aggregate_make_concrete():
+	var a = Signature.IteratorSignature.new(Signature.TypeSignature.new("Vector2"))
+	var b = Signature.GenericTypeSignature.new()
+	var res = b.make_concrete([a], true)
+	assert_eq(res.size(), 1)
+	assert_eq(res[0], a.type)
+
 func test_iterator_make_concrete_with_cards(ready):
 	var array_card = Card.new(func():
 		OutCard.static_signature(Signature.IteratorSignature.new(Signature.TypeSignature.new("Vector2"))))
