@@ -16,12 +16,17 @@ func compatible_with_struct(other: StructSignature): return false
 func compatible_with_group(other: GroupSignature): return false
 func compatible_with_iterator(other: IteratorSignature): return other.type.compatible_with(self)
 ## Given a set of incoming cards, make this Signature concrete, i.e., non-generic
-func make_concrete(incoming: Array[Signature], visited = []) -> Array[Signature]:
-	var has_iterator = incoming.any(func(s): return s is IteratorSignature)
-	return Array([IteratorSignature.new(self)] if has_iterator else [self], TYPE_OBJECT, &"RefCounted", Signature)
+func make_concrete(incoming: Array[Signature], aggregate = false) -> Array[Signature]:
+	var has_iterator = not aggregate and incoming.any(func(s): return s is IteratorSignature)
+	return sig_array([IteratorSignature.new(self)] if has_iterator else [self])
+func unwrap_iterator():
+	return self
+
+static func sig_array(array):
+	return Array(array, TYPE_OBJECT, &"RefCounted", Signature)
 
 class OutputAnySignature extends Signature:
-	func get_description(): return "* -> out"
+	func get_description(): return "SPECIAL_ANY_OUT"
 	func compatible_with(other: Signature): return true
 	func eq(other: Signature): return other is OutputAnySignature
 	func compatible_with_command(other: CommandSignature): return true
@@ -31,7 +36,7 @@ class OutputAnySignature extends Signature:
 	func compatible_with_struct(other: StructSignature): return true
 	func compatible_with_group(other: GroupSignature): return true
 	func compatible_with_iterator(other: IteratorSignature): return true
-	func make_concrete(incoming: Array[Signature], visited = []) -> Array[Signature]:
+	func make_concrete(incoming: Array[Signature], aggregate = false) -> Array[Signature]:
 		return incoming
 
 class TypeSignature extends Signature:
@@ -78,11 +83,11 @@ class GenericTypeSignature extends Signature:
 	func compatible_with(other: Signature): return other.compatible_with_generic(self)
 	func compatible_with_type(other: Signature): return true
 	func compatible_with_generic(other: GenericTypeSignature): return true
-	func make_concrete(incoming: Array[Signature], visited = []):
-		if incoming.is_empty(): return super.make_concrete(incoming, visited)
+	func make_concrete(incoming: Array[Signature], aggregate = false):
+		if incoming.is_empty(): return super.make_concrete(incoming, aggregate)
 		
 		var matching = incoming.filter(func(s): return s.compatible_with(self))
-		var has_iterator = incoming.any(func(s): return s is IteratorSignature)
+		var has_iterator = not aggregate and incoming.any(func(s): return s is IteratorSignature)
 		if has_iterator:
 			matching = matching.map(func (s): return s if s is IteratorSignature else IteratorSignature.new(s))
 		return Array(matching, TYPE_OBJECT, &"RefCounted", Signature)
@@ -104,8 +109,10 @@ class IteratorSignature extends Signature:
 	func compatible_with(other: Signature): return other.compatible_with_iterator(self)
 	func get_description(): return "Iterator<{0}>".format([type.get_description()])
 	func compatible_with_iterator(other: IteratorSignature): return other.type.compatible_with(type)
-	func make_concrete(incoming: Array[Signature], visited = []) -> Array[Signature]:
-		return [self]
+	func make_concrete(incoming: Array[Signature], aggregate = false) -> Array[Signature]:
+		return sig_array(type.make_concrete(sig_array(incoming.map(func (s): return s.unwrap_iterator())), true).map(func (s): return IteratorSignature.new(s)))
+	func unwrap_iterator():
+		return type
 
 class VoidSignature extends Signature:
 	func eq(other: Signature): return other is VoidSignature

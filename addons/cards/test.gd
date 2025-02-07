@@ -169,6 +169,8 @@ func test_signatures():
 	
 	assert_not_compatible(Signature.GenericTypeSignature.new(), Signature.CommandSignature.new("cmd", Signature.GenericTypeSignature.new()))
 	assert_compatible(Signature.CommandSignature.new("cmd", Signature.GenericTypeSignature.new()), Signature.GenericTypeSignature.new())
+	
+	assert_compatible(Signature.IteratorSignature.new(Signature.TypeSignature.new("Vector2")), Signature.IteratorSignature.new(Signature.GenericTypeSignature.new()))
 
 func test_extract_code_card_source_code():
 	var src = "var code_card = CodeCard.create(
@@ -434,13 +436,39 @@ func test_iterator_aggregate(ready):
 	var get_prop = GetPropertyCard.new()
 	get_prop.property_name = "position"
 	
-	var report_card = CodeCard.new([["data", Signature.IteratorSignature.new(Signature.GenericTypeSignature.new())]], [], func(card, data):
-		reported["reported"] = data)
+	var report_card = CodeCard.new(
+		[["data", Signature.IteratorSignature.new(Signature.GenericTypeSignature.new())]],
+		[["out", Signature.TypeSignature.new("Vector2")]],
+		func(card, out, data): reported["reported"] = data)
 	
 	array_card.c(get_prop)
 	get_prop.c_named("data", report_card)
 	ready.call()
 	
+	assert_eq(report_card.output_signatures[0], Signature.TypeSignature.new("Vector2"))
+	
 	for c in array_card.get_outputs():
 		c.invoke([[CharacterBody2D.new(), CharacterBody2D.new()]], Signature.IteratorSignature.new(Signature.TypeSignature.new("Node")))
 	assert_eq(reported["reported"], [Vector2.ZERO, Vector2.ZERO])
+
+func test_iterator_make_concrete():
+	var a = Signature.IteratorSignature.new(Signature.TypeSignature.new("Vector2"))
+	var b = Signature.IteratorSignature.new(Signature.GenericTypeSignature.new())
+	var res = b.make_concrete([a])
+	assert_eq(res.size(), 1)
+	assert_eq(res[0], a)
+
+func test_iterator_make_concrete_with_cards(ready):
+	var array_card = Card.new(func():
+		OutCard.static_signature(Signature.IteratorSignature.new(Signature.TypeSignature.new("Vector2"))))
+	
+	var report_card = CodeCard.new(
+		[["data", Signature.IteratorSignature.new(Signature.GenericTypeSignature.new())]],
+		[["out", Signature.GenericTypeSignature.new()]],
+		func(card, out, data): pass)
+	
+	array_card.c_named("data", report_card)
+	ready.call()
+	
+	assert_eq(report_card.input_signatures[0], Signature.IteratorSignature.new(Signature.TypeSignature.new("Vector2")))
+	assert_eq(report_card.output_signatures[0], Signature.TypeSignature.new("Vector2"))

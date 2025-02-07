@@ -53,9 +53,10 @@ func get_outputs() -> Array[Card]: return [self] as Array[Card]
 
 func propagate_incoming_connected(seen):
 	super.propagate_incoming_connected(seen)
+	var aggregate = parent is CodeCard and parent.inputs.any(func (pair): return pair[1] is Signature.IteratorSignature)
 	# FIXME not sure if we want to wrap an iterator with a command or the other way around
 	actual_signatures = Array(
-		_compute_actual_signatures(signature if has_static_signature else null).map(func (s): return _add_command(s)),
+		_compute_actual_signatures(signature if has_static_signature else null, aggregate).map(func (s): return _add_command(s)),
 		TYPE_OBJECT,
 		&"RefCounted",
 		Signature

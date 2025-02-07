@@ -376,11 +376,11 @@ func get_remembered_for(signature: Signature):
 ## Compute actual signature based on connected nodes.
 ## Meant for use in OutCard and InCard, the other classes
 ## defer to these to figure out their signatures.
-func _compute_actual_signatures(base: Signature) -> Array[Signature]:
+func _compute_actual_signatures(base: Signature, aggregate = false) -> Array[Signature]:
 	var s = [] as Array[Signature]
 	for card in _get_incoming_list():
 		s.append_array(card.output_signatures)
-	return base.make_concrete(s, []) if base else s
+	return base.make_concrete(s, aggregate) if base else s
 func _get_incoming_list(): return get_all_incoming()
 
 ########################

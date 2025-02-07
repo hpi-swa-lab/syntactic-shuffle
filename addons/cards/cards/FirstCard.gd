@@ -14,10 +14,10 @@ func s():
 			out.call(iterator[0])
 , [])
 	code_card.position = Vector2(698.5455, 398.2183)
-	var named_in_card = NamedInCard.named_data("iterator", it(any("T")))
-	named_in_card.position = Vector2(200.0, 400.0)
 	var out_card = OutCard.new()
 	out_card.position = Vector2(1190.92, 400.0026)
+	var in_card = InCard.data(it(any("T")))
+	in_card.position = Vector2(213.383, 412.5826)
 	
 	code_card.c(out_card)
-	named_in_card.c_named("iterator", code_card)
+	in_card.c_named("iterator", code_card)
