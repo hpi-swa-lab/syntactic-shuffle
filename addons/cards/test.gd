@@ -1,7 +1,7 @@
 @tool
 extends CardBoundary
 
-var execute_only = "test_named_addition_and_store"
+var execute_only = ""
 
 class ManualTriggerCard extends Card:
 	var type: Signature

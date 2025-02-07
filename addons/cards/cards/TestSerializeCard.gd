@@ -22,10 +22,10 @@ func s():
 	named_in_card.position = Vector2(0.0, 0.0)
 	var plus_card = PlusCard.new()
 	plus_card.position = Vector2(0.0, 0.0)
-	var code_card = CodeCard.create([["body", t("CharacterBody2D")], ["trigger", trg()]], [["trigger", trg()]], func (card, body):
+	var code_card = CodeCard.create([["body", t("CharacterBody2D")], ["trigger", trg()]], [["trigger", trg()]], func (card, trigger, body):
 		if body is CharacterBody2D:
 			for collision_index in body.get_slide_collision_count():
-				card.output("trigger", []), [])
+				trigger.call(null), [])
 	code_card.position = Vector2(0.0, 0.0)
 	
 	in_card.c(out_card)

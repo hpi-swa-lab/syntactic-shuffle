@@ -199,7 +199,7 @@ func get_source_code():
 	return source_code
 
 func serialize_constructor():
-	return "CodeCard.create([{inputs}], {{outputs}}, {code}, [{pull_only}])".format({
+	return "CodeCard.create([{inputs}], [{outputs}], {code}, [{pull_only}])".format({
 		"inputs": ", ".join(inputs.map(func(pair): return '["{0}", {1}]'.format([pair[0], pair[1].serialize_gdscript()]))),
 		"outputs": ", ".join(outputs.map(func(pair): return '["{0}", {1}]'.format([pair[0], pair[1].serialize_gdscript()]))),
 		"code": get_source_code(),

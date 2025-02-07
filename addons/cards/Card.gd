@@ -474,7 +474,7 @@ func serialize_gdscript(overwrite_name: String = "", size: Vector2 = Vector2.ZER
 	
 	return "@tool
 extends Card
-class_name{name}
+class_name {name}
 
 func v():
 	title(\"{title}\")
