@@ -45,16 +45,15 @@ func _get_incoming_list():
 	# OutCards in a CodeCard are not connected to their inputs
 	# TODO consider generic type names
 	if parent is CodeCard: return parent.cards.filter(func(c): return c is InCard)
+	# InCard's have a special OutCard -- this is us
+	if parent is InCard: return [parent]
 	return get_all_incoming()
 
 func get_outputs() -> Array[Card]: return [self] as Array[Card]
 
 func propagate_incoming_connected(seen):
 	super.propagate_incoming_connected(seen)
-	# if we are the OutCard of an InCard, the InCard sets a signature
-	# directly that we would override here since we don't have any connections
-	if not parent is InCard:
-		actual_signatures = _compute_actual_signatures(_add_command(signature) if has_static_signature else null)
+	actual_signatures = _compute_actual_signatures(_add_command(signature) if has_static_signature else null)
 
 func propagate_unreachable(seen):
 	# If no connected is reachable, show no signatures
