@@ -10,6 +10,8 @@ class ManualTriggerCard extends Card:
 	func _init(type: Signature):
 		super._init()
 		self.type = type
+		out_card.has_static_signature = true
+		out_card.signature = type
 	
 	func v():
 		title("Manual Trigger")
@@ -53,6 +55,15 @@ func run_cards_test(test):
 	else:
 		test.call()
 
+func test_type_of_cell_card(ready):
+	var input = ManualTriggerCard.new(Signature.TypeSignature.new("float"))
+	var num = NumberCard.new()
+	
+	input.c(num)
+	ready.call()
+	
+	input.trigger([1.0])
+
 func test_named_addition_and_store(ready):
 	var store = NumberCard.new()
 	
@@ -72,7 +83,8 @@ func test_named_addition_and_store(ready):
 	ready.call()
 	
 	a_trigger.trigger([])
-	#b_trigger.trigger([])
+	# The other value should be fetched as remembered
+	# b_trigger.trigger([])
 	assert_eq(store.number, 20.0)
 
 func test_serialize_constructor(ready):
@@ -373,28 +385,35 @@ b
 d
 ")
 
+func test_initialize_get_property(ready):
+	var get_prop = GetPropertyCard.new()
+	get_prop.property_name = "position"
+	
+	var object = NodeCard.new(CharacterBody2D.new())
+	object.c(get_prop)
+	
+	ready.call()
+	
+	assert_eq(get_prop.output_signatures.size(), 1)
+	assert_eq(get_prop.output_signatures[0], Signature.TypeSignature.new("Vector2"))
+
 func test_iterator_invoke(ready):
 	var reported = {"reported": null}
 	var array_card = Card.new(func():
-		var out = OutCard.static_signature(Signature.IteratorSignature.new(Signature.TypeSignature.new("Node"))))
+		OutCard.static_signature(Signature.IteratorSignature.new(Signature.TypeSignature.new("Node"))))
+	
 	var get_prop = GetPropertyCard.new()
 	get_prop.property_name = "position"
+	
 	var report_card = CodeCard.new([["data", Signature.GenericTypeSignature.new()]], [], func(card, out, data):
 		reported["reported"] = data)
+	
 	array_card.c(get_prop)
 	get_prop.c_named("data", report_card)
 	ready.call()
 	
 	assert_eq(get_prop.output_signatures[0], Signature.IteratorSignature.new(Signature.TypeSignature.new("Vector2")))
 	
-	for c in array_card.cards:
-		if c is OutCard:
-			c.invoke([[CharacterBody2D.new(), CharacterBody2D.new()]], Signature.IteratorSignature.new(Signature.TypeSignature.new("Node")))
+	for c in array_card.get_outputs():
+		c.invoke([[CharacterBody2D.new(), CharacterBody2D.new()]], Signature.IteratorSignature.new(Signature.TypeSignature.new("Node")))
 	assert_eq(reported["reported"], [Vector2.ZERO, Vector2.ZERO])
-	
-	for c in get_prop.cards:
-		if c is OutCard:
-			var r = []
-			c.is_reachable(r)
-			print(r.map(func(c):
-				return c.output_signatures[0].get_description()))

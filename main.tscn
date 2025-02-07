@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://bqninusgeuw0i"]
+[gd_scene load_steps=13 format=3 uid="uid://bqninusgeuw0i"]
 
 [ext_resource type="Script" uid="uid://cja8ehiirmcyt" path="res://addons/cards/CardBoundary.gd" id="1_ig7tw"]
 [ext_resource type="Script" uid="uid://dkyx51jnk8cvd" path="res://addons/cards/cards/AxisControlsCard.gd" id="5_7mycd"]
@@ -9,6 +9,8 @@
 [ext_resource type="Script" uid="uid://bapqs0tgxuf2o" path="res://addons/cards/cards/PlusCard.gd" id="8_efxa6"]
 [ext_resource type="Script" uid="uid://dpn0hnjmcwudf" path="res://addons/cards/cards/ClockCard.gd" id="9_dg77c"]
 [ext_resource type="Script" uid="uid://cxldeg24krchn" path="res://camera_2d.gd" id="9_kek77"]
+[ext_resource type="Script" uid="uid://dj1u5natr5pv3" path="res://addons/cards/cards/NodesInGroupCard.gd" id="10_dg77c"]
+[ext_resource type="Script" uid="uid://bbls2cpisjntj" path="res://addons/cards/cards/GetPropertyCard.gd" id="11_ycdy4"]
 [ext_resource type="Script" uid="uid://dio881dm6xtr3" path="res://hand.gd" id="15_vivmo"]
 
 [node name="main" type="Node2D"]
@@ -102,6 +104,24 @@ scale = Vector2(0.2, 0.2)
 script = ExtResource("9_dg77c")
 id = "906b4418-ddfc-4d12-bf4e-561d1449eaee"
 metadata/_custom_type_script = ExtResource("9_dg77c")
+
+[node name="NodesInGroupCard" type="Node2D" parent="CardBoundary"]
+position = Vector2(15, 302)
+scale = Vector2(0.2, 0.2)
+script = ExtResource("10_dg77c")
+id = "4b44a451-7fb9-4ecb-b3b4-26b1b110ae46"
+outgoing = Array[NodePath]([NodePath("../GetPropertyCard")])
+group_name = "enemy"
+metadata/_custom_type_script = ExtResource("10_dg77c")
+
+[node name="GetPropertyCard" type="Node2D" parent="CardBoundary"]
+position = Vector2(106, 244)
+scale = Vector2(0.2, 0.2)
+script = ExtResource("11_ycdy4")
+id = "90e89c8e-c673-49f7-99de-663d120745c0"
+incoming = Array[NodePath]([NodePath("../NodesInGroupCard")])
+property_name = "position"
+metadata/_custom_type_script = ExtResource("11_ycdy4")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 script = ExtResource("15_vivmo")

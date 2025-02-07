@@ -136,7 +136,6 @@ func init_signatures():
 	if not disable and not initialized_signatures and get_all_incoming().is_empty():
 		start_propagate_incoming_connected()
 
-
 func setup_finished():
 	pass
 
@@ -284,7 +283,7 @@ func start_propagate_incoming_connected():
 
 func propagate_incoming_connected(seen):
 	# if we passed by here from an unrechable input first, explore again
-	if seen.has(self) and seen[self] != "unreachable": return
+	if seen.has(self) and seen[self] != &"unreachable": return
 	seen[self] = &"done"
 	initialized_signatures = true
 	var parent_has_no_incoming = get_all_incoming().is_empty()
@@ -326,6 +325,9 @@ var input_signatures: Array[Signature]:
 		var s = [] as Array[Signature]
 		for card in get_inputs(): s.append_array(card.actual_signatures)
 		return s
+
+func output_signature_changed():
+	start_propagate_incoming_connected()
 
 func get_outputs() -> Array[Card]: return cards.filter(func(c): return c is OutCard)
 func get_inputs() -> Array[Card]: return cards.filter(func(c): return c is InCard)

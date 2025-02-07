@@ -22,11 +22,11 @@ func s():
 		if not obj is Object: return
 		for prop in obj.get_property_list():
 			if prop["name"] == prop_name:
-				var t = Signature.type_signature(prop["type"])
+				var t = Signature.TypeSignature.new(Signature.type_signature(prop["type"]))
 				for c in card.parent.cards:
-					if c is OutCard:
-						c.has_static_signature = true
-						c.signature = Signature.TypeSignature.new(t)
+					if c is OutCard: c.signature = t
+					if c is CodeCard:
+						for c2 in c.get_outputs(): c2.signature = t
 				return, ["prop_name"])
 	code_card_2.position = Vector2(809.9025, 1322.814)
 	var subscribe_in_card = SubscribeInCard.new(t("Object"))

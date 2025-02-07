@@ -90,6 +90,9 @@ func rebuild_inputs_outputs():
 	cards.clear()
 	build_cards_list()
 
+func output_for_name(name: String):
+	return get_outputs()[outputs.find_custom(func (s): return s[0] == name)]
+
 func setup_finished():
 	super.setup_finished()
 	get_source_code()
@@ -158,8 +161,8 @@ func hyper_invoke(args, signatures):
 	var result = {}
 	var count = {}
 	for out in outputs:
-		result[out] = range(0, list.size())
-		count[out] = 0
+		result[out[0]] = range(0, list.size())
+		count[out[0]] = 0
 	var report_result = func(arg, name, index):
 		result[name][index] = arg
 		count[name] += 1
@@ -170,27 +173,16 @@ func hyper_invoke(args, signatures):
 		var item = list[i]
 		args[iterator_index] = item
 		var combined_args = [self]
-		for pair in outputs: combined_args.push_back(report_result.bind(pair[1], i))
+		for pair in outputs: combined_args.push_back(report_result.bind(pair[0], i))
 		combined_args.append_array(args)
-		process.callv(args)
+		process.callv(combined_args)
 
 func _output(arg: Variant, name: String):
-	var signature: Signature
-	for pair in outputs:
-		if pair[0] == name: signature = pair[1]
 	var args = [arg] if arg != null else []
-	# FIXME no longer needed?
-	if not signature:
-		report_error(Error.CodeCardMissingOutput.new(self, name, args))
-		return
-	for card in get_outgoing():
-		var output
-		for o in cards:
-			if o.signature == signature:
-				output = o
-				break
-		assert(output)
-		card.invoke(args, signature, "", output)
+	var output = output_for_name(name)
+	assert(output.output_signatures.size() == 1)
+	output.invoke(args, output.output_signatures[0], "", output)
+	#output.invoke(args, output.signature, "", output)
 
 func get_source_code():
 	if not source_code:

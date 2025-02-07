@@ -53,7 +53,13 @@ func get_outputs() -> Array[Card]: return [self] as Array[Card]
 
 func propagate_incoming_connected(seen):
 	super.propagate_incoming_connected(seen)
-	actual_signatures = _compute_actual_signatures(_add_command(signature) if has_static_signature else null)
+	# FIXME not sure if we want to wrap an iterator with a command or the other way around
+	actual_signatures = Array(
+		_compute_actual_signatures(signature if has_static_signature else null).map(func (s): return _add_command(s)),
+		TYPE_OBJECT,
+		&"RefCounted",
+		Signature
+	)
 
 func propagate_unreachable(seen):
 	# If no connected is reachable, show no signatures

@@ -3,6 +3,7 @@ extends Card
 class_name CellCard
 
 var out_card: OutCard
+var out_cards: Array[Card] = []
 var type_signature: Signature.CommandSignature
 
 static func create(name: String, type: String, data: Variant):
@@ -33,14 +34,12 @@ func clone():
 	get: return type
 	set(v):
 		type = v
-		if out_card:
-			if v:
-				out_card.has_static_signature = true
-				out_card.signature = Signature.TypeSignature.new(v)
-				type_signature.arg = out_card.signature
-			else:
-				out_card.has_static_signature = false
-				type_signature.arg = Signature.GenericTypeSignature.new()
+		for c in out_cards:
+			c.has_static_signature = v != null
+			if v: c.signature = Signature.TypeSignature.new(v)
+		if type_signature:
+			type_signature.arg = Signature.TypeSignature.new(v) if v else Signature.GenericTypeSignature.new()
+			output_signature_changed()
 var update_ui_func = null
 
 func can_edit(): return false
@@ -87,6 +86,10 @@ func s():
 	
 	var trigger_card = InCard.trigger()
 	trigger_card.c(trigger_code_card)
+	
+	out_cards = [out_card]
+	out_cards.append_array(code_card.get_outputs())
+	out_cards.append_array(trigger_code_card.get_outputs())
 	
 	# refresh type info
 	self.type = type
