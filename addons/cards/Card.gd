@@ -391,10 +391,10 @@ const ALWAYS_RECONNECT = false
 static func always_reconnect():
 	return ALWAYS_RECONNECT and not Engine.is_editor_hint()
 
-func _check_disconnect(them: Node2D):
+func _check_disconnect(them: Card):
 	var my_boundary = get_card_boundary()
 	var their_boundary = get_card_boundary()
-	if (global_position.distance_to(them.global_position) > MAX_CONNECTION_DISTANCE
+	if (get_card_global_position().distance_to(them.get_card_global_position()) > MAX_CONNECTION_DISTANCE
 		or my_boundary != their_boundary):
 		disconnect_from(them)
 
