@@ -27,6 +27,7 @@ func s():
 					if c is OutCard: c.signature = t
 					if c is CodeCard:
 						for c2 in c.get_outputs(): c2.signature = t
+				card.parent.start_propagate_incoming_connected()
 				return, ["prop_name"])
 	code_card_2.position = Vector2(809.9025, 1322.814)
 	var subscribe_in_card = SubscribeInCard.new(t("Object"))

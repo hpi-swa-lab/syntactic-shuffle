@@ -115,9 +115,10 @@ func invoke(args: Array, signature: Signature, named = "", source_out = null):
 	
 	if command_name: signature = _add_command(signature)
 	
-	if has_static_signature:
-		if not signature.compatible_with(self.signature): return
-		signature = self.signature
+	# FIXME still needed? we now look up the signature in the code card already
+	#if has_static_signature:
+		#if not signature.compatible_with(self.signature): return
+		#signature = self.signature
 	
 	if remember_message:
 		remembered_signature = signature

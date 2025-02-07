@@ -398,15 +398,15 @@ func test_initialize_get_property(ready):
 	assert_eq(get_prop.output_signatures[0], Signature.TypeSignature.new("Vector2"))
 
 func test_iterator_invoke(ready):
-	var reported = {"reported": null}
+	var reported = []
 	var array_card = Card.new(func():
 		OutCard.static_signature(Signature.IteratorSignature.new(Signature.TypeSignature.new("Node"))))
 	
 	var get_prop = GetPropertyCard.new()
 	get_prop.property_name = "position"
 	
-	var report_card = CodeCard.new([["data", Signature.GenericTypeSignature.new()]], [], func(card, out, data):
-		reported["reported"] = data)
+	var report_card = CodeCard.new([["data", Signature.GenericTypeSignature.new()]], [], func(card, data):
+		reported.push_back(data))
 	
 	array_card.c(get_prop)
 	get_prop.c_named("data", report_card)
@@ -416,4 +416,4 @@ func test_iterator_invoke(ready):
 	
 	for c in array_card.get_outputs():
 		c.invoke([[CharacterBody2D.new(), CharacterBody2D.new()]], Signature.IteratorSignature.new(Signature.TypeSignature.new("Node")))
-	assert_eq(reported["reported"], [Vector2.ZERO, Vector2.ZERO])
+	assert_eq(reported, [Vector2.ZERO, Vector2.ZERO])
