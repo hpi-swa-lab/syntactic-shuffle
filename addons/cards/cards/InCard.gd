@@ -101,7 +101,7 @@ func invoke(args: Array, signature: Signature, named = "", source_out = null):
 		card.invoke(args, signature, "", out_card)
 	for name in named_outgoing:
 		for p in named_outgoing[name]:
-			var card = get_node_or_null(p)
+			var card = lookup_card(p)
 			if card: card.invoke(args, signature, name, out_card)
 
 func try_connect_in(them: Card):

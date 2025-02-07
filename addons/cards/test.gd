@@ -1,7 +1,7 @@
 @tool
 extends CardBoundary
 
-var execute_only = "iterator"
+var execute_only = "test_named_addition_and_store"
 
 class ManualTriggerCard extends Card:
 	var type: Signature
@@ -47,7 +47,8 @@ func run_cards_test(test):
 		Card.push_active_card_list(card)
 		test.call(func():
 			was_called["was"] = true
-			Card.pop_active_card_list())
+			Card.pop_active_card_list()
+			card.init_signatures())
 		assert(was_called["was"], "ready was not called")
 	else:
 		test.call()

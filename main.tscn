@@ -1,10 +1,13 @@
-[gd_scene load_steps=8 format=3 uid="uid://bqninusgeuw0i"]
+[gd_scene load_steps=11 format=3 uid="uid://bqninusgeuw0i"]
 
 [ext_resource type="Script" uid="uid://cja8ehiirmcyt" path="res://addons/cards/CardBoundary.gd" id="1_ig7tw"]
 [ext_resource type="Script" uid="uid://dkyx51jnk8cvd" path="res://addons/cards/cards/AxisControlsCard.gd" id="5_7mycd"]
 [ext_resource type="Script" uid="uid://cykn2a1upyl7a" path="res://addons/cards/cards/Vector2Card.gd" id="6_5vw27"]
 [ext_resource type="Script" uid="uid://bvr4vcw3kd72b" path="res://addons/cards/placeholder/placeholder.gd" id="6_272bh"]
 [ext_resource type="Script" uid="uid://ctmo5roqpacap" path="res://addons/cards/cards/MoveCard.gd" id="6_kek77"]
+[ext_resource type="Script" uid="uid://dtcitdmnbq585" path="res://addons/cards/cards/NumberCard.gd" id="7_4c57u"]
+[ext_resource type="Script" uid="uid://bapqs0tgxuf2o" path="res://addons/cards/cards/PlusCard.gd" id="8_efxa6"]
+[ext_resource type="Script" uid="uid://dpn0hnjmcwudf" path="res://addons/cards/cards/ClockCard.gd" id="9_dg77c"]
 [ext_resource type="Script" uid="uid://cxldeg24krchn" path="res://camera_2d.gd" id="9_kek77"]
 [ext_resource type="Script" uid="uid://dio881dm6xtr3" path="res://hand.gd" id="15_vivmo"]
 
@@ -71,6 +74,34 @@ script = ExtResource("6_kek77")
 id = "38bb0cf3-ba85-4161-8c7e-445c5d90f201"
 incoming = Array[NodePath]([NodePath("../AxisControlsCard")])
 metadata/_custom_type_script = ExtResource("6_kek77")
+
+[node name="NumberCard" type="Node2D" parent="CardBoundary"]
+position = Vector2(81, 122)
+scale = Vector2(0.2, 0.2)
+script = ExtResource("7_4c57u")
+id = "aba8f867-00c0-4097-8b2c-d406b2dfdfa0"
+number = 0.0
+metadata/_custom_type_script = ExtResource("7_4c57u")
+
+[node name="NumberCard2" type="Node2D" parent="CardBoundary"]
+position = Vector2(208, 4)
+scale = Vector2(0.2, 0.2)
+script = ExtResource("7_4c57u")
+id = "b1779734-d568-4f65-a81d-a6061b0077d5"
+number = 0.0
+metadata/_custom_type_script = ExtResource("7_4c57u")
+
+[node name="PlusCard" type="Node2D" parent="CardBoundary"]
+scale = Vector2(0.2, 0.2)
+script = ExtResource("8_efxa6")
+metadata/_custom_type_script = ExtResource("8_efxa6")
+
+[node name="ClockCard" type="Node2D" parent="CardBoundary"]
+position = Vector2(-84, 109)
+scale = Vector2(0.2, 0.2)
+script = ExtResource("9_dg77c")
+id = "906b4418-ddfc-4d12-bf4e-561d1449eaee"
+metadata/_custom_type_script = ExtResource("9_dg77c")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 script = ExtResource("15_vivmo")

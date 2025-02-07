@@ -130,8 +130,12 @@ func _ready() -> void:
 		if card is CellCard:
 			for element in card.get_extra_ui(): ui(element)
 	
+	init_signatures()
+
+func init_signatures():
 	if not disable and not initialized_signatures and get_all_incoming().is_empty():
 		start_propagate_incoming_connected()
+
 
 func setup_finished():
 	pass

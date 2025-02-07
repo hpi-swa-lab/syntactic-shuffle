@@ -120,10 +120,10 @@ func invoke(args: Array, signature: Signature, named = "", source_out = null):
 	_feedback_signaled = false
 	for name in n:
 		for p in n[name]:
-			var obj = parent.get_node_or_null(p)
+			var obj = parent.lookup_card(p)
 			if obj: obj.invoke(args, signature, name, self)
 	for out in parent.outgoing:
-		var obj = parent.get_node_or_null(out)
+		var obj = parent.lookup_card(out)
 		if obj: obj.invoke(args, signature, named, self)
 	
 	if not _feedback_signaled: parent.show_feedback_for(null, args)

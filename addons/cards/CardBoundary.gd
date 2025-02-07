@@ -50,7 +50,7 @@ static func traverse_connection_candidates(card: Card, cb: Callable):
 	return G.traverse_nodes(boundary, exclude, cb)
 
 static func get_card_boundary(node: Node):
-	var b = G.closest_parent_that(node, func (n): return n is CardBoundary)
+	var b = G.closest_parent_that(node, func(n): return n is CardBoundary)
 	assert(b, "card was not inside a boundary")
 	return b
 
@@ -64,7 +64,7 @@ static func boundary_at_card(card: Card):
 	var candidates = []
 	var pos = card.get_viewport().get_mouse_position()
 	var fallback = null
-	for boundary in card.get_tree().get_nodes_in_group("card_boundary").filter(func (b):
+	for boundary in card.get_tree().get_nodes_in_group("card_boundary").filter(func(b):
 			return b.is_visible_in_tree() and not card.is_ancestor_of(b)):
 		if boundary.is_fallback_boundary():
 			assert(fallback == null, "cannot have multiple fallback card boundaries")
@@ -124,6 +124,7 @@ func card_entered(card: Card):
 	card.disable = disable_on_enter
 	card.paused = pause_on_enter
 	card.parent = G.closest_parent_that(self, func(n): return n is Card)
+	card.init_signatures()
 	#card.editor_sync_prop("paused")
 	#card.editor_sync_prop("disabled")
 	#card.editor_sync("cards:move_boundary", [card.id, Card.get_id(self)])
@@ -166,12 +167,12 @@ func _relayout():
 		Layout.FAN: _relayout_fan()
 
 func get_cards():
-	return get_children().filter(func (s): return s is Card and not s.dragging)
+	return get_children().filter(func(s): return s is Card and not s.dragging)
 
 func _apply_card_transform(card: Node2D, new_transform: Transform2D):
 	if card.transform != new_transform:
 		var tween = get_tree().create_tween()
-		tween\
+		tween \
 			.set_ease(Tween.EASE_OUT) \
 			.set_trans(Tween.TRANS_QUINT) \
 			.tween_property(card, "transform", new_transform, 0.15)
@@ -213,7 +214,7 @@ func _relayout_fan():
 		# make sure the full rect is on screen
 		var rect = _extra_collision.get_viewport_transform() * _extra_collision.get_global_transform() * _extra_collision.shape.get_rect()
 		# FIXME also check for bottom / right
-		var delta = Vector2.ZERO# Vector2.ZERO.max(-rect.position)
+		var delta = Vector2.ZERO # Vector2.ZERO.max(-rect.position)
 		_extra_collision.position += delta
 		
 		var c = get_cards()

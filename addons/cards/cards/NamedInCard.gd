@@ -64,10 +64,10 @@ func rename(new_name: String):
 	input_name = new_name
 	parent.connection_draw_node.queue_redraw()
 
-func _get_remembered_for(signature: Signature):
+func get_remembered_for(signature: Signature):
 	if not parent: return null
 	for p in parent.named_incoming.get(input_name, []):
-		var card = parent.get_node_or_null(p)
+		var card = parent.lookup_card(p)
 		if card and is_valid_incoming(card, signature):
 			var val = card.get_remembered_for(signature)
 			if val != null: return val
