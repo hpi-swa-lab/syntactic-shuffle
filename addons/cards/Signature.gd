@@ -18,15 +18,16 @@ func compatible_with_iterator(other: IteratorSignature): return other.type.compa
 ## Given a set of incoming cards, make this Signature concrete, i.e., non-generic
 func make_concrete(incoming: Array[Signature], aggregate = false) -> Array[Signature]:
 	var has_iterator = not aggregate and incoming.any(func(s): return s is IteratorSignature)
-	return sig_array([IteratorSignature.new(self)] if has_iterator else [self])
-func unwrap_iterator():
-	return self
+	return sig_array([wrap_iterator()] if has_iterator else [self])
+func unwrap_iterator(): return self
+func wrap_iterator(): return IteratorSignature.new(self)
+func unwrap_command(): return self
 
 static func sig_array(array):
 	return Array(array, TYPE_OBJECT, &"RefCounted", Signature)
 
 class OutputAnySignature extends Signature:
-	func get_description(): return "SPECIAL_ANY_OUT"
+	func get_description(): return "[any]"
 	func compatible_with(other: Signature): return true
 	func eq(other: Signature): return other is OutputAnySignature
 	func compatible_with_command(other: CommandSignature): return true
@@ -37,7 +38,10 @@ class OutputAnySignature extends Signature:
 	func compatible_with_group(other: GroupSignature): return true
 	func compatible_with_iterator(other: IteratorSignature): return true
 	func make_concrete(incoming: Array[Signature], aggregate = false) -> Array[Signature]:
-		return incoming
+		#return incoming
+		if incoming.is_empty():
+			return sig_array([self])
+		else: return incoming
 
 class TypeSignature extends Signature:
 	var type: String
@@ -67,10 +71,14 @@ class CommandSignature extends Signature:
 	func serialize_gdscript(): return "cmd(\"{0}\"{1})".format([command, ", " + arg.serialize_gdscript() if arg else ""])
 	func provides_data(): return arg.provides_data()
 	func eq(other: Signature): return other is CommandSignature and other.arg.eq(arg)
-	func get_description(): return ">{0}[{1}]".format([command, arg.get_description()]) if arg else ">{0}".format([command])
+	func get_description(): return "{0}![{1}]".format([command, arg.get_description()]) if arg else ">{0}".format([command])
 	func compatible_with(other: Signature): return other.compatible_with_command(self)
 	func compatible_with_command(other: CommandSignature):
 		return other.command == command and arg.compatible_with(other.arg)
+	func unwrap_command(): return arg
+	func make_concrete(incoming: Array[Signature], aggregate = false) -> Array[Signature]:
+		incoming = sig_array(incoming.map(func (s): return s.unwrap_command()))
+		return sig_array(arg.make_concrete(incoming, aggregate).map(func (s): return CommandSignature.new(command, s)))
 
 class GenericTypeSignature extends Signature:
 	var name: String
@@ -89,7 +97,7 @@ class GenericTypeSignature extends Signature:
 		var matching = incoming.filter(func(s): return s.compatible_with(self))
 		var has_iterator = not aggregate and incoming.any(func(s): return s is IteratorSignature)
 		if has_iterator:
-			matching = matching.map(func (s): return s if s is IteratorSignature else IteratorSignature.new(s))
+			matching = matching.map(func (s): return s.wrap_iterator())
 		elif aggregate:
 			matching = matching.map(func (s): return s.unwrap_iterator())
 		return sig_array(matching)
@@ -113,8 +121,8 @@ class IteratorSignature extends Signature:
 	func compatible_with_iterator(other: IteratorSignature): return other.type.compatible_with(type)
 	func make_concrete(incoming: Array[Signature], aggregate = false) -> Array[Signature]:
 		return sig_array(type.make_concrete(sig_array(incoming.map(func (s): return s.unwrap_iterator())), true).map(func (s): return IteratorSignature.new(s)))
-	func unwrap_iterator():
-		return type
+	func unwrap_iterator(): return type
+	func wrap_iterator(): return self
 
 class VoidSignature extends Signature:
 	func eq(other: Signature): return other is VoidSignature

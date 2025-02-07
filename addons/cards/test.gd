@@ -262,7 +262,7 @@ func test_derive_output_types_axis_controls(ready):
 	var c = AxisControlsCard.new()
 	ready.call()
 	assert_eq(c.output_signatures.size(), 1)
-	assert_eq(c.output_signatures[0].get_description(), ">direction[Vector2]")
+	assert_eq(c.output_signatures[0], Signature.CommandSignature.new("direction", Signature.TypeSignature.new("Vector2")))
 
 func test_derive_output_types_minus(ready):
 	var v1 = Vector2Card.new()
@@ -451,6 +451,13 @@ func test_iterator_aggregate(ready):
 		c.invoke([[CharacterBody2D.new(), CharacterBody2D.new()]], Signature.IteratorSignature.new(Signature.TypeSignature.new("Node")))
 	assert_eq(reported["reported"], [Vector2.ZERO, Vector2.ZERO])
 
+func test_command_make_concrete():
+	var a = Signature.CommandSignature.new("a", Signature.TypeSignature.new("Vector2"))
+	var b = Signature.CommandSignature.new("a", Signature.GenericTypeSignature.new())
+	var res = b.make_concrete([a])
+	assert_eq(res.size(), 1)
+	assert_eq(res[0], a)
+
 func test_iterator_make_concrete():
 	var a = Signature.IteratorSignature.new(Signature.TypeSignature.new("Vector2"))
 	var b = Signature.IteratorSignature.new(Signature.GenericTypeSignature.new())
@@ -464,6 +471,14 @@ func test_iterator_aggregate_make_concrete():
 	var res = b.make_concrete([a], true)
 	assert_eq(res.size(), 1)
 	assert_eq(res[0], a.type)
+
+func test_iterator_command_make_concrete():
+	return # TODO
+	var a = Signature.IteratorSignature.new(Signature.CommandSignature.new("a", Signature.TypeSignature.new("Vector2")))
+	var b = Signature.CommandSignature.new("a", Signature.GenericTypeSignature.new())
+	var res = b.make_concrete([a])
+	assert_eq(res.size(), 1)
+	assert_eq(res[0], a)
 
 func test_iterator_make_concrete_with_cards(ready):
 	var array_card = Card.new(func():
@@ -479,3 +494,8 @@ func test_iterator_make_concrete_with_cards(ready):
 	
 	assert_eq(report_card.input_signatures[0], Signature.IteratorSignature.new(Signature.TypeSignature.new("Vector2")))
 	assert_eq(report_card.output_signatures[0], Signature.TypeSignature.new("Vector2"))
+
+func test_out_card_signature(ready):
+	var out = OutCard.new()
+	ready.call()
+	assert(not out.input_signatures.is_empty())

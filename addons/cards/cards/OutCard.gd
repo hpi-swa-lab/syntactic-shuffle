@@ -53,14 +53,17 @@ func get_outputs() -> Array[Card]: return [self] as Array[Card]
 
 func propagate_incoming_connected(seen):
 	super.propagate_incoming_connected(seen)
-	var aggregate = parent is CodeCard and parent.inputs.any(func (pair): return pair[1] is Signature.IteratorSignature)
+	var aggregate = parent is CodeCard and parent.inputs.any(func(pair): return pair[1] is Signature.IteratorSignature)
+	var sig = null
+	if has_static_signature:
+		sig = signature
+	elif _get_incoming_list().is_empty():
+		# if we have no connections, we advertise all possibilities. Otherwise, we pass
+		# null, which makes us inherit our incoming signatures.
+		sig = Signature.OutputAnySignature.new()
 	# FIXME not sure if we want to wrap an iterator with a command or the other way around
-	actual_signatures = Array(
-		_compute_actual_signatures(signature if has_static_signature else null, aggregate).map(func (s): return _add_command(s)),
-		TYPE_OBJECT,
-		&"RefCounted",
-		Signature
-	)
+	actual_signatures = Signature.sig_array(
+		_compute_actual_signatures(sig, aggregate).map(func(s): return _add_command(s)))
 
 func propagate_unreachable(seen):
 	# If no connected is reachable, show no signatures
