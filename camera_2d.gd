@@ -66,16 +66,14 @@ func group_selected():
 		var sig = from.output_signatures
 		# FIXME choosing first
 		var input = NamedInCard.named_data(named, sig[0]) if named else InCard.data(sig[0])
-		input.parent = parent.cards_parent
-		parent.cards_parent.add_child(input)
+		parent.add_card(input)
 		before.push_back(func():
 			to.disconnect_from(from))
 		after.push_back(func():
 			from.connect_to(parent, named)
 			input.connect_to(to, named))
 	var add_output = func(from, to, named, output):
-		output.parent = parent.cards_parent
-		if not output.get_parent(): parent.cards_parent.add_child(output)
+		if not output.get_parent(): parent.add_card(output)
 		before.push_back(func():
 			from.disconnect_from(to))
 		after.push_back(func():
