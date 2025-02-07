@@ -218,33 +218,37 @@ func test_derive_output_types_from_incoming(ready):
 	
 	num.c(c)
 	ready.call()
-	
 	assert_eq(c.output_signatures.size(), 1)
 	assert_eq(c.output_signatures[0].get_description(), "float")
 	
 	c.disconnect_all()
-	
 	assert_eq(c.output_signatures.size(), 2)
 	
-	vector.c(c)
-	
+	vector.connect_to(c)
 	assert_eq(c.output_signatures.size(), 1)
 	assert_eq(c.output_signatures[0].get_description(), "Vector2")
+	
+	c.disconnect_all()
+	num.connect_to(c)
+	assert_eq(c.output_signatures.size(), 1)
+	assert_eq(c.output_signatures[0].get_description(), "float")
 
-func test_derive_output_types_no_incoming():
+func test_derive_output_types_no_incoming(ready):
 	var c = Card.new(func():
 		var process = PhysicsProcessCard.new()
 		var vec = Vector2Card.new()
 		var out = OutCard.new()
 		process.c(vec)
 		vec.c(out))
+	ready.call()
 	assert_eq(c.output_signatures.size(), 1)
 	assert_eq(c.output_signatures[0].get_description(), "Vector2")
 
-func test_derive_output_types_axis_controls():
+func test_derive_output_types_axis_controls(ready):
 	var c = AxisControlsCard.new()
+	ready.call()
 	assert_eq(c.output_signatures.size(), 1)
-	assert_eq(c.output_signatures[0].get_description(), ">directionVector2")
+	assert_eq(c.output_signatures[0].get_description(), ">direction[Vector2]")
 
 func test_derive_output_types_minus(ready):
 	var v1 = Vector2Card.new()
@@ -305,14 +309,12 @@ func test_get_description_with_cycle(ready):
 	vector_card.c(pull_only_card)
 	pull_only_card.c(store_card)
 	store_card.c(vector_card)
-	ready.call()
-	
 	# test that this does not cause an infinite loop
-	for i in store_card.cards:
-		if i is InCard: i.get_concrete_signatures()
+	ready.call()
 
-func test_type_of_subscribe_in_card():
+func test_type_of_subscribe_in_card(ready):
 	var subscribe_card = SubscribeInCard.new(Signature.TypeSignature.new("float"))
+	ready.call()
 	
 	assert_eq(subscribe_card.output_signatures.size(), 3)
 	assert_eq(subscribe_card.output_signatures[1].command, "connect")

@@ -57,14 +57,15 @@ func signature_changed():
 		actual_signatures = _compute_actual_signatures(signature)
 	if out_card: out_card.signature = signature
 
-## Our parent card was encountered but this InCard was not reachable.
-## We still want to set our signature but do not propagate further.
-func propagate_unreachable():
-	actual_signatures = _compute_actual_signatures(signature)
-
 func propagate_incoming_connected(seen):
 	actual_signatures = _compute_actual_signatures(signature)
 	super.propagate_incoming_connected(seen)
+
+## Our parent card was encountered but this InCard was not reachable.
+## We still want to set our signature but do not propagate further.
+func propagate_unreachable(seen):
+	actual_signatures = _compute_actual_signatures(signature)
+	super.propagate_unreachable(seen)
 
 func _get_incoming_list():
 	return parent.get_incoming() if parent else []

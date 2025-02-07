@@ -258,6 +258,7 @@ func _disconnect_from(to: Card):
 
 func incoming_disconnected(obj: Card):
 	connection_draw_node.incoming_disconnected(obj)
+	start_propagate_incoming_connected()
 	for input in cards:
 		if input is InCard: input.incoming_disconnected(obj)
 func outgoing_disconnected(obj: Card):
@@ -272,6 +273,8 @@ func start_propagate_incoming_connected():
 	var seen = {}
 	var previous_seen = null
 	propagate_incoming_connected(seen)
+	# If we encounter a loop, we will have to do a second pass, since
+	# the inputs of the loop will not have been initialized yet.
 	while seen != previous_seen:
 		previous_seen = seen
 		seen = {}
@@ -280,7 +283,8 @@ func start_propagate_incoming_connected():
 				node.parent.propagate_incoming_connected(seen)
 
 func propagate_incoming_connected(seen):
-	if seen.has(self): return
+	# if we passed by here from an unrechable input first, explore again
+	if seen.has(self) and seen[self] != "unreachable": return
 	seen[self] = &"done"
 	initialized_signatures = true
 	var parent_has_no_incoming = get_all_incoming().is_empty()
@@ -292,12 +296,20 @@ func propagate_incoming_connected(seen):
 		if c is InCard:
 			if c.has_connected() or parent_has_no_incoming: c.propagate_incoming_connected(seen)
 			else:
-				c.propagate_unreachable()
+				c.propagate_unreachable(seen)
 				seen[c] = &"recheck"
 		else:
 			if c.get_all_incoming().is_empty(): c.propagate_incoming_connected(seen)
 	for c in get_all_outgoing():
 		c.propagate_incoming_connected(seen)
+
+func propagate_unreachable(seen):
+	if seen.has(self): return
+	seen[self] = &"unreachable"
+	for c in cards:
+		c.propagate_unreachable(seen)
+	for c in get_all_outgoing():
+		c.propagate_unreachable(seen)
 
 ########################
 ## SIGNATURES AND INVOKE
@@ -472,9 +484,10 @@ func serialize_constructor():
 
 func serialize_gdscript(overwrite_name: String = "", size: Vector2 = Vector2.ZERO):
 	
+	# FIXME \u0020 below: VSCode's format has a bug where the space is removed on space
 	return "@tool
 extends Card
-class_name {name}
+class_name\u0020{name}
 
 func v():
 	title(\"{title}\")

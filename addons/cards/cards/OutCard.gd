@@ -56,6 +56,10 @@ func propagate_incoming_connected(seen):
 	if not parent is InCard:
 		actual_signatures = _compute_actual_signatures(_add_command(signature) if has_static_signature else null)
 
+func propagate_unreachable(seen):
+	# If no connected is reachable, show no signatures
+	actual_signatures = []
+
 ## Check if we have a compatible remembered value. If we remember values
 ## in general but we don't currently a value, check our incoming connections.
 func get_remembered_for(signature: Signature):
