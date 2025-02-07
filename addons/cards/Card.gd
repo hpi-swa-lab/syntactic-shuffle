@@ -545,7 +545,7 @@ static func none(): return Signature.VoidSignature.new()
 static func t(type: String): return Signature.TypeSignature.new(type)
 static func grp(group_names: Array[StringName]): return Signature.GroupSignature.new(group_names)
 static func cmd(name: String, arg = null): return Signature.CommandSignature.new(name, arg)
-static func any(): return Signature.GenericTypeSignature.new()
+static func any(name = ""): return Signature.GenericTypeSignature.new(name)
 static func struct(props, methods): return Signature.StructSignature.new(props, methods)
 static func it(arg: Signature): return Signature.IteratorSignature.new(arg)
 

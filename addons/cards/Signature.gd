@@ -104,6 +104,8 @@ class IteratorSignature extends Signature:
 	func compatible_with(other: Signature): return other.compatible_with_iterator(self)
 	func get_description(): return "Iterator<{0}>".format([type.get_description()])
 	func compatible_with_iterator(other: IteratorSignature): return other.type.compatible_with(type)
+	func make_concrete(incoming: Array[Signature], visited = []) -> Array[Signature]:
+		return [self]
 
 class VoidSignature extends Signature:
 	func eq(other: Signature): return other is VoidSignature

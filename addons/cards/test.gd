@@ -376,13 +376,19 @@ func test_group_with_overlapping_inputs_produces_named_inputs(ready):
 	assert_eq(container.cards.filter(func(c): return c is NamedInCard).size(), 2)
 
 func test_dedent():
-	assert_eq(CodeEditor.dedent("a
+	assert_eq(CodeEditor.dedent("	a
 		b
 			c
 		d"), "a
-b
-	c
-d
+	b
+		c
+	d
+")
+	assert_eq(CodeEditor.dedent("		if not iterator.is_empty():
+			out.call(iterator[0])
+"
+), "if not iterator.is_empty():
+	out.call(iterator[0])
 ")
 
 func test_initialize_get_property(ready):

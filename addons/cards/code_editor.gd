@@ -17,7 +17,7 @@ func attach_cards(card: CodeCard, size: Vector2):
 		%outputs.add_child(build_field(pair[0], output))
 	
 	var regex = RegEx.new()
-	regex.compile(r"^\s*func\s*\(.+\):\s*")
+	regex.compile(r"^\s*func\s*\(.+\):[^\S\n]*\n?")
 	
 	%code.text = dedent(regex.sub(card.get_source_code(), ""))
 	fake_a_godot_highlighter()
@@ -52,8 +52,9 @@ func get_current_outputs():
 	return Array(%outputs.get_children().map(func(box): return [box.get_meta("name").text, box.get_meta("signature").signature]), TYPE_ARRAY, "", null)
 
 func get_function_signature():
-	var inputs = get_current_inputs().filter(func(pair): return pair[1].provides_data()).map(func(pair): return pair[0])
-	inputs.push_front("card")
+	var inputs = ["card"]
+	inputs.append_array(get_current_outputs().filter(func(pair): return pair[1].provides_data()).map(func(pair): return pair[0]))
+	inputs.append_array(get_current_inputs().filter(func(pair): return pair[1].provides_data()).map(func(pair): return pair[0]))
 	return "func ({0}):".format([", ".join(inputs)])
 
 func update_function_signature():
@@ -77,7 +78,9 @@ func build_field(name: String, card: Card):
 			update_function_signature()
 			save_pull_list())
 	else:
-		label.text_changed.connect(func(s): save_inputs_outputs())
+		label.text_changed.connect(func(s):
+			update_function_signature()
+			save_inputs_outputs())
 	
 	var sig = VBoxContainer.new()
 	sig.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -152,7 +155,9 @@ func _on_add_selected_pressed() -> void:
 		# FIXME picking first
 		sig = sig[0]
 		
-		var name = sig.get_description().to_snake_case()
+		var valid = RegEx.new()
+		valid.compile(r"[^A-Za-z0-9_]")
+		var name = valid.sub(sig.get_description(), "", true).to_snake_case()
 		var counter = names.get(name, 0)
 		names.set(name, counter + 1)
 		if counter > 0: name = name + "_" + str(counter)
@@ -219,9 +224,6 @@ static func dedent(src: String):
 	var min_indent = 9e8
 	var first = true
 	for line in lines:
-		if first:
-			first = false
-			continue
 		var m = prefix_length.search(line)
 		if m.strings[0].length() == line.length(): continue
 		min_indent = min(min_indent, m.strings[0].length())
@@ -229,10 +231,6 @@ static func dedent(src: String):
 	first = true
 	var out = ""
 	for line in lines:
-		if first:
-			first = false
-			out += line + "\n"
-			continue
 		if line.length() > min_indent:
 			out += line.substr(min_indent) + "\n"
 	

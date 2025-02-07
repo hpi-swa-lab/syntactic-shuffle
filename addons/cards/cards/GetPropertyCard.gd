@@ -10,7 +10,7 @@ func v():
 
 func s():
 	var code_card = CodeCard.create([["property", t("String")], ["object", any()], ["trigger", trg()]], [["out", any()]], func(card, out, property, object):
-		out.call(object.get(property)), ["property"])
+		if property and property in object: out.call(object.get(property)), ["property"])
 	code_card.position = Vector2(1003.648, 263.8711)
 	var cell_card = CellCard.create("property_name", "String", "")
 	cell_card.position = Vector2(1010.196, 833.1957)
