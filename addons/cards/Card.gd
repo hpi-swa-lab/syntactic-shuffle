@@ -167,7 +167,9 @@ func card_parent_in_world():
 
 func can_edit(): return true
 ## Return true if this card can emit triggers without any connected inputs.
-## Assumed true by default.
+## Assumed true by default. Only relevant if this card tends to occur without
+## any inputs, such as the CellCard, as it would otherwise be considered for
+## reachability checks.
 func can_be_trigger(): return true
 
 func get_selection_manager() -> CardCamera:

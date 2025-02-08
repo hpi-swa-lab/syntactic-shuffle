@@ -170,7 +170,7 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.key_label == KEY_G and event.ctrl_pressed and event.pressed:
 		group_selected()
 	if event is InputEventKey and event.key_label == KEY_0 and event.ctrl_pressed and event.pressed:
-		G.at("search").grab_focus()
+		G.at("search").start_focus()
 	if event is InputEventPanGesture:
 		_zoom(-1 * event.delta.y * zoom.x)
 	if event is InputEventMouseButton:

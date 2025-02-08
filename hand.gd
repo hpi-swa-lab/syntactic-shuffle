@@ -54,19 +54,18 @@ func _ready() -> void:
 	add_child(column)
 	
 	var items = []
-	var list = ItemList.new()
+	var list = preload("res://addons/cards/autocomplete_input.tscn").instantiate()
+	list.placeholder_text = "Search Card ..."
 	G.put("search", list)
-	list.item_activated.connect(func(index):
-		var card = load(items[index]).new()
-		#list.deselect_all()
+	list.item_selected.connect(func(item):
+		var card = load(item["path"]).new()
 		card.position = get_viewport().get_camera_2d().position
 		# FIXME
-		get_node("/root/main/CardBoundary").add_child(card))
-	list.custom_minimum_size = Vector2(300, 80)
+		get_node("/root/main/CardBoundary").add_child(card)
+		get_viewport().get_camera_2d().set_as_selection(card))
 	for info in ProjectSettings.get_global_class_list():
-		if info["base"] == "Card":
-			list.add_item(info["class"])
-			items.push_back(info["path"])
+		if info["base"] == "Card": items.push_back({"name": info["class"], "path": info["path"]})
+	list.list = items
 	column.add_child(list)
 	
 	for category in categories:
