@@ -182,6 +182,9 @@ class StructSignature extends Signature:
 			if prop["name"] == name: return true
 		return false
 
+static func signature_for_value(value):
+	return Signature.TypeSignature.new(type_signature(typeof(value)))
+
 static func type_signature(type, inverse = false):
 	var mapping = {
 		TYPE_NIL: "nil",
@@ -234,7 +237,7 @@ static func data_to_expression(data) -> String:
 	if data is Vector2:
 		return "Vector2" + str(data)
 	if data is String:
-		return "\"" + data.replace("\"", "\\\"") + "\""
+		return "\"" + data.replace("\"", "\\\"").replace("\\", "\\\\") + "\""
 	if data == null:
 		return "null"
 	if data is Array:

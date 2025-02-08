@@ -166,6 +166,9 @@ func card_parent_in_world():
 	return parent.card_parent_in_world()
 
 func can_edit(): return true
+## Return true if this card can emit triggers without any connected inputs.
+## Assumed true by default.
+func can_be_trigger(): return true
 
 func get_selection_manager() -> CardCamera:
 	return visual.get_selection_manager()
@@ -298,7 +301,7 @@ func propagate_incoming_connected(seen):
 				c.propagate_unreachable(seen)
 				seen[c] = &"recheck"
 		else:
-			if c.get_all_incoming().is_empty(): c.propagate_incoming_connected(seen)
+			if c.get_all_incoming().is_empty() and c.can_be_trigger(): c.propagate_incoming_connected(seen)
 	for c in get_all_outgoing():
 		c.propagate_incoming_connected(seen)
 

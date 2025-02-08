@@ -11,11 +11,15 @@ func v():
 func s():
 	var cell_card = CellCard.create("regex", "String", ".*")
 	cell_card.position = Vector2(513.7805, 176.8419)
-	var code_card = CodeCard.create([["string", t("String")], ["regex", t("String")]], [["out", t("RegExMatch")]], func (card, out, string, regex):
+	var code_card = CodeCard.create([["string", t("String")], ["regex", t("String")]], [["out", t("Dictionary")]], func (card, out, string, regex):
 		var r = RegEx.new()
 		r.compile(regex)
 		var res = r.search(string)
-		if res: out.call(res)
+		if res:
+			var dict = {}
+			for name in res.names:
+				dict[name] = res.get_string(name)
+			out.call(dict)
 , ["regex"])
 	code_card.position = Vector2(711.1526, 654.3732)
 	var in_card = InCard.data(t("String"))

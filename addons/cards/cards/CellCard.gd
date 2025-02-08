@@ -43,6 +43,7 @@ func clone():
 var update_ui_func = null
 
 func can_edit(): return false
+func can_be_trigger(): return false
 
 func v():
 	title("Data Cell")

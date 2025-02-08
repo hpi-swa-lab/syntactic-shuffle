@@ -12,9 +12,9 @@ func attach_cards(card: CodeCard, size: Vector2):
 	for input in card.cards:
 		if input is NamedInCard:
 			%inputs.add_child(build_field(input.input_name, input))
-	for pair in card.outputs:
-		var output = card.cards.filter(func(c): return c is OutCard and c.signature.eq(pair[1]))[0]
-		%outputs.add_child(build_field(pair[0], output))
+	for i in range(card.outputs.size()):
+		var output = card.get_outputs()[i]
+		%outputs.add_child(build_field(card.outputs[i][0], output))
 	
 	var regex = RegEx.new()
 	regex.compile(r"^\s*func\s*\(.+\):[^\S\n]*\n?")
