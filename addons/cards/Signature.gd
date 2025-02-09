@@ -43,6 +43,13 @@ class OutputAnySignature extends Signature:
 			return sig_array([self])
 		else: return incoming
 
+static var _custom_class_hierarchy = null
+static func _ensure_custom_class_hierarchy():
+	if _custom_class_hierarchy: return
+	_custom_class_hierarchy = {}
+	for c in ProjectSettings.get_global_class_list():
+		_custom_class_hierarchy[c["class"]] = c["base"]
+
 class TypeSignature extends Signature:
 	var type: String
 	func _init(type: String):
@@ -54,10 +61,12 @@ class TypeSignature extends Signature:
 	func compatible_with(other: Signature): return other.compatible_with_type(self)
 	func compatible_with_generic(other: GenericTypeSignature): return true
 	func compatible_with_type(other: TypeSignature):
+		_ensure_custom_class_hierarchy()
 		var name = other.type
 		while name:
 			if name == type: return true
 			elif ClassDB.class_exists(name): name = ClassDB.get_parent_class(name)
+			elif _custom_class_hierarchy.has(name): name = _custom_class_hierarchy[name]
 			else: break
 		return false
 	func compatible_with_struct(other: StructSignature): return other.compatible_with_type(self)
@@ -182,8 +191,11 @@ class StructSignature extends Signature:
 			if prop["name"] == name: return true
 		return false
 
+static func signature_for_type(type):
+	return Signature.TypeSignature.new(type_signature(type))
+
 static func signature_for_value(value):
-	return Signature.TypeSignature.new(type_signature(typeof(value)))
+	return signature_for_type(typeof(value))
 
 static func type_signature(type, inverse = false):
 	var mapping = {
@@ -244,4 +256,6 @@ static func data_to_expression(data) -> String:
 		return "[" + ", ".join(data.map(data_to_expression)) + "]"
 	if data is Signature:
 		return data.serialize_gdscript()
+	if data is Callable:
+		if data.is_custom(): return "null"
 	return str(data)

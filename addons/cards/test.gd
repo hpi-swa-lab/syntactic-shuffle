@@ -347,7 +347,7 @@ func test_group_with_overlapping_outputs_merges(ready):
 	b_r.c(b_minus_card)
 	ready.call()
 	
-	var cam = CardCamera.new()
+	var cam = CardEditor.new()
 	cam.add_to_selection(a_r)
 	cam.add_to_selection(b_r)
 	cam.add_to_selection(a)
@@ -368,7 +368,7 @@ func test_group_with_overlapping_inputs_produces_named_inputs(ready):
 	b_r.c(minus_card)
 	ready.call()
 	
-	var cam = CardCamera.new()
+	var cam = CardEditor.new()
 	cam.add_to_selection(a_r)
 	cam.add_to_selection(b_r)
 	cam.add_to_selection(minus_card)

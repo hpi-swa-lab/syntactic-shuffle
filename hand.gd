@@ -3,7 +3,7 @@ extends CanvasLayer
 var categories = {
 	"Abstraction": [
 		CodeCard.create_default(),
-		CellCard.new("value", "float", 0.0),
+		CellCard.create_default(),
 		FilterSignaturesCard.new(Signature.VoidSignature.new()),
 		"StoreCard",
 		"RememberCard",

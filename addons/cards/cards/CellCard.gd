@@ -6,6 +6,9 @@ var out_card: OutCard
 var out_cards: Array[Card] = []
 var type_signature: Signature.CommandSignature
 
+static func create_default():
+	return CellCard.new("value", "float", 0.0)
+
 static func create(name: String, type: String, data: Variant):
 	var c = CellCard.new(name, type, data)
 	return c

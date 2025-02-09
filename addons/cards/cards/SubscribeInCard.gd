@@ -32,7 +32,8 @@ func incoming_connected(obj: Card):
 	if remembered: invoke(remembered.get_remembered_value(), cmd("connect", signature))
 
 func incoming_disconnected(obj: Card):
-	invoke([obj], cmd("disconnect", signature))
+	var remembered = obj.get_remembered_for(signature) if obj else get_remembered()
+	if remembered: invoke(remembered.get_remembered_value(), cmd("disconnect", signature))
 
 func serialize_constructor():
 	return "{0}.new({1})".format([card_name, signature.serialize_gdscript()])

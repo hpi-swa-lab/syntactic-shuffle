@@ -121,7 +121,7 @@ func _on_card_control_mouse_entered() -> void:
 
 func _on_card_control_mouse_exited() -> void: %signatures.visible = false
 
-func get_selection_manager() -> CardCamera:
+func get_selection_manager() -> CardEditor:
 	return get_viewport().get_camera_2d()
 
 func try_focus():

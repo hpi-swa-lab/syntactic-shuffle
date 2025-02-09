@@ -1,5 +1,5 @@
 extends Camera2D
-class_name CardCamera
+class_name CardEditor
 
 signal physics_process(delta: float)
 signal process(delta: float)
@@ -211,6 +211,7 @@ func spawn_connected(script_path):
 	var pos
 	if selected:
 		parent = selected.parent
+		if not parent: parent = selected.get_parent()
 		pos = selected.position + Vector2(400 * selected.scale.x, 0)
 	else:
 		# FIXME doesn't quite work yet

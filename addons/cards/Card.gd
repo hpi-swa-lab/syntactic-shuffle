@@ -34,8 +34,8 @@ var card_name:
 @export var disable = false:
 	set(v):
 		if v == disable: return
-		if is_toplevel() and disable: entered_program()
-		if is_toplevel() and not disable: left_program()
+		if is_toplevel() and disable: entered_program(get_selection_manager())
+		if is_toplevel() and not disable: left_program(get_selection_manager())
 		disable = v
 		if connection_draw_node: connection_draw_node.queue_redraw()
 		if disable: disconnect_all()
@@ -70,11 +70,7 @@ var cards: Array[Card]:
 var visual: CardVisual
 var cards_parent = CardBoundary.new()
 var connection_draw_node = CardConnectionsDraw.new()
-var parent: Card:
-	get: return parent
-	set(v):
-		if is_toplevel() and not disable: entered_program()
-		parent = v
+var parent: Card
 var allows_cycles = false
 var initialized_signatures = false
 @export var incoming: Array[NodePath] = []
@@ -97,7 +93,7 @@ func _init(custom_build = null):
 
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_PREDELETE:
-		left_program()
+		if is_toplevel() and is_inside_tree(): left_program(get_selection_manager())
 		disconnect_all()
 
 func setup(custom_build = null):
@@ -112,10 +108,10 @@ func build_cards_list(custom_build = null):
 	cards.append_array(cards_parent.get_children())
 
 ## This card or its parent just entered the program
-func entered_program(): for card in cards: card.entered_program()
+func entered_program(manager): for card in cards: card.entered_program(manager)
 
 ## This card or its parent just left the program
-func left_program(): for card in cards: card.left_program()
+func left_program(manager): for card in cards: card.left_program(manager)
 
 func visual_setup():
 	visual = preload("res://addons/cards/CardVisual.tscn").instantiate()
@@ -147,6 +143,7 @@ func _ready() -> void:
 			for element in card.get_extra_ui(): ui(element)
 	
 	init_signatures()
+	if is_toplevel() and not disable: entered_program(get_selection_manager())
 
 func init_signatures():
 	if not disable and not initialized_signatures and get_all_incoming().is_empty():
@@ -188,7 +185,7 @@ func can_edit(): return true
 ## reachability checks.
 func can_be_trigger(): return true
 
-func get_selection_manager() -> CardCamera:
+func get_selection_manager() -> CardEditor:
 	return visual.get_selection_manager()
 
 func get_card_global_position():
