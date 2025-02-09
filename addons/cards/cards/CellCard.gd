@@ -131,9 +131,13 @@ func get_extra_ui() -> Array[Control]:
 			update_ui_func = func(v): b.set_pressed_no_signal(v)
 			return [b]
 		"String":
-			var e = LineEdit.new()
+			var e = TextEdit.new()
+			e.wrap_mode = TextEdit.LINE_WRAPPING_BOUNDARY
+			e.scroll_fit_content_height = true
+			e.caret_blink = true
+			e.add_theme_font_size_override("font_size", 8)
 			if data != null: e.text = data
-			e.text_changed.connect(func(s): data = s)
+			e.text_changed.connect(func(): data = e.text)
 			update_ui_func = func(v): if e.text != v: e.text = v
 			return [e]
 		_:
