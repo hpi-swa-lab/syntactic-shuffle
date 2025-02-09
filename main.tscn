@@ -1,16 +1,8 @@
-[gd_scene load_steps=13 format=3 uid="uid://bqninusgeuw0i"]
+[gd_scene load_steps=5 format=3 uid="uid://bqninusgeuw0i"]
 
 [ext_resource type="Script" uid="uid://cja8ehiirmcyt" path="res://addons/cards/CardBoundary.gd" id="1_ig7tw"]
-[ext_resource type="Script" uid="uid://dkyx51jnk8cvd" path="res://addons/cards/cards/AxisControlsCard.gd" id="5_7mycd"]
-[ext_resource type="Script" uid="uid://cykn2a1upyl7a" path="res://addons/cards/cards/Vector2Card.gd" id="6_5vw27"]
 [ext_resource type="Script" uid="uid://bvr4vcw3kd72b" path="res://addons/cards/placeholder/placeholder.gd" id="6_272bh"]
-[ext_resource type="Script" uid="uid://dtcitdmnbq585" path="res://addons/cards/cards/NumberCard.gd" id="7_4c57u"]
-[ext_resource type="Script" uid="uid://bapqs0tgxuf2o" path="res://addons/cards/cards/PlusCard.gd" id="8_efxa6"]
 [ext_resource type="Script" uid="uid://cxldeg24krchn" path="res://camera_2d.gd" id="9_kek77"]
-[ext_resource type="Script" uid="uid://dj1u5natr5pv3" path="res://addons/cards/cards/NodesInGroupCard.gd" id="10_dg77c"]
-[ext_resource type="Script" uid="uid://ctmo5roqpacap" path="res://addons/cards/cards/MoveCard.gd" id="10_efxa6"]
-[ext_resource type="Script" uid="uid://7yyrsfem3862" path="res://addons/cards/cards/RegexCard.gd" id="11_dg77c"]
-[ext_resource type="Script" uid="uid://bbls2cpisjntj" path="res://addons/cards/cards/GetPropertyCard.gd" id="11_ycdy4"]
 [ext_resource type="Script" uid="uid://dio881dm6xtr3" path="res://hand.gd" id="15_vivmo"]
 
 [node name="main" type="Node2D"]
@@ -52,78 +44,6 @@ color = Color(0.974666, 0.76677, 1.15514e-06, 1)
 shape_type = "Circle"
 circle_radius = 10.0
 metadata/_custom_type_script = ExtResource("6_272bh")
-
-[node name="Vector2Card" type="Node2D" parent="CardBoundary"]
-position = Vector2(378, 168)
-scale = Vector2(0.2, 0.2)
-script = ExtResource("6_5vw27")
-id = "190083a7-166a-4fea-a237-e9fa76f98494"
-vector = Vector2(0, 0)
-metadata/_custom_type_script = ExtResource("6_5vw27")
-
-[node name="AxisControlsCard" type="Node2D" parent="CardBoundary"]
-position = Vector2(213, 329)
-scale = Vector2(0.2, 0.2)
-script = ExtResource("5_7mycd")
-id = "5d248181-b1ca-4e41-8889-b3f6f07e559e"
-outgoing = Array[NodePath]([NodePath("../MoveCard")])
-metadata/_custom_type_script = ExtResource("5_7mycd")
-
-[node name="NumberCard" type="Node2D" parent="CardBoundary"]
-position = Vector2(81, 122)
-scale = Vector2(0.2, 0.2)
-script = ExtResource("7_4c57u")
-id = "aba8f867-00c0-4097-8b2c-d406b2dfdfa0"
-number = 0.0
-metadata/_custom_type_script = ExtResource("7_4c57u")
-
-[node name="NumberCard2" type="Node2D" parent="CardBoundary"]
-position = Vector2(208, 4)
-scale = Vector2(0.2, 0.2)
-script = ExtResource("7_4c57u")
-id = "b1779734-d568-4f65-a81d-a6061b0077d5"
-number = 0.0
-metadata/_custom_type_script = ExtResource("7_4c57u")
-
-[node name="PlusCard" type="Node2D" parent="CardBoundary"]
-scale = Vector2(0.2, 0.2)
-script = ExtResource("8_efxa6")
-id = "56965b3b-2a32-4906-98ca-34d6060171e7"
-metadata/_custom_type_script = ExtResource("8_efxa6")
-
-[node name="NodesInGroupCard" type="Node2D" parent="CardBoundary"]
-position = Vector2(15, 302)
-scale = Vector2(0.2, 0.2)
-script = ExtResource("10_dg77c")
-id = "4b44a451-7fb9-4ecb-b3b4-26b1b110ae46"
-outgoing = Array[NodePath]([NodePath("../GetPropertyCard")])
-group_name = "enemy"
-metadata/_custom_type_script = ExtResource("10_dg77c")
-
-[node name="GetPropertyCard" type="Node2D" parent="CardBoundary"]
-position = Vector2(106, 244)
-scale = Vector2(0.2, 0.2)
-script = ExtResource("11_ycdy4")
-id = "90e89c8e-c673-49f7-99de-663d120745c0"
-incoming = Array[NodePath]([NodePath("../NodesInGroupCard")])
-property_name = "position"
-metadata/_custom_type_script = ExtResource("11_ycdy4")
-
-[node name="MoveCard" type="Node2D" parent="CardBoundary"]
-position = Vector2(348, 368)
-scale = Vector2(0.2, 0.2)
-script = ExtResource("10_efxa6")
-id = "5c5f7132-8eab-40bf-a4e1-a06b7fdf9cb7"
-incoming = Array[NodePath]([NodePath("../AxisControlsCard")])
-metadata/_custom_type_script = ExtResource("10_efxa6")
-
-[node name="RegexCard" type="Node2D" parent="CardBoundary"]
-position = Vector2(541, 337)
-scale = Vector2(0.2, 0.2)
-script = ExtResource("11_dg77c")
-id = "6cd6b27f-8d5a-46ce-9d7d-bd0e5fb83fe9"
-regex = "^(?<verb>[^ ]+) (?<path>[^ ]+) HTTP\\/1\\.1\\n(?<headers>[\\S\\s]+?)\\n\\n(?<body>[\\S\\s]*)"
-metadata/_custom_type_script = ExtResource("11_dg77c")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 script = ExtResource("15_vivmo")

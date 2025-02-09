@@ -160,7 +160,33 @@ func spawn_connected(script_path):
 	set_as_selection(card)
 	card.visual.try_focus()
 
-func _ready(): Card.set_ignore_object(self)
+const PROGRAM_FILE = "res://program.gd"
+
+func save_cards(path = PROGRAM_FILE):
+	var f = FileAccess.open(path, FileAccess.WRITE)
+	f.store_string("@tool\nextends Card\nfunc s():\n" + Card.serialize_card_construction(get_parent().get_cards()))
+
+func load_cards(path = PROGRAM_FILE):
+	if FileAccess.file_exists(path):
+		var container = load(path).new()
+		var parent = get_parent()
+		# make sure _ready is called only once all cards are in place
+		_unmount_while(parent, func ():
+			for card in container.cards: card.reparent(parent, false))
+
+func _unmount_while(node: Node, cb: Callable):
+	var index = node.get_index()
+	var parent = node.get_parent()
+	parent.remove_child(node)
+	cb.call()
+	parent.add_child(node)
+	parent.move_child(node, index)
+
+func _ready():
+	Card.set_ignore_object(self)
+	
+	await get_tree().process_frame
+	load_cards()
 
 func _zoom(factor: float) -> void:
 	var delta = get_global_mouse_position() - global_position
@@ -189,6 +215,8 @@ func _unhandled_input(event: InputEvent) -> void:
 		duplicate_selected()
 	if event is InputEventKey and event.key_label == KEY_G and event.ctrl_pressed and event.pressed:
 		group_selected()
+	if event is InputEventKey and event.key_label == KEY_S and event.ctrl_pressed and event.pressed:
+		save_cards()
 	if event is InputEventPanGesture:
 		_zoom(-1 * event.delta.y * zoom.x)
 	if event is InputEventMouseButton:
