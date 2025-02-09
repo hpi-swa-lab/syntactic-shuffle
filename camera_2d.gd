@@ -150,6 +150,16 @@ func group_selected():
 	
 	return parent
 
+func spawn_connected(script_path):
+	var selected: Card = get_single_selection()
+	var card = load(script_path).new()
+	card.position = selected.position + Vector2(100, 0) if selected else position
+	
+	get_parent().add_child(card)
+	if selected: selected.try_connect(card)
+	set_as_selection(card)
+	card.visual.try_focus()
+
 func _ready(): Card.set_ignore_object(self)
 
 func _zoom(factor: float) -> void:

@@ -58,16 +58,8 @@ func _ready() -> void:
 	list.placeholder_text = "Search Card ..."
 	G.put("search", list)
 	list.item_selected.connect(func(item):
-		var card = load(item["path"]).new()
 		var camera = get_viewport().get_camera_2d()
-		var selected: Card = camera.get_single_selection()
-		
-		card.position = selected.position + Vector2(100, 0) if selected else get_viewport().get_camera_2d().position
-		
-		camera.get_parent().add_child(card)
-		if selected: selected.try_connect(card)
-		camera.set_as_selection(card)
-		card.visual.try_focus())
+		camera.spawn_connected(item["path"]))
 	for info in ProjectSettings.get_global_class_list():
 		if info["base"] == "Card": items.push_back({"name": info["class"], "path": info["path"]})
 	list.list = items
