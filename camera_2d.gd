@@ -219,7 +219,9 @@ func spawn_connected(script_path):
 		parent = b.get_parent_card()
 		if not parent: parent = b
 	
-	var card = load(script_path).new()
+	var script = load(script_path)
+	var create = script.get_script_method_list().filter(func (m): return m["name"] == "create_default")
+	var card = script.create_default() if create else script.new()
 	card.position = pos
 	
 	parent.add_card(card)

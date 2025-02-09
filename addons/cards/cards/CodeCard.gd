@@ -37,6 +37,10 @@ static func _extract_anonymous_functions(src: String):
 	
 	return sources
 
+static func create_default():
+	@warning_ignore("unused_parameter")
+	return CodeCard.new([], [["out", Signature.TypeSignature.new("")]], func(card, out): pass , [], "func(card, out): out.call(null)")
+
 static func create(inputs: Array[Array], outputs: Array[Array], process: Callable, pull_only = []):
 	var c = CodeCard.new(inputs, outputs, process, pull_only)
 	return c

@@ -15,6 +15,7 @@ func _gui_input(event):
 			KEY_DOWN: move_focus(1)
 			KEY_UP: move_focus(-1)
 			KEY_ENTER, KEY_KP_ENTER: accept_selected()
+			KEY_ESCAPE: release_focus()
 
 func accept_selected():
 	var index = get_focused_index()
