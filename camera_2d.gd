@@ -13,6 +13,11 @@ func clear_selection():
 		if is_instance_valid(card) and card.visual: card.visual.on_deselected()
 	selection.clear()
 
+func get_single_selection():
+	var s = get_selection()
+	if s.size() == 1: return s[0]
+	return null
+
 func get_selection():
 	return selection.keys().filter(func(k): return is_instance_valid(k))
 
@@ -158,19 +163,22 @@ func _input(event: InputEvent) -> void:
 		held = event.is_pressed()
 	if event is InputEventMouseMotion and held:
 		position -= event.screen_relative / zoom
+	if event is InputEventKey and event.key_label == KEY_SPACE and event.ctrl_pressed and event.pressed:
+		G.at("search").start_focus()
+		get_viewport().set_input_as_handled()
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		selecting = event.is_pressed()
-		if selecting: clear_selection()
+		if selecting:
+			clear_selection()
+			get_viewport().gui_release_focus()
 	if event is InputEventKey and (event.key_label == KEY_DELETE or event.key_label == KEY_BACKSPACE) and event.pressed:
 		delete_selected()
 	if event is InputEventKey and event.key_label == KEY_D and event.ctrl_pressed and event.pressed:
 		duplicate_selected()
 	if event is InputEventKey and event.key_label == KEY_G and event.ctrl_pressed and event.pressed:
 		group_selected()
-	if event is InputEventKey and event.key_label == KEY_0 and event.ctrl_pressed and event.pressed:
-		G.at("search").start_focus()
 	if event is InputEventPanGesture:
 		_zoom(-1 * event.delta.y * zoom.x)
 	if event is InputEventMouseButton:

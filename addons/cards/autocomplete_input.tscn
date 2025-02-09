@@ -10,7 +10,6 @@ offset_right = -1696.0
 offset_bottom = -1049.0
 grow_horizontal = 2
 grow_vertical = 2
-text = "test"
 keep_editing_on_text_submit = true
 expand_to_text_length = true
 deselect_on_focus_loss_enabled = false

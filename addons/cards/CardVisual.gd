@@ -123,3 +123,9 @@ func _on_card_control_mouse_exited() -> void: %signatures.visible = false
 
 func get_selection_manager() -> CardCamera:
 	return get_viewport().get_camera_2d()
+
+func try_focus():
+	var c = %CardControl.find_next_valid_focus()
+	if is_ancestor_of(c):
+		await get_tree().process_frame
+		c.grab_focus()

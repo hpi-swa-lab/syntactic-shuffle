@@ -14,12 +14,14 @@ func _gui_input(event):
 		match event.keycode:
 			KEY_DOWN: move_focus(1)
 			KEY_UP: move_focus(-1)
-			KEY_ENTER, KEY_KP_ENTER, KEY_TAB: accept_selected()
+			KEY_ENTER, KEY_KP_ENTER: accept_selected()
 
 func accept_selected():
 	var index = get_focused_index()
 	if index >= 0 and %list.visible:
 		selected(index)
+		await get_tree().process_frame
+		release_focus()
 
 func get_focused_index():
 	var l = %list.get_selected_items()
@@ -38,6 +40,7 @@ func selected(index: int):
 	build_list("")
 
 func move_focus(dir: int):
+	if %list.item_count == 0: return
 	var current = get_focused_index() + dir
 	while current < %list.item_count and current >= 0 and not %list.is_item_selectable(current):
 		current += dir

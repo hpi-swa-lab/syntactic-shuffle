@@ -59,10 +59,15 @@ func _ready() -> void:
 	G.put("search", list)
 	list.item_selected.connect(func(item):
 		var card = load(item["path"]).new()
-		card.position = get_viewport().get_camera_2d().position
-		# FIXME
-		get_node("/root/main/CardBoundary").add_child(card)
-		get_viewport().get_camera_2d().set_as_selection(card))
+		var camera = get_viewport().get_camera_2d()
+		var selected: Card = camera.get_single_selection()
+		
+		card.position = selected.position + Vector2(100, 0) if selected else get_viewport().get_camera_2d().position
+		
+		camera.get_parent().add_child(card)
+		if selected: selected.try_connect(card)
+		camera.set_as_selection(card)
+		card.visual.try_focus())
 	for info in ProjectSettings.get_global_class_list():
 		if info["base"] == "Card": items.push_back({"name": info["class"], "path": info["path"]})
 	list.list = items
