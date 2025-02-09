@@ -33,6 +33,9 @@ var card_name:
 ## Not currently able to move, connect, or emit
 @export var disable = false:
 	set(v):
+		if v == disable: return
+		if is_toplevel() and disable: entered_program()
+		if is_toplevel() and not disable: left_program()
 		disable = v
 		if connection_draw_node: connection_draw_node.queue_redraw()
 		if disable: disconnect_all()
@@ -67,13 +70,19 @@ var cards: Array[Card]:
 var visual: CardVisual
 var cards_parent = CardBoundary.new()
 var connection_draw_node = CardConnectionsDraw.new()
-var parent: Card
+var parent: Card:
+	get: return parent
+	set(v):
+		if is_toplevel() and not disable: entered_program()
+		parent = v
 var allows_cycles = false
 var initialized_signatures = false
 @export var incoming: Array[NodePath] = []
 @export var outgoing: Array[NodePath] = []
 @export var named_outgoing: Dictionary[String, Array] = {}
 @export var named_incoming: Dictionary[String, Array] = {}
+
+func is_toplevel(): return not parent
 
 ########################
 ## SETUP AND VISUALS
@@ -88,6 +97,7 @@ func _init(custom_build = null):
 
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_PREDELETE:
+		left_program()
 		disconnect_all()
 
 func setup(custom_build = null):
@@ -100,6 +110,12 @@ func build_cards_list(custom_build = null):
 	else: s()
 	pop_active_card_list()
 	cards.append_array(cards_parent.get_children())
+
+## This card or its parent just entered the program
+func entered_program(): for card in cards: card.entered_program()
+
+## This card or its parent just left the program
+func left_program(): for card in cards: card.left_program()
 
 func visual_setup():
 	visual = preload("res://addons/cards/CardVisual.tscn").instantiate()

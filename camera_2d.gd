@@ -1,12 +1,66 @@
 extends Camera2D
 class_name CardCamera
 
+signal physics_process(delta: float)
+signal process(delta: float)
+
 @export var zoom_speed = 0.1
 @export var pan = true
 
 var held = false
 var selecting = false
 var selection = {}
+
+func _ready():
+	Card.set_ignore_object(self)
+	
+	await get_tree().process_frame
+	load_cards()
+
+func _zoom(factor: float) -> void:
+	var delta = get_global_mouse_position() - global_position
+	delta = delta - delta * zoom.x / (zoom.x + factor)
+	zoom += Vector2(factor, factor)
+	position += delta
+
+func _process(delta: float) -> void:
+	process.emit(delta)
+
+func _physics_process(delta: float) -> void:
+	physics_process.emit(delta)
+
+func _input(event: InputEvent) -> void:
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and pan:
+		held = event.is_pressed()
+	if event is InputEventMouseMotion and held:
+		position -= event.screen_relative / zoom
+	if event is InputEventKey and event.key_label == KEY_SPACE and event.ctrl_pressed and event.pressed:
+		G.at("search").start_focus()
+		get_viewport().set_input_as_handled()
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+		selecting = event.is_pressed()
+		if selecting:
+			clear_selection()
+			get_viewport().gui_release_focus()
+	if event is InputEventKey and (event.key_label == KEY_DELETE or event.key_label == KEY_BACKSPACE) and event.pressed:
+		delete_selected()
+	if event is InputEventKey and event.key_label == KEY_D and event.ctrl_pressed and event.pressed:
+		duplicate_selected()
+	if event is InputEventKey and event.key_label == KEY_G and event.ctrl_pressed and event.pressed:
+		group_selected()
+	if event is InputEventKey and event.key_label == KEY_S and event.ctrl_pressed and event.pressed:
+		save_cards()
+	if event is InputEventPanGesture:
+		_zoom(-1 * event.delta.y * zoom.x)
+	if event is InputEventMouseButton:
+		var factor = 0
+		match event.button_index:
+			MOUSE_BUTTON_WHEEL_DOWN: factor = -1
+			MOUSE_BUTTON_WHEEL_UP: factor = 1
+			_: factor = 0
+		if factor != 0: _zoom(factor * event.factor * zoom_speed * zoom.x)
 
 func clear_selection():
 	for card in selection:
@@ -151,11 +205,24 @@ func group_selected():
 	return parent
 
 func spawn_connected(script_path):
+	var camera_pos = get_screen_center_position()
 	var selected: Card = get_single_selection()
-	var card = load(script_path).new()
-	card.position = selected.position + Vector2(100, 0) if selected else position
+	var parent
+	var pos
+	if selected:
+		parent = selected.parent
+		pos = selected.position + Vector2(400 * selected.scale.x, 0)
+	else:
+		# FIXME doesn't quite work yet
+		var b = CardBoundary.boundary_at_position(camera_pos)
+		pos = camera_pos * b.global_transform.inverse()
+		parent = b.get_parent_card()
+		if not parent: parent = b
 	
-	get_parent().add_child(card)
+	var card = load(script_path).new()
+	card.position = pos
+	
+	parent.add_card(card)
 	if selected: selected.try_connect(card)
 	set_as_selection(card)
 	card.visual.try_focus()
@@ -181,48 +248,3 @@ func _unmount_while(node: Node, cb: Callable):
 	cb.call()
 	parent.add_child(node)
 	parent.move_child(node, index)
-
-func _ready():
-	Card.set_ignore_object(self)
-	
-	await get_tree().process_frame
-	load_cards()
-
-func _zoom(factor: float) -> void:
-	var delta = get_global_mouse_position() - global_position
-	delta = delta - delta * zoom.x / (zoom.x + factor)
-	zoom += Vector2(factor, factor)
-	position += delta
-
-func _input(event: InputEvent) -> void:
-	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and pan:
-		held = event.is_pressed()
-	if event is InputEventMouseMotion and held:
-		position -= event.screen_relative / zoom
-	if event is InputEventKey and event.key_label == KEY_SPACE and event.ctrl_pressed and event.pressed:
-		G.at("search").start_focus()
-		get_viewport().set_input_as_handled()
-
-func _unhandled_input(event: InputEvent) -> void:
-	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
-		selecting = event.is_pressed()
-		if selecting:
-			clear_selection()
-			get_viewport().gui_release_focus()
-	if event is InputEventKey and (event.key_label == KEY_DELETE or event.key_label == KEY_BACKSPACE) and event.pressed:
-		delete_selected()
-	if event is InputEventKey and event.key_label == KEY_D and event.ctrl_pressed and event.pressed:
-		duplicate_selected()
-	if event is InputEventKey and event.key_label == KEY_G and event.ctrl_pressed and event.pressed:
-		group_selected()
-	if event is InputEventKey and event.key_label == KEY_S and event.ctrl_pressed and event.pressed:
-		save_cards()
-	if event is InputEventPanGesture:
-		_zoom(-1 * event.delta.y * zoom.x)
-	if event is InputEventMouseButton:
-		var factor = 0
-		match event.button_index:
-			MOUSE_BUTTON_WHEEL_DOWN: factor = -1
-			MOUSE_BUTTON_WHEEL_UP: factor = 1
-			_: factor = 0
-		if factor != 0: _zoom(factor * event.factor * zoom_speed * zoom.x)

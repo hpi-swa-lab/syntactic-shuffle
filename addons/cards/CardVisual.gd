@@ -126,6 +126,6 @@ func get_selection_manager() -> CardCamera:
 
 func try_focus():
 	var c = %CardControl.find_next_valid_focus()
-	if is_ancestor_of(c):
+	if c and is_ancestor_of(c):
 		await get_tree().process_frame
 		c.grab_focus()

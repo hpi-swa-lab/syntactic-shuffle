@@ -54,7 +54,8 @@ static func get_card_boundary(node: Node):
 	assert(b, "card was not inside a boundary")
 	return b
 
-static func boundary_at_card(card: Card):
+static func boundary_at_card(card: Card): return boundary_at_position(card.get_viewport().get_mouse_position(), card)
+static func boundary_at_position(pos: Vector2, ignore_parent = null):
 	#var intersect = PhysicsPointQueryParameters2D.new()
 	#intersect.collide_with_areas = true
 	#intersect.collide_with_bodies = false
@@ -62,10 +63,9 @@ static func boundary_at_card(card: Card):
 	#var candidates = card.get_world_2d().direct_space_state.intersect_point(intersect)
 	
 	var candidates = []
-	var pos = card.get_viewport().get_mouse_position()
 	var fallback = null
-	for boundary in card.get_tree().get_nodes_in_group("card_boundary").filter(func(b):
-			return b.is_visible_in_tree() and not card.is_ancestor_of(b)):
+	for boundary in Engine.get_main_loop().get_nodes_in_group("card_boundary").filter(func(b):
+			return b.is_visible_in_tree() and not (ignore_parent and ignore_parent.is_ancestor_of(b))):
 		if boundary.is_fallback_boundary():
 			assert(fallback == null, "cannot have multiple fallback card boundaries")
 			fallback = boundary
@@ -100,6 +100,8 @@ static func card_moved(card: Card, new_boundary = null):
 			# FIXME Card.editor_sync("cards:spawn", [boundary.get_path(), card.id, card.get_script().resource_path, card.get_index()])
 		old_boundary._relayout()
 
+func add_card(card: Card): add_child(card)
+
 func is_fallback_boundary():
 	for id in get_shape_owners():
 		if not is_shape_owner_disabled(id):
@@ -117,13 +119,15 @@ func contains_screen_position(pos: Vector2):
 				return true
 	return false
 
+func get_parent_card(): return G.closest_parent_that(self, func(n): return n is Card)
+
 func card_left(card: Card):
 	card.parent = null
 
 func card_entered(card: Card):
 	card.disable = disable_on_enter
 	card.paused = pause_on_enter
-	card.parent = G.closest_parent_that(self, func(n): return n is Card)
+	card.parent = get_parent_card()
 	card.init_signatures()
 	#card.editor_sync_prop("paused")
 	#card.editor_sync_prop("disabled")
