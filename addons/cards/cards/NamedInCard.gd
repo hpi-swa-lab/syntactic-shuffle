@@ -58,7 +58,7 @@ func rename(new_name: String):
 		var list = connected.named_outgoing[input_name]
 		connected.named_outgoing.erase(input_name)
 		connected.named_outgoing[new_name] = list
-	var list = parent.named_incoming[input_name]
+	var list = parent.named_incoming.get(input_name, [])
 	parent.named_incoming.erase(input_name)
 	parent.named_incoming[new_name] = list
 	input_name = new_name

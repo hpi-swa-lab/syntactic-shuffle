@@ -147,6 +147,12 @@ func test_signatures():
 	assert_not_compatible(
 		Signature.CommandSignature.new("increment", null),
 		Signature.GenericTypeSignature.new())
+	assert_compatible(
+		Signature.CommandSignature.new("increment", null),
+		Signature.CommandSignature.new("*", null))
+	assert_compatible(
+		Signature.CommandSignature.new("increment", Signature.TypeSignature.new("float")),
+		Signature.CommandSignature.new("*", null))
 	assert_not_compatible(
 		Signature.CommandSignature.new("increment", null),
 		Signature.CommandSignature.new("increment", Signature.TypeSignature.new("float")))
@@ -457,6 +463,13 @@ func test_command_make_concrete():
 	var res = b.make_concrete([a])
 	assert_eq(res.size(), 1)
 	assert_eq(res[0], a)
+
+func test_command_left_make_concrete():
+	var a = Signature.CommandSignature.new("a", Signature.TypeSignature.new("Vector2"))
+	var b = Signature.GenericTypeSignature.new()
+	var res = b.make_concrete([a])
+	assert_eq(res.size(), 1)
+	assert_eq(res[0], a.arg)
 
 func test_iterator_make_concrete():
 	var a = Signature.IteratorSignature.new(Signature.TypeSignature.new("Vector2"))

@@ -142,7 +142,8 @@ func build_field(name: String, card: Card):
 	return box
 
 func _on_add_input_pressed() -> void:
-	%inputs.add_child(build_field("", code_card.add_card(NamedInCard.named_data("", Signature.TypeSignature.new("")))))
+	%inputs.add_child(build_field("name", code_card.add_card(NamedInCard.named_data("names", Signature.TypeSignature.new("")))))
+	save_inputs_outputs()
 	update_function_signature()
 	_resize()
 

@@ -398,7 +398,7 @@ func _compute_actual_signatures(base: Signature, aggregate = false) -> Array[Sig
 	var s = [] as Array[Signature]
 	for card in _get_incoming_list():
 		s.append_array(card.output_signatures)
-	return base.make_concrete(s, aggregate) if base else s
+	return Signature.deduplicate(base.make_concrete(s, aggregate) if base else s)
 func _get_incoming_list(): return get_all_incoming()
 
 ########################

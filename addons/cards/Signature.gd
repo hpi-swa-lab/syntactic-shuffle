@@ -26,6 +26,13 @@ func unwrap_command(): return self
 static func sig_array(array):
 	return Array(array, TYPE_OBJECT, &"RefCounted", Signature)
 
+static func deduplicate(array) -> Array[Signature]:
+	var out = [] as Array[Signature]
+	for s in array:
+		if not out.any(func (s2): return s.eq(s2)):
+			out.push_back(s)
+	return out
+
 class OutputAnySignature extends Signature:
 	func get_description(): return "[any]"
 	func compatible_with(other: Signature): return true
@@ -83,6 +90,7 @@ class CommandSignature extends Signature:
 	func get_description(): return "{0}![{1}]".format([command, arg.get_description()]) if arg else ">{0}".format([command])
 	func compatible_with(other: Signature): return other.compatible_with_command(self)
 	func compatible_with_command(other: CommandSignature):
+		if command == "*": return true
 		return other.command == command and arg.compatible_with(other.arg)
 	func unwrap_command(): return arg
 	func make_concrete(incoming: Array[Signature], aggregate = false) -> Array[Signature]:
@@ -103,7 +111,7 @@ class GenericTypeSignature extends Signature:
 	func make_concrete(incoming: Array[Signature], aggregate = false):
 		if incoming.is_empty(): return super.make_concrete(incoming, aggregate)
 		
-		var matching = incoming.filter(func(s): return s.compatible_with(self))
+		var matching = incoming.filter(func(s): return s.compatible_with(self)).map(func (s): return s.unwrap_command())
 		var has_iterator = not aggregate and incoming.any(func(s): return s is IteratorSignature)
 		if has_iterator:
 			matching = matching.map(func (s): return s.wrap_iterator())

@@ -9,14 +9,17 @@ func v():
 	container_size(Vector2(2000.0, 1600.0))
 
 func s():
-	var enter_leave_card_card = EnterLeaveCardCard.new()
-	enter_leave_card_card.position = Vector2(397.3763, 844.6288)
 	var signal_card = SignalCard.new()
-	signal_card.position = Vector2(915.5621, 1050.628)
+	signal_card.position = Vector2(1005.652, 393.6871)
 	signal_card.cards[4].data = "process"
 	signal_card.cards[5].data = null
 	var out_card = OutCard.new()
-	out_card.position = Vector2(1404.338, 1168.536)
+	out_card.position = Vector2(1624.379, 366.8322)
+	var enter_leave_card_card = EnterLeaveCardCard.new()
+	enter_leave_card_card.position = Vector2(200.0, 400.0)
+	var unwrap_command_card = UnwrapCommandCard.new()
+	unwrap_command_card.position = Vector2(616.4738, 394.9503)
 	
-	enter_leave_card_card.c(signal_card)
 	signal_card.c(out_card)
+	enter_leave_card_card.c(unwrap_command_card)
+	unwrap_command_card.c(signal_card)
