@@ -160,11 +160,23 @@ func add_card(card: Card):
 func mark_activated(from, args):
 	if from and is_inside_tree():
 		connection_draw_node.on_activated(from.parent)
+	if from:
 		from.parent.show_feedback_for(self, args)
 		from.mark_signaled_feedback()
 
 func show_feedback_for(to: Node, args: Array):
-	connection_draw_node.show_feedback_for(to, args)
+	if args.is_empty(): return
+	if not _feedback.has(to):
+		_feedback[to] = preload("res://addons/cards/feedback_card.tscn").instantiate()
+		_feedback[to].position = Vector2(100, 100)
+	_feedback[to].report_object(args[0])
+	connection_draw_node.reposition_feedback()
+var _feedback = {}
+func _delete_feedback_for(to):
+	remove_child(_feedback[to])
+	_feedback[to].queue_free()
+	_feedback.erase(to)
+	connection_draw_node.reposition_feedback()
 
 func get_card_boundary() -> CardBoundary:
 	return CardBoundary.get_card_boundary(self)
@@ -274,16 +286,16 @@ func _disconnect_from(to: Card):
 	assert("node to disconnect from not found")
 
 func incoming_disconnected(obj: Card):
-	connection_draw_node.incoming_disconnected(obj)
 	start_propagate_incoming_connected()
 	for input in cards:
 		if input is InCard: input.incoming_disconnected(obj)
 func outgoing_disconnected(obj: Card):
-	connection_draw_node.outgoing_disconnected(obj)
+	for to in _feedback.duplicate():
+		if to == obj: _delete_feedback_for(to)
 func outgoing_connected(obj: Card):
-	connection_draw_node.outgoing_disconnected(obj)
+	if _feedback.has(null): _delete_feedback_for(null)
 func incoming_connected(obj: Card):
-	connection_draw_node.incoming_connected(obj)
+	if _feedback.has(null): _delete_feedback_for(null)
 	start_propagate_incoming_connected()
 
 func start_propagate_incoming_connected():

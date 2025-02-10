@@ -25,29 +25,6 @@ func _draw():
 				draw_connection(self, node, true, light_background)
 				draw_label_to(node, name, light_background)
 
-var _feedback = {}
-func show_feedback_for(to: Node, args: Array):
-	if args.is_empty() or not card: return
-	if not _feedback.has(to):
-		_feedback[to] = preload("res://addons/cards/feedback_card.tscn").instantiate()
-		_feedback[to].position = Vector2(100, 100)
-		add_child(_feedback[to])
-	_feedback[to].report_object(args[0])
-	reposition_feedback()
-func incoming_connected(obj: Node):
-	pass
-func outgoing_connected(obj: Node):
-	if _feedback.has(null): _delete_feedback_for(null)
-func incoming_disconnected(obj: Node):
-	if _feedback.has(null): _delete_feedback_for(null)
-func outgoing_disconnected(obj: Node):
-	for to in _feedback.duplicate():
-		if to == obj: _delete_feedback_for(to)
-func _delete_feedback_for(to):
-	remove_child(_feedback[to])
-	_feedback[to].queue_free()
-	_feedback.erase(to)
-
 func check_redraw(delta):
 	if should_redraw():
 		queue_redraw()
@@ -60,17 +37,21 @@ func reposition_feedback():
 	var top_left = global_position - size / 2
 	var box = AABB(Vector3(top_left.x, top_left.y, 0), Vector3(size.x, size.y, 0))
 	
-	for to in _feedback:
+	for to in card._feedback:
 		if to == null: continue
+		var f = card._feedback[to]
+		if not f.get_parent(): add_child(f)
 		var dir = global_position - to.global_position
 		var i = box.intersects_ray(Vector3(to.global_position.x, to.global_position.y, 0.0), Vector3(dir.x, dir.y, 0.0))
 		var intersection = Vector2(i.x, i.y)
 		
-		var feedback_rect = get_global_transform() * _feedback[to].get_rect()
-		_feedback[to].global_position = intersection - feedback_rect.size / 2
-	if _feedback.has(null):
-		var feedback_rect = get_global_transform() * _feedback[null].get_rect()
-		_feedback[null].global_position = global_position + Vector2(size.x / 2, 0) - feedback_rect.size / 2
+		var feedback_rect = get_global_transform() * f.get_rect()
+		f.global_position = intersection - feedback_rect.size / 2
+	if card._feedback.has(null):
+		var f = card._feedback[null]
+		if not f.get_parent(): add_child(f)
+		var feedback_rect = get_global_transform() * f.get_rect()
+		f.global_position = global_position + Vector2(size.x / 2, 0) - feedback_rect.size / 2
 
 var last_deps = null
 func should_redraw():
