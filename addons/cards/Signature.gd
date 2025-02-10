@@ -91,7 +91,7 @@ class CommandSignature extends Signature:
 	func compatible_with(other: Signature): return other.compatible_with_command(self)
 	func compatible_with_command(other: CommandSignature):
 		if command == "*": return true
-		return other.command == command and arg.compatible_with(other.arg)
+		return other.command == command and other.arg.compatible_with(arg)
 	func unwrap_command(): return arg
 	func make_concrete(incoming: Array[Signature], aggregate = false) -> Array[Signature]:
 		incoming = sig_array(incoming.map(func (s): return s.unwrap_command()))

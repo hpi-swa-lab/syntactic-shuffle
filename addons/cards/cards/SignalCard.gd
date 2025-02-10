@@ -22,13 +22,11 @@ func s():
 		var out_sig = Signature.TriggerSignature.new() if args.is_empty() else Signature.signature_for_type(args[0]["type"])
 		var sub
 		if args.is_empty(): sub = func (): out.call(null)
-		else: sub = func (arg):
-			print("a", arg)
-			out.call(arg)
+		else: sub = func (arg): out.call(arg)
 		for o in card.parent.get_outputs():
 			o.signature = out_sig
 		card.get_outputs()[0].signature = out_sig
-		card.parent.start_propagate_incoming_connected()
+		card.parent.parent.start_propagate_incoming_connected()
 		callable.call(sub)
 		obj.connect(signal_name, sub)
 , ["signal_name"])

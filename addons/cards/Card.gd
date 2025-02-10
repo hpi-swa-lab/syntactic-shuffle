@@ -173,7 +173,6 @@ func show_feedback_for(to: Node, args: Array):
 	connection_draw_node.reposition_feedback()
 var _feedback = {}
 func _delete_feedback_for(to):
-	remove_child(_feedback[to])
 	_feedback[to].queue_free()
 	_feedback.erase(to)
 	connection_draw_node.reposition_feedback()
