@@ -87,7 +87,7 @@ func s():
 		NamedInCard.new(pair[0], pair[1])
 	
 	for pair in outputs:
-		OutCard.static_signature(pair[1])
+		StaticOutCard.new(pair[0], pair[1])
 
 func rebuild_inputs_outputs():
 	for card in cards: card.queue_free()
@@ -95,7 +95,7 @@ func rebuild_inputs_outputs():
 	build_cards_list()
 
 func output_for_name(name: String):
-	return get_outputs()[outputs.find_custom(func (s): return s[0] == name)]
+	return get_outputs()[outputs.find_custom(func(s): return s[0] == name)]
 
 func setup_finished():
 	super.setup_finished()
@@ -156,16 +156,16 @@ func invoke(args: Array, signature: Signature, named = "", source_out = null):
 
 func should_hyper_invoke(signatures):
 	for i in range(signatures.size()):
-		if signatures[i] is Signature.IteratorSignature and not inputs[i][1] is Signature.IteratorSignature:
+		if signatures[i].has_iterator() and not inputs[i][1].has_iterator():
 			return true
 	return false
 
 # Inspiration from https://github.com/jmoenig/Snap/blob/724297b6391f3d8d964a45b2bc7d0ea29cb8c75e/src/threads.js#L4807
 func hyper_invoke(args, signatures):
-	assert(signatures.filter(func(s): return s is Signature.IteratorSignature).size() == 1, "TODO no support yet for more than one iterator")
+	assert(signatures.filter(func(s): return s.has_iterator()).size() == 1, "TODO no support yet for more than one iterator")
 	var iterator_index = -1
 	for i in range(0, signatures.size()):
-		if signatures[i] is Signature.IteratorSignature: iterator_index = i
+		if signatures[i].has_iterator(): iterator_index = i
 	var list = args[iterator_index]
 	
 	var result = {}
@@ -189,9 +189,14 @@ func hyper_invoke(args, signatures):
 
 func _output(arg: Variant, name: String):
 	var args = [arg] if arg != null else []
-	var output = output_for_name(name)
+	var output = get_output(name)
 	assert(output.output_signatures.size() == 1)
 	output.invoke(args, output.output_signatures[0], "", output)
+
+func get_output(name: String):
+	for o in get_outputs():
+		if o.output_name == name: return o
+	return null
 
 func get_source_code():
 	if not source_code:

@@ -9,7 +9,7 @@ var signature: Signature = Signature.VoidSignature.new():
 	get: return signature
 	set(v):
 		signature = v
-		if out_card: out_card.signature = v
+		if out_card: out_card.override_signature([v] as Array[Signature])
 		if in_card: in_card.signature = v
 
 func _init(signature):
@@ -27,7 +27,7 @@ func can_edit(): return false
 func s():
 	in_card = InCard.data(none())
 	in_card.position = Vector2(260.0294, 667.1127)
-	out_card = OutCard.new()
+	out_card = StaticOutCard.new("out", none())
 	out_card.position = Vector2(1253.268, 679.9912)
 	
 	in_card.c(out_card)

@@ -12,7 +12,7 @@ func s():
 	var number_card = NumberCard.new()
 	number_card.position = Vector2(846.7021, 1355.779)
 	number_card.cards[1].data = 0.75000000000012
-	var code_card = CodeCard.create([["elapsed", t("float")], ["delta", t("float")], ["seconds", t("float")]], [["out", trg()], ["out_elapsed", t("float")]], func (card, out, out_elapsed, elapsed, delta, seconds):
+	var code_card = CodeCard.create([["elapsed", t("float")], ["delta", t("float")], ["seconds", t("float")]], [["out", trg()], ["out_elapsed", t("float")]], func(card, out, out_elapsed, elapsed, delta, seconds):
 		elapsed += delta
 		if elapsed >= seconds:
 			elapsed -= seconds
@@ -22,7 +22,7 @@ func s():
 	code_card.position = Vector2(636.7162, 729.7614)
 	var physics_process_card = PhysicsProcessCard.new()
 	physics_process_card.position = Vector2(123.8394, 652.9629)
-	var out_card = OutCard.static_signature(trg(), false)
+	var out_card = OutCard.new()
 	out_card.position = Vector2(1645.949, 662.6255)
 	var store_card = StoreCard.new()
 	store_card.position = Vector2(423.3535, 1365.83)

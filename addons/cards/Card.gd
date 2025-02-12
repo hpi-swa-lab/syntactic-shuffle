@@ -95,6 +95,7 @@ func _notification(what: int) -> void:
 	if what == NOTIFICATION_PREDELETE:
 		if is_toplevel() and is_inside_tree(): left_program(get_selection_manager())
 		disconnect_all()
+		for c in cards: c.free()
 
 func setup(custom_build = null):
 	if not id: id = uuid.v4()
@@ -147,7 +148,7 @@ func _ready() -> void:
 
 func init_signatures():
 	if not disable and not initialized_signatures and get_all_incoming().is_empty():
-		start_propagate_incoming_connected()
+		start_propagate_incoming_connected(true)
 
 func setup_finished():
 	pass
@@ -297,8 +298,12 @@ func incoming_connected(obj: Card):
 	if _feedback.has(null): _delete_feedback_for(null)
 	start_propagate_incoming_connected()
 
-func start_propagate_incoming_connected():
+func start_propagate_incoming_connected(init = false):
+	# we ignore requests (except for the init request) until initialized
+	if not init and not initialized_signatures: return
+	
 	var seen = {}
+	var notify_done = {}
 	var previous_seen = null
 	propagate_incoming_connected(seen)
 	# If we encounter a loop, we will have to do a second pass, since
@@ -309,6 +314,8 @@ func start_propagate_incoming_connected():
 		for node in previous_seen:
 			if previous_seen[node] == &"recheck":
 				node.parent.propagate_incoming_connected(seen)
+			if previous_seen[node] == &"notify_done": notify_done[node] = true
+	for card in notify_done.keys(): card.notify_done_propagate()
 
 func propagate_incoming_connected(seen):
 	# if we passed by here from an unrechable input first, explore again
@@ -354,9 +361,6 @@ var input_signatures: Array[Signature]:
 		var s = [] as Array[Signature]
 		for card in get_inputs(): s.append_array(card.actual_signatures)
 		return s
-
-func output_signature_changed():
-	start_propagate_incoming_connected()
 
 func get_outputs() -> Array[Card]: return cards.filter(func(c): return c is OutCard)
 func get_inputs() -> Array[Card]: return cards.filter(func(c): return c is InCard)
@@ -411,6 +415,12 @@ func _compute_actual_signatures(base: Signature, aggregate = false) -> Array[Sig
 		s.append_array(card.output_signatures)
 	return Signature.deduplicate(base.make_concrete(s, aggregate) if base else s)
 func _get_incoming_list(): return get_all_incoming()
+
+func debug_print_signatures(indent = 0):
+	print("\t".repeat(indent) + card_name)
+	print("\t".repeat(indent) + "> " + ", ".join(input_signatures.map(func (s): return s.d)))
+	print("\t".repeat(indent) + "< " + ", ".join(output_signatures.map(func (s): return s.d)))
+	for c in cards: c.debug_print_signatures(indent + 1)
 
 ########################
 # UPDATING PER FRAME AND MOVE
@@ -556,8 +566,8 @@ static func serialize_card_construction(cards: Array):
 		for i in range(0, c.cards.size()):
 			if c.cards[i] is CellCard:
 				cards_desc += "\t{0}.cards[{1}].data = {2}\n".format([n, i, Signature.data_to_expression(c.cards[i].data)])
-	if not cards.is_empty(): cards_desc += "\t\n"
-	else: cards_desc = "\tpass"
+		cards_desc += "\t\n"
+	if cards.is_empty(): cards_desc = "\tpass"
 	for c in cards:
 		for them in c.get_outgoing():
 			if cards.has(them): cards_desc += "\t{0}.c({1})\n".format([var_names[c], var_names[them]])

@@ -14,10 +14,10 @@ var enter_out_card: OutCard
 var leave_out_card: OutCard
 
 func s():
-	enter_out_card = OutCard.static_signature(cmd("enter", t("CardEditor")))
+	enter_out_card = StaticOutCard.new("enter", cmd("enter", t("CardEditor")))
 	enter_out_card.position = Vector2(1052.319, 453.2359)
 	
-	leave_out_card = OutCard.static_signature(cmd("leave", t("CardEditor")))
+	leave_out_card = StaticOutCard.new("leave", cmd("leave", t("CardEditor")))
 	leave_out_card.position = Vector2(1052.319, 653.2359)
 
 func entered_program(editor):

@@ -8,7 +8,7 @@ func v():
 	icon_data("iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAADNJREFUOI1jYBhs4D8BPkmGkKWZIpup4gKqhAFVATYXkOyq/zjYJBsy8NFKlsaBj0aCAABn0BLuMpwyWQAAAABJRU5ErkJggg==")
 
 func s():
-	var out_card = OutCard.remember()
+	var out_card = OutCard.new(true)
 	out_card.position = Vector2(1431.055, 182.1524)
 	var cell_card = CellCard.create("vector", "Vector2", Vector2(0.0, 0.0))
 	cell_card.position = Vector2(956.2359, 556.02)

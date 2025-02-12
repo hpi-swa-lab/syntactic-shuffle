@@ -11,22 +11,17 @@ func v():
 func s():
 	var out_card = OutCard.new()
 	out_card.position = Vector2(1836.92, 819.9062)
-	var code_card = CodeCard.create([["obj", cmd("connect", t("Object"))], ["signal_name", t("String")]], [["out", trg()], ["callable", t("Callable")]], func (card, out, callable, obj, signal_name):
+	var code_card = CodeCard.create([["obj", cmd("connect", t("Object"))], ["signal_name", t("String")]], [["out", none()], ["callable", t("Callable")]], func (card, out, callable, obj, signal_name):
 		var sig = null
 		for s in obj.get_signal_list():
-			if s["name"] == signal_name:
-				sig = s
-				break
+			if s["name"] == signal_name: sig = s; break
 		if not sig: return
-		var args = sig["args"]
-		var out_sig = Signature.TriggerSignature.new() if args.is_empty() else Signature.signature_for_type(args[0]["type"])
+		
+		card.get_output("out").override_signature([Signature.signature_for_dict(sig)] as Array[Signature])
+		
 		var sub
-		if args.is_empty(): sub = func (): out.call(null)
+		if sig["args"].is_empty(): sub = func (): out.call(null)
 		else: sub = func (arg): out.call(arg)
-		for o in card.parent.get_outputs():
-			o.signature = out_sig
-		card.get_outputs()[0].signature = out_sig
-		card.parent.parent.start_propagate_incoming_connected()
 		callable.call(sub)
 		obj.connect(signal_name, sub)
 , ["signal_name"])

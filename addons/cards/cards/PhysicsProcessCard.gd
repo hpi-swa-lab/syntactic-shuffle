@@ -10,9 +10,11 @@ func v():
 	description("Invoke in every physics tick.")
 	icon(preload("res://addons/cards/icons/always.png"))
 
+func can_edit(): return false
+
 func s():
-	out_card = OutCard.static_signature(trg())
-	delta_out_card = OutCard.static_signature(t("float"))
+	out_card = StaticOutCard.new("trigger", trg())
+	delta_out_card = StaticOutCard.new("delta", t("float"))
 
 func _physics_process(delta: float):
 	if Engine.is_editor_hint() or disable: return

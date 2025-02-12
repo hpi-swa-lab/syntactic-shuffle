@@ -8,7 +8,7 @@ func v():
 	icon(preload("res://addons/cards/icons/reflect.png"))
 
 func s():
-	var out_card = OutCard.data()
+	var out_card = OutCard.new()
 	
 	var code_card = CodeCard.create([["vector", t("Vector2")], ["normal", t("Vector2")]], [["out", t("Vector2")]], func(card, out, v, n):
 		# FIXME n != Vector.ZERO

@@ -8,7 +8,7 @@ func v():
 	icon_data("iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAEpJREFUOI3Nk9EKACAIA73o/395vUaELAxqz/OYDpEUFbXStAsABGyjNse0wo4TZJDyDbpjkoQNcO4w6/4KWdyISy38BXjfAtV3HkzVFS/23UvPAAAAAElFTkSuQmCC")
 
 func s():
-	var out_card = OutCard.remember()
+	var out_card = OutCard.new(true)
 	out_card.position = Vector2(516.228, 400.0003)
 	var in_card = InCard.data(any())
 	in_card.position = Vector2(200.0, 400.0)

@@ -10,6 +10,8 @@ func _init(node):
 	# We are never shown, so we need to trigger signature discovery manually
 	start_propagate_incoming_connected()
 
+func can_edit(): return false
+
 func get_card_global_position():
 	return node.global_position
 
@@ -20,8 +22,7 @@ func v():
 	container_size(Vector2(2000.0, 1600.0))
 
 func s():
-	var c = OutCard.static_signature(t(node.get_class()), true)
-	c.remembered = [node]
-	c.remembered_signature = c.signature
+	var c = StaticOutCard.new("type", t(node.get_class()), true)
+	c.remember(c.static_signature, [node])
 	
-	OutCard.static_signature(grp(node.get_groups()), true)
+	StaticOutCard.new("group", grp(node.get_groups()), true)

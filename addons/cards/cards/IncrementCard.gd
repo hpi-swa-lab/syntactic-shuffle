@@ -8,6 +8,12 @@ func v():
 	icon(preload("res://addons/cards/icons/increment.png"))
 
 func s():
-	var out_card = OutCard.command("increment")
+	var out_card = OutCard.new()
+
 	var in_card = InCard.trigger()
-	in_card.c(out_card)
+
+	var code_card = CodeCard.create([["input", trg()]], [["out", cmd("increment")]], func(card, out):
+		out.call(null), [])
+
+	in_card.c_named("input", out_card)
+	code_card.c(out_card)

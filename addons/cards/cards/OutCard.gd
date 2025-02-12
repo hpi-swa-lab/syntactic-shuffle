@@ -2,70 +2,64 @@
 extends Card
 class_name OutCard
 
-static func data():
-	return OutCard.new()
-
-static func command(command: String):
-	var c = OutCard.new(false, null, command)
-	return c
-
-static func remember(init = null, init_signature: Signature = null):
-	var c = OutCard.new(true)
-	if init != null:
-		c.remembered = init
-		c.remembered_signature = init_signature
-	return c
-
-static func remember_command(command: String):
-	var c = OutCard.new(true, null, command)
-	return c
-
-static func static_signature(signature: Signature, remember = false):
-	var c = OutCard.new(remember, signature)
-	return c
-
-func _init(remember = false, signature: Signature = null, command = "") -> void:
-	self.command_name = command
-	self.remember_message = remember
-	if signature:
-		self.has_static_signature = true
+class RememberedValue:
+	var signature: Signature
+	var args: Variant
+	func _init(signature, value):
 		self.signature = signature
+		self.args = value
+	func ensure():
+		for arg in args:
+			# guard against freed objects to which we remember references
+			if not is_instance_valid(arg) and typeof(arg) == TYPE_OBJECT:
+				signature = null
+				args = null
+				return false
+		return true
+
+func _init(remember = false) -> void:
+	self.remember_message = remember
 	super._init()
 
-@export var remember_message := false
-@export var command_name := ""
-@export var has_static_signature := false
-var signature: Signature
+var remember_message := false
 var actual_signatures: Array[Signature] = []
 
-var remembered
-var remembered_signature
+var remembered: RememberedValue
+
+func get_outputs() -> Array[Card]: return [self] as Array[Card]
+
+func _get_base_signatures():
+	# if we have no connections, we advertise all possibilities.
+	if _get_incoming_list().is_empty():
+		return [Signature.OutputAnySignature.new()]
+	# Otherwise, we pass null, which makes us inherit our incoming signatures.
+	return []
+
+func _get_aggregate(): return false
 
 func _get_incoming_list():
 	# OutCards in a CodeCard are not connected to their inputs
 	# TODO consider generic type names
 	if parent is CodeCard: return parent.cards.filter(func(c): return c is InCard)
-	# InCard's have a special OutCard -- this is us
-	if parent is InCard: return [parent]
+	if parent is InCard: return [StubCard.new(parent)]
 	return get_all_incoming()
 
-func get_outputs() -> Array[Card]: return [self] as Array[Card]
+class StubCard:
+	var c
+	func _init(c): self.c = c
+	var output_signatures:
+		get: return c.actual_signatures if c.has_connected() else []
 
 func propagate_incoming_connected(seen):
+	var sig = _get_base_signatures()
+	var aggregate = _get_aggregate()
+	actual_signatures = [] as Array[Signature]
+	for s in sig: actual_signatures.append_array(_compute_actual_signatures(s, aggregate))
+	if sig.is_empty(): actual_signatures.append_array(_compute_actual_signatures(Signature.OutputAnySignature.new(), aggregate))
 	super.propagate_incoming_connected(seen)
-	var aggregate = parent is CodeCard and parent.inputs.any(func(pair): return pair[1] is Signature.IteratorSignature)
-	var sig = null
-	if has_static_signature:
-		sig = signature
-	elif _get_incoming_list().is_empty():
-		# if we have no connections, we advertise all possibilities. Otherwise, we pass
-		# null, which makes us inherit our incoming signatures.
-		sig = Signature.OutputAnySignature.new()
-	# FIXME not sure if we want to wrap an iterator with a command or the other way around
-	actual_signatures = Signature.sig_array(
-		_compute_actual_signatures(sig, aggregate).map(func(s): return _add_command(s)))
 
 func propagate_unreachable(seen):
+	if seen.has(self): return
 	# If no connected is reachable, show no signatures
 	actual_signatures = []
 
@@ -74,26 +68,22 @@ func propagate_unreachable(seen):
 func get_remembered_for(signature: Signature):
 	if not remember_message: return null
 	
-	if remembered_signature and get_remembered_value():
-		if remembered_signature.compatible_with(signature): return self
+	if remembered and get_remembered_value():
+		if remembered.signature.compatible_with(signature): return self
 		else: return null
 	else: return _try_connected_remembered(signature)
 
 func _ensure_remembered():
-	if remembered:
-		for arg in remembered:
-			# guard against freed objects to which we remember references
-			if not is_instance_valid(arg) and typeof(arg) == TYPE_OBJECT:
-				remembered_signature = null
-				remembered = null
+	if remembered and not remembered.ensure():
+		remembered = null
 
 func get_remembered_value():
 	_ensure_remembered()
-	return remembered
+	return remembered.args
 
 func get_remembered_signature():
 	_ensure_remembered()
-	return remembered_signature
+	return remembered.signature
 
 func _try_connected_remembered(signature: Signature):
 	for card in get_all_incoming():
@@ -109,25 +99,13 @@ func v():
 	description("Emit output.")
 	icon_data("iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAIZJREFUOI3FUjsOwCAIBdOlEwfx/kfxIEzdtJMEVNB06ZsMvA8RAP5EIQJ0es2pC78Q2cIgjoyxi1cGkbgnG44mS0MnOFOI9lokaNLOCNMBMTSZJui4a5X3k/wc1yASKaBnEG3CfKKOQQBomRky86Qaass16gT3kAqR6X065egSj7E5tnOTFy92Ir2sNy07AAAAAElFTkSuQmCC")
 
-func _add_command(signature: Signature) -> Signature:
-	if not command_name: return signature
-	if signature is Signature.CommandSignature and signature.command == command_name: return signature
-	return Signature.CommandSignature.new(command_name, signature)
+func remember(signature: Signature, args: Array):
+	remembered = RememberedValue.new(signature, args)
 
 func invoke(args: Array, signature: Signature, named = "", source_out = null):
 	if Engine.is_editor_hint(): return
 	
-	if command_name: signature = _add_command(signature)
-	
-	# FIXME still needed? we now look up the signature in the code card already
-	#if has_static_signature:
-		#if not signature.compatible_with(self.signature): return
-		#signature = self.signature
-	
-	if remember_message:
-		remembered_signature = signature
-		remembered = args
-	
+	if remember_message: remember(signature, args)
 	if source_out: mark_activated(source_out, args)
 	
 	var n = parent.named_outgoing
@@ -148,11 +126,4 @@ func mark_signaled_feedback():
 	_feedback_signaled = true
 
 func serialize_constructor():
-	if command_name:
-		return "{0}.command(\"{1}\")".format([card_name, command_name])
-	elif remember_message:
-		return "{0}.remember()".format([card_name])
-	elif has_static_signature:
-		return "{0}.static_signature({1}, {2})".format([card_name, signature.serialize_gdscript(), remember_message])
-	else:
-		return "{0}.new()".format([card_name])
+	return "{0}.new({1})".format([card_name, remember_message])

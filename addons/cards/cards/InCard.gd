@@ -23,20 +23,14 @@ var signature: Signature = Signature.VoidSignature.new():
 		signature = v
 		signature_changed()
 var out_card
-var actual_signatures: Array[Signature] = []:
-	get: return actual_signatures
-	set(a):
-		actual_signatures = a
-		if not signature is Signature.OutputAnySignature: out_card.actual_signatures = a
+var actual_signatures: Array[Signature] = []
 
 func s():
 	# special InCard that the OutCard uses for connection purposes. Would yield
 	# an infinite loop if we proceeded here.
 	if signature is Signature.OutputAnySignature: return
 	
-	out_card = OutCard.new()
-	out_card.has_static_signature = true
-	out_card.signature = signature
+	out_card = StaticOutCard.new("out", signature)
 
 func v():
 	title("Input")
@@ -55,10 +49,13 @@ func can_edit(): return false
 func signature_changed():
 	if parent: # FIXME this fine?
 		actual_signatures = _compute_actual_signatures(signature)
-	if out_card: out_card.signature = signature
+	if out_card: out_card.override_signature([signature] as Array[Signature])
 
 func propagate_incoming_connected(seen):
-	actual_signatures = _compute_actual_signatures(signature)
+	if parent is OutCard:
+		actual_signatures = parent.actual_signatures
+	else:
+		actual_signatures = _compute_actual_signatures(signature)
 	super.propagate_incoming_connected(seen)
 
 ## Our parent card was encountered but this InCard was not reachable.

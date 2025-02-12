@@ -8,9 +8,9 @@ func v():
 	icon(preload("res://addons/cards/icons/collision.png"))
 
 func s():
-	var out_card = OutCard.data()
+	var out_card = OutCard.new()
 	
-	var code_card = CodeCard.create([["body", t("Node2D")]], [["trigger", trg()]], func (card, out, body):
+	var code_card = CodeCard.create([["body", t("Node2D")]], [["trigger", trg()]], func(card, out, body):
 		out.call(null))
 	code_card.c(out_card)
 	

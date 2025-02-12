@@ -172,7 +172,7 @@ func _on_add_selected_pressed() -> void:
 
 func add_output(name = "out", signature = null) -> void:
 	if not signature: signature = Signature.TypeSignature.new("")
-	%outputs.add_child(build_field(name, code_card.add_card(OutCard.static_signature(signature))))
+	%outputs.add_child(build_field(name, code_card.add_card(StaticOutCard.new(name, signature))))
 	save_inputs_outputs()
 	_resize()
 

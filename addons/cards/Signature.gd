@@ -7,6 +7,7 @@ func compatible_with(other: Signature) -> bool: return false
 func get_description() -> String: return ""
 func serialize_gdscript() -> String: return ""
 func provides_data() -> bool: return false
+func has_iterator() -> bool: return false
 func eq(other: Signature): return false
 func compatible_with_command(other: CommandSignature): return other.arg and other.arg.compatible_with(self)
 func compatible_with_trigger(other: TriggerSignature): return false
@@ -23,7 +24,8 @@ func unwrap_iterator(): return self
 func wrap_iterator(): return IteratorSignature.new(self)
 func unwrap_command(): return self
 
-static func sig_array(array):
+static func sig_array(array: Array):
+	assert(array.is_empty() or array[0] is Signature)
 	return Array(array, TYPE_OBJECT, &"RefCounted", Signature)
 
 static func deduplicate(array) -> Array[Signature]:
@@ -49,6 +51,7 @@ class OutputAnySignature extends Signature:
 		if incoming.is_empty():
 			return sig_array([self])
 		else: return incoming
+	func serialize_gdscript(): return "OutputAnySignature.new()"
 
 static var _custom_class_hierarchy = null
 static func _ensure_custom_class_hierarchy():
@@ -84,6 +87,7 @@ class CommandSignature extends Signature:
 	func _init(command: String, arg: Signature):
 		self.command = command
 		self.arg = arg if arg else TriggerSignature.new()
+	func has_iterator(): return arg.has_iterator()
 	func serialize_gdscript(): return "cmd(\"{0}\"{1})".format([command, ", " + arg.serialize_gdscript() if arg else ""])
 	func provides_data(): return arg.provides_data()
 	func eq(other: Signature): return other is CommandSignature and other.arg.eq(arg)
@@ -130,6 +134,7 @@ class IteratorSignature extends Signature:
 	var type: Signature
 	func _init(type: Signature):
 		self.type = type
+	func has_iterator(): return true
 	func provides_data(): return type.provides_data()
 	func serialize_gdscript(): return "it({0})".format([type.serialize_gdscript()])
 	func eq(other: Signature): return other is IteratorSignature and type.eq(other.type)
@@ -199,6 +204,11 @@ class StructSignature extends Signature:
 			if prop["name"] == name: return true
 		return false
 
+static func signature_for_dict(dict: Dictionary):
+	if dict["args"].is_empty():
+		return Signature.TriggerSignature.new()
+	return Signature.TypeSignature.new(type_signature(dict["args"][0]["type"]))
+
 static func signature_for_type(type):
 	return Signature.TypeSignature.new(type_signature(type))
 
@@ -267,3 +277,9 @@ static func data_to_expression(data) -> String:
 	if data is Callable:
 		if data.is_custom(): return "null"
 	return str(data)
+
+static func signatures_equal(a: Array[Signature], b: Array[Signature]):
+	if a.size() != b.size(): return false
+	for i in range(0, a.size()):
+		if not a[i].eq(b[i]): return false
+	return true

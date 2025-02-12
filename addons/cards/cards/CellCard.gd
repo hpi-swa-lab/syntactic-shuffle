@@ -3,8 +3,8 @@ extends Card
 class_name CellCard
 
 var out_card: OutCard
-var out_cards: Array[Card] = []
-var type_signature: Signature.CommandSignature
+var in_card: InCard
+var signature_out_card: OutCard
 
 static func create_default():
 	return CellCard.new("value", "float", 0.0)
@@ -31,18 +31,16 @@ func clone():
 	get: return data
 	set(v):
 		data = v
-		if out_card: out_card.remembered = [data]
+		if out_card: out_card.remember(out_card.static_signature, [data])
 		if update_ui_func: update_ui_func.call(v)
 @export var type: String = "":
 	get: return type
 	set(v):
 		type = v
-		for c in out_cards:
-			c.has_static_signature = v != null
-			if v: c.signature = Signature.TypeSignature.new(v)
-		if type_signature:
-			type_signature.arg = Signature.TypeSignature.new(v) if v else Signature.GenericTypeSignature.new()
-			output_signature_changed()
+		var t = Signature.TypeSignature.new(v)
+		if in_card: in_card.signature = Signature.CommandSignature.new("store", t)
+		if out_card: out_card.override_signature([t] as Array[Signature])
+		if signature_out_card: signature_out_card.invoke([t], cmd("signature_changed", t("Signature")))
 var update_ui_func = null
 
 func can_edit(): return false
@@ -74,26 +72,23 @@ func v():
 	ui(default_edit)
 
 func s():
-	out_card = OutCard.remember([data], Signature.TypeSignature.new(type))
+	out_card = StaticOutCard.new("out", Signature.TypeSignature.new(type), true)
+	out_card.remember(out_card.static_signature, [data])
+	#signature_out_card = StaticOutCard.new(cmd("signature_changed", t("Signature")))
 	
 	var code_card = CodeCard.create([["arg", cmd("store", any())]], [["out", any()]], func(card, out, arg):
 		data = arg
 		out.call(data))
 	code_card.c(out_card)
 	
-	type_signature = cmd("store", any())
-	var override_card = InCard.data(type_signature)
-	override_card.c_named("arg", code_card)
+	in_card = InCard.data(cmd("store", any()))
+	in_card.c_named("arg", code_card)
 	
 	var trigger_code_card = CodeCard.create([], [["out", any()]], func(card, out): out.call(data))
 	trigger_code_card.c(out_card)
 	
 	var trigger_card = InCard.trigger()
 	trigger_card.c(trigger_code_card)
-	
-	out_cards = [out_card]
-	out_cards.append_array(code_card.get_outputs())
-	out_cards.append_array(trigger_code_card.get_outputs())
 	
 	# refresh type info
 	self.type = type

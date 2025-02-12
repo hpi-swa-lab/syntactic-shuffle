@@ -22,7 +22,7 @@ func s():
 	code_card.position = Vector2(572.2458, 1388.409)
 	var in_card_3 = InCard.data(cmd("toggle", trg()))
 	in_card_3.position = Vector2(165.3011, 1415.906)
-	var out_card = OutCard.remember()
+	var out_card = OutCard.new(true)
 	out_card.position = Vector2(1374.487, 421.9353)
 	
 	cell_card.c(out_card)
