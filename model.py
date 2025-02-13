@@ -75,5 +75,15 @@ s.add(compatible(c1_o, c2_i))
 s.add(subtype(Signature.t(c2_i), Signature.t(c1_o)))
 s.add(compatible(c2_o, c3_i))
 
+# CharacterBody2D
+c4_o = Const("c4_o", Signature)
+s.add(compatible(c4_o, Signature.TypeSig(Type.CharacterBody2D)))
+
+# Node
+c5_i = Const("c5_i", Signature)
+s.add(compatible(c5_i, Signature.TypeSig(Type.Node)))
+
+s.add(compatible(c4_o, c5_i))
+
 print(s.check())
 print(s.model())
