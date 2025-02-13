@@ -40,7 +40,7 @@
 			(or
 			  (and (and ((_ is CommandSig) s1) ((_ is CommandSig) s2))
 				   (= (cmd s1) (cmd s2))
-				   (= (cmd_t s1) (cmd_t s2)))
+				   (subtype (cmd_t s1) (cmd_t s2)))
 			  (and (and ((_ is TypeSig) s1) ((_ is TypeSig) s2))
 				   (subtype (t s1) (t s2)))))
 
