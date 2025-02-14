@@ -121,15 +121,15 @@ func group_selected():
 	var after = []
 	var incoming = []
 	var outgoing = []
-	var add_input = func(from, to, named):
+	var add_input = func(from, to, named, export_name):
 		var sig = from.output_signatures
 		# FIXME choosing first
-		var input = InCard.data(sig[0])
+		var input = NamedInCard.named_data(named, sig[0]) if export_name else InCard.data(sig[0])
 		parent.add_card(input)
 		before.push_back(func():
 			to.disconnect_from(from))
 		after.push_back(func():
-			from.connect_to(parent)
+			from.connect_to(parent, named if export_name else "")
 			input.connect_to(to, named))
 	var add_output = func(from, to, named, output):
 		if not output.get_parent(): parent.add_card(output)
@@ -140,12 +140,12 @@ func group_selected():
 			from.c(output))
 	
 	for c in cards:
-		for i in c.get_incoming(): if not cards.has(i): incoming.push_back([i, c, ""])
+		for i in c.get_incoming(): if not cards.has(i): incoming.push_back([i, c, "", false])
 		for i in c.get_outgoing(): if not cards.has(i): outgoing.push_back([c, i, "", OutCard.new()])
 		for n in c.named_incoming:
 			for p in c.named_incoming[n]:
 				var i = c.get_node(p)
-				if not cards.has(i): incoming.push_back([i, c, n])
+				if not cards.has(i): incoming.push_back([i, c, n, false])
 		for n in c.named_outgoing:
 			for p in c.named_outgoing[n]:
 				var i = c.get_node(p)
@@ -180,6 +180,7 @@ func group_selected():
 		if list.size() > 1:
 			for i in range(0, list.size()):
 				list[i][2] = sig.get_description() + "_" + str(i)
+				list[i][3] = true
 	
 	for i in range(0, incoming.size()):
 		if incoming[i][2]: continue
@@ -189,7 +190,7 @@ func group_selected():
 				pass
 	
 	for t in before: t.call()
-	for pair in incoming: add_input.call(pair[0], pair[1], pair[2])
+	for pair in incoming: add_input.call(pair[0], pair[1], pair[2], pair[3])
 	for pair in outgoing: add_output.call(pair[0], pair[1], pair[2], pair[3])
 	for t in after: t.call()
 	var i_y = 0
