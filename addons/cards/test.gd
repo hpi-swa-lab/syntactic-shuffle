@@ -457,9 +457,9 @@ func test_group_with_overlapping_inputs_produces_named_inputs(ready):
 	assert_eq(container.cards.filter(func(c): return c is NamedInCard).size(), 2)
 
 func test_conflicting_signatures_for_store(ready):
-	var out = CodeCard.new([],
+	var out = CodeCard.new([["in_float", Signature.TypeSignature.new("float")]],
 		[["out_vec", Signature.TypeSignature.new("Vector2")], ["out_float", Signature.TypeSignature.new("float")]],
-		func(card, out_vec, out_float): out_float.call(1.0))
+		func(card, out_vec, out_float, in_float): out_float.call(1.0))
 	
 	var store = StoreCard.new()
 	out.c(store)
@@ -468,7 +468,7 @@ func test_conflicting_signatures_for_store(ready):
 	store.c(cell)
 	ready.call()
 	
-	out._output(1.0, "out_float")
+	out.invoke([1.0], Signature.TypeSignature.new("float"), "in_float")
 
 func test_dedent():
 	assert_eq(CodeEditor.dedent("	a

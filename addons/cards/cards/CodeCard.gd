@@ -150,7 +150,7 @@ func invoke(args: Array, signature: Signature, named = "", source_out = null):
 	if should_hyper_invoke(signatures): hyper_invoke(combined_args, signatures)
 	else:
 		for i in range(outputs.size() - 1, -1, -1):
-			combined_args.push_front(_output.bind(outputs[i][0]))
+			combined_args.push_front(_output.bind(outputs[i][0], signatures))
 		combined_args.push_front(self)
 		process.callv(combined_args)
 
@@ -177,7 +177,7 @@ func hyper_invoke(args, signatures):
 		result[name][index] = arg
 		count[name] += 1
 		if count[name] == list.size():
-			_output(result[name], name)
+			_output(result[name], name, signatures)
 	
 	for i in range(0, list.size()):
 		var item = list[i]
@@ -187,11 +187,19 @@ func hyper_invoke(args, signatures):
 		combined_args.append_array(args)
 		process.callv(combined_args)
 
-func _output(arg: Variant, name: String):
+func _output(arg: Variant, name: String, in_signatures: Array):
 	var args = [arg] if arg != null else []
 	var output = get_output(name)
-	assert(output.output_signatures.size() == 1)
-	output.invoke(args, output.output_signatures[0], "", output)
+	var out_sig
+	if output.output_signatures.size() != 1:
+		var compat = output.static_signature.make_concrete(Signature.sig_array(in_signatures))
+		assert(compat.size() == 1)
+		for s in output.output_signatures:
+			if s.eq(compat[0]): out_sig = s
+	else:
+		out_sig = output.output_signatures[0]
+	assert(out_sig)
+	output.invoke(args, out_sig, "", output)
 
 func get_output(name: String):
 	for o in get_outputs():
