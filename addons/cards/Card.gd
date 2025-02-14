@@ -63,9 +63,9 @@ var dragging: bool:
 			CardBoundary.get_card_boundary(self).card_picked_up(self)
 	get: return dragging
 
+var _cards: Array[Card]
 var cards: Array[Card]:
-	get: return Array(cards_parent.get_children().filter(func(s): return s is Card),
-		TYPE_OBJECT, "Node2D", Card)
+	get: return _cards
 
 var visual: CardVisual
 var cards_parent = CardBoundary.new()
@@ -90,12 +90,17 @@ func _init(custom_build = null):
 		parent = active_card_list.back()
 		parent.add_card(self)
 	setup(custom_build)
+	cards_parent.child_order_changed.connect(func():
+		_cards = Array(cards_parent.get_children().filter(func(s): return s is Card),
+			TYPE_OBJECT, "Node2D", Card))
 
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_PREDELETE:
 		if is_toplevel() and is_inside_tree(): left_program(get_selection_manager())
 		disconnect_all()
-		for c in cards: c.free()
+		for c in cards:
+			c.disconnect_all()
+			c.free()
 
 func setup(custom_build = null):
 	if not id: id = uuid.v4()
@@ -456,11 +461,6 @@ func _process(delta: float) -> void:
 				if c: try_connect(c))
 	
 	connection_draw_node.check_redraw(delta)
-
-func _physics_process(delta: float) -> void:
-	if not cards_parent.is_inside_tree() and not disable and not Engine.is_editor_hint():
-		for c in cards:
-			if not c.disable: c._physics_process(delta)
 
 static func _each_input_candidate(object: Node, cb: Callable, named: bool):
 	for card in object.cards:

@@ -86,10 +86,11 @@ func build_field(name: String, card: Card):
 	sig.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	
 	var editor = preload("res://addons/cards/signature/signature_edit.tscn").instantiate()
-	editor.signature = card.signature
+	editor.signature = card.signature if card is InCard else card.static_signature
 	editor.on_edit.connect(func(s):
 		update_function_signature()
-		card.signature = s)
+		if card is InCard: card.signature = s
+		else: card.static_signature = s)
 	box.set_meta("signature", editor)
 	
 	sig.add_child(editor)

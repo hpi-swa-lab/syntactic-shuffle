@@ -79,7 +79,7 @@ func _ensure_remembered():
 
 func get_remembered_value():
 	_ensure_remembered()
-	return remembered.args
+	return remembered.args if remembered else null
 
 func get_remembered_signature():
 	_ensure_remembered()

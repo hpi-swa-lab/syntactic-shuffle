@@ -34,6 +34,7 @@ func _on_save_button_pressed() -> void:
 		# TODO handle name change
 		path = card.get_script().resource_path
 		src = card.serialize_gdscript("", size)
+		print(src)
 	var file = FileAccess.open(path, FileAccess.WRITE)
 	file.store_string(src)
 

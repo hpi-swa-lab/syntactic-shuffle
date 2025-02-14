@@ -20,9 +20,13 @@ func s():
 	out_card = StaticOutCard.new("connect", cmd("connect", signature))
 	disconnect_card = StaticOutCard.new("disconnect", cmd("disconnect", signature))
 
+var _signaled_for = {}
+
 func invoke(args: Array, signature: Signature, named = "", source_out = null):
 	# direct triggers are also considered for connection
-	# TODO need to make sure we also disconnect
+	if _signaled_for.has(source_out.parent):
+		_trigger("disconnect", source_out.parent)
+	_signaled_for[source_out.parent] = args[0]
 	super.invoke(args, cmd("connect", signature), named, source_out)
 
 func signature_changed():
@@ -30,24 +34,33 @@ func signature_changed():
 	if out_card: out_card.signature = signature
 	if disconnect_card: disconnect_card.signature = signature
 
-func _trigger(command: String, obj: Card):
-	var remembered = obj.get_remembered_for(signature) if obj else get_remembered()
-	if remembered: super.invoke(remembered.get_remembered_value(), cmd(command, signature))
+func _trigger(command: String, card: Card):
+	var remembered = card.get_remembered_for(signature) if card else get_remembered()
+	if remembered:
+		var val = remembered.get_remembered_value()
+		if command == "connect": _signaled_for[card] = val[0]
+		super.invoke(val, cmd(command, signature))
 
 func propagate_incoming_connected(seen):
+	var init = not initialized_signatures
 	super.propagate_incoming_connected(seen)
-	seen[self] = &"notify_done"
+	if init: seen[self] = &"notify_done"
 
 func notify_done_propagate():
 	_trigger("connect", null)
 
-func incoming_connected(obj: Card):
-	_trigger("connect", obj)
-	super.incoming_connected(obj)
+func incoming_connected(card: Card):
+	if _signaled_for.has(card):
+		super.invoke([_signaled_for[card]], cmd("disconnect", signature))
+		_signaled_for.erase(card)
+	_trigger("connect", card)
+	super.incoming_connected(card)
 
-func incoming_disconnected(obj: Card):
-	_trigger("disconnect", obj)
-	super.incoming_disconnected(obj)
+func incoming_disconnected(card: Card):
+	if _signaled_for.has(card):
+		super.invoke([_signaled_for[card]], cmd("disconnect", signature))
+		_signaled_for.erase(card)
+	super.incoming_disconnected(card)
 
 func serialize_constructor():
 	return "{0}.new({1})".format([card_name, signature.serialize_gdscript()])

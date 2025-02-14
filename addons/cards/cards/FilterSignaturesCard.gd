@@ -12,6 +12,9 @@ var signature: Signature = Signature.VoidSignature.new():
 		if out_card: out_card.override_signature([v] as Array[Signature])
 		if in_card: in_card.signature = v
 
+static func create_default():
+	return FilterSignaturesCard.new(Signature.VoidSignature.new())
+
 func _init(signature):
 	self.signature = signature
 	super._init()

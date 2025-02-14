@@ -18,6 +18,7 @@ func _init(name: String, type: String, data: Variant):
 	self.type = type
 	self.data = data
 	self.default = data
+	assert(data == null or Signature.type_signature(typeof(data)) == type)
 	super._init()
 
 func clone():

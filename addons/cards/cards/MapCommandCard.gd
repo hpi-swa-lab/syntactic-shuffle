@@ -19,7 +19,7 @@ func s():
 	out_card.position = Vector2(1190.92, 400.0026)
 	var cell_card = CellCard.create("to", "String", "")
 	cell_card.position = Vector2(1026.598, 1202.347)
-	var cell_card_2 = CellCard.create("from", "String", 0.0)
+	var cell_card_2 = CellCard.create("from", "String", "")
 	cell_card_2.position = Vector2(405.8742, 1103.943)
 	
 	code_card.c(out_card)
