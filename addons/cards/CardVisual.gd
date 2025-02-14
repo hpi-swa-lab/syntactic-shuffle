@@ -87,6 +87,8 @@ func input_event(e: InputEvent):
 		is_dragging = false
 		expanded = not expanded
 		get_selection_manager().clear_selection()
+	if dragging and e is InputEventMouseMotion:
+		CardBoundary.card_moved(card)
 
 # if we move from the hand to the main scene, we won't receive the mouse button up
 func _unhandled_input(e: InputEvent) -> void:

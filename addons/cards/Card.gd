@@ -42,6 +42,7 @@ var card_name:
 		if connection_draw_node: connection_draw_node.queue_redraw()
 		if disable: disconnect_all()
 		if visual: visual.paused = paused
+		set_process(not disable)
 	get: return disable
 
 ## Not currently activating triggers or returning objects but can be
@@ -445,9 +446,6 @@ func _check_disconnect(them: Card):
 		disconnect_from(them)
 
 func _process(delta: float) -> void:
-	if dragging and not Engine.is_editor_hint():
-		CardBoundary.card_moved(self)
-	
 	if disable: return
 	if dragging or always_reconnect():
 		for card in get_outgoing(): _check_disconnect(card)

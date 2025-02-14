@@ -158,8 +158,9 @@ func fill_rect(rect: Rect2):
 	shape_owner_get_owner(id).position = rect.size / 2
 	shape_owner_get_shape(id, 0).size = rect.size
 
-func _process(delta) -> void:
-	hovered = contains_screen_position(get_viewport().get_mouse_position())
+func _input(event: InputEvent) -> void:
+	if event is InputEventMouseMotion:
+		hovered = contains_screen_position(get_viewport().get_mouse_position())
 
 func my_card_extent():
 	return CardVisual.base_card_size * card_scale
