@@ -34,7 +34,9 @@ var card_name:
 @export var disable = false:
 	set(v):
 		if v == disable: return
-		if is_toplevel() and disable: entered_program(get_selection_manager())
+		if is_toplevel() and disable:
+			start_propagate_incoming_connected(true)
+			entered_program(get_selection_manager())
 		if is_toplevel() and not disable: left_program(get_selection_manager())
 		disable = v
 		if connection_draw_node: connection_draw_node.queue_redraw()
