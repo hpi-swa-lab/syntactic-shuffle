@@ -124,12 +124,12 @@ func group_selected():
 	var add_input = func(from, to, named):
 		var sig = from.output_signatures
 		# FIXME choosing first
-		var input = NamedInCard.named_data(named, sig[0]) if named else InCard.data(sig[0])
+		var input = InCard.data(sig[0])
 		parent.add_card(input)
 		before.push_back(func():
 			to.disconnect_from(from))
 		after.push_back(func():
-			from.connect_to(parent, named)
+			from.connect_to(parent)
 			input.connect_to(to, named))
 	var add_output = func(from, to, named, output):
 		if not output.get_parent(): parent.add_card(output)
