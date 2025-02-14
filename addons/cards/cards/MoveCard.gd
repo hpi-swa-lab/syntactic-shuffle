@@ -11,10 +11,12 @@ func v():
 func s():
 	var vector_2_card = Vector2Card.new()
 	vector_2_card.position = Vector2(869.269, 1318.908)
-	vector_2_card.cards[1].data = Vector2(0.0, 490.5)
+	vector_2_card.cards[1].data = Vector2(-0.0, 0.0)
+	
 	var bool_card = BoolCard.new()
 	bool_card.position = Vector2(1219.58, 428.579)
 	bool_card.cards[0].data = false
+	
 	var code_card = CodeCard.create([["velocity", t("Vector2")], ["body", t("Node")], ["did_accelerate", t("bool")], ["trigger", trg()]], [["out", t("Vector2")], ["did_accelerate", t("bool")]], func(card, out, out_accelerated, velocity, body, did_accelerate):
 			if not did_accelerate:
 				var friction = 20
@@ -28,8 +30,10 @@ func s():
 			out_accelerated.call(false)
 			out.call(velocity), ["body", "velocity", "did_accelerate"])
 	code_card.position = Vector2(622.4604, 637.1277)
+	
 	var in_card = InCard.data(t("Node"))
 	in_card.position = Vector2(161.7643, 967.2809)
+	
 	var code_card_2 = CodeCard.create([["direction", t("Vector2")], ["velocity", t("Vector2")]], [["out", t("Vector2")], ["did_accelerate", t("bool")]], func(card, out, did_accelerate, direction, velocity):
 			var _accel = 10
 			var max_velocity = 500
@@ -38,22 +42,30 @@ func s():
 			did_accelerate.call(true)
 			out.call(v), ["velocity"])
 	code_card_2.position = Vector2(1386.606, 1125.075)
+	
 	var in_card_2 = InCard.data(t("Vector2"))
 	in_card_2.position = Vector2(341.0815, 2687.129)
-	var physics_process_card = PhysicsProcessCard.new()
-	physics_process_card.position = Vector2(133.5331, 301.9212)
+	
 	var store_card = StoreCard.new()
 	store_card.position = Vector2(902.5308, 172.4603)
+	
 	var store_card_2 = StoreCard.new()
 	store_card_2.position = Vector2(1000.191, 928.6358)
+	
 	var pull_only_card = PullOnlyCard.new()
 	pull_only_card.position = Vector2(454.9027, 1920.42)
+	
 	var plus_card = PlusCard.new()
 	plus_card.position = Vector2(900.6112, 2479.565)
+	
 	var store_card_3 = StoreCard.new()
 	store_card_3.position = Vector2(1304.446, 1927.079)
+	
 	var in_card_3 = InCard.data(cmd("direction", t("Vector2")))
 	in_card_3.position = Vector2(1856.695, 1127.132)
+	
+	var always_card = AlwaysCard.new()
+	always_card.position = Vector2(188.8411, 303.7273)
 	
 	vector_2_card.c(pull_only_card)
 	vector_2_card.c_named("velocity", code_card_2)
@@ -65,10 +77,10 @@ func s():
 	code_card_2.c(store_card_2)
 	code_card_2.c(bool_card)
 	in_card_2.c_named("left_vector", plus_card)
-	physics_process_card.c_named("trigger", code_card)
 	store_card.c(bool_card)
 	store_card_2.c(vector_2_card)
 	pull_only_card.c_named("right_vetor", plus_card)
 	plus_card.c(store_card_3)
 	store_card_3.c(vector_2_card)
 	in_card_3.c_named("direction", code_card_2)
+	always_card.c_named("trigger", code_card)

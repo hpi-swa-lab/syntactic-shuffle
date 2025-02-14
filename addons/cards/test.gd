@@ -213,7 +213,7 @@ func test_simple_named_connect(ready):
 
 func test_simple_outgoing_connect(ready):
 	var increment = IncrementCard.new()
-	var process = PhysicsProcessCard.new()
+	var process = AlwaysCard.new()
 	ready.call()
 	process.try_connect(increment)
 	assert(process.get_outgoing().has(increment))
@@ -221,7 +221,7 @@ func test_simple_outgoing_connect(ready):
 
 func test_simple_incoming_connect(ready):
 	var increment = IncrementCard.new()
-	var process = PhysicsProcessCard.new()
+	var process = AlwaysCard.new()
 	ready.call()
 	increment.try_connect(process)
 	assert(process.get_outgoing().has(increment))
@@ -328,7 +328,7 @@ func test_casting_generic_signature(ready):
 
 func test_derive_output_types_no_incoming(ready):
 	var c = Card.new(func():
-		var process = PhysicsProcessCard.new()
+		var process = AlwaysCard.new()
 		var vec = Vector2Card.new()
 		var out = OutCard.new()
 		process.c(vec)

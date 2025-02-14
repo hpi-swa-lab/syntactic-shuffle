@@ -29,8 +29,16 @@ func s():
 	var filter_signatures_card_2 = FilterSignaturesCard.new(cmd("enter", any("T")))
 	filter_signatures_card_2.position = Vector2(179.5218, 615.3729)
 	
+	var forward_trigger_card = ForwardTriggerCard.new()
+	forward_trigger_card.position = Vector2(985.881, 1089.25)
+	
+	var out_card_2 = OutCard.new(false)
+	out_card_2.position = Vector2(1501.513, 1099.381)
+	
 	signal_card.c(filter_signatures_card)
+	signal_card.c(forward_trigger_card)
 	enter_leave_card_card.c(filter_signatures_card_2)
 	unwrap_command_card.c(signal_card)
 	filter_signatures_card.c(out_card)
 	filter_signatures_card_2.c(unwrap_command_card)
+	forward_trigger_card.c(out_card_2)

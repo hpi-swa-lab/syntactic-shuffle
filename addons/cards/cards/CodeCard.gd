@@ -208,7 +208,7 @@ func get_output(name: String):
 
 func get_source_code():
 	if not source_code:
-		var index = parent.cards.filter(func(c): return c is CodeCard).find(self)
+		var index = parent.cards_parent.get_children().filter(func(c): return c is CodeCard).find(self)
 		source_code = fetch_source_code_in(parent.get_script().source_code, index)
 	return source_code
 

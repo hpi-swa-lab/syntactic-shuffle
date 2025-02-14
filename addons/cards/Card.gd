@@ -332,7 +332,7 @@ func propagate_incoming_connected(seen):
 		# InCards are only considered when they are connected or when
 		# this card is entirely unconnected (should then show the default
 		# connection options). Other cards are considered entry points when
-		# they have no incoming cards (e.g., the PhysicsProcessCard)
+		# they have no incoming cards (e.g., the AlwaysCard)
 		if c is InCard:
 			if c.has_connected() or parent_has_no_incoming: c.propagate_incoming_connected(seen)
 			else:

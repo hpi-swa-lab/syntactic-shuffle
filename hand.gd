@@ -17,7 +17,7 @@ var categories = {
 		"AxisControlsCard",
 		"MousePositionCard",
 		"ClockCard",
-		"PhysicsProcessCard"
+		"AlwaysCard"
 	],
 	"Data": [
 		"SetPropertyCard",
