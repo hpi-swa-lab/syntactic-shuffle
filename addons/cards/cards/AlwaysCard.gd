@@ -11,8 +11,8 @@ func v():
 func s():
 	var signal_card = SignalCard.new()
 	signal_card.position = Vector2(907.3478, 400.15)
-	signal_card.cards[4].data = "process"
-	signal_card.cards[5].data = null
+	signal_card.get_cell("signal_name").data = "process"
+	signal_card.get_cell("callback").data = null
 	
 	var out_card = OutCard.new(false)
 	out_card.position = Vector2(1771.475, 389.3198)

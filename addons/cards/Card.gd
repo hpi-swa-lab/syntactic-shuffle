@@ -513,6 +513,11 @@ func get_stored_data():
 	for card in cards:
 		if card is CellCard: return card.data
 
+func get_cell(name: String):
+	for card in cards:
+		if card is CellCard and card.data_name == name: return card
+	assert(false)
+
 ########################
 # Serialization
 ########################
@@ -565,7 +570,7 @@ static func serialize_card_construction(cards: Array):
 		cards_desc += "\t{0}.position = Vector2{1}\n".format([n, c.position])
 		for i in range(0, c.cards.size()):
 			if c.cards[i] is CellCard:
-				cards_desc += "\t{0}.cards[{1}].data = {2}\n".format([n, i, Signature.data_to_expression(c.cards[i].data)])
+				cards_desc += "\t{0}.get_cell({1}).data = {2}\n".format([n, Signature.data_to_expression(c.cards[i].data_name), Signature.data_to_expression(c.cards[i].data)])
 		cards_desc += "\t\n"
 	if cards.is_empty(): cards_desc = "\tpass"
 	for c in cards:
