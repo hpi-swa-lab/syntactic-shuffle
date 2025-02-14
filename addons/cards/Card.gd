@@ -205,11 +205,11 @@ func can_edit(): return true
 ## reachability checks.
 func can_be_trigger(): return true
 
-func get_selection_manager() -> CardEditor:
-	return visual.get_selection_manager()
+func get_selection_manager() -> CardEditor: return visual.get_selection_manager()
 
-func get_card_global_position():
-	return global_position
+func get_card_global_position(): return global_position
+
+func create_expanded(): return load("res://addons/cards/card_editor.tscn").instantiate()
 
 ########################
 ## CONNECTIONS

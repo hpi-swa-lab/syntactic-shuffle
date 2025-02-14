@@ -276,6 +276,7 @@ static func data_to_expression(data) -> String:
 		return data.serialize_gdscript()
 	if data is Callable:
 		if data.is_custom(): return "null"
+	if data is Object: return "null"
 	return str(data)
 
 static func signatures_equal(a: Array[Signature], b: Array[Signature]):

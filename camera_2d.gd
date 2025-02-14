@@ -10,6 +10,7 @@ signal process(delta: float)
 var held = false
 var selecting = false
 var selection = {}
+var scroll_disable = 0
 
 func _ready():
 	Card.set_ignore_object(self)

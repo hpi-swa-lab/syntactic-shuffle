@@ -20,7 +20,7 @@ func _draw():
 	var named = card.named_incoming
 	for name in named:
 		for p in named[name]:
-			var node = card.get_node_or_null(p)
+			var node = card.lookup_card(p)
 			if node:
 				draw_connection(self, node, true, light_background)
 				draw_label_to(node, name, light_background)

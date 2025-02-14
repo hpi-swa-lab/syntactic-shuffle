@@ -70,6 +70,8 @@ var source_code: String = "":
 		source_code = v
 		if visual: description(v.substr(0, 150))
 
+func create_expanded(): return load("res://addons/cards/code_editor.tscn").instantiate()
+
 func v():
 	title("Code")
 	icon(preload("res://addons/cards/icons/code.png"))
