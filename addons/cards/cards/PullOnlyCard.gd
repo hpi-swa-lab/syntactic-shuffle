@@ -18,8 +18,7 @@ func s():
 		var sig = card.output_signatures
 		if sig.is_empty(): return
 		for o in card.get_outgoing():
-			o.remembered = [input]
-			o.remembered_signature = sig[0]
+			o.remember(sig[0], [input])
 , [])
 	code_card.position = Vector2(661.5192, 786.9964)
 	

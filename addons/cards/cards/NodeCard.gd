@@ -8,7 +8,7 @@ func _init(node):
 	self.node = node
 	super._init()
 	# We are never shown, so we need to trigger signature discovery manually
-	start_propagate_incoming_connected()
+	start_propagate_incoming_connected(true)
 
 func can_edit(): return false
 

@@ -9,8 +9,9 @@ func v():
 	container_size(Vector2(2000.0, 1600.0))
 
 func s():
-	var out_card = OutCard.new()
+	var out_card = OutCard.new(false)
 	out_card.position = Vector2(1190.92, 400.0026)
+	
 	var code_card = CodeCard.create([["trigger", trg()]], [["out", cmd("direction", t("Vector2"))]], func(card, out):
 		var input_direction = Vector2.ZERO
 		if Input.is_action_pressed("ui_left"): input_direction += Vector2.LEFT
@@ -19,9 +20,14 @@ func s():
 		if Input.is_action_pressed("ui_down"): input_direction += Vector2.DOWN
 		if input_direction.length() > 0: out.call(input_direction.normalized())
 , [])
-	code_card.position = Vector2(581.647, 398.63)
-	var physics_process_card = PhysicsProcessCard.new()
-	physics_process_card.position = Vector2(200.0, 400.0)
+	code_card.position = Vector2(666.2298, 390.4971)
+	
+	var always_card = AlwaysCard.new()
+	always_card.position = Vector2(154.9026, 654.1458)
+	
+	var forward_trigger_card = ForwardTriggerCard.new()
+	forward_trigger_card.position = Vector2(552.0296, 798.1564)
 	
 	code_card.c(out_card)
-	physics_process_card.c_named("trigger", code_card)
+	always_card.c(forward_trigger_card)
+	forward_trigger_card.c_named("trigger", code_card)

@@ -14,6 +14,9 @@ func _init(signature: Signature):
 	self.signature = signature
 	super._init()
 
+static func create_default():
+	return InCard.new(t(""))
+
 func clone():
 	return get_script().new(signature)
 
