@@ -75,8 +75,8 @@ func input_event(e: InputEvent):
 			get_selection_manager().set_as_selection(card)
 	if e is InputEventMouseButton and e.button_index == MOUSE_BUTTON_LEFT and not e.is_pressed():
 		held = false
+		if is_dragging: dragging.emit(false)
 		is_dragging = false
-		dragging.emit(false)
 	if e is InputEventMouseMotion and held:
 		if not is_dragging:
 			is_dragging = true
@@ -87,7 +87,7 @@ func input_event(e: InputEvent):
 		is_dragging = false
 		expanded = not expanded
 		get_selection_manager().clear_selection()
-	if dragging and e is InputEventMouseMotion:
+	if is_dragging and e is InputEventMouseMotion:
 		CardBoundary.card_moved(card)
 
 # if we move from the hand to the main scene, we won't receive the mouse button up
