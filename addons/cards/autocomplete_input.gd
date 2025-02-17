@@ -3,24 +3,24 @@ extends LineEdit
 
 var node
 
-signal item_selected(object)
+signal item_selected(object, shift)
 var list: Array = []
 
 var _gui_input_keycode
 
-func _gui_input(event):
+func _gui_input(event: InputEvent):
 	if event is InputEventKey and event.pressed:
 		_gui_input_keycode = event.keycode
 		match event.keycode:
 			KEY_DOWN: move_focus(1)
 			KEY_UP: move_focus(-1)
-			KEY_ENTER, KEY_KP_ENTER: accept_selected()
+			KEY_ENTER, KEY_KP_ENTER: accept_selected(event.shift_pressed)
 			KEY_ESCAPE: release_focus()
 
-func accept_selected():
+func accept_selected(shift: bool):
 	var index = get_focused_index()
 	if index >= 0 and %list.visible:
-		selected(index)
+		selected(index, shift)
 		await get_tree().process_frame
 		release_focus()
 
@@ -33,10 +33,10 @@ func start_focus():
 	select_all()
 	build_list(text)
 
-func selected(index: int):
+func selected(index: int, shift: bool):
 	%list.visible = false
 	text = %list.get_item_text(index)
-	item_selected.emit(%list.get_item_metadata(index))
+	item_selected.emit(%list.get_item_metadata(index), shift)
 	text = ""
 	build_list("")
 
@@ -96,4 +96,4 @@ func fuzzy_match(name: String, search: String):
 
 func _on_list_pressed(index):
 	if %list.is_item_selectable(index):
-		selected(index)
+		selected(index, false)

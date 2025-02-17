@@ -103,6 +103,7 @@ func remember(signature: Signature, args: Array):
 	remembered = RememberedValue.new(signature, args)
 
 func invoke(args: Array, signature: Signature, named = "", source_out = null):
+	if not parent: return
 	if Engine.is_editor_hint(): return
 	
 	if remember_message: remember(signature, args)

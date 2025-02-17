@@ -1,49 +1,39 @@
-[gd_scene load_steps=5 format=3 uid="uid://bqninusgeuw0i"]
+[gd_scene load_steps=4 format=3 uid="uid://bqninusgeuw0i"]
 
-[ext_resource type="Script" uid="uid://cja8ehiirmcyt" path="res://addons/cards/CardBoundary.gd" id="1_ig7tw"]
-[ext_resource type="Script" uid="uid://bvr4vcw3kd72b" path="res://addons/cards/placeholder/placeholder.gd" id="6_272bh"]
+[ext_resource type="Script" uid="uid://c75bmfv78rqjm" path="res://main.gd" id="1_h2yge"]
 [ext_resource type="Script" uid="uid://cxldeg24krchn" path="res://camera_2d.gd" id="9_kek77"]
 [ext_resource type="Script" uid="uid://dio881dm6xtr3" path="res://hand.gd" id="15_vivmo"]
 
 [node name="main" type="Node2D"]
+script = ExtResource("1_h2yge")
 
-[node name="CardBoundary" type="Area2D" parent="."]
-script = ExtResource("1_ig7tw")
-id = "4d539466-3572-4d4f-b596-fdb825ac923e"
-metadata/_custom_type_script = ExtResource("1_ig7tw")
-
-[node name="Camera2D" type="Camera2D" parent="CardBoundary"]
+[node name="CardEditor" type="Camera2D" parent="."]
 position = Vector2(947, 542)
 script = ExtResource("9_kek77")
 
-[node name="wall" type="StaticBody2D" parent="CardBoundary"]
-position = Vector2(570, 610)
-
-[node name="Placeholder" type="Node2D" parent="CardBoundary/wall"]
-script = ExtResource("6_272bh")
-placeholder_size = Vector2(498, 29)
-metadata/_custom_type_script = ExtResource("6_272bh")
-
-[node name="character" type="CharacterBody2D" parent="CardBoundary" groups=["enemy"]]
-position = Vector2(449, 382)
-metadata/cards_outgoing = [NodePath("")]
-
-[node name="Placeholder" type="Node2D" parent="CardBoundary/character"]
-script = ExtResource("6_272bh")
-color = Color(1, 0.0369013, 0.39483, 1)
-placeholder_size = Vector2(20, 20)
-metadata/_custom_type_script = ExtResource("6_272bh")
-
-[node name="pickup" type="CharacterBody2D" parent="CardBoundary"]
-position = Vector2(541, 102)
-metadata/cards_outgoing = [NodePath("")]
-
-[node name="Placeholder" type="Node2D" parent="CardBoundary/pickup"]
-script = ExtResource("6_272bh")
-color = Color(0.974666, 0.76677, 1.15514e-06, 1)
-shape_type = "Circle"
-circle_radius = 10.0
-metadata/_custom_type_script = ExtResource("6_272bh")
-
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 script = ExtResource("15_vivmo")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer"]
+offset_left = 351.0
+offset_top = 2.0
+offset_right = 1378.0
+offset_bottom = 33.0
+
+[node name="ToplevelCardsList" type="TabBar" parent="CanvasLayer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+clip_tabs = false
+tab_close_display_policy = 2
+
+[node name="Button" type="Button" parent="CanvasLayer/HBoxContainer"]
+visible = false
+layout_mode = 2
+text = " + "
+
+[node name="ToplevelContainer" type="Node2D" parent="."]
+unique_name_in_owner = true
+scale = Vector2(0.2, 0.2)
+
+[connection signal="tab_changed" from="CanvasLayer/HBoxContainer/ToplevelCardsList" to="." method="_on_toplevel_cards_list_tab_changed"]
+[connection signal="tab_close_pressed" from="CanvasLayer/HBoxContainer/ToplevelCardsList" to="." method="_on_toplevel_cards_list_tab_close_pressed"]
