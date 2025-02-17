@@ -55,6 +55,7 @@ func set_icon_texture(texture: Texture): %Icon.texture = texture
 func ui(c: Control): %extra_ui.add_child(c)
 func short_description(): %Description.max_lines_visible = 2
 func container_size(size: Vector2): _container_size = size
+func get_container_size(): return _container_size
 
 var card: Card:
 	get: return get_parent()
@@ -110,9 +111,9 @@ func _on_card_control_mouse_entered() -> void:
 		inputs.push_back(s)
 		# inputs.push_back(c.input_name + ": " + s if c is NamedInCard else s)
 	var remembered = ""
-	for c in card.cards:
+	for c in [card] if card is OutCard else card.cards:
 		if c is OutCard:
-			var r = c.get_remembered_value()
+			var r = c.get_remembered_for_display()
 			if r: remembered += "\nR: " + str(r)
 	
 	%signatures.visible = true

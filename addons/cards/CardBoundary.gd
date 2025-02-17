@@ -104,7 +104,8 @@ func add_card(card: Card): add_child(card)
 
 func get_nodes_for_serialization():
 	# FIXME potentially filters out desirable objects
-	return get_children().filter(func (n): return not (n is CollisionShape2D))
+	return get_children().filter(func (n):
+		return not (n is CollisionShape2D) and not n.has_meta("cards_spawned"))
 
 func is_fallback_boundary():
 	for id in get_shape_owners():

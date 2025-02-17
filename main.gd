@@ -1,6 +1,6 @@
 extends Node2D
 
-const PROGRAM_FILE = "res://addons/cards/cards/MoveCard.gd"
+const PROGRAM_FILE = "res://addons/cards/cards/GameCard.gd"
 
 var open_cards := [] as Array[Card]
 

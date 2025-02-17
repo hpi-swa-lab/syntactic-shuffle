@@ -21,6 +21,7 @@ func attach_cards(card: Card, size: Vector2, is_fullscreen = false):
 		_on_auto_layout_pressed()
 	
 	await get_tree().process_frame
+	
 	if not is_fullscreen: self.size = size
 	else:
 		self.size = get_child(0).get_combined_minimum_size()
@@ -41,7 +42,7 @@ func _on_save_button_pressed(copy = false) -> void:
 	regex.compile(r"[^A-Za-z0-9]")
 	n = regex.sub(n, "", true)
 	var path = "res://addons/cards/cards/{0}.gd".format([n])
-	var src = card.serialize_gdscript(n, size)
+	var src = card.serialize_gdscript(n, card.visual.get_container_size() if is_fullscreen else size)
 	
 	var old_path = null if new_card or copy else card.get_script().resource_path
 	if old_path and path != old_path:

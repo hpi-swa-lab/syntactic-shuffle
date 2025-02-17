@@ -89,12 +89,12 @@ func is_toplevel(): return not parent
 
 func _init(custom_build = null):
 	var parent = null
-	if not active_card_list.is_empty() and not is_offscreen():
+	if not active_card_list.is_empty():
 		parent = active_card_list.back()
 		parent.add_card(self)
 	setup(custom_build)
 	cards_parent.child_order_changed.connect(func():
-		_cards = Array(cards_parent.get_children().filter(func(s): return s is Card),
+		_cards = Array(cards_parent.get_children().map(ensure_card).filter(func(s): return s is Card),
 			TYPE_OBJECT, "Node2D", Card))
 
 func _notification(what: int) -> void:
@@ -166,7 +166,7 @@ func setup_finished():
 
 func add_card(card: Card):
 	card.parent = self
-	cards_parent.add_child(card)
+	if not card.is_offscreen(): cards_parent.add_child(card)
 	return card
 
 func mark_activated(from, args):
@@ -275,11 +275,14 @@ func lookup_card(path: NodePath):
 	return ensure_card(get_node_or_null(path))
 static func ensure_card(object: Node) -> Card:
 	if object == null: return null
+	if not is_instance_valid(object): return null
 	if object is Card: return object
 	if Engine.is_editor_hint(): return null
 	if not object.has_meta("node_card"):
 		object.set_meta("node_card", NodeCard.new(object))
-	return object.get_meta("node_card")
+	var c = object.get_meta("node_card")
+	if is_instance_valid(c): return c
+	return null
 
 static func delete_from_dict_list(dict: Dictionary, value: NodePath):
 	for key in dict:
@@ -593,6 +596,7 @@ static func serialize_card_construction(nodes: Array):
 		cards_desc += "\t{0}.position = Vector2{1}\n".format([node_name, n.position])
 		cards_desc += "\t{0}.name = \"{1}\"\n".format([node_name, node_name])
 		cards_desc += "\tscene_object({0})\n".format([node_name])
+		cards_desc += "\t\n"
 	
 	for node in nodes:
 		var card = Card.ensure_card(node)

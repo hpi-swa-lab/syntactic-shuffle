@@ -6,7 +6,7 @@ func v():
 	title("Move")
 	description("Move an object.")
 	icon_data("iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAFJJREFUOI1jYMAP/kMxTsBIQDNBtbgMwGUrhnomPC4gClDsBWQXEAwwbOoYkQTJAYyMFGhmYGCgYiBS5AUYgBmCy1B0cUZkQWxgpKREQoBg6gQAJZ0UCnXgLU8AAAAASUVORK5CYII=")
-	container_size(Vector2(568.0, 128.0))
+	container_size(Vector2(2065.723, 2946.552))
 
 func s():
 	var vector_2_card = Vector2Card.new()

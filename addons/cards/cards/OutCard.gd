@@ -66,7 +66,7 @@ func propagate_unreachable(seen):
 ## Check if we have a compatible remembered value. If we remember values
 ## in general but we don't currently a value, check our incoming connections.
 func get_remembered_for(signature: Signature):
-	if not remember_message: return null
+	# if not remember_message: return null
 	
 	if remembered and get_remembered_value():
 		if remembered.signature.compatible_with(signature): return self
@@ -85,6 +85,12 @@ func get_remembered_signature():
 	_ensure_remembered()
 	return remembered.signature
 
+func get_remembered_for_display():
+	for s in output_signatures:
+		var r = get_remembered_for(s)
+		if r: return r.get_remembered_value()
+	return null
+
 func _try_connected_remembered(signature: Signature):
 	for card in get_all_incoming():
 		var r = card.get_remembered_for(signature)
@@ -100,6 +106,7 @@ func v():
 	icon_data("iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAIZJREFUOI3FUjsOwCAIBdOlEwfx/kfxIEzdtJMEVNB06ZsMvA8RAP5EIQJ0es2pC78Q2cIgjoyxi1cGkbgnG44mS0MnOFOI9lokaNLOCNMBMTSZJui4a5X3k/wc1yASKaBnEG3CfKKOQQBomRky86Qaass16gT3kAqR6X065egSj7E5tnOTFy92Ir2sNy07AAAAAElFTkSuQmCC")
 
 func remember(signature: Signature, args: Array):
+	assert(remember_message)
 	remembered = RememberedValue.new(signature, args)
 
 func invoke(args: Array, signature: Signature, named = "", source_out = null):

@@ -28,4 +28,5 @@ func s():
 	var c = StaticOutCard.new("type", t(node.get_class()), true)
 	c.remember(c.static_signature, [node])
 	
-	StaticOutCard.new("group", grp(node.get_groups()), true)
+	var c2 = StaticOutCard.new("group", grp(node.get_groups()), true)
+	c2.remember(c2.static_signature, [node])

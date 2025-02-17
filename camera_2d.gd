@@ -73,7 +73,7 @@ func get_single_selection():
 	return null
 
 func get_selection():
-	return selection.keys().filter(func(k): return is_instance_valid(k) and k.is_visible_in_tree)
+	return selection.keys().filter(func(k): return is_instance_valid(k) and k.is_visible_in_tree())
 
 func set_as_selection(obj: Node):
 	clear_selection()
