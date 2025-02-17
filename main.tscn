@@ -28,8 +28,7 @@ layout_mode = 2
 clip_tabs = false
 tab_close_display_policy = 2
 
-[node name="Button" type="Button" parent="CanvasLayer/HBoxContainer"]
-visible = false
+[node name="AddButton" type="Button" parent="CanvasLayer/HBoxContainer"]
 layout_mode = 2
 text = " + "
 
@@ -46,3 +45,4 @@ scale = Vector2(0.2, 0.2)
 
 [connection signal="tab_changed" from="CanvasLayer/HBoxContainer/ToplevelCardsList" to="." method="_on_toplevel_cards_list_tab_changed"]
 [connection signal="tab_close_pressed" from="CanvasLayer/HBoxContainer/ToplevelCardsList" to="." method="_on_toplevel_cards_list_tab_close_pressed"]
+[connection signal="pressed" from="CanvasLayer/HBoxContainer/AddButton" to="." method="_on_add_button_pressed"]

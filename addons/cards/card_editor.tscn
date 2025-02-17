@@ -38,7 +38,7 @@ layout_mode = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/Column"]
 layout_mode = 2
-theme_override_constants/separation = 32
+theme_override_constants/separation = 8
 
 [node name="Icon" type="TextureButton" parent="MarginContainer/Column/HBoxContainer"]
 unique_name_in_owner = true
@@ -64,9 +64,16 @@ size_flags_vertical = 4
 text = "Auto Layout"
 
 [node name="SaveButton" type="Button" parent="MarginContainer/Column/HBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 4
 text = "Save Changes"
+
+[node name="SaveCopyButton" type="Button" parent="MarginContainer/Column/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 4
+text = "Save Copy"
 
 [node name="Resize" type="Panel" parent="."]
 unique_name_in_owner = true
@@ -87,4 +94,5 @@ mouse_default_cursor_shape = 12
 [connection signal="text_changed" from="MarginContainer/Column/HBoxContainer/Name" to="." method="_on_name_text_changed"]
 [connection signal="pressed" from="MarginContainer/Column/HBoxContainer/AutoLayout" to="." method="_on_auto_layout_pressed"]
 [connection signal="pressed" from="MarginContainer/Column/HBoxContainer/SaveButton" to="." method="_on_save_button_pressed"]
+[connection signal="pressed" from="MarginContainer/Column/HBoxContainer/SaveCopyButton" to="." method="_on_save_copy_button_pressed"]
 [connection signal="gui_input" from="Resize" to="." method="_on_resize_gui_input"]

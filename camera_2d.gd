@@ -73,7 +73,7 @@ func get_single_selection():
 	return null
 
 func get_selection():
-	return selection.keys().filter(func(k): return is_instance_valid(k))
+	return selection.keys().filter(func(k): return is_instance_valid(k) and k.is_visible_in_tree)
 
 func set_as_selection(obj: Node):
 	clear_selection()
@@ -214,7 +214,6 @@ func spawn_connected(script_path: String, open_toplevel = false):
 		get_parent().open_toplevel_card(card)
 		return
 	
-	var camera_pos = get_screen_center_position()
 	var selected: Card = get_single_selection()
 	var parent
 	var pos
@@ -223,9 +222,9 @@ func spawn_connected(script_path: String, open_toplevel = false):
 		if not parent: parent = selected.get_parent()
 		pos = selected.position + Vector2(400 * selected.scale.x, 0)
 	else:
-		# FIXME doesn't quite work yet
+		var camera_pos = get_viewport_rect().size / 2
 		var b = CardBoundary.boundary_at_position(camera_pos)
-		pos = camera_pos * b.global_transform.inverse()
+		pos = Vector2(300, 300)
 		parent = b.get_parent_card()
 		if not parent: parent = b
 	

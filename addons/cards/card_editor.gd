@@ -13,37 +13,47 @@ func attach_cards(card: Card, size: Vector2, is_fullscreen = false):
 		make_fullscreen()
 	
 	%Name.text = card.visual.get_title()
+	_on_name_text_changed(%Name.text)
 	%Icon.texture_normal = card.visual.get_icon_texture()
 	
 	if card.cards_parent.get_children().filter(func (c):
 		return c is Card and c.position != Vector2.ZERO).is_empty():
 		_on_auto_layout_pressed()
 	
-	if not is_fullscreen:
-		await get_tree().process_frame
-		self.size = size
+	await get_tree().process_frame
+	if not is_fullscreen: self.size = size
+	else:
+		self.size = get_child(0).get_combined_minimum_size()
+		position = Vector2(get_viewport_rect().size.x - self.size.x, 0)
+		set_anchors_preset(Control.PRESET_TOP_RIGHT)
+		
 
 func detach_cards():
 	if not is_fullscreen: %Column.remove_child(card.cards_parent)
 
-func _on_save_button_pressed() -> void:
-	var path
-	var src
-	if card is BlankCard:
-		assert(%Name.text)
-		var n = %Name.text.to_camel_case().capitalize() + "Card"
-		var regex = RegEx.new()
-		regex.compile(r"[^A-Za-z0-9]")
-		n = regex.sub(n, "", true)
-		path = "res://addons/cards/cards/{0}.gd".format([n])
-		src = card.serialize_gdscript(n, size)
+func _on_save_button_pressed(copy = false) -> void:
+	card.title(%Name.text)
+	
+	var new_card = card is BlankCard
+	
+	var n = %Name.text.to_camel_case().capitalize() + "Card"
+	var regex = RegEx.new()
+	regex.compile(r"[^A-Za-z0-9]")
+	n = regex.sub(n, "", true)
+	var path = "res://addons/cards/cards/{0}.gd".format([n])
+	var src = card.serialize_gdscript(n, size)
+	
+	var old_path = null if new_card or copy else card.get_script().resource_path
+	if old_path and path != old_path:
+		DirAccess.rename_absolute(old_path, path)
+		card.get_script().resource_path = path
+		card.get_script().take_over_path(old_path)
 	else:
-		# TODO handle name change
-		path = card.get_script().resource_path
-		src = card.serialize_gdscript("", size)
-		print(src)
-	var file = FileAccess.open(path, FileAccess.WRITE)
-	file.store_string(src)
+		var file = FileAccess.open(path, FileAccess.WRITE)
+		file.store_string(src)
+
+func _on_save_copy_button_pressed() -> void:
+	_on_save_button_pressed(true)
 
 func _on_auto_layout_pressed() -> void:
 	layout_cards(card.cards_parent.get_children().filter(func (c): return c is Card))
@@ -119,7 +129,13 @@ func _on_icon_pressed() -> void:
 		card.visual.set_icon_texture(texture))
 
 func _on_name_text_changed(new_text: String) -> void:
-	card.title(new_text)
+	var new_card = card is BlankCard
+	var renamed = not new_card and new_text != card.visual.get_title()
+	%SaveCopyButton.visible = renamed
+	if new_card: %SaveButton.text = "Create Card"
+	elif renamed: %SaveButton.text = "Rename & Save"
+	else: %SaveButton.text = "Save Changes"
+	%SaveButton.disabled = new_text.is_empty()
 
 var resizing = false
 func _on_resize_gui_input(event: InputEvent) -> void:
@@ -138,7 +154,4 @@ func make_fullscreen():
 	%MarginContainer.remove_theme_constant_override("margin_top")
 	%MarginContainer.remove_theme_constant_override("margin_left")
 	add_theme_stylebox_override("panel", StyleBoxEmpty.new())
-	size = get_child(0).get_combined_minimum_size()
 	scale = Vector2(0.8, 0.8)
-	set_anchors_preset(Control.PRESET_TOP_RIGHT)
-	position = Vector2(get_viewport_rect().size.x - size.x, 0)

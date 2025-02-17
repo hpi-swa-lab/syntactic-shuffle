@@ -129,9 +129,6 @@ func card_entered(card: Card):
 	card.paused = pause_on_enter
 	card.parent = get_parent_card()
 	card.init_signatures()
-	#card.editor_sync_prop("paused")
-	#card.editor_sync_prop("disabled")
-	#card.editor_sync("cards:move_boundary", [card.id, Card.get_id(self)])
 	if card.visual:
 		var tween = card.visual.create_tween()
 		tween.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC) \
