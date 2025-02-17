@@ -6,16 +6,16 @@ func v():
 	title("Move")
 	description("Move an object.")
 	icon_data("iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAFJJREFUOI1jYMAP/kMxTsBIQDNBtbgMwGUrhnomPC4gClDsBWQXEAwwbOoYkQTJAYyMFGhmYGCgYiBS5AUYgBmCy1B0cUZkQWxgpKREQoBg6gQAJZ0UCnXgLU8AAAAASUVORK5CYII=")
-	container_size(Vector2(2269.79, 2935.291))
+	container_size(Vector2(568.0, 128.0))
 
 func s():
 	var vector_2_card = Vector2Card.new()
 	vector_2_card.position = Vector2(869.269, 1318.908)
-	vector_2_card.cards[1].data = Vector2(-0.0, 0.0)
+	vector_2_card.get_cell("vector").data = Vector2(0.0, 0.0)
 	
 	var bool_card = BoolCard.new()
 	bool_card.position = Vector2(1219.58, 428.579)
-	bool_card.cards[0].data = false
+	bool_card.get_cell("value").data = false
 	
 	var code_card = CodeCard.create([["velocity", t("Vector2")], ["body", t("Node")], ["did_accelerate", t("bool")], ["trigger", trg()]], [["out", t("Vector2")], ["did_accelerate", t("bool")]], func(card, out, out_accelerated, velocity, body, did_accelerate):
 			if not did_accelerate:
@@ -65,7 +65,7 @@ func s():
 	in_card_3.position = Vector2(1856.695, 1127.132)
 	
 	var always_card = AlwaysCard.new()
-	always_card.position = Vector2(188.8411, 303.7273)
+	always_card.position = Vector2(292.4666, 383.438)
 	
 	vector_2_card.c(pull_only_card)
 	vector_2_card.c_named("velocity", code_card_2)

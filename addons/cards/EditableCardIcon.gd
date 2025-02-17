@@ -6,7 +6,7 @@ class_name EditableCardIcon
 func _open_editor():
 	var editor = preload("res://addons/cards/icon_editor.tscn").instantiate()
 	get_parent().add_child(editor)
-	editor.global_position = global_position + get_rect().size / 2 - editor.get_rect().size / 2
+	editor.global_position = global_position + get_rect().size / 2 - Vector2(editor.get_rect().size.x / 2, 0)
 	
 	var path = texture.resource_path
 	editor.texture = ImageTexture.create_from_image(texture.get_image())

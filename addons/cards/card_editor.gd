@@ -1,10 +1,16 @@
 extends Panel
 
 var card
+var is_fullscreen = false
 
-func attach_cards(card: Card, size: Vector2):
+func attach_cards(card: Card, size: Vector2, is_fullscreen = false):
 	self.card = card
-	%Column.add_child(card.cards_parent)
+	
+	if not is_fullscreen:
+		%Column.add_child(card.cards_parent)
+	else:
+		# cards_parent is mounted in a separate container
+		make_fullscreen()
 	
 	%Name.text = card.visual.get_title()
 	%Icon.texture_normal = card.visual.get_icon_texture()
@@ -13,11 +19,12 @@ func attach_cards(card: Card, size: Vector2):
 		return c is Card and c.position != Vector2.ZERO).is_empty():
 		_on_auto_layout_pressed()
 	
-	await get_tree().process_frame
-	self.size = size
+	if not is_fullscreen:
+		await get_tree().process_frame
+		self.size = size
 
 func detach_cards():
-	%Column.remove_child(card.cards_parent)
+	if not is_fullscreen: %Column.remove_child(card.cards_parent)
 
 func _on_save_button_pressed() -> void:
 	var path
@@ -103,7 +110,7 @@ func layout_cards(cards):
 func _on_icon_pressed() -> void:
 	var editor = preload("res://addons/cards/icon_editor.tscn").instantiate()
 	get_parent().add_child(editor)
-	editor.global_position = %Icon.global_position - editor.get_rect().size / 2
+	editor.global_position = %Icon.global_position - Vector2(editor.get_rect().size.x / 2, 0)
 	
 	editor.texture = ImageTexture.create_from_image(%Icon.texture_normal.get_image())
 	
@@ -121,3 +128,17 @@ func _on_resize_gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion and resizing:
 		size += event.relative
 		card.cards_parent.fill_rect(get_rect())
+
+func make_fullscreen():
+	is_fullscreen = true
+	
+	%Resize.visible = false
+	%MarginContainer.remove_theme_constant_override("margin_bottom")
+	%MarginContainer.remove_theme_constant_override("margin_right")
+	%MarginContainer.remove_theme_constant_override("margin_top")
+	%MarginContainer.remove_theme_constant_override("margin_left")
+	add_theme_stylebox_override("panel", StyleBoxEmpty.new())
+	size = get_child(0).get_combined_minimum_size()
+	scale = Vector2(0.8, 0.8)
+	set_anchors_preset(Control.PRESET_TOP_RIGHT)
+	position = Vector2(get_viewport_rect().size.x - size.x, 0)
