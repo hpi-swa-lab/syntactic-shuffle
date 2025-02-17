@@ -8,12 +8,15 @@ func _init(node):
 	self.node = node
 	super._init()
 	# We are never shown, so we need to trigger signature discovery manually
-	start_propagate_incoming_connected(true)
+	node.ready.connect(func(): start_propagate_incoming_connected(true), CONNECT_ONE_SHOT)
 
 func can_edit(): return false
 
-func get_card_global_position():
-	return node.global_position
+func get_card_global_position(): return node.global_position
+
+func lookup_card(path: NodePath): return node.get_node_or_null(path)
+
+func is_offscreen(): return true
 
 func v():
 	title("Node Proxy")

@@ -102,6 +102,10 @@ static func card_moved(card: Card, new_boundary = null):
 
 func add_card(card: Card): add_child(card)
 
+func get_nodes_for_serialization():
+	# FIXME potentially filters out desirable objects
+	return get_children().filter(func (n): return not (n is CollisionShape2D))
+
 func is_fallback_boundary():
 	for id in get_shape_owners():
 		if not is_shape_owner_disabled(id):

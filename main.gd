@@ -7,14 +7,13 @@ var open_cards := [] as Array[Card]
 func _ready() -> void:
 	load_cards(PROGRAM_FILE)
 
-func save_cards(path = PROGRAM_FILE):
-	var f = FileAccess.open(path, FileAccess.WRITE)
-	f.store_string("@tool\nextends Card\nfunc s():\n" + Card.serialize_card_construction(get_parent().get_cards()))
-
 func load_cards(path = PROGRAM_FILE):
 	if FileAccess.file_exists(path):
 		var card = load(path).new()
 		open_toplevel_card(card)
+
+func save_card():
+	%Editor._on_save_button_pressed()
 
 func center_camera():
 	var c = %Editor.card.cards

@@ -89,7 +89,7 @@ func is_toplevel(): return not parent
 
 func _init(custom_build = null):
 	var parent = null
-	if not active_card_list.is_empty():
+	if not active_card_list.is_empty() and not is_offscreen():
 		parent = active_card_list.back()
 		parent.add_card(self)
 	setup(custom_build)
@@ -114,7 +114,10 @@ func build_cards_list(custom_build = null):
 	if custom_build: custom_build.call()
 	else: s()
 	pop_active_card_list()
-	cards.append_array(cards_parent.get_children())
+	cards.append_array(cards_parent.get_children().filter(func (n): return n is Card))
+
+## Return true if your card should not appear in the cards_parent. E.g., the NodeCard
+func is_offscreen(): return false
 
 ## This card or its parent just entered the program
 func entered_program(manager): for card in cards: card.entered_program(manager)
@@ -529,7 +532,6 @@ func serialize_constructor():
 	return "{0}.new()".format([card_name])
 
 func serialize_gdscript(overwrite_name: String = "", size: Vector2 = Vector2.ZERO):
-	
 	# FIXME \u0020 below: VSCode's format has a bug where the space is removed on space
 	return "@tool
 extends Card
@@ -548,11 +550,15 @@ func s():
 		"icon_data": visual.get_icon_data(),
 		"allow_cycles": "\n\tallow_cycles()" if allows_cycles else "",
 		"size": "\n\tcontainer_size(Vector2" + str(size) + ")" if size != Vector2.ZERO else "",
-		"cards": serialize_card_construction(cards)
+		"cards": serialize_card_construction(cards_parent.get_nodes_for_serialization())
 	})
 
-static func serialize_card_construction(cards: Array):
-	if cards.is_empty(): return "pass"
+static func serialize_card_construction(nodes: Array):
+	if nodes.is_empty(): return "\tpass"
+	
+	var cards = nodes.filter(func (n): return n is Card)
+	var non_cards = nodes.filter(func (n): return not (n is Card))
+	
 	var cards_desc = ""
 	var var_names = {}
 	var count = {}
@@ -572,15 +578,32 @@ static func serialize_card_construction(cards: Array):
 			if c.cards[i] is CellCard:
 				cards_desc += "\t{0}.get_cell({1}).data = {2}\n".format([n, Signature.data_to_expression(c.cards[i].data_name), Signature.data_to_expression(c.cards[i].data)])
 		cards_desc += "\t\n"
-	if cards.is_empty(): cards_desc = "\tpass"
-	for c in cards:
-		for them in c.get_outgoing():
-			if cards.has(them): cards_desc += "\t{0}.c({1})\n".format([var_names[c], var_names[them]])
-		for name in c.named_outgoing:
-			for their_path in c.named_outgoing[name]:
-				var them = c.lookup_card(their_path)
+	
+	var regex = RegEx.new()
+	regex.compile(r"[^A-Za-z0-9]")
+	for n in non_cards:
+		var node_name = n.name
+		node_name = regex.sub(node_name, "", true)
+		if n.scene_file_path:
+			cards_desc += "\tvar {0} = load(\"{1}\").instantiate()\n".format([node_name, n.scene_file_path])
+		else:
+			assert(false)
+		var_names[n] = "Card.ensure_card({0})\n".format([node_name])
+		# so far, you can only edit position
+		cards_desc += "\t{0}.position = Vector2{1}\n".format([node_name, n.position])
+		cards_desc += "\t{0}.name = \"{1}\"\n".format([node_name, node_name])
+		cards_desc += "\tscene_object({0})\n".format([node_name])
+	
+	for node in nodes:
+		var card = Card.ensure_card(node)
+		for them in card.get_outgoing():
+			if cards.has(them): cards_desc += "\t{0}.c({1})\n".format([var_names[node], var_names[them]])
+		for name in card.named_outgoing:
+			for their_path in card.named_outgoing[name]:
+				var them = card.lookup_card(their_path)
 				if them and cards.has(them):
-					cards_desc += "\t{0}.c_named(\"{2}\", {1})\n".format([var_names[c], var_names[them], name])
+					cards_desc += "\t{0}.c_named(\"{2}\", {1})\n".format([var_names[card], var_names[them], name])
+	
 	return cards_desc
 
 # DSL for signatures
@@ -604,6 +627,7 @@ func icon_data(t: String): visual.icon_data(t)
 func ui(t: Control): visual.ui(t)
 func c(other: Card): connect_to(other, "", true)
 func c_named(name: String, other: Card): connect_to(other, name, true)
+func scene_object(obj: Node): cards_parent.add_child(obj)
 ## If your Card defers delivery of outputs you can signal here that it is
 ## possible to connect it in a cycle. (Otherwise, if inputs are synchronously
 ## delivered to outputs we get an infinite loop).

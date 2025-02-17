@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://cepmrn75jf700"]
+
+[ext_resource type="Script" uid="uid://bvr4vcw3kd72b" path="res://addons/cards/placeholder/placeholder.gd" id="1_djcbs"]
+
+[node name="tree" type="CharacterBody2D"]
+
+[node name="Placeholder" type="Node2D" parent="."]
+script = ExtResource("1_djcbs")
+placeholder_size = Vector2(20, 20)
+metadata/_custom_type_script = ExtResource("1_djcbs")
