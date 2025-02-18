@@ -1,7 +1,10 @@
 extends Panel
 
-var card
+var card: Card
 var is_fullscreen = false
+
+func get_editor() -> CardEditor:
+	return get_node("/root/main")
 
 func attach_cards(card: Card, size: Vector2, is_fullscreen = false):
 	self.card = card
@@ -32,6 +35,13 @@ func attach_cards(card: Card, size: Vector2, is_fullscreen = false):
 func detach_cards():
 	if not is_fullscreen: %Column.remove_child(card.cards_parent)
 
+func set_card_script(card: Card, path: String):
+	var props = {}
+	for p in card.get_script().get_script_property_list(): props[p["name"]] = card.get(p["name"])
+	
+	card.set_script(load(path))
+	for p in props: card.set(p, props[p])
+
 func _on_save_button_pressed(copy = false) -> void:
 	card.title(%Name.text)
 	
@@ -47,11 +57,20 @@ func _on_save_button_pressed(copy = false) -> void:
 	var old_path = null if new_card or copy else card.get_script().resource_path
 	if old_path and path != old_path:
 		DirAccess.rename_absolute(old_path, path)
-		card.get_script().resource_path = path
 		card.get_script().take_over_path(old_path)
-	else:
-		var file = FileAccess.open(path, FileAccess.WRITE)
-		file.store_string(src)
+		card.get_script().resource_path = path
+		get_editor().card_moved(card, old_path, path)
+	
+	var file = FileAccess.open(path, FileAccess.WRITE)
+	file.store_string(src)
+	file.close()
+	card.card_name = n
+	set_card_script(card, path)
+	
+	if new_card: get_editor().card_created(card)
+	get_editor().card_saved(card)
+	
+	_on_name_text_changed(%Name.text)
 
 func _on_save_copy_button_pressed() -> void:
 	_on_save_button_pressed(true)
@@ -137,6 +156,10 @@ func _on_name_text_changed(new_text: String) -> void:
 	elif renamed: %SaveButton.text = "Rename & Save"
 	else: %SaveButton.text = "Save Changes"
 	%SaveButton.disabled = new_text.is_empty()
+
+func _on_delete_pressed() -> void:
+	DirAccess.remove_absolute(card.get_script().resource_path)
+	get_editor().card_deleted(card)
 
 var resizing = false
 func _on_resize_gui_input(event: InputEvent) -> void:

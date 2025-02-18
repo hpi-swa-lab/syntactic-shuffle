@@ -49,20 +49,8 @@ var categories = {
 
 func _ready() -> void:
 	var column = VBoxContainer.new()
-	column.position = Vector2(0, 0)
+	column.position = Vector2(0, 70)
 	add_child(column)
-	
-	var items = []
-	var list = preload("res://addons/cards/autocomplete_input.tscn").instantiate()
-	list.placeholder_text = "Search Card ..."
-	G.put("search", list)
-	list.item_selected.connect(func(item, shift):
-		var camera = get_viewport().get_camera_2d()
-		camera.spawn_connected(item["path"], shift))
-	for info in ProjectSettings.get_global_class_list():
-		if info["base"] == "Card": items.push_back({"name": info["class"], "path": info["path"]})
-	list.list = items
-	column.add_child(list)
 	
 	for category in categories:
 		var label = Label.new()

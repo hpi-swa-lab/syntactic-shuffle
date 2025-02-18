@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://bqninusgeuw0i"]
+[gd_scene load_steps=6 format=3 uid="uid://bqninusgeuw0i"]
 
 [ext_resource type="Script" uid="uid://c75bmfv78rqjm" path="res://main.gd" id="1_h2yge"]
 [ext_resource type="PackedScene" uid="uid://b60kovj1bwg4i" path="res://addons/cards/card_editor.tscn" id="4_1bvp3"]
+[ext_resource type="PackedScene" uid="uid://c5rjbfui0u7bg" path="res://addons/cards/autocomplete_input.tscn" id="5_lquwl"]
 [ext_resource type="Script" uid="uid://cxldeg24krchn" path="res://camera_2d.gd" id="9_kek77"]
 [ext_resource type="Script" uid="uid://dio881dm6xtr3" path="res://hand.gd" id="15_vivmo"]
 
@@ -15,6 +16,14 @@ script = ExtResource("9_kek77")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 script = ExtResource("15_vivmo")
+
+[node name="Search" parent="CanvasLayer" instance=ExtResource("5_lquwl")]
+unique_name_in_owner = true
+offset_left = 18.0
+offset_top = 15.0
+offset_right = -1784.0
+offset_bottom = -1034.0
+placeholder_text = "Create Card ..."
 
 [node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer"]
 offset_left = 351.0
@@ -43,6 +52,7 @@ offset_bottom = 521.0
 unique_name_in_owner = true
 scale = Vector2(0.2, 0.2)
 
+[connection signal="item_selected" from="CanvasLayer/Search" to="." method="_on_search_item_selected"]
 [connection signal="tab_changed" from="CanvasLayer/HBoxContainer/ToplevelCardsList" to="." method="_on_toplevel_cards_list_tab_changed"]
 [connection signal="tab_close_pressed" from="CanvasLayer/HBoxContainer/ToplevelCardsList" to="." method="_on_toplevel_cards_list_tab_close_pressed"]
 [connection signal="pressed" from="CanvasLayer/HBoxContainer/AddButton" to="." method="_on_add_button_pressed"]

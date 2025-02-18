@@ -23,9 +23,7 @@ static func get_id(node: Node):
 static func set_ignore_object(node: Node):
 	node.set_meta("cards_ignore", true)
 
-## Such that the debugger shows the name at the top
-var card_name:
-	get: return get_script().get_global_name()
+var card_name: String
 
 ## Not currently able to move, connect, or emit
 @export var disable = false:
@@ -85,6 +83,7 @@ func is_toplevel(): return not parent
 ########################
 
 func _init(custom_build = null):
+	card_name = get_script().get_global_name()
 	var parent = null
 	if not active_card_list.is_empty():
 		parent = active_card_list.back()

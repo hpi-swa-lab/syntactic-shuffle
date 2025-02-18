@@ -7,6 +7,7 @@ signal process(delta: float)
 var selecting = false
 var selection = {}
 var open_cards := [] as Array[Card]
+var card_library = []
 
 func _process(delta: float) -> void:
 	process.emit(delta)
@@ -18,7 +19,32 @@ func _physics_process(delta: float) -> void:
 # OPEN CLOSE TOPLEVEL CARDS
 #############
 
+func card_moved(card: Card, from: String, to: String):
+	for info in card_library:
+		if info["path"] == from:
+			info["path"] = to
+			info["name"] = card.card_name
+
+func card_created(card: Card):
+	card_library.push_back({"name": card.card_name, "path": card.get_script().resource_path})
+
+func card_saved(card: Card):
+	var index = open_cards.find(card)
+	if index >= 0: %ToplevelCardsList.set_tab_title(index, card.card_name)
+
+func card_deleted(card: Card):
+	var index = open_cards.find(card)
+	if index >= 0: %ToplevelCardsList.remove_tab(index)
+	
+	for info in card_library:
+		if info["path"] == card.get_script().resource_path:
+			card_library.erase(info)
+			break
+
 func _ready() -> void:
+	for info in ProjectSettings.get_global_class_list():
+		if info["base"] == "Card": card_library.push_back({"name": info["class"], "path": info["path"]})
+	%Search.list = card_library
 	load_cards("res://addons/cards/cards/GameCard.gd")
 
 func load_cards(path):
@@ -69,7 +95,7 @@ func _on_add_button_pressed() -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.key_label == KEY_SPACE and event.ctrl_pressed and event.pressed:
-		G.at("search").start_focus()
+		%Search.start_focus()
 		get_viewport().set_input_as_handled()
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		selecting = event.is_pressed()
@@ -83,7 +109,7 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.key_label == KEY_G and event.ctrl_pressed and event.pressed:
 		group_selected()
 	if event is InputEventKey and event.key_label == KEY_S and event.ctrl_pressed and event.pressed:
-		get_parent().save_card()
+		save_card()
 
 #############
 # SELECTION HANDLING
@@ -238,7 +264,7 @@ func spawn_connected(script_path: String, open_toplevel = false):
 	var card = script.create_default() if create else script.new()
 	
 	if open_toplevel:
-		get_parent().open_toplevel_card(card)
+		open_toplevel_card(card)
 		return
 	
 	var selected: Card = get_single_selection()
@@ -261,3 +287,6 @@ func spawn_connected(script_path: String, open_toplevel = false):
 	if selected: selected.try_connect(card)
 	set_as_selection(card)
 	card.visual.try_focus()
+
+func _on_search_item_selected(item, shift: Variant) -> void:
+	spawn_connected(item["path"], shift)

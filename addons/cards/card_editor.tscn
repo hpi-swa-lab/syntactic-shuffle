@@ -58,6 +58,11 @@ expand_to_text_length = true
 layout_mode = 2
 size_flags_horizontal = 3
 
+[node name="Delete" type="Button" parent="MarginContainer/Column/HBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+text = "Delete"
+
 [node name="AutoLayout" type="Button" parent="MarginContainer/Column/HBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 4
@@ -92,6 +97,7 @@ mouse_default_cursor_shape = 12
 
 [connection signal="pressed" from="MarginContainer/Column/HBoxContainer/Icon" to="." method="_on_icon_pressed"]
 [connection signal="text_changed" from="MarginContainer/Column/HBoxContainer/Name" to="." method="_on_name_text_changed"]
+[connection signal="pressed" from="MarginContainer/Column/HBoxContainer/Delete" to="." method="_on_delete_pressed"]
 [connection signal="pressed" from="MarginContainer/Column/HBoxContainer/AutoLayout" to="." method="_on_auto_layout_pressed"]
 [connection signal="pressed" from="MarginContainer/Column/HBoxContainer/SaveButton" to="." method="_on_save_button_pressed"]
 [connection signal="pressed" from="MarginContainer/Column/HBoxContainer/SaveCopyButton" to="." method="_on_save_copy_button_pressed"]
