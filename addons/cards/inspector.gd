@@ -45,13 +45,30 @@ func _report_object(object, field_name, parent, expand):
 	
 	_report_children(object, item, expand)
 
+func _is_array(o):
+	return o is Array or\
+		o is PackedByteArray or\
+		o is PackedStringArray or\
+		o is PackedInt32Array or\
+		o is PackedColorArray or\
+		o is PackedFloat64Array or\
+		o is PackedFloat32Array or\
+		o is PackedInt64Array or\
+		o is PackedVector2Array or\
+		o is PackedVector3Array or\
+		o is PackedVector4Array
+
 func _report_children(object, parent, expand):
-	if object is Object or object is Dictionary:
-		var l = object.keys() if object is Dictionary else object.get_property_list()
+	if object is Object or object is Dictionary or _is_array(object):
+		var l
+		if object is Dictionary: l = object.keys()
+		elif _is_array(object): l = range(0, object.size())
+		else: object.get_property_list()
+		
 		if expand:
 			for prop in l:
-				var n = prop if prop is String else prop["name"]
-				_report_object(object.get(n), n, parent, false)
+				var n = prop["name"] if prop is Dictionary else prop
+				_report_object(object.get(n), str(n), parent, false)
 		else:
 			var loading = %Tree.create_item(parent)
 			loading.set_metadata(0, object)

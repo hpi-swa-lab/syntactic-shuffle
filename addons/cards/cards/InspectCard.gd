@@ -28,7 +28,17 @@ func s():
 	var in_card = InCard.data(any("T"))
 	in_card.position = Vector2(205.1522, 545.3572)
 	
+	var iterator_code_card = CodeCard.create([["inspect", it(any("T"))]], [["out", it(any("T"))]],
+		func(card, out, inspect):
+			last_object = inspect
+			reported_object.emit(inspect)
+			out.call(inspect), [])
+	
+	var iterator_in_card = InCard.data(it(any("T")))
+	iterator_in_card.position = Vector2(205.1522, 545.3572)
+	
 	in_card.c_named("inspect", code_card)
+	iterator_in_card.c_named("inspect", iterator_code_card)
 
 func create_expanded(): return load("res://addons/cards/inspector.tscn").instantiate()
 
