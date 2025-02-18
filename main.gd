@@ -41,11 +41,21 @@ func card_deleted(card: Card):
 			card_library.erase(info)
 			break
 
+const SAVE_FILE = "user://state.save"
+
 func _ready() -> void:
 	for info in ProjectSettings.get_global_class_list():
 		if info["base"] == "Card": card_library.push_back({"name": info["class"], "path": info["path"]})
 	%Search.list = card_library
-	load_cards("res://addons/cards/cards/GameCard.gd")
+	
+	if FileAccess.file_exists(SAVE_FILE):
+		var save = JSON.parse_string(FileAccess.get_file_as_string(SAVE_FILE))
+		if save and save["open_paths"]:
+			for p in save["open_paths"]: load_cards(p)
+
+func _exit_tree() -> void:
+	var save_file = FileAccess.open(SAVE_FILE, FileAccess.WRITE)
+	save_file.store_string(JSON.stringify({"open_paths": open_cards.map(func (c): return c.get_script().resource_path)}))
 
 func load_cards(path):
 	if FileAccess.file_exists(path):
@@ -63,6 +73,8 @@ func center_camera():
 		%CardEditor.position = c.reduce(func(sum, current): return sum + current.global_position, Vector2.ZERO) / c.size()
 
 func open_toplevel_card(card: Card, open = true):
+	%Editor.visible = true
+	
 	card.visual_setup()
 	card.cards_parent.card_scale = 1.1
 	card.cards_parent.light_background = true
@@ -85,6 +97,8 @@ func _on_toplevel_cards_list_tab_close_pressed(tab: int) -> void:
 	open_cards[tab].queue_free()
 	open_cards.remove_at(tab)
 	%ToplevelCardsList.remove_tab(tab)
+	if open_cards.is_empty():
+		%Editor.visible = false
 
 func _on_add_button_pressed() -> void:
 	open_toplevel_card(BlankCard.new())

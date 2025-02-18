@@ -43,6 +43,7 @@ text = " + "
 
 [node name="Editor" parent="CanvasLayer" instance=ExtResource("4_1bvp3")]
 unique_name_in_owner = true
+visible = false
 offset_left = 844.0
 offset_top = 1.0
 offset_right = 924.0
