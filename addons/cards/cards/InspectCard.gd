@@ -7,6 +7,8 @@ var last_object
 
 func allow_edit(): return false
 
+func start_expanded(): return true
+
 func v():
 	title("Inspect")
 	description("")

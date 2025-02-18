@@ -152,6 +152,8 @@ func _ready() -> void:
 	
 	init_signatures()
 	if is_toplevel() and not disable: entered_program(get_editor())
+	
+	if start_expanded(): visual.expanded = true
 
 func init_signatures():
 	if not disable and not initialized_signatures and get_all_incoming().is_empty():
@@ -203,6 +205,8 @@ func can_edit(): return true
 ## any inputs, such as the CellCard, as it would otherwise be considered for
 ## reachability checks.
 func can_be_trigger(): return true
+
+func start_expanded(): return false
 
 func get_editor() -> CardEditor: return Engine.get_main_loop().root.get_node("main")
 
