@@ -1,5 +1,5 @@
 @tool
-extends CardBoundary
+extends CardEditor
 
 var execute_only = ""
 

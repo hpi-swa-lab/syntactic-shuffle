@@ -114,6 +114,7 @@ class GenericTypeSignature extends Signature:
 	func compatible_with_type(other: Signature): return true
 	func compatible_with_generic(other: GenericTypeSignature): return true
 	func make_concrete(incoming: Array[Signature], aggregate = false):
+		incoming = incoming.filter(func (i): return i.provides_data())
 		if incoming.is_empty(): return super.make_concrete(incoming, aggregate)
 		
 		var matching = incoming.filter(func(s): return s.compatible_with(self)).map(func (s): return s.unwrap_command())

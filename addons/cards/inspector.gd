@@ -25,6 +25,9 @@ func clear():
 
 func report_object(object):
 	%Tree.clear()
+	%Tree.set_column_expand(0, true)
+	%Tree.set_column_expand_ratio(1, 3)
+	%Tree.set_column_expand(1, true)
 	
 	if object is String:
 		%Tree.visible = false
@@ -39,7 +42,7 @@ func _report_object(object, field_name, parent, expand):
 	var item: TreeItem = %Tree.create_item(parent)
 	item.set_text(0, field_name)
 	item.set_text(1, str(object))
-	item.set_expand_right(0, false)
+	item.set_expand_right(0, true)
 	item.set_expand_right(1, true)
 	item.collapsed = not expand
 	

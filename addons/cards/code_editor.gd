@@ -60,6 +60,7 @@ func get_function_signature():
 func update_function_signature():
 	%FunctionSignature.text = get_function_signature()
 	save_inputs_outputs()
+	code_card.start_propagate_incoming_connected()
 
 func build_field(name: String, card: Card):
 	var box = VBoxContainer.new()
@@ -104,7 +105,8 @@ func build_field(name: String, card: Card):
 	remove.pressed.connect(func():
 		box.queue_free()
 		await get_tree().process_frame
-		update_function_signature())
+		update_function_signature()
+		save_inputs_outputs())
 	buttons.add_child(remove)
 	var up = Button.new()
 	up.text = "↑"
