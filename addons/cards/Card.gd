@@ -132,17 +132,18 @@ func _ready() -> void:
 	connection_draw_node.card = self
 	add_child(connection_draw_node)
 	
-	var collision = CollisionShape2D.new()
-	collision.shape = RectangleShape2D.new()
-	collision.shape.size = Vector2(100, 100)
-	set_ignore_object(collision)
-	cards_parent.add_child(collision)
 	cards_parent.card_scale = 1.1
 	cards_parent.light_background = true
 	
 	visual_setup()
 	
-	if is_inside_tree(): get_card_boundary().card_entered(self)
+	if is_inside_tree():
+		var collision = CollisionShape2D.new()
+		collision.shape = RectangleShape2D.new()
+		collision.shape.size = Vector2(100, 100)
+		set_ignore_object(collision)
+		cards_parent.add_child(collision)
+		get_card_boundary().card_entered(self)
 	
 	for card in cards:
 		card.setup_finished()
