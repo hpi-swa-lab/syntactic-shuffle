@@ -6,7 +6,7 @@ func v():
 	title("Spawn")
 	description("")
 	icon_data("iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAFNJREFUOI3VksEKgFAQAjX2/395ukbsPqRHRHMWUdGAdihJst26AI4MOvFkeudIRN8b2GaqVFfRkwQlZWtPbG/g7khpHcDvJJgSdVv95Egrog1WnGASIh1+lM11AAAAAElFTkSuQmCC")
-	container_size(Vector2(2000.0, 1600.0))
+	container_size(Vector2(1507.083, 1357.673))
 
 func s():
 	var code_card = CodeCard.create([["node", t("Node")]], [["out", t("Node")]], func (card, out, node):

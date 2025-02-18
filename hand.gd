@@ -66,6 +66,7 @@ func _ready() -> void:
 	
 	for category in categories:
 		var label = Label.new()
+		label.add_theme_color_override("font_color", Color.BLACK)
 		label.text = category
 		var margin = MarginContainer.new()
 		margin.add_theme_constant_override("margin_left", 20)

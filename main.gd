@@ -38,7 +38,8 @@ func center_camera():
 
 func open_toplevel_card(card: Card, open = true):
 	card.visual_setup()
-	card.cards_parent.card_scale = 1.0
+	card.cards_parent.card_scale = 1.1
+	card.cards_parent.light_background = true
 	open_cards.push_back(card)
 	%ToplevelCardsList.add_tab(card.card_name)
 	
