@@ -132,8 +132,6 @@ func _ready() -> void:
 	connection_draw_node.card = self
 	add_child(connection_draw_node)
 	
-	scale = get_base_scale()
-	
 	var collision = CollisionShape2D.new()
 	collision.shape = RectangleShape2D.new()
 	collision.shape.size = Vector2(100, 100)
@@ -143,7 +141,8 @@ func _ready() -> void:
 	cards_parent.light_background = true
 	
 	visual_setup()
-	get_card_boundary().card_entered(self)
+	
+	if is_inside_tree(): get_card_boundary().card_entered(self)
 	
 	for card in cards:
 		card.setup_finished()
@@ -155,9 +154,17 @@ func _ready() -> void:
 	
 	if start_expanded(): visual.expanded = true
 
+func _get_uninitialized(list = []):
+	for c in cards:
+		if not c.initialized_signatures:
+			list.push_back(c)
+		c._get_uninitialized(list)
+	return list
+
 func init_signatures():
 	if not disable and not initialized_signatures and get_all_incoming().is_empty():
 		start_propagate_incoming_connected(true)
+		# for c in _get_uninitialized(): c.initialized_signatures = true
 
 func setup_finished():
 	pass
@@ -355,6 +362,7 @@ func propagate_incoming_connected(seen):
 func propagate_unreachable(seen):
 	if seen.has(self): return
 	seen[self] = &"unreachable"
+	initialized_signatures = true
 	for c in cards:
 		c.propagate_unreachable(seen)
 	for c in get_all_outgoing():

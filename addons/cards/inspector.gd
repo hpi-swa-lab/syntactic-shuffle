@@ -7,6 +7,7 @@ const LOADING_MARKER = "--loading--"
 func attach_cards(card: Card, size: Vector2):
 	self.card = card
 	card.reported_object.connect(report_object)
+	card.clear.connect(clear)
 	
 	if card.last_object: report_object(card.last_object)
 	else:
@@ -18,6 +19,9 @@ func attach_cards(card: Card, size: Vector2):
 
 func detach_cards():
 	pass
+
+func clear():
+	%Tree.clear()
 
 func report_object(object):
 	%Tree.clear()

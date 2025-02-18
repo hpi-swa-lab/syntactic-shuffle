@@ -43,7 +43,7 @@ func s():
 		if property and property in object:
 			var res = object.get(property)
 			for c in card.get_outputs():
-				c.override_signature(Signature.signature_for_value(res))
+				c.override_signature(Signature.sig_array([Signature.signature_for_value(res)]))
 			out.call(res), ["property"])
 	code_card_3.position = Vector2(771.9716, 1767.601)
 	

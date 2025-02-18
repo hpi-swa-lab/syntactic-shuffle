@@ -62,23 +62,37 @@ func v():
 	
 	var data_name_edit = LineEdit.new()
 	data_name_edit.text = data_name
-	data_name_edit.text_changed.connect(func(s): data_name = s)
+	data_name_edit.text_changed.connect(func(s):
+		data_name = s
+		get_editor().card_content_edited(self))
 	data_name_edit.placeholder_text = "Name"
 	ui(data_name_edit)
 	
 	var type_edit = LineEdit.new()
 	type_edit.text = type
-	type_edit.text_changed.connect(func(s): type = s)
+	type_edit.text_changed.connect(func(s):
+		type = s
+		get_editor().card_content_edited(self))
 	type_edit.placeholder_text = "Type"
 	ui(type_edit)
 	
+	var confirm_default = Label.new()
+	confirm_default.text = "Press enter to confirm."
+	confirm_default.add_theme_color_override("font_color", Color.BLACK)
+	confirm_default.visible = false
+	
 	var default_edit = LineEdit.new()
 	default_edit.text = Signature.data_to_expression(default)
+	default_edit.text_changed.connect(func (s): confirm_default.visible = true)
 	default_edit.text_submitted.connect(func(s):
+		confirm_default.visible = false
 		default = G.eval_expression(s)
+		get_editor().card_content_edited(self)
 		data = default)
 	default_edit.placeholder_text = "Default"
 	ui(default_edit)
+	
+	ui(confirm_default)
 
 func s():
 	out_card = StaticOutCard.new("out", Signature.TypeSignature.new(type), true)

@@ -26,16 +26,22 @@ func s():
 	regex_card.get_cell("regex").data = "(?<verb>[^ ]+) (?<name>[^ ]+) HTTP\\/1.1\\r\n(?<headers>[\\S\\s]+)\\r\n\\r\n(?<body>[\\S\\s]*)"
 	
 	var inspect_card = InspectCard.new()
-	inspect_card.position = Vector2(2454.569, 143.417)
+	inspect_card.position = Vector2(3421.24, -92.27754)
 	
 	var inspect_card_2 = InspectCard.new()
 	inspect_card_2.position = Vector2(1463.115, 772.203)
 	
-	var forward_trigger_card = ForwardTriggerCard.new()
-	forward_trigger_card.position = Vector2(4501.917, -434.6002)
+	var get_property_card = GetPropertyCard.new()
+	get_property_card.position = Vector2(2036.885, -350.4081)
+	get_property_card.get_cell("property_name").data = "headers"
+	
+	var split_card = SplitCard.new()
+	split_card.position = Vector2(2422.728, -164.2572)
+	split_card.get_cell("separator").data = "\n"
 	
 	on_server_request_card.c_named("peer", parse_http_card)
 	parse_http_card.c(example_card)
 	example_card.c(regex_card)
 	example_card.c(inspect_card_2)
-	regex_card.c(inspect_card)
+	regex_card.c(get_property_card)
+	get_property_card.c(split_card)

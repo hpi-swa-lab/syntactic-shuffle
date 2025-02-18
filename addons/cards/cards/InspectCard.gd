@@ -3,6 +3,8 @@ extends Card
 class_name InspectCard
 
 signal reported_object(object)
+signal clear()
+
 var last_object
 
 func allow_edit(): return false
@@ -29,3 +31,7 @@ func s():
 	in_card.c_named("inspect", code_card)
 
 func create_expanded(): return load("res://addons/cards/inspector.tscn").instantiate()
+
+func incoming_disconnected(obj: Card):
+	super.incoming_disconnected(obj)
+	clear.emit()

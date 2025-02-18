@@ -60,6 +60,8 @@ func propagate_incoming_connected(seen):
 
 func propagate_unreachable(seen):
 	if seen.has(self): return
+	initialized_signatures = true
+	seen[self] = &"unreachable"
 	# If no connected is reachable, show no signatures
 	actual_signatures = []
 
