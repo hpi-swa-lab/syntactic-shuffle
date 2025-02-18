@@ -2,9 +2,18 @@ extends Panel
 
 var card: Card
 var is_fullscreen = false
+var unsaved_changes = false:
+	get: return unsaved_changes
+	set(v):
+		unsaved_changes = v
+		update_button_state()
 
 func get_editor() -> CardEditor:
 	return get_node("/root/main")
+
+func _ready() -> void:
+	get_editor().after_edit.connect(func (cards: Array):
+		if cards.any(func (c): return card.cards.has(c)): unsaved_changes = true)
 
 func attach_cards(card: Card, size: Vector2, is_fullscreen = false):
 	self.card = card
@@ -16,7 +25,7 @@ func attach_cards(card: Card, size: Vector2, is_fullscreen = false):
 		make_fullscreen()
 	
 	%Name.text = card.visual.get_title()
-	_on_name_text_changed(%Name.text)
+	update_button_state()
 	%Icon.texture_normal = card.visual.get_icon_texture()
 	
 	if card.cards_parent.get_children().filter(func(c):
@@ -70,7 +79,8 @@ func _on_save_button_pressed(copy = false) -> void:
 	if new_card: get_editor().card_template_created(card)
 	get_editor().card_template_saved(card)
 	
-	_on_name_text_changed(%Name.text)
+	unsaved_changes = false
+	update_button_state()
 
 func _on_save_copy_button_pressed() -> void:
 	_on_save_button_pressed(true)
@@ -149,6 +159,10 @@ func _on_icon_pressed() -> void:
 		card.visual.set_icon_texture(texture))
 
 func _on_name_text_changed(new_text: String) -> void:
+	update_button_state()
+
+func update_button_state():
+	var new_text = %Name.text
 	var new_card = card is BlankCard
 	var renamed = not new_card and new_text != card.visual.get_title()
 	%SaveCopyButton.visible = renamed
@@ -156,6 +170,8 @@ func _on_name_text_changed(new_text: String) -> void:
 	elif renamed: %SaveButton.text = "Rename & Save"
 	else: %SaveButton.text = "Save Changes"
 	%SaveButton.disabled = new_text.is_empty()
+	
+	if unsaved_changes: %SaveButton.text += " *"
 
 func _on_delete_pressed() -> void:
 	DirAccess.remove_absolute(card.get_script().resource_path)

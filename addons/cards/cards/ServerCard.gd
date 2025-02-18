@@ -26,7 +26,7 @@ func s():
 	regex_card.get_cell("regex").data = "(?<verb>[^ ]+) (?<name>[^ ]+) HTTP\\/1.1\\r\n(?<headers>[\\S\\s]+)\\r\n\\r\n(?<body>[\\S\\s]*)"
 	
 	var inspect_card = InspectCard.new()
-	inspect_card.position = Vector2(2369.569, 173.417)
+	inspect_card.position = Vector2(2454.569, 143.417)
 	
 	var inspect_card_2 = InspectCard.new()
 	inspect_card_2.position = Vector2(1463.115, 772.203)
