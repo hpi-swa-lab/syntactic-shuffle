@@ -72,8 +72,8 @@ var is_dragging = false
 func input_event(e: InputEvent):
 	if e is InputEventMouseButton and e.button_index == MOUSE_BUTTON_LEFT and e.is_pressed():
 		held = true
-		if not get_selection_manager().is_selected(card):
-			get_selection_manager().set_as_selection(card)
+		if not get_editor().is_selected(card):
+			get_editor().set_as_selection(card)
 	if e is InputEventMouseButton and e.button_index == MOUSE_BUTTON_LEFT and not e.is_pressed():
 		held = false
 		if is_dragging: dragging.emit(false)
@@ -82,12 +82,12 @@ func input_event(e: InputEvent):
 		if not is_dragging:
 			is_dragging = true
 			dragging.emit(true)
-		get_selection_manager().move_selected(e.screen_relative / get_viewport_transform().get_scale() / card.get_card_boundary().global_scale)
+		get_editor().move_selected(e.screen_relative / get_viewport_transform().get_scale() / card.get_card_boundary().global_scale)
 	if e is InputEventMouseButton and e.double_click and e.button_index == MOUSE_BUTTON_LEFT:
 		held = false
 		is_dragging = false
 		expanded = not expanded
-		get_selection_manager().clear_selection()
+		get_editor().clear_selection()
 	if is_dragging and e is InputEventMouseMotion:
 		CardBoundary.card_moved(card)
 
@@ -120,12 +120,12 @@ func _on_card_control_mouse_entered() -> void:
 	%inputs.text = "\n".join(inputs)
 	%outputs.text = "\n".join(card.output_signatures.map(func(s): return s.get_description())) + remembered
 	
-	get_selection_manager().consider_selection(card)
+	get_editor().consider_selection(card)
 
 func _on_card_control_mouse_exited() -> void: %signatures.visible = false
 
-func get_selection_manager() -> CardEditor:
-	return get_viewport().get_camera_2d()
+func get_editor() -> CardEditor:
+	return G.closest_parent_that(self, func (p): return p is CardEditor)
 
 func try_focus():
 	var c = %CardControl.find_next_valid_focus()

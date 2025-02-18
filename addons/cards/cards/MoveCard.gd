@@ -21,7 +21,7 @@ func s():
 			if not did_accelerate:
 				var friction = 20
 				velocity = velocity.lerp(Vector2.ZERO, min(1.0, friction * card.card_parent_in_world().get_process_delta_time()))
-			if body is CharacterBody2D:
+			if body is CharacterBody2D and body.is_inside_tree():
 				body.velocity = velocity
 				body.move_and_slide()
 				velocity = body.velocity

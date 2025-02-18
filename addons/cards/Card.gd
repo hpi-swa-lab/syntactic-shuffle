@@ -15,9 +15,6 @@ static func push_active_card_list(list):
 static func pop_active_card_list():
 	active_card_list.pop_back()
 
-static func editor_sync(message: String, args: Array):
-	if EngineDebugger.is_active(): EngineDebugger.send_message(message, args)
-
 static func get_id(node: Node):
 	if node is Card: return node.id
 	if node is CardBoundary: return node.id
@@ -36,8 +33,8 @@ var card_name:
 		if v == disable: return
 		if is_toplevel() and disable:
 			start_propagate_incoming_connected(true)
-			entered_program(get_selection_manager())
-		if is_toplevel() and not disable: left_program(get_selection_manager())
+			entered_program(get_editor())
+		if is_toplevel() and not disable: left_program(get_editor())
 		disable = v
 		if connection_draw_node: connection_draw_node.queue_redraw()
 		if disable: disconnect_all()
@@ -99,7 +96,7 @@ func _init(custom_build = null):
 
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_PREDELETE:
-		if is_toplevel() and is_inside_tree(): left_program(get_selection_manager())
+		if is_toplevel() and is_inside_tree(): left_program(get_editor())
 		disconnect_all()
 		for c in cards:
 			c.disconnect_all()
@@ -114,7 +111,7 @@ func build_cards_list(custom_build = null):
 	if custom_build: custom_build.call()
 	else: s()
 	pop_active_card_list()
-	cards.append_array(cards_parent.get_children().filter(func (n): return n is Card))
+	cards.append_array(cards_parent.get_children().filter(func(n): return n is Card))
 
 ## Return true if your card should not appear in the cards_parent. E.g., the NodeCard
 func is_offscreen(): return false
@@ -155,7 +152,7 @@ func _ready() -> void:
 			for element in card.get_extra_ui(): ui(element)
 	
 	init_signatures()
-	if is_toplevel() and not disable: entered_program(get_selection_manager())
+	if is_toplevel() and not disable: entered_program(get_editor())
 
 func init_signatures():
 	if not disable and not initialized_signatures and get_all_incoming().is_empty():
@@ -208,7 +205,7 @@ func can_edit(): return true
 ## reachability checks.
 func can_be_trigger(): return true
 
-func get_selection_manager() -> CardEditor: return visual.get_selection_manager()
+func get_editor() -> CardEditor: return visual.get_editor()
 
 func get_card_global_position(): return global_position
 
@@ -432,8 +429,8 @@ func _get_incoming_list(): return get_all_incoming()
 
 func debug_print_signatures(indent = 0):
 	print("\t".repeat(indent) + card_name)
-	print("\t".repeat(indent) + "> " + ", ".join(input_signatures.map(func (s): return s.d)))
-	print("\t".repeat(indent) + "< " + ", ".join(output_signatures.map(func (s): return s.d)))
+	print("\t".repeat(indent) + "> " + ", ".join(input_signatures.map(func(s): return s.d)))
+	print("\t".repeat(indent) + "< " + ", ".join(output_signatures.map(func(s): return s.d)))
 	for c in cards: c.debug_print_signatures(indent + 1)
 
 ########################
@@ -559,8 +556,8 @@ func s():
 static func serialize_card_construction(nodes: Array):
 	if nodes.is_empty(): return "\tpass"
 	
-	var cards = nodes.filter(func (n): return n is Card)
-	var non_cards = nodes.filter(func (n): return not (n is Card))
+	var cards = nodes.filter(func(n): return n is Card)
+	var non_cards = nodes.filter(func(n): return not (n is Card))
 	
 	var cards_desc = ""
 	var var_names = {}

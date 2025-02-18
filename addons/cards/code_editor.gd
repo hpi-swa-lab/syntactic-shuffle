@@ -151,7 +151,7 @@ func _on_add_input_pressed() -> void:
 func _on_add_selected_pressed() -> void:
 	var names = {}
 	var connections = []
-	for selected in code_card.get_selection_manager().get_selection():
+	for selected in code_card.get_editor().get_selection():
 		if selected == code_card: continue
 		var sig = selected.output_signatures
 		# FIXME picking first
