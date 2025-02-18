@@ -446,6 +446,8 @@ func _check_disconnect(them: Card):
 	if (get_card_global_position().distance_to(them.get_card_global_position()) > MAX_CONNECTION_DISTANCE
 		or my_boundary != their_boundary):
 		disconnect_from(them)
+		# FIXME order may be wrong
+		get_editor().card_disconnected(self, them)
 
 func _process(delta: float) -> void:
 	if disable: return

@@ -3,6 +3,7 @@ class_name CardEditor
 
 signal physics_process(delta: float)
 signal process(delta: float)
+signal after_edit(cards: Array[Card])
 
 var selecting = false
 var selection = {}
@@ -19,20 +20,29 @@ func _physics_process(delta: float) -> void:
 # OPEN CLOSE TOPLEVEL CARDS
 #############
 
-func card_moved(card: Card, from: String, to: String):
+func card_content_edited(card: Card):
+	after_edit.emit([card])
+
+func card_connected(from: Card, to: Card):
+	after_edit.emit([from, to])
+
+func card_disconnected(from: Card, to: Card):
+	after_edit.emit([from, to])
+
+func card_template_moved(card: Card, from: String, to: String):
 	for info in card_library:
 		if info["path"] == from:
 			info["path"] = to
 			info["name"] = card.card_name
 
-func card_created(card: Card):
+func card_template_created(card: Card):
 	card_library.push_back({"name": card.card_name, "path": card.get_script().resource_path})
 
-func card_saved(card: Card):
+func card_template_saved(card: Card):
 	var index = open_cards.find(card)
 	if index >= 0: %ToplevelCardsList.set_tab_title(index, card.card_name)
 
-func card_deleted(card: Card):
+func card_template_deleted(card: Card):
 	var index = open_cards.find(card)
 	if index >= 0: %ToplevelCardsList.remove_tab(index)
 	
@@ -55,7 +65,7 @@ func _ready() -> void:
 
 func _exit_tree() -> void:
 	var save_file = FileAccess.open(SAVE_FILE, FileAccess.WRITE)
-	save_file.store_string(JSON.stringify({"open_paths": open_cards.map(func (c): return c.get_script().resource_path)}))
+	save_file.store_string(JSON.stringify({"open_paths": open_cards.map(func(c): return c.get_script().resource_path)}))
 
 func load_cards(path):
 	if FileAccess.file_exists(path):

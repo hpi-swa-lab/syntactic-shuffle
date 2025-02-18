@@ -117,6 +117,7 @@ func try_connect_in(them: Card):
 				for my_signature in my_signatures:
 					if their_signature.compatible_with(my_signature):
 						them.connect_to(parent if parent else self)
+						get_editor().card_connected(them, self)
 						incoming_connected(them)
 						return
 

@@ -19,7 +19,7 @@ func attach_cards(card: Card, size: Vector2, is_fullscreen = false):
 	_on_name_text_changed(%Name.text)
 	%Icon.texture_normal = card.visual.get_icon_texture()
 	
-	if card.cards_parent.get_children().filter(func (c):
+	if card.cards_parent.get_children().filter(func(c):
 		return c is Card and c.position != Vector2.ZERO).is_empty():
 		_on_auto_layout_pressed()
 	
@@ -59,7 +59,7 @@ func _on_save_button_pressed(copy = false) -> void:
 		DirAccess.rename_absolute(old_path, path)
 		card.get_script().take_over_path(old_path)
 		card.get_script().resource_path = path
-		get_editor().card_moved(card, old_path, path)
+		get_editor().card_template_moved(card, old_path, path)
 	
 	var file = FileAccess.open(path, FileAccess.WRITE)
 	file.store_string(src)
@@ -67,8 +67,8 @@ func _on_save_button_pressed(copy = false) -> void:
 	card.card_name = n
 	set_card_script(card, path)
 	
-	if new_card: get_editor().card_created(card)
-	get_editor().card_saved(card)
+	if new_card: get_editor().card_template_created(card)
+	get_editor().card_template_saved(card)
 	
 	_on_name_text_changed(%Name.text)
 
@@ -76,7 +76,7 @@ func _on_save_copy_button_pressed() -> void:
 	_on_save_button_pressed(true)
 
 func _on_auto_layout_pressed() -> void:
-	layout_cards(card.cards_parent.get_children().filter(func (c): return c is Card))
+	layout_cards(card.cards_parent.get_children().filter(func(c): return c is Card))
 
 func init_positions(cards: Array):
 	const RADIUS = 200.0
@@ -159,7 +159,7 @@ func _on_name_text_changed(new_text: String) -> void:
 
 func _on_delete_pressed() -> void:
 	DirAccess.remove_absolute(card.get_script().resource_path)
-	get_editor().card_deleted(card)
+	get_editor().card_template_deleted(card)
 
 var resizing = false
 func _on_resize_gui_input(event: InputEvent) -> void:
