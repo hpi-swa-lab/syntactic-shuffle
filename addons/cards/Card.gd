@@ -204,7 +204,7 @@ func can_edit(): return true
 ## reachability checks.
 func can_be_trigger(): return true
 
-func get_editor() -> CardEditor: return visual.get_editor()
+func get_editor() -> CardEditor: return Engine.get_main_loop().root.get_node("main")
 
 func get_card_global_position(): return global_position
 

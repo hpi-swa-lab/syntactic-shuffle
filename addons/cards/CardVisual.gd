@@ -125,7 +125,7 @@ func _on_card_control_mouse_entered() -> void:
 func _on_card_control_mouse_exited() -> void: %signatures.visible = false
 
 func get_editor() -> CardEditor:
-	return G.closest_parent_that(self, func (p): return p is CardEditor)
+	return get_node("/root/main")
 
 func try_focus():
 	var c = %CardControl.find_next_valid_focus()

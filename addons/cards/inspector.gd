@@ -42,10 +42,12 @@ func _report_object(object, field_name, parent, expand):
 	_report_children(object, item, expand)
 
 func _report_children(object, parent, expand):
-	if object is Object:
-		var l = object.get_property_list()
+	if object is Object or object is Dictionary:
+		var l = object.keys() if object is Dictionary else object.get_property_list()
 		if expand:
-			for prop in l: _report_object(object.get(prop["name"]), prop["name"], parent, false)
+			for prop in l:
+				var n = prop if prop is String else prop["name"]
+				_report_object(object.get(n), n, parent, false)
 		else:
 			var loading = %Tree.create_item(parent)
 			loading.set_metadata(0, object)

@@ -72,6 +72,7 @@ class TypeSignature extends Signature:
 	func compatible_with_generic(other: GenericTypeSignature): return true
 	func compatible_with_type(other: TypeSignature):
 		_ensure_custom_class_hierarchy()
+		if type == "Variant": return true
 		var name = other.type
 		while name:
 			if name == type: return true
@@ -267,7 +268,8 @@ static func data_to_expression(data) -> String:
 	if data is Vector2:
 		return "Vector2" + str(data)
 	if data is String:
-		return "\"" + data.replace("\"", "\\\"").replace("\\", "\\\\") + "\""
+		#return "\"" + data.replace("\\", "\\\\").replace("\"", "\\\"") + "\""
+		return "\"" + data.c_escape() + "\""
 	if data == null:
 		return "null"
 	if data is Array:

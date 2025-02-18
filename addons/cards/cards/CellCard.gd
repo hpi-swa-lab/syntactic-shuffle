@@ -34,18 +34,26 @@ func clone():
 		data = v
 		if out_card: out_card.remember(out_card.static_signature, [data])
 		if update_ui_func: update_ui_func.call(v)
+		update_out_type()
 @export var type: String = "":
 	get: return type
 	set(v):
 		type = v
-		var t = Signature.TypeSignature.new(v)
-		if in_card: in_card.signature = Signature.CommandSignature.new("store", t)
-		if out_card: out_card.override_signature([t] as Array[Signature])
-		if signature_out_card: signature_out_card.invoke([t], cmd("signature_changed", t("Signature")))
+		update_out_type()
 var update_ui_func = null
 
 func can_edit(): return false
 func can_be_trigger(): return false
+
+func update_out_type():
+	var t = Signature.TypeSignature.new(Signature.type_signature(typeof(data)) if data != null and type == "Variant" else type)
+	if in_card and in_card.signature.arg is Signature.TypeSignature and t.type == in_card.signature.arg.type: return
+	
+	if in_card: in_card.signature = Signature.CommandSignature.new("store", t)
+	if out_card: out_card.override_signature([t] as Array[Signature])
+	if signature_out_card: signature_out_card.invoke([t], cmd("signature_changed", t("Signature")))
+	
+	start_propagate_incoming_connected()
 
 func v():
 	title("Data Cell")
@@ -79,6 +87,7 @@ func s():
 	
 	var code_card = CodeCard.create([["arg", cmd("store", any())]], [["out", any()]], func(card, out, arg):
 		data = arg
+		update_out_type()
 		out.call(data))
 	code_card.c(out_card)
 	
@@ -97,15 +106,20 @@ func s():
 func serialize_constructor():
 	return "{0}.create(\"{1}\", \"{2}\", {3})".format([card_name, data_name, type, Signature.data_to_expression(default)])
 
+func change_data_ui(cb):
+	return func():
+		cb.call()
+		get_editor().card_content_edited(parent)
+
 func get_extra_ui() -> Array[Control]:
 	match type:
 		"Vector2":
 			var x = get_number_input()
 			if data != null: x.value = data.x
-			x.value_changed.connect(func(v): data.x = v)
+			x.value_changed.connect(change_data_ui(func(v): data.x = v))
 			var y = get_number_input()
 			if data != null: y.value = data.y
-			y.value_changed.connect(func(v): data.y = v)
+			y.value_changed.connect(change_data_ui(func(v): data.y = v))
 			update_ui_func = func(val):
 				y.set_value_no_signal(val.y)
 				x.set_value_no_signal(val.x)
@@ -113,20 +127,20 @@ func get_extra_ui() -> Array[Control]:
 		"float":
 			var n = get_number_input()
 			if data != null: n.value = data
-			n.value_changed.connect(func(v): data = v)
+			n.value_changed.connect(change_data_ui(func(v): data = v))
 			update_ui_func = func(val): n.set_value_no_signal(val)
 			return [n]
 		"int":
 			var n = get_number_input()
 			n.step = 1
 			if data != null: n.value = data
-			n.value_changed.connect(func(v): data = int(v))
+			n.value_changed.connect(change_data_ui(func(v): data = int(v)))
 			update_ui_func = func(val): n.set_value_no_signal(val)
 			return [n]
 		"bool":
 			var b = CheckButton.new()
 			if data != null: b.button_pressed = data
-			b.toggled.connect(func(b): data = b)
+			b.toggled.connect(change_data_ui(func(b): data = b))
 			update_ui_func = func(v): b.set_pressed_no_signal(v)
 			return [b]
 		"String":
@@ -136,7 +150,7 @@ func get_extra_ui() -> Array[Control]:
 			e.caret_blink = true
 			e.add_theme_font_size_override("font_size", 8)
 			if data != null: e.text = data
-			e.text_changed.connect(func(): data = e.text)
+			e.text_changed.connect(change_data_ui(func(): data = e.text))
 			update_ui_func = func(v): if e.text != v: e.text = v
 			return [e]
 		_:
