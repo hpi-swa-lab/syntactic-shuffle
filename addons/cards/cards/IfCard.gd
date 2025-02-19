@@ -6,7 +6,7 @@ func v():
 	title("If")
 	description("")
 	icon_data("iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAF5JREFUOI3VksEOwDAIQqH//8/s1MYQF+cSD+XkhRcFKQkAQFKS6HOltQc3k1QL4IYI/ASIiqbqlBQQTdUG3CH+VbrBGCA7pwXI6n3NoArv1NwN0b+0nYH/xWU1jgAeiH49EcWufDwAAAAASUVORK5CYII=")
-	container_size(Vector2(2000.0, 1600.0))
+	container_size(Vector2(1776.992, 1131.401))
 
 func s():
 	var code_card = CodeCard.create([["data", any("T")], ["trigger", trg()]], [["out", any("T")]], func (card, out, data):

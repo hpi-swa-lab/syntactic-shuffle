@@ -611,6 +611,20 @@ func test_iterator_make_concrete_with_cards(ready):
 	assert_eq(report_card.input_signatures[0], Signature.IteratorSignature.new(Signature.TypeSignature.new("Vector2")))
 	assert_eq(report_card.output_signatures[0], Signature.TypeSignature.new("Vector2"))
 
+func test_iterator_wrap(ready):
+	var array_card = Card.new(func():
+		StaticOutCard.new("out", Signature.IteratorSignature.new(Signature.TypeSignature.new("Vector2"))))
+	
+	var report_card = CodeCard.new(
+		[["data", Signature.IteratorSignature.new(Signature.GenericTypeSignature.new())]],
+		[["out", Signature.GenericTypeSignature.new()]],
+		func(card, out, data): pass )
+	
+	ready.call()
+	
+	# TODO
+
+
 func test_out_card_signature(ready):
 	var out = OutCard.new()
 	ready.call()

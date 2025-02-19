@@ -35,7 +35,7 @@ func s():
 	inspect_card_2.position = Vector2(4073.443, 990.723)
 	
 	var get_property_card = GetPropertyCard.new()
-	get_property_card.position = Vector2(2690.887, -457.1656)
+	get_property_card.position = Vector2(2541.791, -471.035)
 	get_property_card.get_cell("property_name").data = "content-type"
 	
 	var string_equal_card = StringEqualCard.new()

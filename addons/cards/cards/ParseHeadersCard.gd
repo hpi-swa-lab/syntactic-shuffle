@@ -6,7 +6,7 @@ func v():
 	title("Parse Headers")
 	description("")
 	icon_data("iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAFFJREFUOI3tUkEKADAI0rH/f9mdgohGRJcdJnQoyjSiJEywRtNPEGwAIClJtGLMfT0l6CAuKi1kW1MFt8bMisfyjRYdBaWFSkH7iFER/yvPCQ5ObCYhPaHX4wAAAABJRU5ErkJggg==")
-	container_size(Vector2(2546.731, 1595.794))
+	container_size(Vector2(2419.082, 952.4449))
 
 func s():
 	var get_property_card = GetPropertyCard.new()

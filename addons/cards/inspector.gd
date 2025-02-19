@@ -22,6 +22,7 @@ func detach_cards():
 
 func clear():
 	%Tree.clear()
+	%Text.text = ""
 
 func report_object(object):
 	%Tree.clear()

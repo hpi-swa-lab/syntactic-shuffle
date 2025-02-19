@@ -206,6 +206,13 @@ class StructSignature extends Signature:
 			if prop["name"] == name: return true
 		return false
 
+class Iterator extends RefCounted:
+	var keys_list
+	var values_list
+	func _init(list):
+		keys_list = list
+		values_list = list
+
 static func signature_for_dict(dict: Dictionary):
 	if dict["args"].is_empty():
 		return Signature.TriggerSignature.new()

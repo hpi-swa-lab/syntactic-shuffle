@@ -6,7 +6,7 @@ func v():
 	title("String Equal")
 	description("")
 	icon_data("iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAADtJREFUOI1j/P//PwMlgIki3VQzgJGR8T8yTVcXMFIaiCw4TSbgnf///zMyMIx6gYGBCl4YJEl5QA0AAMvWFhnOfsWcAAAAAElFTkSuQmCC")
-	container_size(Vector2(2000.0, 1600.0))
+	container_size(Vector2(1170.815, 1292.978))
 
 func s():
 	var cell_card = CellCard.create("value", "String", "")
