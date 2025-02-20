@@ -2,21 +2,6 @@
 extends Card
 class_name OutCard
 
-class RememberedValue:
-	var signature: Signature
-	var args: Variant
-	func _init(signature, value):
-		self.signature = signature
-		self.args = value
-	func ensure():
-		for arg in args:
-			# guard against freed objects to which we remember references
-			if not is_instance_valid(arg) and typeof(arg) == TYPE_OBJECT:
-				signature = null
-				args = null
-				return false
-		return true
-
 func _init(remember = false) -> void:
 	self.remember_message = remember
 	super._init()
@@ -24,7 +9,7 @@ func _init(remember = false) -> void:
 var remember_message := false
 var actual_signatures: Array[Signature] = []
 
-var remembered: RememberedValue
+var remembered: Dictionary[Invocation, Invocation.Remembered]
 
 func get_outputs() -> Array[Card]: return [self] as Array[Card]
 
@@ -68,27 +53,33 @@ func propagate_unreachable(seen):
 ## Check if we have a compatible remembered value. If we remember values
 ## in general but we don't currently a value, check our incoming connections.
 func get_remembered_for(signature: Signature, invocation: Invocation):
-	if remembered and get_remembered_value(invocation):
-		if remembered.signature.compatible_with(signature): return self
+	var r = _remembered_for_invocation(invocation)
+	if r and r.valid():
+		if r.signature.compatible_with(signature): return self
 		else: return null
 	else: return _try_connected_remembered(signature, invocation)
 
-func _ensure_remembered():
-	if remembered and not remembered.ensure():
-		remembered = null
-
 func get_remembered_value(invocation):
-	_ensure_remembered()
-	return remembered.args if remembered else null
+	return _remembered_for_invocation(invocation).args
 
 func get_remembered_signature(invocation):
-	_ensure_remembered()
-	return remembered.signature
+	return _remembered_for_invocation(invocation).signature
 
 func _try_connected_remembered(signature: Signature, invocation: Invocation):
 	for card in get_all_incoming():
 		var r = card.get_remembered_for(signature, invocation)
 		if r: return r
+	return null
+
+func _remembered_for_invocation(invocation: Invocation) -> Invocation.Remembered:
+	var r = remembered.get(invocation)
+	if r: return r
+	return remembered.get(Invocation.GLOBAL)
+
+func get_remembered_for_display():
+	for s in output_signatures:
+		var r = get_remembered_for(s, Invocation.GLOBAL)
+		if r: return r.get_remembered_value(Invocation.GLOBAL)
 	return null
 
 func s():
@@ -99,15 +90,15 @@ func v():
 	description("Emit output.")
 	icon_data("iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAIZJREFUOI3FUjsOwCAIBdOlEwfx/kfxIEzdtJMEVNB06ZsMvA8RAP5EIQJ0es2pC78Q2cIgjoyxi1cGkbgnG44mS0MnOFOI9lokaNLOCNMBMTSZJui4a5X3k/wc1yASKaBnEG3CfKKOQQBomRky86Qaass16gT3kAqR6X065egSj7E5tnOTFy92Ir2sNy07AAAAAElFTkSuQmCC")
 
-func remember(signature: Signature, args: Array):
+func remember(signature: Signature, args: Array, invocation: Invocation):
 	assert(remember_message)
-	remembered = RememberedValue.new(signature, args)
+	remembered[invocation] = invocation.remember(signature, args)
 
 func invoke(args: Array, signature: Signature, invocation: Invocation, named = "", source_out = null):
 	if not parent: return
 	if Engine.is_editor_hint(): return
 	
-	if remember_message: remember(signature, args)
+	if remember_message: remember(signature, args, invocation)
 	if source_out: mark_activated(source_out, args)
 	
 	var n = parent.named_outgoing

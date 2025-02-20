@@ -32,7 +32,7 @@ func clone():
 	get: return data
 	set(v):
 		data = v
-		if out_card: out_card.remember(out_card.static_signature, [data])
+		if out_card: out_card.remember(out_card.static_signature, [data], Invocation.GLOBAL)
 		if update_ui_func: update_ui_func.call(v)
 		update_out_type()
 @export var type: String = "":
@@ -96,7 +96,7 @@ func v():
 
 func s():
 	out_card = StaticOutCard.new("out", Signature.TypeSignature.new(type), true)
-	out_card.remember(out_card.static_signature, [data])
+	out_card.remember(out_card.static_signature, [data], Invocation.GLOBAL)
 	#signature_out_card = StaticOutCard.new(cmd("signature_changed", t("Signature")))
 	
 	var code_card = CodeCard.create([["arg", cmd("store", any())]], [["out", any()]], func(card, out, arg):

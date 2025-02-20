@@ -655,7 +655,7 @@ func test_remember_per_invoke(ready):
 	var res = []
 	var a = RememberCard.new()
 	var b = RememberCard.new()
-	var c = CodeCard.new([["a", Card.t("int")], ["b", Card.t("int")]], [], func(card, out, num):
+	var c = CodeCard.new([["a", Card.t("int")], ["b", Card.t("int")]], [], func(card, a, b):
 		res.push_back(true))
 	a.c_named("a", c)
 	b.c_named("b", c)
@@ -666,6 +666,24 @@ func test_remember_per_invoke(ready):
 	b.start([4], Card.t("int"))
 	
 	assert_eq(res, [])
+
+func test_remember_same_invocation(ready):
+	var res = []
+	var s = ManualTriggerCard.new(Card.t("int"))
+	var a = RememberCard.new()
+	var b = RememberCard.new()
+	var c = CodeCard.new([["a", Card.t("int")], ["b", Card.t("int")]], [], func(card, a, b):
+		res.push_back(a + b))
+	s.c(a)
+	s.c(b)
+	a.c_named("a", c)
+	b.c_named("b", c)
+	
+	ready.call()
+	
+	s.trigger(3)
+	
+	assert_eq(res, [6])
 
 func test_out_card_signature(ready):
 	var out = OutCard.new()

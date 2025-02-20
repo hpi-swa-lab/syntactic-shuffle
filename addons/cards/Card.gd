@@ -183,11 +183,11 @@ func mark_activated(from, args):
 		from.mark_signaled_feedback()
 
 func show_feedback_for(to: Node, args: Array):
-	if args.is_empty(): return
+	var obj = "TRG" if args.is_empty() else args[0]
 	if not _feedback.has(to):
 		_feedback[to] = preload("res://addons/cards/feedback_card.tscn").instantiate()
 		_feedback[to].position = Vector2(100, 100)
-	_feedback[to].report_object(args[0])
+	_feedback[to].report_object(obj)
 	connection_draw_node.reposition_feedback()
 var _feedback = {}
 func _delete_feedback_for(to):

@@ -63,9 +63,6 @@ var inputs: Array[Array]
 var pull_only: Array
 
 var error_label: Label
-## Access to the current invocation. If it is unset during output, the card
-## triggered asynchronously.
-var current_invocation: Invocation
 
 var source_code: String = "":
 	get: return source_code
@@ -124,6 +121,9 @@ func invoke(args: Array, signature: Signature, invocation: Invocation, named = "
 	if not inputs.is_empty(): assert(named, "code cards with inputs can only have named connections")
 	if pull_only.has(named): return
 	
+	if parent is IfCard:
+		print("a")
+	
 	var combined_args = []
 	var signatures = []
 	var pulled_remembered = []
@@ -152,14 +152,12 @@ func invoke(args: Array, signature: Signature, invocation: Invocation, named = "
 	
 	if source_out: mark_activated(source_out, args)
 	
-	current_invocation = invocation
-	if should_hyper_invoke(signatures): hyper_invoke(combined_args, signatures)
+	if should_hyper_invoke(signatures): hyper_invoke(combined_args, signatures, invocation)
 	else:
 		for i in range(outputs.size() - 1, -1, -1):
-			combined_args.push_front(_output.bind(outputs[i][0], signatures))
+			combined_args.push_front(_output.bind(invocation, outputs[i][0], signatures))
 		combined_args.push_front(self)
 		process.callv(combined_args)
-	invocation = null
 
 func should_hyper_invoke(signatures):
 	for i in range(signatures.size()):
@@ -168,7 +166,7 @@ func should_hyper_invoke(signatures):
 	return false
 
 # Inspiration from https://github.com/jmoenig/Snap/blob/724297b6391f3d8d964a45b2bc7d0ea29cb8c75e/src/threads.js#L4807
-func hyper_invoke(args, signatures):
+func hyper_invoke(args: Array, signatures: Array, invocation: Invocation):
 	assert(signatures.filter(func(s): return s.has_iterator()).size() == 1, "TODO no support yet for more than one iterator")
 	var iterator_index = -1
 	for i in range(0, signatures.size()):
@@ -180,21 +178,21 @@ func hyper_invoke(args, signatures):
 	for out in outputs:
 		result[out[0]] = range(0, list.size())
 		count[out[0]] = 0
-	var report_result = func(arg, name, index):
+	var report_result = func(arg, invocation, name, index):
 		result[name][index] = arg
 		count[name] += 1
 		if count[name] == list.size():
-			_output(result[name], name, signatures)
+			_output(result[name], invocation, name, signatures)
 	
 	for i in range(0, list.size()):
 		var item = list[i]
 		args[iterator_index] = item
 		var combined_args = [self]
-		for pair in outputs: combined_args.push_back(report_result.bind(pair[0], i))
+		for pair in outputs: combined_args.push_back(report_result.bind(invocation, pair[0], i))
 		combined_args.append_array(args)
 		process.callv(combined_args)
 
-func _output(arg: Variant, name: String, in_signatures: Array):
+func _output(arg: Variant, invocation: Invocation, name: String, in_signatures: Array):
 	var args = [arg] if arg != null else []
 	var output = get_output(name)
 	var out_sig
@@ -206,7 +204,7 @@ func _output(arg: Variant, name: String, in_signatures: Array):
 	else:
 		out_sig = output.output_signatures[0]
 	assert(out_sig)
-	output.invoke(args, out_sig, current_invocation if current_invocation else Invocation.new(), "", output)
+	output.invoke(args, out_sig, invocation, "", output)
 
 func get_output(name: String) -> OutCard:
 	for o in get_outputs():

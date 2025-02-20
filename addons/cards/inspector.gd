@@ -11,8 +11,8 @@ func attach_cards(card: Card, size: Vector2):
 	
 	if card.last_object: report_object(card.last_object)
 	else:
-		var r = card.get_inputs()[0].get_remembered()
-		if r: report_object(r.get_remembered_value()[0])
+		var r = card.get_inputs()[0].get_remembered(Invocation.GLOBAL)
+		if r: report_object(r.get_remembered_value(Invocation.GLOBAL)[0])
 	
 	await get_tree().process_frame
 	self.size = Vector2(600, 400)
