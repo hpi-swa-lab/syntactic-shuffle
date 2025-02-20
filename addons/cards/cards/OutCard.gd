@@ -111,7 +111,7 @@ func remember(signature: Signature, args: Array):
 	assert(remember_message)
 	remembered = RememberedValue.new(signature, args)
 
-func invoke(args: Array, signature: Signature, named = "", source_out = null):
+func invoke(args: Array, signature: Signature, invocation: Invocation, named = "", source_out = null):
 	if not parent: return
 	if Engine.is_editor_hint(): return
 	
@@ -123,10 +123,10 @@ func invoke(args: Array, signature: Signature, named = "", source_out = null):
 	for name in n:
 		for p in n[name]:
 			var obj = parent.lookup_card(p)
-			if obj: obj.invoke(args, signature, name, self)
+			if obj: obj.invoke(args, signature, invocation.pop(), name, self)
 	for out in parent.outgoing:
 		var obj = parent.lookup_card(out)
-		if obj: obj.invoke(args, signature, named, self)
+		if obj: obj.invoke(args, signature, invocation.pop(), named, self)
 	
 	if not _feedback_signaled: parent.show_feedback_for(null, args)
 

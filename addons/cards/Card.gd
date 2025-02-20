@@ -279,7 +279,7 @@ func _get_named(dict) -> Array:
 			var card = lookup_card(p)
 			if card: out.append(card)
 	return out
-func lookup_card(path: NodePath):
+func lookup_card(path: NodePath) -> Card:
 	return ensure_card(get_node_or_null(path))
 static func ensure_card(object: Node) -> Card:
 	if object == null: return null
@@ -388,12 +388,14 @@ var input_signatures: Array[Signature]:
 func get_outputs() -> Array[Card]: return cards.filter(func(c): return c is OutCard)
 func get_inputs() -> Array[Card]: return cards.filter(func(c): return c is InCard)
 
-func invoke(args: Array, signature: Signature, named = "", source_out = null):
+func start(args: Array, signature: Signature, named = ""): invoke(args, signature, Invocation.new(), named)
+
+func invoke(args: Array, signature: Signature, invocation: Invocation, named = "", source_out = null):
 	for input in cards:
 		if ((not named and input is InCard and not input is NamedInCard) or
 			(named and input is NamedInCard and input.input_name == named)):
 			if signature.compatible_with(input.signature):
-				input.invoke(args, signature, "", source_out)
+				input.invoke(args, signature, invocation.push(), "", source_out)
 				mark_activated(source_out, args)
 
 ## Return true if this named connection can exist as part of a cycle

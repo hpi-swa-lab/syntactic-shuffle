@@ -19,7 +19,7 @@ class ManualTriggerCard extends Card:
 		out_card = StaticOutCard.new("out", type)
 	
 	func trigger(data):
-		out_card.invoke([data], type)
+		out_card.start([data], type)
 
 @export_tool_button("Run") var _run = run
 func run():
@@ -468,7 +468,7 @@ func test_conflicting_signatures_for_store(ready):
 	store.c(cell)
 	ready.call()
 	
-	out.invoke([1.0], Signature.TypeSignature.new("float"), "in_float")
+	out.start([1.0], Signature.TypeSignature.new("float"), "in_float")
 
 func test_dedent():
 	assert_eq(CodeEditor.dedent("	a
@@ -509,7 +509,7 @@ func test_initialize_get_property_without_remembered(ready):
 	card.c(get_prop)
 	ready.call()
 	
-	card.get_outputs()[0].invoke([CharacterBody2D.new()], Signature.TypeSignature.new("CharacterBody2D"))
+	card.get_outputs()[0].start([CharacterBody2D.new()], Signature.TypeSignature.new("CharacterBody2D"))
 	
 	assert_eq(get_prop.output_signatures.size(), 1)
 	assert_eq(get_prop.output_signatures[0], Signature.TypeSignature.new("Vector2"))
@@ -529,12 +529,12 @@ func test_iterator_invoke(ready):
 	get_prop.c_named("data", report_card)
 	ready.call()
 	
-	array_card.get_outputs()[0].invoke([[CharacterBody2D.new()]],
+	array_card.get_outputs()[0].start([[CharacterBody2D.new()]],
 		Signature.IteratorSignature.new(Signature.TypeSignature.new("CharacterBody2D")))
 	assert_eq(get_prop.output_signatures[0], Signature.IteratorSignature.new(Signature.TypeSignature.new("Vector2")))
 	
 	for c in array_card.get_outputs():
-		c.invoke([[CharacterBody2D.new(), CharacterBody2D.new()]], Signature.IteratorSignature.new(Signature.TypeSignature.new("Node")))
+		c.start([[CharacterBody2D.new(), CharacterBody2D.new()]], Signature.IteratorSignature.new(Signature.TypeSignature.new("Node")))
 	assert_eq(reported, [Vector2.ZERO, Vector2.ZERO, Vector2.ZERO])
 
 func test_iterator_aggregate(ready):
@@ -557,7 +557,7 @@ func test_iterator_aggregate(ready):
 	assert_eq(report_card.output_signatures[0], Signature.TypeSignature.new("Vector2"))
 	
 	for c in array_card.get_outputs():
-		c.invoke([[CharacterBody2D.new(), CharacterBody2D.new()]], Signature.IteratorSignature.new(Signature.TypeSignature.new("Node")))
+		c.start([[CharacterBody2D.new(), CharacterBody2D.new()]], Signature.IteratorSignature.new(Signature.TypeSignature.new("Node")))
 	assert_eq(reported["reported"], [Vector2.ZERO, Vector2.ZERO])
 
 func test_command_make_concrete():
@@ -618,12 +618,54 @@ func test_iterator_wrap(ready):
 	var report_card = CodeCard.new(
 		[["data", Signature.IteratorSignature.new(Signature.GenericTypeSignature.new())]],
 		[["out", Signature.GenericTypeSignature.new()]],
-		func(card, out, data): pass )
+		func(card, out, data): pass)
 	
 	ready.call()
 	
 	# TODO
 
+func test_overlapping_async_invoke(ready):
+	var res = []
+	var cbs = {}
+	var start = Card.new(func():
+		InCard.new(Card.t("int")).c(
+			StaticOutCard.new("out", Card.t("int"), true)))
+	
+	var async = CodeCard.new([["num", Card.t("int")]], [["out", Card.t("int")]], func(card, out, num):
+		cbs[num] = out.bind(num))
+	
+	var output = CodeCard.new([["l", Card.t("int")], ["r", Card.t("int")]], [], func(card, l, r):
+		res.push_back(l + r))
+	
+	start.c_named("num", async)
+	start.c_named("r", output)
+	async.c_named("l", output)
+	
+	ready.call()
+	
+	start.start([3], Card.t("int"))
+	start.start([4], Card.t("int"))
+	
+	cbs[4].call()
+	cbs[3].call()
+	
+	assert_eq(res, [8, 6])
+
+func test_remember_per_invoke(ready):
+	var res = []
+	var a = RememberCard.new()
+	var b = RememberCard.new()
+	var c = CodeCard.new([["a", Card.t("int")], ["b", Card.t("int")]], [], func(card, out, num):
+		res.push_back(true))
+	a.c_named("a", c)
+	b.c_named("b", c)
+	
+	ready.call()
+	
+	a.start([3], Card.t("int"))
+	b.start([4], Card.t("int"))
+	
+	assert_eq(res, [])
 
 func test_out_card_signature(ready):
 	var out = OutCard.new()

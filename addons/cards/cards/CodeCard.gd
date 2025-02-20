@@ -63,6 +63,9 @@ var inputs: Array[Array]
 var pull_only: Array
 
 var error_label: Label
+## Access to the current invocation. If it is unset during output, the card
+## triggered asynchronously.
+var current_invocation: Invocation
 
 var source_code: String = "":
 	get: return source_code
@@ -117,7 +120,7 @@ func report_error(s: Error):
 func close_error():
 	if error_label: error_label.text = ""
 
-func invoke(args: Array, signature: Signature, named = "", source_out = null):
+func invoke(args: Array, signature: Signature, invocation: Invocation, named = "", source_out = null):
 	if not inputs.is_empty(): assert(named, "code cards with inputs can only have named connections")
 	if pull_only.has(named): return
 	
@@ -149,12 +152,14 @@ func invoke(args: Array, signature: Signature, named = "", source_out = null):
 	
 	if source_out: mark_activated(source_out, args)
 	
+	current_invocation = invocation
 	if should_hyper_invoke(signatures): hyper_invoke(combined_args, signatures)
 	else:
 		for i in range(outputs.size() - 1, -1, -1):
 			combined_args.push_front(_output.bind(outputs[i][0], signatures))
 		combined_args.push_front(self)
 		process.callv(combined_args)
+	invocation = null
 
 func should_hyper_invoke(signatures):
 	for i in range(signatures.size()):
@@ -201,9 +206,9 @@ func _output(arg: Variant, name: String, in_signatures: Array):
 	else:
 		out_sig = output.output_signatures[0]
 	assert(out_sig)
-	output.invoke(args, out_sig, "", output)
+	output.invoke(args, out_sig, current_invocation if current_invocation else Invocation.new(), "", output)
 
-func get_output(name: String):
+func get_output(name: String) -> OutCard:
 	for o in get_outputs():
 		if o.output_name == name: return o
 	return null

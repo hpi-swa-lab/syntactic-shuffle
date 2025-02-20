@@ -51,7 +51,7 @@ func update_out_type():
 	
 	if in_card: in_card.signature = Signature.CommandSignature.new("store", t)
 	if out_card: out_card.override_signature([t] as Array[Signature])
-	if signature_out_card: signature_out_card.invoke([t], cmd("signature_changed", t("Signature")))
+	if signature_out_card: signature_out_card.invoke([t], cmd("signature_changed", t("Signature")), Invocation.new())
 	
 	start_propagate_incoming_connected()
 

@@ -22,8 +22,8 @@ func s():
 
 func entered_program(editor):
 	super.entered_program(editor)
-	enter_out_card.invoke([editor], cmd("enter", t("CardEditor")))
+	enter_out_card.invoke([editor], cmd("enter", t("CardEditor")), Invocation.new())
 
 func left_program(editor):
 	super.left_program(editor)
-	leave_out_card.invoke([editor], cmd("leave", t("CardEditor")))
+	leave_out_card.invoke([editor], cmd("leave", t("CardEditor")), Invocation.new())

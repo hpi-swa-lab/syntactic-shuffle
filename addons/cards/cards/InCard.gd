@@ -97,13 +97,13 @@ func has_connected():
 		if c.output_signatures.any(func(s): return s.compatible_with(signature)): return true
 	return false
 
-func invoke(args: Array, signature: Signature, named = "", source_out = null):
+func invoke(args: Array, signature: Signature, invocation: Invocation, named = "", source_out = null):
 	for card in get_outgoing():
-		card.invoke(args, signature, "", out_card)
+		card.invoke(args, signature, invocation, "", out_card)
 	for name in named_outgoing:
 		for p in named_outgoing[name]:
 			var card = lookup_card(p)
-			if card: card.invoke(args, signature, name, out_card)
+			if card: card.invoke(args, signature, invocation, name, out_card)
 
 func try_connect_in(them: Card):
 	if not parent: return
