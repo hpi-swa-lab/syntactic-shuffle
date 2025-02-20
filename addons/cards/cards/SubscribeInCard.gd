@@ -35,9 +35,9 @@ func signature_changed():
 	if disconnect_card: disconnect_card.signature = signature
 
 func _trigger(command: String, card: Card, invocation: Invocation):
-	var remembered = card.get_remembered_for(signature) if card else get_remembered()
+	var remembered = card.get_remembered_for(signature, invocation) if card else get_remembered(invocation)
 	if remembered:
-		var val = remembered.get_remembered_value()
+		var val = remembered.get_remembered_value(invocation)
 		if command == "connect": _signaled_for[card] = val[0]
 		super.invoke(val, cmd(command, signature), invocation)
 

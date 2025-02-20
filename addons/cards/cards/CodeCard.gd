@@ -135,14 +135,14 @@ func invoke(args: Array, signature: Signature, invocation: Invocation, named = "
 			signatures.push_back(signature)
 		else:
 			if not pair[1].provides_data(): continue
-			var card
+			var card: NamedInCard
 			for c in cards: if c is NamedInCard and c.input_name == pair[0]: card = c
 			if not card: return
-			var remembered = card.get_remembered()
+			var remembered = card.get_remembered(invocation)
 			# not enough args yet
 			if remembered == null: return
-			combined_args.append_array(remembered.get_remembered_value())
-			signatures.push_back(remembered.get_remembered_signature())
+			combined_args.append_array(remembered.get_remembered_value(invocation))
+			signatures.push_back(remembered.get_remembered_signature(invocation))
 			pulled_remembered.push_back(remembered)
 	# FIXME very noisy -- add extra protocol?
 	# for out in pulled_remembered: out.mark_activated(parent)

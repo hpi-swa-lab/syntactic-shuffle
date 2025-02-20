@@ -424,10 +424,10 @@ func get_connected_inputs(out: Array, seen: Dictionary):
 		if i is InCard: out.push_back(i)
 		else: i.get_connected_inputs(out, seen)
 
-func get_remembered_for(signature: Signature):
+func get_remembered_for(signature: Signature, invocation: Invocation):
 	for card in cards:
 		if card is OutCard:
-			var val = card.get_remembered_for(signature)
+			var val = card.get_remembered_for(signature, invocation)
 			if val != null: return val
 	return null
 

@@ -67,35 +67,27 @@ func propagate_unreachable(seen):
 
 ## Check if we have a compatible remembered value. If we remember values
 ## in general but we don't currently a value, check our incoming connections.
-func get_remembered_for(signature: Signature):
-	# if not remember_message: return null
-	
-	if remembered and get_remembered_value():
+func get_remembered_for(signature: Signature, invocation: Invocation):
+	if remembered and get_remembered_value(invocation):
 		if remembered.signature.compatible_with(signature): return self
 		else: return null
-	else: return _try_connected_remembered(signature)
+	else: return _try_connected_remembered(signature, invocation)
 
 func _ensure_remembered():
 	if remembered and not remembered.ensure():
 		remembered = null
 
-func get_remembered_value():
+func get_remembered_value(invocation):
 	_ensure_remembered()
 	return remembered.args if remembered else null
 
-func get_remembered_signature():
+func get_remembered_signature(invocation):
 	_ensure_remembered()
 	return remembered.signature
 
-func get_remembered_for_display():
-	for s in output_signatures:
-		var r = get_remembered_for(s)
-		if r: return r.get_remembered_value()
-	return null
-
-func _try_connected_remembered(signature: Signature):
+func _try_connected_remembered(signature: Signature, invocation: Invocation):
 	for card in get_all_incoming():
-		var r = card.get_remembered_for(signature)
+		var r = card.get_remembered_for(signature, invocation)
 		if r: return r
 	return null
 

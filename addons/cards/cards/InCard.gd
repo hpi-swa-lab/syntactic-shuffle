@@ -70,11 +70,11 @@ func propagate_unreachable(seen):
 func _get_incoming_list():
 	return parent.get_incoming() if parent else []
 
-func get_remembered_for(signature: Signature):
+func get_remembered_for(signature: Signature, invocation: Invocation):
 	if not parent: return null
-	for card in parent.get_all_incoming():
+	for card in _get_incoming_list():
 		if is_valid_incoming(card, signature):
-			var val = card.get_remembered_for(signature)
+			var val = card.get_remembered_for(signature, invocation)
 			if val: return val
 	return null
 
@@ -87,8 +87,8 @@ func is_valid_incoming(card, signature):
 
 func get_inputs() -> Array[Card]: return [self] as Array[Card]
 
-func get_remembered():
-	return get_remembered_for(signature)
+func get_remembered(invocation: Invocation):
+	return get_remembered_for(signature, invocation)
 
 func has_connected():
 	# NOTE: cannot use self.actual_signatures here since since is used during the

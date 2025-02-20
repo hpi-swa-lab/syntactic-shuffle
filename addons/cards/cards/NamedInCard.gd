@@ -64,14 +64,5 @@ func rename(new_name: String):
 	input_name = new_name
 	parent.connection_draw_node.queue_redraw()
 
-func get_remembered_for(signature: Signature):
-	if not parent: return null
-	for p in parent.named_incoming.get(input_name, []):
-		var card = parent.lookup_card(p)
-		if card and is_valid_incoming(card, signature):
-			var val = card.get_remembered_for(signature)
-			if val != null: return val
-	return null
-
 func serialize_constructor():
 	return "{0}.named_data(\"{1}\", {2})".format([card_name, input_name, signature.serialize_gdscript()])
