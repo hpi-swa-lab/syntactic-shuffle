@@ -108,11 +108,11 @@ func s():
 	in_card = InCard.data(cmd("store", any()))
 	in_card.c_named("arg", code_card)
 	
-	var trigger_code_card = CodeCard.create([], [["out", any()]], func(card, out): out.call(data))
+	var trigger_code_card = CodeCard.create([["trigger", trg()]], [["out", any()]], func(card, out): out.call(data))
 	trigger_code_card.c(out_card)
 	
 	var trigger_card = InCard.trigger()
-	trigger_card.c(trigger_code_card)
+	trigger_card.c_named("trigger", trigger_code_card)
 	
 	# refresh type info
 	self.type = type

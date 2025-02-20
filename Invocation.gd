@@ -6,8 +6,8 @@ static var GLOBAL = Invocation.new()
 
 class Remembered extends RefCounted:
 	var args
-	var signature
-	func _init(v, s):
+	var signature: Signature
+	func _init(v: Array, s: Signature):
 		args = v
 		signature = s
 	func clear():

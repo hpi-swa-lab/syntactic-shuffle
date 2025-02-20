@@ -9,7 +9,7 @@ func v():
 	container_size(Vector2(1135.335, 831.1046))
 
 func s():
-	var code_card = CodeCard.create([["string", t("String")]], [["out", t("")]], func (card, out, string):
+	var code_card = CodeCard.create([["string", t("String")]], [["out", t("String")]], func (card, out, string):
 		out.call(JSON.parse_string(string))
 , [])
 	code_card.position = Vector2(533.6737, 400.0007)

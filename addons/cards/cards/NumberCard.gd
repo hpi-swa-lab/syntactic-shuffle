@@ -30,8 +30,8 @@ func s():
 	var in_card_4 = InCard.trigger()
 	in_card_4.position = Vector2(622.0853, 66.68216)
 	
-	var code_card = CodeCard.create([["trigger", trg()], ["current", t("float")]], [["out", t("float")]], func(card, current):
-		card.output("out", [current + 1]), ["current"])
+	var code_card = CodeCard.create([["trigger", trg()], ["current", t("float")]], [["out", t("float")]], func(card, out, current):
+		out.call(current + 1), ["current"])
 	code_card.position = Vector2(1111.923, 1198.735)
 	
 	cell_card.c(out_card)

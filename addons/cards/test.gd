@@ -18,8 +18,8 @@ class ManualTriggerCard extends Card:
 	func s():
 		out_card = StaticOutCard.new("out", type)
 	
-	func trigger(data):
-		out_card.start([data], type)
+	func trigger(args):
+		out_card.start(args, type)
 
 @export_tool_button("Run") var _run = run
 func run():
@@ -163,7 +163,7 @@ func test_type_of_cell_card(ready):
 	input.c(num)
 	ready.call()
 	
-	input.trigger(1.0)
+	input.trigger([1.0])
 
 func test_named_addition_and_store(ready):
 	var store = NumberCard.new()
@@ -533,8 +533,7 @@ func test_iterator_invoke(ready):
 		Signature.IteratorSignature.new(Signature.TypeSignature.new("CharacterBody2D")))
 	assert_eq(get_prop.output_signatures[0], Signature.IteratorSignature.new(Signature.TypeSignature.new("Vector2")))
 	
-	for c in array_card.get_outputs():
-		c.start([[CharacterBody2D.new(), CharacterBody2D.new()]], Signature.IteratorSignature.new(Signature.TypeSignature.new("Node")))
+	array_card.get_outputs()[0].start([[CharacterBody2D.new(), CharacterBody2D.new()]], Signature.IteratorSignature.new(Signature.TypeSignature.new("Node")))
 	assert_eq(reported, [Vector2.ZERO, Vector2.ZERO, Vector2.ZERO])
 
 func test_iterator_aggregate(ready):
@@ -681,7 +680,7 @@ func test_remember_same_invocation(ready):
 	
 	ready.call()
 	
-	s.trigger(3)
+	s.trigger([3])
 	
 	assert_eq(res, [6])
 
@@ -689,3 +688,20 @@ func test_out_card_signature(ready):
 	var out = OutCard.new()
 	ready.call()
 	assert(not out.input_signatures.is_empty())
+
+func test_order_independent_invoke(ready):
+	var res = []
+	var source = ManualTriggerCard.new(Card.t("int"))
+	var trigger = ForwardTriggerCard.new()
+	var if_card = IfCard.new()
+	var target = CodeCard.new([["in", Card.t("int")]], [], func(card, num):
+		res.push_back(num))
+	
+	# we connect the trigger first, such that the data may not be available yet
+	source.c(trigger)
+	source.c(if_card)
+	trigger.c(if_card)
+	if_card.c_named("in", target)
+	ready.call()
+	source.trigger([3])
+	assert_eq(res, [3])

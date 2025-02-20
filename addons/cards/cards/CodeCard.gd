@@ -117,33 +117,43 @@ func report_error(s: Error):
 func close_error():
 	if error_label: error_label.text = ""
 
+var pending_invoke: Dictionary[Invocation, Dictionary] = {}
+func _get_pending_dict():
+	var r = {}
+	for pair in inputs: r[pair[0]] = []
+	return r
+
 func invoke(args: Array, signature: Signature, invocation: Invocation, named = "", source_out = null):
-	if not inputs.is_empty(): assert(named, "code cards with inputs can only have named connections")
-	if pull_only.has(named): return
+	if not pending_invoke.has(invocation): pending_invoke.set(invocation, _get_pending_dict())
+	var pending := pending_invoke.get(invocation)
+	var input = get_input(named)
+	if not signature.compatible_with(input.signature): return
+	pending[named].push_back(Invocation.Remembered.new(args, signature))
 	
 	var combined_args = []
 	var signatures = []
-	var pulled_remembered = []
+	var has_at_least_one_non_pull = false
 	for pair in inputs:
-		if pair[0] == named:
-			if not signature.compatible_with(pair[1]): return
+		if pending[pair[0]].is_empty():
 			if not pair[1].provides_data(): continue
-			combined_args.append_array(args)
-			signatures.push_back(signature)
-		else:
-			if not pair[1].provides_data(): continue
-			var card: NamedInCard
-			for c in cards: if c is NamedInCard and c.input_name == pair[0]: card = c
-			if not card: return
+			var card = get_input(pair[0])
 			var remembered = card.get_remembered(invocation)
 			# not enough args yet
 			if remembered == null: return
 			combined_args.append_array(remembered.get_remembered_value(invocation))
 			signatures.push_back(remembered.get_remembered_signature(invocation))
-			pulled_remembered.push_back(remembered)
+		else:
+			has_at_least_one_non_pull = has_at_least_one_non_pull or not pull_only.has(pair[0])
+			combined_args.append_array(pending[pair[0]][0].args)
+			signatures.push_back(pending[pair[0]][0].signature)
+	if not has_at_least_one_non_pull: return
+	# success! we got enough, so we can pop for this invocation now
+	for pair in inputs:
+		if not pending[pair[0]].is_empty(): pending[pair[0]].pop_front()
 	# FIXME very noisy -- add extra protocol?
 	# for out in pulled_remembered: out.mark_activated(parent)
 	if process.get_argument_count() - outputs.size() - 1 != combined_args.size():
+		push_error("Need {0} arguments to invoke (received {1}).".format([process.get_argument_count(), combined_args.size() + outputs.size() + 1]))
 		report_error(Error.Generic.new("Need {0} arguments to invoke (received {1}).".format([process.get_argument_count(), combined_args.size()])))
 		return
 	
@@ -190,7 +200,6 @@ func hyper_invoke(args: Array, signatures: Array, invocation: Invocation):
 		process.callv(combined_args)
 
 func _output(arg: Variant, invocation: Invocation, name: String, in_signatures: Array):
-	var args = [arg] if arg != null else []
 	var output = get_output(name)
 	var out_sig
 	if output.output_signatures.size() != 1:
@@ -201,11 +210,17 @@ func _output(arg: Variant, invocation: Invocation, name: String, in_signatures: 
 	else:
 		out_sig = output.output_signatures[0]
 	assert(out_sig)
+	var args = [arg] if out_sig.provides_data() else []
 	output.invoke(args, out_sig, invocation, "", output)
 
 func get_output(name: String) -> OutCard:
 	for o in get_outputs():
 		if o.output_name == name: return o
+	return null
+
+func get_input(name: String) -> InCard:
+	for o in get_inputs():
+		if o.input_name == name: return o
 	return null
 
 func get_source_code():
