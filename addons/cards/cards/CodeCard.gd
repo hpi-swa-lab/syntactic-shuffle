@@ -121,9 +121,6 @@ func invoke(args: Array, signature: Signature, invocation: Invocation, named = "
 	if not inputs.is_empty(): assert(named, "code cards with inputs can only have named connections")
 	if pull_only.has(named): return
 	
-	if parent is IfCard:
-		print("a")
-	
 	var combined_args = []
 	var signatures = []
 	var pulled_remembered = []
