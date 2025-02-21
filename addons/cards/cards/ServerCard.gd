@@ -9,10 +9,32 @@ func v():
 	container_size(Vector2(2000.0, 1600.0))
 
 func s():
-	var code_card = CodeCard.create([["peer", t("StreamPeerTCP")], ["data", t("String")]], [], func (card, peer, data):
-		peer.put_string(data)
-		peer.disconnect_from_host()
-, ["peer"])
+	var card = Card.new(func ():
+		pass,
+	func (c):
+		c.title("mycard")
+		c.description("")
+		c.icon_data("iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAHtJREFUOI2lk1EOwCAIQ6nx/lfuvkxYLVOyfhpoH6ggGX80ug0AXoktAwAkic0AANX5ViMiQl1dclWHvESHeEWwRBI6ymk0uGtcJEqUzdb5dK7arDvIRpagSnOU2zvIaS5RZUc4EWWqqQUOt1rkRlA1f41QLvFW7d+oegAzyGEZyise1wAAAABJRU5ErkJggg=="))
+	card.position = Vector2(3709.155, 27.41008)
+	
+	var card_2 = Card.new(func ():
+		pass,
+	func (c):
+		c.title("asdasd")
+		c.description("")
+		c.icon_data("iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAGNJREFUOI2tk0EOgCAMBHcM///yejWm1NXKEeg00wUkWYO1JMk2X4oBH5PukrQFAJFaCQCcav2v8KZ7CbBN6l8COgjg+/7jDK4FldoWcL3cKUUpdENtAUki43ewusMkUjT8zicePywlw3S6GwAAAABJRU5ErkJggg=="))
+	card_2.position = Vector2(3691.806, 742.5928)
+	
+	var card_3 = Card.new(func ():
+		pass,
+	func (c):
+		c.title("tree")
+		c.description("")
+		c.icon_data("iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAGlJREFUOI3NksEOwCAIQ9vF///l7sTiTFFZPKxHhGdToCQ4kXweJNE2AWg7Q1F3oDYWXFPUSGp8vzJrTpLYuywDnF4A98NKNoMKhNkagXn6obMZ/AsQR7MK1QLcxW0DsuHMxXSNnxxUdQPgf0AZi4LZ1wAAAABJRU5ErkJggg=="))
+	card_3.position = Vector2(4009.879, 439.9413)
+	
+	var code_card = CodeCard.create([["peer", t("StreamPeerTCP")], ["data", t("String")]], [], func ():
+		pass, ["peer"])
 	code_card.position = Vector2(3193.317, 1645.337)
 	
 	var example_card = ExampleCard.new()

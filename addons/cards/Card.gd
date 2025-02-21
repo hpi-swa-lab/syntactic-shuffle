@@ -85,7 +85,7 @@ func is_toplevel(): return not parent
 ## SETUP AND VISUALS
 ########################
 
-func _init(custom_build = null):
+func _init(custom_build = null, custom_visual_setup = null):
 	card_name = get_script().get_global_name()
 	var parent = null
 	if not active_card_list.is_empty():
@@ -95,6 +95,8 @@ func _init(custom_build = null):
 	cards_parent.child_order_changed.connect(func():
 		_cards = Array(cards_parent.get_children().map(ensure_card).filter(func(s): return s is Card),
 			TYPE_OBJECT, "Node2D", Card))
+	
+	if custom_visual_setup: prepare_for_showing(custom_visual_setup)
 
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_PREDELETE:
@@ -124,28 +126,34 @@ func entered_program(manager): for card in cards: card.entered_program(manager)
 ## This card or its parent just left the program
 func left_program(manager): for card in cards: card.left_program(manager)
 
-func visual_setup():
+func visual_setup(custom_visual_setup = null):
 	visual = preload("res://addons/cards/CardVisual.tscn").instantiate()
 	visual.dragging.connect(func(d): dragging = d)
 	visual.paused = paused
 	add_child(visual)
-	v()
+	custom_visual_setup.call(self) if custom_visual_setup else v()
 
 func _ready() -> void:
+	if not visual: prepare_for_showing()
+
+func prepare_for_showing(custom_visual_setup = null):
 	connection_draw_node.card = self
 	add_child(connection_draw_node)
 	
 	cards_parent.card_scale = 1.1
 	cards_parent.light_background = true
 	
-	visual_setup()
+	visual_setup(custom_visual_setup)
 	
-	if is_inside_tree():
+	# For the toplevel card, we do not need a collision shape
+	if parent:
 		var collision = CollisionShape2D.new()
 		collision.shape = RectangleShape2D.new()
 		collision.shape.size = Vector2(100, 100)
 		set_ignore_object(collision)
 		cards_parent.add_child(collision)
+	
+	if is_inside_tree():
 		get_card_boundary().card_entered(self)
 	
 	for card in cards:
@@ -561,7 +569,16 @@ func clone():
 	return get_script().new()
 
 func serialize_constructor():
-	return "{0}.new()".format([card_name])
+	if get_script().get_global_name() == "BlankCard" or get_script().get_global_name() == "Card":
+		return "Card.new(func ():
+{cards},
+	func (c):
+{visual})".format({
+		"cards": serialize_card_construction(cards_parent.get_nodes_for_serialization()).indent("\t"),
+		"visual": serialize_visual_construction(Vector2.ZERO, "c.").indent("\t")
+	})
+	else:
+		return "{0}.new()".format([card_name])
 
 func serialize_gdscript(overwrite_name: String = "", size: Vector2 = Vector2.ZERO):
 	# FIXME \u0020 below: VSCode's format has a bug where the space is removed on space
@@ -570,19 +587,26 @@ extends Card
 class_name\u0020{name}
 
 func v():
-	title(\"{title}\")
-	description(\"{description}\")
-	icon_data(\"{icon_data}\"){size}{allow_cycles}
+{visual}
 
 func s():
 {cards}".format({
 		"name": overwrite_name if overwrite_name else card_name,
+		"visual": serialize_visual_construction(size),
+		"cards": serialize_card_construction(cards_parent.get_nodes_for_serialization())
+	})
+
+func serialize_visual_construction(size: Vector2 = Vector2.ZERO, accessor: String = ""):
+	return "\t{accessor}title(\"{title}\")
+	{accessor}description(\"{description}\")
+	{accessor}icon_data(\"{icon_data}\"){size}{allow_cycles}".format({
 		"title": visual.get_title(),
 		"description": visual.get_description(),
 		"icon_data": visual.get_icon_data(),
+		# FIXME still needed?
 		"allow_cycles": "\n\tallow_cycles()" if allows_cycles else "",
 		"size": "\n\tcontainer_size(Vector2" + str(size) + ")" if size != Vector2.ZERO else "",
-		"cards": serialize_card_construction(cards_parent.get_nodes_for_serialization())
+		"accessor": accessor
 	})
 
 static func serialize_card_construction(nodes: Array):

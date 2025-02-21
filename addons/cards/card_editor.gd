@@ -32,8 +32,8 @@ func attach_cards(card: Card, size: Vector2, is_fullscreen = false):
 		return c is Card and c.position != Vector2.ZERO).is_empty():
 		_on_auto_layout_pressed()
 	
-	var lower_right = card.cards_parent.get_children().reduce(func (max, c): return max.max(c.position), Vector2.ZERO) + CardVisual.base_card_size
-	size = lower_right
+	var lower_right = card.cards_parent.get_children().reduce(func (max, c): return max.max(c.position), Vector2.ZERO)
+	size = (lower_right + CardVisual.base_card_size).max(Vector2(1200, 800))
 	
 	await get_tree().process_frame
 	
@@ -55,7 +55,6 @@ func set_card_script(card: Card, path: String):
 
 func _on_save_button_pressed(copy = false) -> void:
 	var s = card.visual.get_container_size() if is_fullscreen else size
-	card.title(%Name.text)
 	card.container_size(s)
 	
 	var new_card = card is BlankCard
@@ -164,6 +163,7 @@ func _on_icon_pressed() -> void:
 
 func _on_name_text_changed(new_text: String) -> void:
 	update_button_state()
+	card.title(new_text)
 
 func update_button_state():
 	var new_text = %Name.text
