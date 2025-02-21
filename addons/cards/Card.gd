@@ -590,6 +590,7 @@ static func serialize_card_construction(nodes: Array):
 	if nodes.is_empty(): return "\tpass"
 	
 	var cards = nodes.filter(func(n): return n is Card)
+	cards.sort_custom(func (a, b): return a.card_name.naturalnocasecmp_to(b.card_name) < 0)
 	var non_cards = nodes.filter(func(n): return not (n is Card))
 	
 	var cards_desc = ""

@@ -176,6 +176,16 @@ func _relayout():
 func get_cards():
 	return get_children().filter(func(s): return s is Card and not s.dragging)
 
+func update_z_order():
+	var i = 1
+	for card in get_children():
+		if card is Card:
+			if card.visual.expanded:
+				card.visual.z_index = i * 2
+				i += 1
+			else:
+				card.visual.z_index = 2
+
 func _apply_card_transform(card: Node2D, new_transform: Transform2D):
 	if card.transform != new_transform:
 		var tween = get_tree().create_tween()

@@ -32,6 +32,8 @@ var expanded = false:
 		elif editor:
 			editor.detach_cards()
 			editor.queue_free()
+		
+		update_z_order()
 
 @export var paused = false:
 	get: return paused
@@ -67,11 +69,19 @@ func _ready() -> void:
 func get_rect():
 	return global_transform * %CardControl.get_rect()
 
+func update_z_order():
+	card.get_card_boundary().update_z_order()
+
+func raise():
+	card.get_parent().move_child(card, -1)
+	update_z_order()
+
 var held = false
 var is_dragging = false
 func input_event(e: InputEvent):
 	if e is InputEventMouseButton and e.button_index == MOUSE_BUTTON_LEFT and e.is_pressed():
 		held = true
+		raise()
 		if not get_editor().is_selected(card):
 			get_editor().set_as_selection(card)
 	if e is InputEventMouseButton and e.button_index == MOUSE_BUTTON_LEFT and not e.is_pressed():
