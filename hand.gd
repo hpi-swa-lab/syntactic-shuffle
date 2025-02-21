@@ -63,7 +63,7 @@ func _ready() -> void:
 		
 		const STACK_SIZE = Vector2(140, 100)
 		
-		var stack = CardBoundary.new()
+		var stack = CardBoundary.new(null)
 		stack.duplicate_on_drag = true
 		stack.card_layout = CardBoundary.Layout.COLLAPSED_ROW
 		stack.disable_on_enter = true
@@ -88,7 +88,7 @@ func _ready() -> void:
 		
 		column.add_spacer(false)
 	
-	var t = Trash.new()
+	var t = Trash.new(null)
 	t.position = Vector2(60, 80 + categories.size() * 145)
 	column.add_child(t)
 

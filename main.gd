@@ -179,18 +179,18 @@ func duplicate_selected():
 	
 	var container = G.eval_object("@tool\nextends Card\nfunc s():\n{0}".format([src]), func(): return Card.new())
 	
-	var parent = selection.keys()[0].get_parent()
+	var parent = selection.keys()[0].parent
 	clear_selection()
 	for c in container.cards:
 		container.cards_parent.remove_child(c)
-		parent.add_child(c)
+		parent.add_card(c)
 		add_to_selection(c)
 
 func group_selected():
 	var cards = selection.keys()
 	clear_selection()
 	var parent = BlankCard.new()
-	cards[0].get_parent().add_child(parent)
+	cards[0].parent.add_card(parent)
 	parent.position = cards.map(func(c): return c.position).reduce(func(sum, v): return sum + v) / cards.size() - CardVisual.DEFAULT_EDITOR_SIZE * parent.get_base_scale() * 0.25
 	if parent.visual: parent.visual.expanded = true
 	
@@ -301,13 +301,12 @@ func spawn_connected(script_path: String, open_toplevel = false):
 	else:
 		var camera_pos = get_viewport_rect().size / 2
 		var b = CardBoundary.boundary_at_position(camera_pos)
-		pos = Vector2(300, 300)
 		parent = b.get_parent_card()
 		if not parent: parent = b
 	
-	card.position = pos
-	
 	parent.add_card(card)
+	if pos: card.position = pos
+	else: card.global_position = get_viewport().get_camera_2d().global_position
 	if selected: selected.try_connect(card)
 	set_as_selection(card)
 	card.visual.try_focus()

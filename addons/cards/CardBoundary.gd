@@ -21,6 +21,7 @@ enum Layout {
 @export var card_scale = 0.2
 @export var duplicate_on_drag = false
 @export var id: String
+var parent_card: Card
 
 # we close the expanded view when we leave the collision area, so add more collision behind the cards when expanded
 var _extra_collision = CollisionShape2D.new()
@@ -32,6 +33,9 @@ var hovered = false:
 			hovered = v
 			_extra_collision.disabled = not hovered
 			_relayout()
+
+func _init(parent: Card):
+	parent_card = parent
 
 func _ready() -> void:
 	add_to_group("card_boundary")
@@ -124,7 +128,7 @@ func contains_screen_position(pos: Vector2):
 				return true
 	return false
 
-func get_parent_card(): return G.closest_parent_that(self, func(n): return n is Card)
+func get_parent_card(): return parent_card
 
 func card_left(card: Card):
 	card.parent = null

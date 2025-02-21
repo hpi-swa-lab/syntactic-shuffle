@@ -9,30 +9,6 @@ func v():
 	container_size(Vector2(2000.0, 1600.0))
 
 func s():
-	var card = Card.new(func ():
-		pass,
-	func (c):
-		c.title("mycard")
-		c.description("")
-		c.icon_data("iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAHtJREFUOI2lk1EOwCAIQ6nx/lfuvkxYLVOyfhpoH6ggGX80ug0AXoktAwAkic0AANX5ViMiQl1dclWHvESHeEWwRBI6ymk0uGtcJEqUzdb5dK7arDvIRpagSnOU2zvIaS5RZUc4EWWqqQUOt1rkRlA1f41QLvFW7d+oegAzyGEZyise1wAAAABJRU5ErkJggg=="))
-	card.position = Vector2(3709.155, 27.41008)
-	
-	var card_2 = Card.new(func ():
-		pass,
-	func (c):
-		c.title("asdasd")
-		c.description("")
-		c.icon_data("iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAGNJREFUOI2tk0EOgCAMBHcM///yejWm1NXKEeg00wUkWYO1JMk2X4oBH5PukrQFAJFaCQCcav2v8KZ7CbBN6l8COgjg+/7jDK4FldoWcL3cKUUpdENtAUki43ewusMkUjT8zicePywlw3S6GwAAAABJRU5ErkJggg=="))
-	card_2.position = Vector2(3691.806, 742.5928)
-	
-	var card_3 = Card.new(func ():
-		pass,
-	func (c):
-		c.title("tree")
-		c.description("")
-		c.icon_data("iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAGlJREFUOI3NksEOwCAIQ9vF///l7sTiTFFZPKxHhGdToCQ4kXweJNE2AWg7Q1F3oDYWXFPUSGp8vzJrTpLYuywDnF4A98NKNoMKhNkagXn6obMZ/AsQR7MK1QLcxW0DsuHMxXSNnxxUdQPgf0AZi4LZ1wAAAABJRU5ErkJggg=="))
-	card_3.position = Vector2(4009.879, 439.9413)
-	
 	var code_card = CodeCard.create([["peer", t("StreamPeerTCP")], ["data", t("String")]], [], func ():
 		pass, ["peer"])
 	code_card.position = Vector2(3193.317, 1645.337)
@@ -57,10 +33,10 @@ func s():
 	if_card.position = Vector2(2589.533, 437.2175)
 	
 	var inspect_card = InspectCard.new()
-	inspect_card.position = Vector2(1310.254, 946.3888)
+	inspect_card.position = Vector2(3590.185, 1399.205)
 	
 	var inspect_card_2 = InspectCard.new()
-	inspect_card_2.position = Vector2(3590.185, 1399.205)
+	inspect_card_2.position = Vector2(1310.254, 946.3888)
 	
 	var on_server_request_card = OnServerRequestCard.new()
 	on_server_request_card.position = Vector2(301.9791, 300.826)
@@ -80,12 +56,18 @@ func s():
 	regex_card.position = Vector2(1925.457, 141.1403)
 	regex_card.get_cell("regex").data = "(?<verb>[^ ]+) (?<name>[^ ]+) HTTP\\/1.1\\r\n(?<headers>[\\S\\s]+)\\r\n\\r\n(?<body>[\\S\\s]*)"
 	
+	var request_card = RequestCard.new()
+	request_card.position = Vector2(4594.837, -284.5188)
+	request_card.get_cell("path").data = ""
+	request_card.get_cell("method").data = ""
+	request_card.get_cell("body").data = null
+	
 	var string_equal_card = StringEqualCard.new()
 	string_equal_card.position = Vector2(2951.199, -188.7985)
 	string_equal_card.get_cell("value").data = "application/json"
 	
 	example_card.c(regex_card)
-	example_card.c(inspect_card)
+	example_card.c(inspect_card_2)
 	format_string_card.c_named("data", code_card)
 	get_property_card.c(string_equal_card)
 	get_property_card_2.c(parse_json_card)
@@ -96,7 +78,7 @@ func s():
 	parse_headers_card.c(get_property_card)
 	parse_http_card.c(example_card)
 	parse_json_card.c(format_string_card)
-	parse_json_card.c(inspect_card_2)
+	parse_json_card.c(inspect_card)
 	regex_card.c(parse_headers_card)
 	regex_card.c(if_card)
 	string_equal_card.c(if_card)

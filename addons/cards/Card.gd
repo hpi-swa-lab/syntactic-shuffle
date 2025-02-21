@@ -67,7 +67,7 @@ var cards: Array[Card]:
 	get: return _cards
 
 var visual: CardVisual
-var cards_parent = CardBoundary.new()
+var cards_parent = CardBoundary.new(self)
 var connection_draw_node = CardConnectionsDraw.new()
 var parent: Card
 var allows_cycles = false

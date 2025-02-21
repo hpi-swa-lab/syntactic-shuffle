@@ -71,6 +71,7 @@ func get_rect():
 	return global_transform * %CardControl.get_rect()
 
 func update_card_ui():
+	if %extra_ui.get_child_count() > 0: return
 	for c in %extra_ui.get_children(): c.queue_free()
 	for card in card.cards:
 		if card is CellCard:
@@ -148,7 +149,7 @@ func get_editor() -> CardEditor:
 	return get_node("/root/main")
 
 func try_focus():
+	await get_tree().process_frame
 	var c = %CardControl.find_next_valid_focus()
 	if c and is_ancestor_of(c):
-		await get_tree().process_frame
 		c.grab_focus()
