@@ -32,6 +32,9 @@ func attach_cards(card: Card, size: Vector2, is_fullscreen = false):
 		return c is Card and c.position != Vector2.ZERO).is_empty():
 		_on_auto_layout_pressed()
 	
+	var lower_right = card.cards_parent.get_children().reduce(func (max, c): return max.max(c.position), Vector2.ZERO) + CardVisual.base_card_size
+	size = lower_right
+	
 	await get_tree().process_frame
 	
 	if not is_fullscreen: self.size = size
