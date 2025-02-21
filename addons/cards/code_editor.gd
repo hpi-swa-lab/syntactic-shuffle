@@ -77,7 +77,8 @@ func build_field(name: String, card: Card):
 		label.text_changed.connect(func(s):
 			card.rename(s)
 			update_function_signature()
-			save_pull_list())
+			save_pull_list()
+			save_inputs_outputs())
 	else:
 		label.text_changed.connect(func(s):
 			update_function_signature()

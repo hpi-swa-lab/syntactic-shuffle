@@ -3,6 +3,7 @@ extends Node2D
 class_name Card
 
 const MAX_CONNECTION_DISTANCE = 150
+const MAX_LOCK_DISTANCE = 30
 
 static func not_null(obj): return obj != null
 static func get_or_put(dict, key):
@@ -71,10 +72,12 @@ var connection_draw_node = CardConnectionsDraw.new()
 var parent: Card
 var allows_cycles = false
 var initialized_signatures = false
-@export var incoming: Array[NodePath] = []
-@export var outgoing: Array[NodePath] = []
-@export var named_outgoing: Dictionary[String, Array] = {}
-@export var named_incoming: Dictionary[String, Array] = {}
+
+var incoming: Array[NodePath] = []
+var outgoing: Array[NodePath] = []
+var named_outgoing: Dictionary[String, Array] = {}
+var named_incoming: Dictionary[String, Array] = {}
+var locked: Dictionary[Card, bool] = {}
 
 func is_toplevel(): return not parent
 
@@ -301,6 +304,7 @@ static func try_erase(array: Array, value: NodePath):
 	return false
 func _disconnect_from(to: Card):
 	var p = get_path_to_card(to)
+	if locked.has(to): locked.erase(to)
 	if try_erase(incoming, p): return incoming_disconnected(to)
 	if try_erase(outgoing, p): return outgoing_disconnected(to)
 	if delete_from_dict_list(named_outgoing, p): return outgoing_disconnected(to)
@@ -458,7 +462,8 @@ static func always_reconnect():
 func _check_disconnect(them: Card):
 	var my_boundary = get_card_boundary()
 	var their_boundary = get_card_boundary()
-	if (get_card_global_position().distance_to(them.get_card_global_position()) > MAX_CONNECTION_DISTANCE
+	if (not locked.has(them) and
+		(get_card_global_position().distance_to(them.get_card_global_position()) > MAX_CONNECTION_DISTANCE)
 		or my_boundary != their_boundary):
 		disconnect_from(them)
 		# FIXME order may be wrong
@@ -467,17 +472,17 @@ func _check_disconnect(them: Card):
 func _process(delta: float) -> void:
 	if disable: return
 	if dragging or always_reconnect():
-		for card in get_outgoing(): _check_disconnect(card)
-		for card in get_incoming(): _check_disconnect(card)
-		for card in get_named_outgoing(): _check_disconnect(card)
-		for card in get_named_incoming(): _check_disconnect(card)
+		for card in get_all_connected(): _check_disconnect(card)
 		
 		CardBoundary.traverse_connection_candidates(self, func(obj):
+			var dist = global_position.distance_to(obj.global_position)
 			if ((obj is Card or obj.get_parent() == get_parent()) and
 			not obj.has_meta("cards_ignore") and
-			global_position.distance_to(obj.global_position) <= MAX_CONNECTION_DISTANCE):
+			dist <= MAX_CONNECTION_DISTANCE):
 				var c = ensure_card(obj)
-				if c: try_connect(c))
+				if c:
+					try_connect(c)
+					if dist <= MAX_LOCK_DISTANCE: maybe_show_lock(obj))
 	
 	connection_draw_node.check_redraw(delta)
 
@@ -491,6 +496,18 @@ func try_connect(them: Card):
 	_each_input_candidate(them, func(card): card.try_connect_in(self), false)
 	_each_input_candidate(self, func(card): card.try_connect_in(them), true)
 	_each_input_candidate(self, func(card): card.try_connect_in(them), false)
+
+func maybe_show_lock(them: Card):
+	if get_all_connected().has(them):
+		CardLock.create(self, them)
+
+func _lock_connection(them: Card):
+	locked[them] = true
+	connection_draw_node.queue_redraw()
+
+func _unlock_connection(them: Card):
+	locked.erase(them)
+	connection_draw_node.queue_redraw()
 
 func _forward_canvas_gui_input(event: InputEvent, undo_redo):
 	if event is InputEventKey and event.key_label == KEY_TAB and event.pressed:
@@ -614,12 +631,15 @@ static func serialize_card_construction(nodes: Array):
 	for node in nodes:
 		var card = Card.ensure_card(node)
 		for them in card.get_outgoing():
-			if cards.has(them): cards_desc += "\t{0}.c({1})\n".format([var_names[node], var_names[them]])
+			if cards.has(them):
+				cards_desc += "\t{0}.c({1})\n".format([var_names[node], var_names[them]])
+				if node.locked.has(them): cards_desc += "\t{0}.lock({1})\n".format([var_names[node], var_names[them]])
 		for name in card.named_outgoing:
 			for their_path in card.named_outgoing[name]:
 				var them = card.lookup_card(their_path)
 				if them and cards.has(them):
 					cards_desc += "\t{0}.c_named(\"{2}\", {1})\n".format([var_names[card], var_names[them], name])
+					if node.locked.has(them): cards_desc += "\t{0}.lock({1})\n".format([var_names[node], var_names[them]])
 	
 	return cards_desc
 
@@ -645,6 +665,12 @@ func ui(t: Control): visual.ui(t)
 func c(other: Card): connect_to(other, "", true)
 func c_named(name: String, other: Card): connect_to(other, name, true)
 func scene_object(obj: Node): cards_parent.add_child(obj)
+func lock(obj: Card):
+	obj._lock_connection(self)
+	self._lock_connection(obj)
+func unlock(obj: Card):
+	obj._unlock_connection(self)
+	self._unlock_connection(obj)
 ## If your Card defers delivery of outputs you can signal here that it is
 ## possible to connect it in a cycle. (Otherwise, if inputs are synchronously
 ## delivered to outputs we get an infinite loop).

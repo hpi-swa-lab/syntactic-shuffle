@@ -7,4 +7,4 @@
 [node name="Placeholder" type="Node2D" parent="."]
 script = ExtResource("1_djcbs")
 placeholder_size = Vector2(20, 20)
-metadata/_custom_type_script = ExtResource("1_djcbs")
+metadata/_custom_type_script = "uid://bvr4vcw3kd72b"

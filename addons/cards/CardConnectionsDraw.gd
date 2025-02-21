@@ -61,11 +61,18 @@ func should_redraw():
 	var deps = []
 	for to in card.get_incoming():
 		deps.push_back(to.get_card_global_position())
+		deps.push_back(to.global_scale)
+		deps.push_back(to.visual.hovered)
 		dragging = dragging or object_is_dragging(to)
 	for node in card.get_named_incoming():
 		deps.push_back(node.get_card_global_position())
+		deps.push_back(node.global_scale)
+		deps.push_back(node.visual.hovered)
 		dragging = dragging or object_is_dragging(node)
-	if not deps.is_empty(): deps.push_back(card.get_card_global_position())
+	if not deps.is_empty():
+		deps.push_back(card.get_card_global_position())
+		deps.push_back(card.global_scale)
+		deps.push_back(card.visual.hovered)
 	
 	var comp_deps = last_deps
 	last_deps = deps
@@ -96,6 +103,7 @@ func draw_label_to(obj: Card, label: String, light_background: bool):
 
 func draw_connection(from: CardConnectionsDraw, to: Card, inverted, light_background: bool):
 	if not to: return
+	var fade_out = from.card.locked.has(to) and not from.card.visual.hovered and not to.visual.hovered
 	var target = to.get_card_global_position()
 	var distance = target.distance_to(from.global_position)
 	# FIXME save guard -- if this happens, we have a problem anyways
@@ -112,12 +120,14 @@ func draw_connection(from: CardConnectionsDraw, to: Card, inverted, light_backgr
 	var stretch = 1 - distance / Card.MAX_CONNECTION_DISTANCE
 	
 	var orig = LIGHT_BACKGROUND_BASE if light_background else Color.WHITE
-	var base = Color(orig, 0.5).lerp(Color.GREEN, remap(stretch, 0.4, 0, 1, 0)) if Card.always_reconnect() else Color(orig, 3)
+	var base = Color(orig, 0.5).lerp(Color.GREEN, remap(stretch, 0.4, 0, 1, 0)) if Card.always_reconnect() else Color(orig, 1)
 	var color = base.lerp(Color.RED, _tween_values.get(to, 0.0))
 	for i in range(0, distance / GAP):
+		var progress = i / (distance / GAP)
 		var pos = Vector2(0, (i + offset) * GAP)
+		var base_opacity = max((150 - pos.y) / 150.0, remap(pos.y, distance - 150, distance, 0, 1), 0) if fade_out else 1
 		var points = [pos + Vector2(-SIZE, 0), pos + Vector2(0, -SIZE if inverted else SIZE), pos + Vector2(SIZE, 0)]
-		draw_polyline(points, color, SIZE * 0.25, true)
+		draw_polyline(points, Color(color, color.a * base_opacity), SIZE * 0.25, true)
 
 var _tween_values = {}
 var _running_tweens = {}

@@ -124,6 +124,9 @@ func _on_card_control_mouse_entered() -> void:
 
 func _on_card_control_mouse_exited() -> void: %signatures.visible = false
 
+var hovered:
+	get: return %signatures.visible
+
 func get_editor() -> CardEditor:
 	return get_node("/root/main")
 
