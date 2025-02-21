@@ -150,12 +150,11 @@ func _ready() -> void:
 	
 	for card in cards:
 		card.setup_finished()
-		if card is CellCard:
-			for element in card.get_extra_ui(): ui(element)
 	
 	init_signatures()
 	if is_toplevel() and not disable: entered_program(get_editor())
 	
+	visual.update_card_ui()
 	if start_expanded(): visual.expanded = true
 
 func _get_uninitialized(list = []):

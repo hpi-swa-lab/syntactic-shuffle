@@ -32,6 +32,7 @@ var expanded = false:
 		elif editor:
 			editor.detach_cards()
 			editor.queue_free()
+			update_card_ui()
 		
 		update_z_order()
 
@@ -68,6 +69,12 @@ func _ready() -> void:
 
 func get_rect():
 	return global_transform * %CardControl.get_rect()
+
+func update_card_ui():
+	for c in %extra_ui.get_children(): c.queue_free()
+	for card in card.cards:
+		if card is CellCard:
+			for element in card.get_extra_ui(): ui(element)
 
 func update_z_order():
 	card.get_card_boundary().update_z_order()
