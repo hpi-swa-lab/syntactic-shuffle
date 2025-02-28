@@ -25,6 +25,7 @@ var parent_card: Card
 
 # we close the expanded view when we leave the collision area, so add more collision behind the cards when expanded
 var _extra_collision = CollisionShape2D.new()
+var main_collision = CollisionShape2D.new()
 
 var hovered = false:
 	get: return hovered
@@ -36,15 +37,24 @@ var hovered = false:
 
 func _init(parent: Card):
 	parent_card = parent
-
-func _ready() -> void:
+	
+	main_collision.shape = RectangleShape2D.new()
+	main_collision.shape.size = Vector2(100, 100)
+	Card.set_ignore_object(main_collision)
+	add_child(main_collision)
+	
 	add_to_group("card_boundary")
 	input_pickable = true
 	_extra_collision.disabled = true
 	Card.set_ignore_object(_extra_collision)
 	add_child(_extra_collision)
+	
 	if not id:
 		id = uuid.v4()
+
+func make_toplevel():
+	main_collision.queue_free()
+	main_collision = null
 
 static func traverse_connection_candidates(card: Card, cb: Callable):
 	var boundary = get_card_boundary(card)
@@ -160,9 +170,8 @@ func background_rect() -> Rect2:
 	return Rect2()
 
 func fill_rect(rect: Rect2):
-	var id = get_shape_owners()[0]
-	shape_owner_get_owner(id).position = rect.size / 2
-	shape_owner_get_shape(id, 0).size = rect.size
+	main_collision.position = rect.size / 2
+	main_collision.shape.size = rect.size
 
 func _input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion:

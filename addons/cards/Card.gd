@@ -156,14 +156,6 @@ func prepare_for_showing(custom_visual_setup = null):
 	
 	visual_setup(custom_visual_setup)
 	
-	# For the toplevel card, we do not need a collision shape
-	if parent:
-		var collision = CollisionShape2D.new()
-		collision.shape = RectangleShape2D.new()
-		collision.shape.size = Vector2(100, 100)
-		set_ignore_object(collision)
-		cards_parent.add_child(collision)
-	
 	if is_inside_tree():
 		get_card_boundary().card_entered(self)
 	

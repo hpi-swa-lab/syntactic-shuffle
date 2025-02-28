@@ -87,6 +87,7 @@ func open_toplevel_card(card: Card, open = true):
 	
 	# card itself remains offscreen, but we need to initialize its signatures etc
 	card._ready()
+	card.cards_parent.make_toplevel()
 	
 	open_cards.push_back(card)
 	%ToplevelCardsList.add_tab(card.card_name)
