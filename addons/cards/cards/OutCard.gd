@@ -47,8 +47,9 @@ func propagate_unreachable(seen):
 	if seen.has(self): return
 	initialized_signatures = true
 	seen[self] = &"unreachable"
+	var r = _remembered_for_invocation(Invocation.GLOBAL)
 	# If no connected is reachable, show no signatures
-	actual_signatures = []
+	actual_signatures = Signature.sig_array([r.signature] if r else [])
 
 ## Check if we have a compatible remembered value. If we remember values
 ## in general but we don't currently a value, check our incoming connections.
@@ -93,6 +94,7 @@ func v():
 func remember(signature: Signature, args: Array, invocation: Invocation):
 	assert(remember_message)
 	remembered[invocation] = invocation.remember(signature, args)
+	actual_signatures = Signature.sig_array([signature])
 
 func invoke(args: Array, signature: Signature, invocation: Invocation, named = "", source_out = null):
 	if not parent: return

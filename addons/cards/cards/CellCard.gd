@@ -121,8 +121,8 @@ func serialize_constructor():
 	return "{0}.create(\"{1}\", \"{2}\", {3})".format([card_name, data_name, type, Signature.data_to_expression(default)])
 
 func change_data_ui(cb):
-	return func():
-		cb.call()
+	return func(v):
+		cb.call(v)
 		get_editor().card_content_edited(parent)
 
 func get_extra_ui() -> Array[Control]:
@@ -164,7 +164,9 @@ func get_extra_ui() -> Array[Control]:
 			e.caret_blink = true
 			e.add_theme_font_size_override("font_size", 8)
 			if data != null: e.text = data
-			e.text_changed.connect(change_data_ui(func(): data = e.text))
+			e.text_changed.connect(func():
+				data = e.text
+				get_editor().card_content_edited(parent))
 			update_ui_func = func(v): if e.text != v: e.text = v
 			return [e]
 		_:

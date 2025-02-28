@@ -96,9 +96,6 @@ func rebuild_inputs_outputs():
 	cards.clear()
 	build_cards_list()
 
-func output_for_name(name: String):
-	return get_outputs()[outputs.find_custom(func(s): return s[0] == name)]
-
 func setup_finished():
 	super.setup_finished()
 	get_source_code()
@@ -128,7 +125,7 @@ func invoke(args: Array, signature: Signature, invocation: Invocation, named = "
 	var pending := pending_invoke.get(invocation)
 	var input = get_input(named)
 	if not signature.compatible_with(input.signature): return
-	pending[named].push_back(Invocation.Remembered.new(args, signature))
+	if not pull_only.has(named): pending[named].push_back(Invocation.Remembered.new(args, signature))
 	
 	var combined_args = []
 	var signatures = []
@@ -158,6 +155,9 @@ func invoke(args: Array, signature: Signature, invocation: Invocation, named = "
 		return
 	
 	if source_out: mark_activated(source_out, args)
+	
+	if parent is ClockCard:
+		print("a")
 	
 	if should_hyper_invoke(signatures): hyper_invoke(combined_args, signatures, invocation)
 	else:

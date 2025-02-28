@@ -30,10 +30,10 @@ var card_name: String
 @export var disable = false:
 	set(v):
 		if v == disable: return
-		if is_toplevel() and disable:
+		if not has_entered_program and disable:
 			start_propagate_incoming_connected(true)
 			entered_program(get_editor())
-		if is_toplevel() and not disable: left_program(get_editor())
+		if has_entered_program and not disable: left_program(get_editor())
 		disable = v
 		if connection_draw_node: connection_draw_node.queue_redraw()
 		if disable: disconnect_all()
@@ -72,6 +72,7 @@ var connection_draw_node = CardConnectionsDraw.new()
 var parent: Card
 var allows_cycles = false
 var initialized_signatures = false
+var has_entered_program = false
 
 var incoming: Array[NodePath] = []
 var outgoing: Array[NodePath] = []
@@ -100,11 +101,15 @@ func _init(custom_build = null, custom_visual_setup = null):
 
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_PREDELETE:
-		if is_toplevel() and is_inside_tree(): left_program(get_editor())
+		var editor = get_editor()
+		# FIXME when the program is closed, the editor becomes unavailable.
+		# We probably have to store it somewhere.
+		if editor and has_entered_program: left_program(editor)
 		disconnect_all()
 		for c in cards:
-			c.disconnect_all()
-			c.free()
+			if is_instance_valid(c):
+				c.disconnect_all()
+				c.free()
 
 func setup(custom_build = null):
 	if not id: id = uuid.v4()
@@ -121,10 +126,16 @@ func build_cards_list(custom_build = null):
 func is_offscreen(): return false
 
 ## This card or its parent just entered the program
-func entered_program(manager): for card in cards: card.entered_program(manager)
+func entered_program(manager):
+	has_entered_program = true
+	for card in cards:
+		if not card.has_entered_program: card.entered_program(manager)
 
 ## This card or its parent just left the program
-func left_program(manager): for card in cards: card.left_program(manager)
+func left_program(manager):
+	has_entered_program = false
+	for card in cards:
+		if card.has_entered_program: card.left_program(manager)
 
 func visual_setup(custom_visual_setup = null):
 	visual = preload("res://addons/cards/CardVisual.tscn").instantiate()
@@ -160,7 +171,7 @@ func prepare_for_showing(custom_visual_setup = null):
 		card.setup_finished()
 	
 	init_signatures()
-	if is_toplevel() and not disable: entered_program(get_editor())
+	if not has_entered_program and not disable: entered_program(get_editor())
 	
 	visual.update_card_ui()
 	if start_expanded(): visual.expanded = true
@@ -182,6 +193,9 @@ func setup_finished():
 
 func add_card(card: Card):
 	card.parent = self
+	# make sure the card is in the cards list before any potential dispatches for signature updates
+	# are triggered from the card appearing on screen.
+	_cards.push_back(card)
 	if not card.is_offscreen(): cards_parent.add_child(card)
 	return card
 
@@ -226,7 +240,7 @@ func can_be_trigger(): return true
 
 func start_expanded(): return false
 
-func get_editor() -> CardEditor: return Engine.get_main_loop().root.get_node("main")
+func get_editor() -> CardEditor: return Engine.get_main_loop().root.get_node_or_null("main")
 
 func get_card_global_position(): return global_position
 
@@ -295,6 +309,7 @@ static func ensure_card(object: Node) -> Card:
 	if object == null: return null
 	if not is_instance_valid(object): return null
 	if object is Card: return object
+	if object.has_meta("cards_ignore"): return null
 	if Engine.is_editor_hint(): return null
 	if not object.has_meta("node_card"):
 		object.set_meta("node_card", NodeCard.new(object))
@@ -331,6 +346,14 @@ func incoming_connected(obj: Card):
 	if _feedback.has(null): _delete_feedback_for(null)
 	start_propagate_incoming_connected()
 
+func get_card_path():
+	var p = ""
+	var i = self
+	while i:
+		p = i.card_name + "/" + p
+		i = i.parent
+	return p
+
 func start_propagate_incoming_connected(init = false):
 	# we ignore requests (except for the init request) until initialized
 	if not init and not initialized_signatures: return
@@ -353,6 +376,7 @@ func start_propagate_incoming_connected(init = false):
 func propagate_incoming_connected(seen):
 	# if we passed by here from an unrechable input first, explore again
 	if seen.has(self) and seen[self] != &"unreachable": return
+	# print(get_card_path())
 	seen[self] = &"done"
 	initialized_signatures = true
 	var parent_has_no_incoming = get_all_incoming().is_empty()
@@ -367,7 +391,9 @@ func propagate_incoming_connected(seen):
 				c.propagate_unreachable(seen)
 				seen[c] = &"recheck"
 		else:
-			if c.get_all_incoming().is_empty() and c.can_be_trigger(): c.propagate_incoming_connected(seen)
+			if c.get_all_incoming().is_empty():
+				if c.can_be_trigger(): c.propagate_incoming_connected(seen)
+				else: c.propagate_unreachable(seen)
 	for c in get_all_outgoing():
 		c.propagate_incoming_connected(seen)
 

@@ -25,16 +25,17 @@ var _signaled_for = {}
 func invoke(args: Array, signature: Signature, invocation: Invocation, named = "", source_out = null):
 	# direct triggers are also considered for connection
 	if _signaled_for.has(source_out.parent):
-		_trigger("disconnect", source_out.parent, invocation)
-	_signaled_for[source_out.parent] = args[0]
-	super.invoke(args, cmd("connect", signature), invocation, named, source_out)
+		super.invoke([_signaled_for[source_out.parent]], cmd("disconnect", signature), invocation)
+	if args[0] != null:
+		_signaled_for[source_out.parent] = args[0]
+		super.invoke(args, cmd("connect", signature), invocation, named, source_out)
 
 func signature_changed():
 	super.signature_changed()
 	if out_card: out_card.signature = signature
 	if disconnect_card: disconnect_card.signature = signature
 
-func _trigger(command: String, card: Card, invocation: Invocation):
+func _trigger_remembered(command: String, card: Card, invocation: Invocation):
 	var remembered = card.get_remembered_for(signature, invocation) if card else get_remembered(invocation)
 	if remembered:
 		var val = remembered.get_remembered_value(invocation)
@@ -47,13 +48,13 @@ func propagate_incoming_connected(seen):
 	if init: seen[self] = &"notify_done"
 
 func notify_done_propagate():
-	_trigger("connect", null, Invocation.new())
+	_trigger_remembered("connect", null, Invocation.new())
 
 func incoming_connected(card: Card):
 	if _signaled_for.has(card):
 		super.invoke([_signaled_for[card]], cmd("disconnect", signature), Invocation.new())
 		_signaled_for.erase(card)
-	_trigger("connect", card, Invocation.new())
+	_trigger_remembered("connect", card, Invocation.new())
 	super.incoming_connected(card)
 
 func incoming_disconnected(card: Card):
