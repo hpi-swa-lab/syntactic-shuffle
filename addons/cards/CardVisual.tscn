@@ -1,10 +1,11 @@
-[gd_scene load_steps=8 format=3 uid="uid://deh4uywqorec7"]
+[gd_scene load_steps=9 format=3 uid="uid://deh4uywqorec7"]
 
 [ext_resource type="Script" uid="uid://td86i40sy764" path="res://addons/cards/CardVisual.gd" id="1_7r0de"]
 [ext_resource type="Texture2D" uid="uid://c52trtl0cac7l" path="res://icon.svg" id="1_x38hd"]
 [ext_resource type="StyleBox" uid="uid://cjukuw32vfjm2" path="res://addons/cards/card_normal.tres" id="2_s0l1x"]
 [ext_resource type="Texture2D" uid="uid://bhh80pg8s0om5" path="res://addons/cards/icons/trigger.png" id="2_xtshy"]
 [ext_resource type="Texture2D" uid="uid://nf875nia2sti" path="res://addons/cards/icons/padlock.png" id="4_odv1r"]
+[ext_resource type="Script" uid="uid://cb5h5wus6jiqw" path="res://addons/cards/EditableIcon.gd" id="5_s0l1x"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_tbdv3"]
 size = Vector2(194, 274)
@@ -90,6 +91,7 @@ unique_name_in_owner = true
 layout_mode = 2
 texture = ExtResource("1_x38hd")
 expand_mode = 5
+script = ExtResource("5_s0l1x")
 
 [node name="DescriptionMargin" type="MarginContainer" parent="CardControl/MainColumn"]
 layout_mode = 2

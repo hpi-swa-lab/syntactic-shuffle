@@ -1,4 +1,6 @@
-extends Panel
+extends PanelContainer
+
+const LINE_WIDTH = 0.5
 
 signal save(texture: ImageTexture)
 
@@ -14,18 +16,18 @@ var selected_color := Color.BLACK
 var undo = []
 
 func _ready() -> void:
-	image = Image.create_empty(16, 16, false, Image.FORMAT_RGBA8)
-	texture = ImageTexture.create_from_image(image)
-	%Texture.texture = texture
+	if not texture:
+		image = Image.create_empty(16, 16, false, Image.FORMAT_RGBA8)
+		texture = ImageTexture.create_from_image(image)
 	%Texture.draw.connect(func():
 		var size = %Texture.get_rect().size
 		var color = Color(Color.BLACK, 0.1)
-		%Texture.draw_rect(Rect2(Vector2.ZERO, size), color, false, 1)
+		%Texture.draw_rect(Rect2(Vector2.ZERO, size), color, false, LINE_WIDTH)
 		var step = %Texture.get_rect().size / float(image.get_size().x)
 		for y in range(0, 16):
-			%Texture.draw_line(Vector2(0, y * step.y), Vector2(size.x, y * step.y), color, 1)
+			%Texture.draw_line(Vector2(0, y * step.y), Vector2(size.x, y * step.y), color, LINE_WIDTH)
 		for x in range(0, 16):
-			%Texture.draw_line(Vector2(x * step.x, 0), Vector2(x * step.x, size.y), color, 1))
+			%Texture.draw_line(Vector2(x * step.x, 0), Vector2(x * step.x, size.y), color, LINE_WIDTH))
 
 func _on_color_changed(color: Color) -> void:
 	selected_color = color
@@ -57,6 +59,7 @@ func _on_texture_gui_input(event: InputEvent) -> void:
 		if _held:
 			undo.push_back([])
 			_paint(event)
+			get_viewport().get_camera_2d().cancel_move()
 	if event is InputEventMouseMotion and _held:
 		_paint(event)
 
@@ -64,8 +67,9 @@ func _paint(event: InputEventMouse):
 	var point = ((event.position - %Texture.position) / %Texture.get_rect().size * float(image.get_size().x)).floor()
 	if point.x < 0 or point.y < 0 or point.x > 15 or point.y > 15: return
 	undo[undo.size() - 1].push_back([point, image.get_pixelv(point)])
-	image.set_pixelv(point, Color.TRANSPARENT if erase else selected_color)
+	image.set_pixelv(point, Color.TRANSPARENT if erase or %Erase.button_pressed else selected_color)
 	texture.update(image)
+	get_viewport().set_input_as_handled()
 
 func _on_save_pressed() -> void:
 	save.emit(texture)

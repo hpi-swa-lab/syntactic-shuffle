@@ -1,5 +1,7 @@
 extends Camera2D
 
+signal zoom_changed(zoom: float)
+
 @export var zoom_speed = 0.1
 @export var pan = true
 
@@ -14,6 +16,7 @@ func _zoom(factor: float) -> void:
 	delta = delta - delta * zoom.x / (zoom.x + factor)
 	zoom += Vector2(factor, factor)
 	position += delta
+	zoom_changed.emit(zoom.x)
 
 func _input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and pan:
@@ -31,3 +34,6 @@ func _unhandled_input(event: InputEvent) -> void:
 			MOUSE_BUTTON_WHEEL_UP: factor = 1
 			_: factor = 0
 		if factor != 0: _zoom(factor * event.factor * zoom_speed * zoom.x)
+
+func cancel_move():
+	held = false

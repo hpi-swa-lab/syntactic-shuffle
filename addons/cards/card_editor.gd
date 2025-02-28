@@ -152,6 +152,7 @@ func layout_cards(cards):
 
 func _on_icon_pressed() -> void:
 	var editor = preload("res://addons/cards/icon_editor.tscn").instantiate()
+	editor.top_level = true
 	get_parent().add_child(editor)
 	editor.global_position = %Icon.global_position - Vector2(editor.get_rect().size.x / 2, 0)
 	
