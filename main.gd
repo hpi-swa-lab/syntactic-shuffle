@@ -54,14 +54,7 @@ func card_template_deleted(card: Card):
 const SAVE_FILE = "user://state.save"
 
 func _ready() -> void:
-	for info in ProjectSettings.get_global_class_list():
-		if info["base"] == "Card": card_library.push_back({"name": info["class"], "path": info["path"]})
-	%Search.list = card_library
-	
-	if FileAccess.file_exists(SAVE_FILE):
-		var save = JSON.parse_string(FileAccess.get_file_as_string(SAVE_FILE))
-		if save and save["open_paths"]:
-			for p in save["open_paths"]: load_cards(p)
+	setup_multiplayer()
 
 func _exit_tree() -> void:
 	var save_file = FileAccess.open(SAVE_FILE, FileAccess.WRITE)
@@ -314,3 +307,49 @@ func spawn_connected(script_path: String, open_toplevel = false):
 
 func _on_search_item_selected(item, shift: Variant) -> void:
 	spawn_connected(item["path"], shift)
+
+#####################
+# Multiplayer
+#####################
+const IP_ADDRESS = "127.0.0.1"
+const PORT = 34393
+const MAX_CLIENTS = 4
+
+func setup_multiplayer():
+	if OS.get_cmdline_args().has("--client"): setup_client()
+	else: setup_server()
+
+func setup_server():
+	server_initialize_session()
+	
+	var peer := ENetMultiplayerPeer.new()
+	peer.create_server(PORT, MAX_CLIENTS)
+	multiplayer.multiplayer_peer = peer
+	
+	peer.peer_connected.connect(func (id: int):
+		client_initialize_session.rpc_id(id, card_library, open_cards.map(func(c: Card):
+			return c.serialize_data())))
+
+func setup_client():
+	var peer = ENetMultiplayerPeer.new()
+	peer.create_client(IP_ADDRESS, PORT)
+	multiplayer.multiplayer_peer = peer
+
+@rpc("reliable", "authority")
+func client_initialize_session(_card_library, open_cards_data):
+	%Search.list = _card_library
+	for data in open_cards_data:
+		open_toplevel_card(Card.from_data(data))
+
+func server_initialize_session():
+	for info in ProjectSettings.get_global_class_list():
+		if info["base"] == "Card": card_library.push_back({"name": info["class"], "path": info["path"]})
+	%Search.list = card_library
+	
+	if FileAccess.file_exists(SAVE_FILE):
+		var save = JSON.parse_string(FileAccess.get_file_as_string(SAVE_FILE))
+		if save and save["open_paths"]:
+			for p in save["open_paths"]: load_cards(p)
+
+func client_card_moved(card: Card):
+	pass

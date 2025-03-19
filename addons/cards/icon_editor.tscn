@@ -17,46 +17,39 @@ offset_bottom = 312.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_6mf6w")
 script = ExtResource("1_6mf6w")
 
-[node name="MarginContainer" type="MarginContainer" parent="."]
-layout_mode = 2
-theme_override_constants/margin_left = 16
-theme_override_constants/margin_top = 16
-theme_override_constants/margin_right = 16
-theme_override_constants/margin_bottom = 16
-
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 2
 
-[node name="Container" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+[node name="Container" type="HBoxContainer" parent="VBoxContainer"]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 
-[node name="Texture" type="TextureRect" parent="MarginContainer/VBoxContainer/Container"]
+[node name="Texture" type="TextureRect" parent="VBoxContainer/Container"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 6
 texture = ExtResource("2_6mf6w")
 expand_mode = 2
 
-[node name="HBoxContainer" type="GridContainer" parent="MarginContainer/VBoxContainer"]
+[node name="HBoxContainer" type="GridContainer" parent="VBoxContainer"]
 layout_mode = 2
 columns = 3
 
-[node name="Color" type="ColorPickerButton" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="Color" type="ColorPickerButton" parent="VBoxContainer/HBoxContainer"]
 custom_minimum_size = Vector2(20, 0)
 layout_mode = 2
 
-[node name="Undo" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="Undo" type="Button" parent="VBoxContainer/HBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 6
 text = "Undo"
 
-[node name="Clear" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="Clear" type="Button" parent="VBoxContainer/HBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 6
 text = "Clear"
 
-[node name="Erase" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="Erase" type="Button" parent="VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
@@ -64,7 +57,7 @@ theme_override_font_sizes/font_size = 6
 toggle_mode = true
 text = "Erase"
 
-[connection signal="gui_input" from="MarginContainer/VBoxContainer/Container/Texture" to="." method="_on_texture_gui_input"]
-[connection signal="color_changed" from="MarginContainer/VBoxContainer/HBoxContainer/Color" to="." method="_on_color_changed"]
-[connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer/Undo" to="." method="_on_undo_pressed"]
-[connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer/Clear" to="." method="_on_clear_pressed"]
+[connection signal="gui_input" from="VBoxContainer/Container/Texture" to="." method="_on_texture_gui_input"]
+[connection signal="color_changed" from="VBoxContainer/HBoxContainer/Color" to="." method="_on_color_changed"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/Undo" to="." method="_on_undo_pressed"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/Clear" to="." method="_on_clear_pressed"]

@@ -43,13 +43,13 @@ var card_name: String
 
 ## Not currently activating triggers or returning objects but can be
 ## connected to other cards and objects
-@export var paused = false:
+var paused = false:
 	set(v):
 		paused = v
 		if visual: visual.paused = v
 	get: return paused or disable
 
-@export var id: String
+var id: int
 
 var dragging: bool:
 	set(v):
@@ -86,7 +86,13 @@ func is_toplevel(): return not parent
 ## SETUP AND VISUALS
 ########################
 
+static var _current_card_id = 1
+
 func _init(custom_build = null, custom_visual_setup = null):
+	id = _current_card_id
+	_current_card_id = _current_card_id + 1
+	
+	set_process(not multiplayer or multiplayer.is_server())
 	card_name = get_script().get_global_name()
 	var parent = null
 	if not active_card_list.is_empty():
@@ -139,7 +145,9 @@ func left_program(manager):
 
 func visual_setup(custom_visual_setup = null):
 	visual = preload("res://addons/cards/CardVisual.tscn").instantiate()
-	visual.dragging.connect(func(d): dragging = d)
+	visual.dragging.connect(func(d):
+		dragging = d
+		get_editor().client_card_moved(self))
 	visual.paused = paused
 	add_child(visual)
 	custom_visual_setup.call(self) if custom_visual_setup else v()
@@ -586,15 +594,57 @@ func get_cell(name: String):
 func clone():
 	return get_script().new()
 
-func serialize_constructor():
-	if get_script().get_global_name() == "BlankCard" or get_script().get_global_name() == "Card":
-		return "Card.new(func ():
+func serialize_data():
+	var connections = []
+	for c in cards:
+		for o in c.get_outgoing():
+			connections.push_back([c.id, o.id, ""])
+		for name in c.get_named_outgoing():
+			for p in c.named_outgoing[name]:
+				connections.push_back([c.id, c.lookup_card(p).id, name])
+	
+	return {
+		"id": id,
+		"cards": cards.map(func(c): return c.serialize_data()),
+		"title": visual.get_title(),
+		"icon_data": visual.get_icon_data(),
+		"description": visual.get_description(),
+		"cell_data": cards.filter(func(c): return c is CellCard).map(func (c: CellCard):
+			return [c.data_name, Signature.data_to_expression(c.data)]),
+		"position": position,
+		"connections": connections
+	}
+
+static func from_data(data):
+	var c = Card.new()
+	c.id = data["id"]
+	c.title(data["title"])
+	c.icon_data(data["icon_data"])
+	c.description(data["description"])
+	c.position = data["position"]
+	for d in data["cards"]:
+		c.add_card(from_data(d))
+	for d in data["cell_data"]:
+		c.get_cell(d[0]).data = G.eval_expression(d[1])
+	for connection in data["connections"]:
+		var from = c.cards.find_custom(func (c): return c.id == connection[0])
+		var to = c.cards.find_custom(func (c): return c.id == connection[1])
+		if connection[2]: from.c_named(connection[2], to)
+		else: from.c(to)
+	return c
+
+func serialize_current_state():
+	return "Card.new(func ():
 {cards},
 	func (c):
 {visual})".format({
 		"cards": serialize_card_construction(cards_parent.get_nodes_for_serialization()).indent("\t"),
 		"visual": serialize_visual_construction(Vector2.ZERO, "c.").indent("\t")
 	})
+
+func serialize_constructor():
+	if get_script().get_global_name() == "BlankCard" or get_script().get_global_name() == "Card":
+		return serialize_current_state()
 	else:
 		return "{0}.new()".format([card_name])
 
@@ -650,9 +700,9 @@ static func serialize_card_construction(nodes: Array):
 		var n = var_names.get(c)
 		cards_desc += "\tvar {0} = {1}\n".format([n, c.serialize_constructor()])
 		cards_desc += "\t{0}.position = Vector2{1}\n".format([n, c.position])
-		for i in range(0, c.cards.size()):
-			if c.cards[i] is CellCard:
-				cards_desc += "\t{0}.get_cell({1}).data = {2}\n".format([n, Signature.data_to_expression(c.cards[i].data_name), Signature.data_to_expression(c.cards[i].data)])
+		for card in c.cards:
+			if card is CellCard:
+				cards_desc += "\t{0}.get_cell({1}).data = {2}\n".format([n, Signature.data_to_expression(cards.data_name), Signature.data_to_expression(card.data)])
 		cards_desc += "\t\n"
 	
 	var regex = RegEx.new()
