@@ -4,7 +4,7 @@ class_name SignalCard
 
 func v():
 	title("Signal")
-	description("Connect to a singal and trigger when it emits.")
+	description("Connect to a signal and trigger when it emits.")
 	icon_data("iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAGFJREFUOI3FUjESACAIsv7/51oaUsG4GnLxLgiUMnustvog59cCshAiIDEqVDlIa8UVThMlXA2RilTEiEMRlgFzTKv2DThdggYdAFWgNETkxl7IceIEyhd2HJSB4pwE/tUEsg8ZEXMVq5oAAAAASUVORK5CYII=")
 	container_size(Vector2(2000.0, 1600.0))
 
