@@ -18,7 +18,7 @@ func s():
 		var sig = card.output_signatures
 		if sig.is_empty(): return
 		for o in card.get_outgoing():
-			o.remember(sig[0], [input])
+			o.remember(sig[0], [input], Invocation.GLOBAL)
 , [])
 	code_card.position = Vector2(661.5192, 786.9964)
 	

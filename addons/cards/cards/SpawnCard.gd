@@ -10,7 +10,7 @@ func v():
 
 func s():
 	var code_card = CodeCard.create([["node", t("Node")]], [["out", t("Node")]], func (card, out, node):
-		card.card_parent_in_world().get_parent().add_child(node)
+		card.card_parent_in_world().cards_parent.add_child(node)
 		node.set_meta("cards_spawned", true)
 		out.call(node)
 , [])
