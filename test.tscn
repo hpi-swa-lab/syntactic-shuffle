@@ -1,18 +1,20 @@
-[gd_scene load_steps=16 format=3 uid="uid://dcjpymb1evgp4"]
+[gd_scene load_steps=18 format=3 uid="uid://dcjpymb1evgp4"]
 
 [ext_resource type="Script" uid="uid://cja8ehiirmcyt" path="res://addons/cards/CardBoundary.gd" id="1_g14j6"]
 [ext_resource type="Script" uid="uid://dsn8t1oa5bses" path="res://addons/cards/slots/slot.gd" id="3_mhym6"]
-[ext_resource type="Script" uid="uid://dhecdv5284o1j" path="res://addons/cards/cards/AttributeCard.gd" id="3_vbegm"]
+[ext_resource type="Script" path="res://addons/cards/cards/AttributeCard.gd" id="3_vbegm"]
 [ext_resource type="Script" uid="uid://bvr4vcw3kd72b" path="res://addons/cards/placeholder/placeholder.gd" id="4_ehkex"]
-[ext_resource type="Script" uid="uid://du0mdnuijqvri" path="res://addons/cards/cards/SetTextCard.gd" id="5_xersf"]
+[ext_resource type="Script" path="res://addons/cards/cards/SetTextCard.gd" id="5_xersf"]
 [ext_resource type="Script" uid="uid://cxldeg24krchn" path="res://camera_2d.gd" id="6_00tp4"]
 [ext_resource type="Script" uid="uid://dkyx51jnk8cvd" path="res://addons/cards/cards/AxisControlsCard.gd" id="7_5tkv4"]
 [ext_resource type="Script" uid="uid://d23cwws3aqxp1" path="res://addons/cards/cards/MoveCard.gd" id="8_0m0f1"]
-[ext_resource type="Script" uid="uid://bss3ee6m881hx" path="res://addons/cards/cards/GroupCard.gd" id="9_0m0f1"]
+[ext_resource type="Script" path="res://addons/cards/cards/GroupCard.gd" id="9_0m0f1"]
 [ext_resource type="Script" uid="uid://c1y5hmu8ve21k" path="res://addons/cards/cards/ClockCard.gd" id="9_77dp3"]
-[ext_resource type="Script" uid="uid://j7n80v2begui" path="res://addons/cards/cards/GetNameCard.gd" id="10_b0q6j"]
-[ext_resource type="Script" uid="uid://c8cfoeik47tv2" path="res://addons/cards/cards/RandomAxisCard.gd" id="10_mhym6"]
+[ext_resource type="Script" path="res://addons/cards/cards/GetNameCard.gd" id="10_b0q6j"]
+[ext_resource type="Script" path="res://addons/cards/cards/RandomAxisCard.gd" id="10_mhym6"]
+[ext_resource type="Script" path="res://addons/cards/cards/MouseLeftClickCard.gd" id="11_mhym6"]
 [ext_resource type="Script" uid="uid://vnfn6yjp8q5s" path="res://addons/cards/Trash.gd" id="12_0m0f1"]
+[ext_resource type="Script" uid="uid://c5ccmpcq05phf" path="res://addons/cards/cards/LookAtCard.gd" id="13_a3se8"]
 [ext_resource type="Script" uid="uid://dio881dm6xtr3" path="res://hand.gd" id="15_vxl6d"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_77dp3"]
@@ -23,24 +25,23 @@ size = Vector2(1200, 90)
 [node name="main" type="Area2D" parent="."]
 script = ExtResource("1_g14j6")
 id = "bb0e0c61-f6ca-448b-98fe-d0065eb2a52e"
-metadata/_custom_type_script = ExtResource("1_g14j6")
+metadata/_custom_type_script = "uid://cja8ehiirmcyt"
 metadata/slots = Array[ExtResource("3_mhym6")]([Object(Object,"script":Resource("res://addons/cards/slots/object_output_slot.gd"),"card":null)
 ])
 
 [node name="AttributeCard" type="Node2D" parent="main"]
-position = Vector2(758, 440)
+position = Vector2(886, 490)
 script = ExtResource("3_vbegm")
 field = "hp"
 connections = Dictionary[String, Array]({
 "__input": [],
-"__object": [],
+"__object": [[NodePath("../Label"), "__object"]],
 "__output": []
 })
 id = "1dbc8b27-4c94-4d39-9f12-6aebc8883f25"
-metadata/_custom_type_script = ExtResource("3_vbegm")
 
 [node name="other" type="CharacterBody2D" parent="main" groups=["enemy"]]
-position = Vector2(383, 392)
+position = Vector2(240, 252)
 metadata/slots = Array[ExtResource("3_mhym6")]([Object(Object,"script":Resource("res://addons/cards/slots/object_output_slot.gd"),"card":null)
 ])
 metadata/hp = 10
@@ -48,35 +49,36 @@ metadata/hp = 10
 [node name="Placeholder" type="Node2D" parent="main/other"]
 script = ExtResource("4_ehkex")
 placeholder_size = Vector2(51, 88)
-metadata/_custom_type_script = ExtResource("4_ehkex")
+metadata/_custom_type_script = "uid://bvr4vcw3kd72b"
 metadata/slots = Array[ExtResource("3_mhym6")]([Object(Object,"script":Resource("res://addons/cards/slots/object_output_slot.gd"),"card":null)
 ])
 metadata/_edit_lock_ = true
 
 [node name="other2" type="CharacterBody2D" parent="main" groups=["enemy"]]
-position = Vector2(537, 312)
+position = Vector2(446.33, 598.903)
 metadata/slots = Array[ExtResource("3_mhym6")]([Object(Object,"script":Resource("res://addons/cards/slots/object_output_slot.gd"),"card":null)
 ])
 metadata/hp = 20
 
 [node name="Placeholder" type="Node2D" parent="main/other2"]
 script = ExtResource("4_ehkex")
-placeholder_size = Vector2(51, 88)
-metadata/_custom_type_script = ExtResource("4_ehkex")
+placeholder_size = Vector2(319, 15)
+metadata/_custom_type_script = "uid://bvr4vcw3kd72b"
 metadata/slots = Array[ExtResource("3_mhym6")]([Object(Object,"script":Resource("res://addons/cards/slots/object_output_slot.gd"),"card":null)
 ])
 metadata/_edit_lock_ = true
 
 [node name="other3" type="CharacterBody2D" parent="main" groups=["enemy"]]
-position = Vector2(671, 439)
+position = Vector2(458, 520)
 metadata/slots = Array[ExtResource("3_mhym6")]([Object(Object,"script":Resource("res://addons/cards/slots/object_output_slot.gd"),"card":null)
 ])
 metadata/hp = 50
 
 [node name="Placeholder" type="Node2D" parent="main/other3"]
 script = ExtResource("4_ehkex")
-placeholder_size = Vector2(51, 88)
-metadata/_custom_type_script = ExtResource("4_ehkex")
+color = Color(0.948678, 0.760202, 0.805689, 1)
+placeholder_size = Vector2(21, 37)
+metadata/_custom_type_script = "uid://bvr4vcw3kd72b"
 metadata/slots = Array[ExtResource("3_mhym6")]([Object(Object,"script":Resource("res://addons/cards/slots/object_output_slot.gd"),"card":null)
 ])
 metadata/_edit_lock_ = true
@@ -89,7 +91,7 @@ connections = Dictionary[String, Array]({
 "__object": []
 })
 id = "793d226c-0a86-48ee-9e49-2712385576f0"
-metadata/_custom_type_script = ExtResource("5_xersf")
+metadata/_custom_type_script = "uid://du0mdnuijqvri"
 
 [node name="Label" type="Label" parent="main"]
 offset_left = 924.0
@@ -107,19 +109,19 @@ metadata/slots = Array[ExtResource("3_mhym6")]([Object(Object,"script":Resource(
 ])
 
 [node name="Node2D" type="Node2D" parent="main"]
-position = Vector2(649.871, 538.749)
+position = Vector2(652.91, 572.296)
 script = ExtResource("7_5tkv4")
 connections = Dictionary[String, Array]({
-"__output": []
+"__output": [[NodePath("../Node2D2"), "__input"]]
 })
 id = "1054a197-9d0d-41e0-9846-8bb3c5b52ef7"
 
 [node name="Node2D2" type="Node2D" parent="main"]
-position = Vector2(584.401, 488.072)
+position = Vector2(554.765, 541.075)
 script = ExtResource("8_0m0f1")
 connections = Dictionary[String, Array]({
-"__input": [],
-"__object": []
+"__input": [[NodePath("../Node2D"), "__output"], [NodePath("../@Node2D@44"), "__output"], [NodePath("../Node2D3"), "__output"]],
+"__object": [[NodePath("../other3"), "__object"]]
 })
 id = "74149f00-8cf3-49ed-9003-4c12f378f1df"
 
@@ -131,7 +133,7 @@ connections = Dictionary[String, Array]({
 "__output": []
 })
 id = "6a48ec26-47c8-4646-9a6b-d2d5d60c82cc"
-metadata/_custom_type_script = ExtResource("9_0m0f1")
+metadata/_custom_type_script = "uid://bss3ee6m881hx"
 
 [node name="GetNameCard" type="Node2D" parent="main"]
 position = Vector2(1027.36, 560.916)
@@ -142,7 +144,32 @@ connections = Dictionary[String, Array]({
 "__output": []
 })
 id = "de938453-9802-4daf-9e44-0b6270592776"
-metadata/_custom_type_script = ExtResource("10_b0q6j")
+metadata/_custom_type_script = "uid://j7n80v2begui"
+
+[node name="@Node2D@25980" type="Node2D" parent="main"]
+position = Vector2(283, 512)
+script = ExtResource("11_mhym6")
+connections = Dictionary[String, Array]({
+"__output": [[NodePath("../Node2D4"), "__input"]]
+})
+id = "01a7f9ea-8f2d-4c70-a0e0-4fa6b5673631"
+
+[node name="Node2D3" type="Node2D" parent="main"]
+position = Vector2(662, 488)
+script = ExtResource("10_mhym6")
+connections = Dictionary[String, Array]({
+"__output": [[NodePath("../Node2D2"), "__input"]]
+})
+id = "222832d1-c12b-4a8e-bb18-77dc198226f5"
+
+[node name="Node2D4" type="Node2D" parent="main"]
+position = Vector2(387.213, 520.694)
+script = ExtResource("13_a3se8")
+connections = Dictionary[String, Array]({
+"__input": [[NodePath("../@Node2D@25980"), "__output"]],
+"__object": [[NodePath("../other2"), "__object"]]
+})
+id = "8f674577-e48e-4766-9e2a-2391589f5c39"
 
 [node name="overlay" type="CanvasLayer" parent="."]
 script = ExtResource("15_vxl6d")
@@ -154,7 +181,7 @@ disable_on_enter = true
 card_layout = 1
 card_scale = 0.5
 id = "46c741cb-4f4d-4f9c-a983-95a96deaa850"
-metadata/_custom_type_script = ExtResource("1_g14j6")
+metadata/_custom_type_script = "uid://cja8ehiirmcyt"
 
 [node name="ColorRect2" type="ColorRect" parent="overlay/hand"]
 offset_right = 1200.0
@@ -195,4 +222,4 @@ card_layout = null
 card_scale = 0.01
 duplicate_on_drag = null
 id = "ee5cf77f-9423-4993-87ed-cb30508dfc21"
-metadata/_custom_type_script = ExtResource("12_0m0f1")
+metadata/_custom_type_script = "uid://vnfn6yjp8q5s"
