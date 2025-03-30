@@ -6,7 +6,7 @@ func v():
 	title("Move")
 	description("Move an object.")
 	icon_data("iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAFJJREFUOI1jYMAP/kMxTsBIQDNBtbgMwGUrhnomPC4gClDsBWQXEAwwbOoYkQTJAYyMFGhmYGCgYiBS5AUYgBmCy1B0cUZkQWxgpKREQoBg6gQAJZ0UCnXgLU8AAAAASUVORK5CYII=")
-	container_size(Vector2(2053.695, 2969.129))
+	container_size(Vector2(2007.247, 2969.129))
 
 func s():
 	var always_card = AlwaysCard.new()
@@ -56,13 +56,16 @@ func s():
 	pull_only_card.position = Vector2(454.9027, 1920.42)
 	
 	var store_card = StoreCard.new()
-	store_card.position = Vector2(902.5308, 172.4603)
+	store_card.position = Vector2(1000.191, 928.6358)
 	
 	var store_card_2 = StoreCard.new()
-	store_card_2.position = Vector2(1000.191, 928.6358)
+	store_card_2.position = Vector2(1304.446, 1927.079)
 	
 	var store_card_3 = StoreCard.new()
-	store_card_3.position = Vector2(1304.446, 1927.079)
+	store_card_3.position = Vector2(1686.548, 570.0979)
+	
+	var store_card_4 = StoreCard.new()
+	store_card_4.position = Vector2(842.0741, 169.1924)
 	
 	var vector_2_card = Vector2Card.new()
 	vector_2_card.position = Vector2(869.269, 1318.908)
@@ -70,18 +73,20 @@ func s():
 	
 	always_card.c_named("trigger", code_card)
 	bool_card.c_named("did_accelerate", code_card)
+	code_card.c(store_card_4)
 	code_card.c(store_card)
-	code_card.c(store_card_2)
-	code_card_2.c(store_card_2)
+	code_card_2.c(store_card)
 	code_card_2.c(bool_card)
+	code_card_2.c(store_card_3)
 	in_card.c_named("body", code_card)
 	in_card_2.c_named("left_vector", plus_card)
 	in_card_3.c_named("direction", code_card_2)
-	plus_card.c(store_card_3)
+	plus_card.c(store_card_2)
 	pull_only_card.c_named("right_vetor", plus_card)
-	store_card.c(bool_card)
+	store_card.c(vector_2_card)
 	store_card_2.c(vector_2_card)
-	store_card_3.c(vector_2_card)
+	store_card_3.c(bool_card)
+	store_card_4.c(bool_card)
 	vector_2_card.c(pull_only_card)
 	vector_2_card.c_named("velocity", code_card_2)
 	vector_2_card.c_named("velocity", code_card)

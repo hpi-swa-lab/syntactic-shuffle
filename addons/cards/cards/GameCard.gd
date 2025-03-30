@@ -28,6 +28,11 @@ func s():
 	var remember_card = RememberCard.new()
 	remember_card.position = Vector2(1152.266, 530.6744)
 	
+	var tree = load("res://game/tree.tscn").instantiate()
+	tree.position = Vector2(0.0, 0.0)
+	tree.name = "tree"
+	scene_object(tree)
+	
 	tree_scene_card.c(spawn_card)
 	axis_controls_card.c(move_card)
 	spawn_card.c(remember_card)

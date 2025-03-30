@@ -77,12 +77,6 @@ func _remembered_for_invocation(invocation: Invocation) -> Invocation.Remembered
 	if r: return r
 	return remembered.get(Invocation.GLOBAL)
 
-func get_remembered_for_display():
-	for s in output_signatures:
-		var r = get_remembered_for(s, Invocation.GLOBAL)
-		if r: return r.get_remembered_value(Invocation.GLOBAL)
-	return null
-
 func s():
 	InCard.data(Signature.OutputAnySignature.new())
 

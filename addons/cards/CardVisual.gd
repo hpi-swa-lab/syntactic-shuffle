@@ -129,10 +129,12 @@ func _on_card_control_mouse_entered() -> void:
 		inputs.push_back(s)
 		# inputs.push_back(c.input_name + ": " + s if c is NamedInCard else s)
 	var remembered = ""
-	for c in [card] if card is OutCard else card.cards:
-		if c is OutCard:
-			var r = c.get_remembered_for_display()
-			if r: remembered += "\nR: " + str(r)
+	#for c in [card] if card is OutCard else card.cards:
+		#if c is OutCard:
+			#var r = c.get_remembered_for_display()
+			#if r: remembered += "\nR: " + str(r)
+	var r = card.get_remembered_for_display()
+	if r: remembered += "\nR: " + str(r)
 	
 	%signatures.visible = true
 	%inputs.text = "\n".join(inputs)

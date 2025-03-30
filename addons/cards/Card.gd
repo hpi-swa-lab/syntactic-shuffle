@@ -470,6 +470,12 @@ func get_remembered_for(signature: Signature, invocation: Invocation):
 			if val != null: return val
 	return null
 
+func get_remembered_for_display():
+	for s in output_signatures:
+		var r = get_remembered_for(s, Invocation.GLOBAL)
+		if r: return r.get_remembered_value(Invocation.GLOBAL)
+	return null
+
 ## Compute actual signature based on connected nodes.
 ## Meant for use in OutCard and InCard, the other classes
 ## defer to these to figure out their signatures.
@@ -517,7 +523,7 @@ func _process(delta: float) -> void:
 				var c = ensure_card(obj)
 				if c:
 					try_connect(c)
-					if dist <= MAX_LOCK_DISTANCE: maybe_show_lock(obj))
+					if dist <= MAX_LOCK_DISTANCE: maybe_show_lock(c))
 	
 	connection_draw_node.check_redraw(delta)
 

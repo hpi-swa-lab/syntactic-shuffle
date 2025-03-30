@@ -62,17 +62,17 @@ func should_redraw():
 	for to in card.get_incoming():
 		deps.push_back(to.get_card_global_position())
 		deps.push_back(to.global_scale)
-		deps.push_back(to.visual.hovered)
+		if to.visual: deps.push_back(to.visual.hovered)
 		dragging = dragging or object_is_dragging(to)
 	for node in card.get_named_incoming():
 		deps.push_back(node.get_card_global_position())
 		deps.push_back(node.global_scale)
-		deps.push_back(node.visual.hovered)
+		if node.visual: deps.push_back(node.visual.hovered)
 		dragging = dragging or object_is_dragging(node)
 	if not deps.is_empty():
 		deps.push_back(card.get_card_global_position())
 		deps.push_back(card.global_scale)
-		deps.push_back(card.visual.hovered)
+		if card.visual: deps.push_back(card.visual.hovered)
 	
 	var comp_deps = last_deps
 	last_deps = deps
