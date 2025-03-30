@@ -105,6 +105,13 @@ func invoke(args: Array, signature: Signature, invocation: Invocation, named = "
 			var card = lookup_card(p)
 			if card: card.invoke(args, signature, invocation, name, out_card)
 
+func signature_compatible(incoming_signature):
+	# return incoming_signature.compatible_with(signature):
+	for sig in input_signatures:
+		if incoming_signature.compatible_with(sig):
+			return true
+	return false
+
 func try_connect_in(them: Card):
 	if not parent: return
 	if parent.get_incoming().has(them): return
