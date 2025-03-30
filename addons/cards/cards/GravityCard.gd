@@ -11,7 +11,7 @@ func v():
 func s():
 	var vector_2_card = Vector2Card.new()
 	vector_2_card.position = Vector2(1083.499, 678.5871)
-	vector_2_card.cards[1].data = Vector2(0.0, 9.81)
+	vector_2_card.get_cell("vector").data = Vector2(0.0, 9.81)
 	
 	var out_card = OutCard.new(false)
 	out_card.position = Vector2(1779.638, 1164.015)
@@ -24,7 +24,7 @@ func s():
 	
 	var vector_2_card_2 = Vector2Card.new()
 	vector_2_card_2.position = Vector2(956.0118, 1446.213)
-	vector_2_card_2.cards[1].data = Vector2(50.0, 50.0)
+	vector_2_card_2.get_cell("vector").data = Vector2(50.0, 50.0)
 	
 	var always_card = AlwaysCard.new()
 	always_card.position = Vector2(219.6927, 470.7256)
