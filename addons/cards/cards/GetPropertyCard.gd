@@ -55,7 +55,10 @@ func s():
 	out_card_2.position = Vector2(1327.194, 1787.252)
 	
 	var subscribe_in_card = SubscribeInCard.new(t("Object"))
-	subscribe_in_card.position = Vector2(1408.753, 1003.551)
+	subscribe_in_card.position = Vector2(1780.802, 1005.479)
+	
+	var unwrap_command_card = UnwrapCommandCard.new()
+	unwrap_command_card.position = Vector2(1407.306, 1001.623)
 	
 	cell_card.c_named("property", code_card_3)
 	cell_card.c_named("property", code_card_2)
@@ -65,5 +68,6 @@ func s():
 	in_card.c_named("trigger", code_card_3)
 	in_card_2.c_named("object", code_card_2)
 	in_card_3.c_named("trigger", code_card_2)
-	subscribe_in_card.c_named("obj", code_card)
-	subscribe_in_card.c_named("object", code_card_3)
+	subscribe_in_card.c(unwrap_command_card)
+	unwrap_command_card.c_named("obj", code_card)
+	unwrap_command_card.c_named("object", code_card_3)

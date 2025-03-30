@@ -106,9 +106,9 @@ func test_type_unreachable_out_card(ready):
 	var container = Card.new(func():
 		var o = OutCard.new()
 		var c = CodeCard.new([["a", Signature.GenericTypeSignature.new()]],
-			[["b", Signature.GenericTypeSignature.new()]], func(): pass)
+			[["b", Signature.GenericTypeSignature.new()]], func(): pass, [], "_")
 		var c2 = CodeCard.new([["a", Signature.GenericTypeSignature.new()]],
-			[["b", Signature.GenericTypeSignature.new()]], func(): pass)
+			[["b", Signature.GenericTypeSignature.new()]], func(): pass, [], "_")
 		c.c(o)
 		c2.c(o)
 		InCard.new(Signature.TypeSignature.new("float")).c_named("a", c)
@@ -636,10 +636,10 @@ func test_overlapping_async_invoke(ready):
 			StaticOutCard.new("out", Card.t("int"), true)))
 	
 	var async = CodeCard.new([["num", Card.t("int")]], [["out", Card.t("int")]], func(card, out, num):
-		cbs[num] = out.bind(num))
+		cbs[num] = out.bind(num), [], "_")
 	
 	var output = CodeCard.new([["l", Card.t("int")], ["r", Card.t("int")]], [], func(card, l, r):
-		res.push_back(l + r))
+		res.push_back(l + r), [], "_")
 	
 	start.c_named("num", async)
 	start.c_named("r", output)
