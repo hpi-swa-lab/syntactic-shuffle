@@ -9,7 +9,7 @@ func serialize_gdscript() -> String: return ""
 func provides_data() -> bool: return false
 func has_iterator() -> bool: return false
 func eq(other: Signature): return false
-func compatible_with_command(other: CommandSignature): return other.arg and other.arg.compatible_with(self)
+func compatible_with_command(other: CommandSignature): return false #other.arg and other.arg.compatible_with(self)
 func compatible_with_trigger(other: TriggerSignature): return false
 func compatible_with_generic(other: GenericTypeSignature): return false
 func compatible_with_type(other: TypeSignature): return false
@@ -117,7 +117,7 @@ class GenericTypeSignature extends Signature:
 		incoming = incoming.filter(func (i): return i.provides_data())
 		if incoming.is_empty(): return super.make_concrete(incoming, aggregate)
 		
-		var matching = incoming.filter(func(s): return s.compatible_with(self)).map(func (s): return s.unwrap_command())
+		var matching = incoming.map(func (s): return s.unwrap_command()).filter(func(s): return s.compatible_with(self))
 		var has_iterator = not aggregate and incoming.any(func(s): return s is IteratorSignature)
 		if has_iterator:
 			matching = matching.map(func (s): return s.wrap_iterator())

@@ -21,9 +21,11 @@ func s():
 	leave_out_card.position = Vector2(1052.319, 653.2359)
 
 func entered_program(editor):
+	var first_time = not has_entered_program
 	super.entered_program(editor)
-	enter_out_card.invoke([editor], cmd("enter", t("CardEditor")), Invocation.new())
+	if first_time: enter_out_card.invoke([editor], cmd("enter", t("CardEditor")), Invocation.new())
 
 func left_program(editor):
+	var first_time = has_entered_program
 	super.left_program(editor)
-	leave_out_card.invoke([editor], cmd("leave", t("CardEditor")), Invocation.new())
+	if first_time: leave_out_card.invoke([editor], cmd("leave", t("CardEditor")), Invocation.new())

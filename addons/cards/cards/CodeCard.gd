@@ -121,6 +121,8 @@ func _get_pending_dict():
 	return r
 
 func invoke(args: Array, signature: Signature, invocation: Invocation, named = "", source_out = null):
+	if pull_only.has(named): return
+	
 	if not pending_invoke.has(invocation): pending_invoke.set(invocation, _get_pending_dict())
 	var pending := pending_invoke.get(invocation)
 	var input = get_input(named)
@@ -155,9 +157,6 @@ func invoke(args: Array, signature: Signature, invocation: Invocation, named = "
 		return
 	
 	if source_out: mark_activated(source_out, args)
-	
-	if parent is ClockCard:
-		print("a")
 	
 	if should_hyper_invoke(signatures): hyper_invoke(combined_args, signatures, invocation)
 	else:

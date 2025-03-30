@@ -255,11 +255,17 @@ func test_signatures():
 		Signature.CommandSignature.new("increment", Signature.TypeSignature.new("float")),
 		Signature.CommandSignature.new("*", null))
 	assert_not_compatible(
+		Signature.CommandSignature.new("connect", Signature.TypeSignature.new("Node2D")),
+		Signature.TypeSignature.new("Node2D"))
+	assert_not_compatible(
 		Signature.CommandSignature.new("increment", null),
 		Signature.CommandSignature.new("increment", Signature.TypeSignature.new("float")))
 	assert_compatible(
 		Signature.CommandSignature.new("increment", Signature.TypeSignature.new("float")),
 		Signature.CommandSignature.new("increment", Signature.GenericTypeSignature.new()))
+	assert_compatible(
+		Signature.CommandSignature.new("increment", Signature.TypeSignature.new("float")),
+		Signature.CommandSignature.new("increment", Signature.TypeSignature.new("float")))
 	assert_compatible(
 		Signature.IteratorSignature.new(Signature.TypeSignature.new("float")),
 		Signature.TypeSignature.new("float"))
@@ -272,10 +278,9 @@ func test_signatures():
 	assert_compatible(Signature.GroupSignature.new([&"enemy"]), Signature.GroupSignature.new([&"enemy"]))
 	
 	assert_not_compatible(Signature.TriggerSignature.new(), Signature.CommandSignature.new("cmd", Signature.TriggerSignature.new()))
-	assert_compatible(Signature.CommandSignature.new("cmd", Signature.TriggerSignature.new()), Signature.TriggerSignature.new())
+	assert_not_compatible(Signature.CommandSignature.new("cmd", Signature.TriggerSignature.new()), Signature.TriggerSignature.new())
 	
 	assert_not_compatible(Signature.GenericTypeSignature.new(), Signature.CommandSignature.new("cmd", Signature.GenericTypeSignature.new()))
-	assert_compatible(Signature.CommandSignature.new("cmd", Signature.GenericTypeSignature.new()), Signature.GenericTypeSignature.new())
 	
 	assert_compatible(Signature.IteratorSignature.new(Signature.TypeSignature.new("Vector2")), Signature.IteratorSignature.new(Signature.GenericTypeSignature.new()))
 

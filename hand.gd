@@ -48,6 +48,7 @@ var categories = {
 }
 
 func _ready() -> void:
+	return
 	var column = VBoxContainer.new()
 	column.position = Vector2(0, 70)
 	add_child(column)

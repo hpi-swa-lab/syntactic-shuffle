@@ -57,7 +57,9 @@ func string_array(prop_name: String, label: String):
 	var l = LineEdit.new()
 	l.placeholder_text = label + " (comma-separated)"
 	l.text = ",".join(signature.get(prop_name))
-	l.text_changed.connect(func (t): signature.set(prop_name, l.text.split(",")))
+	l.text_changed.connect(func (t):
+		signature.set(prop_name, l.text.split(","))
+		on_edit.emit(signature))
 	add_child(l)
 
 func child_signature(prop_name: String, label: String):

@@ -29,7 +29,7 @@ var card_name: String
 ## Not currently able to move, connect, or emit
 @export var disable = false:
 	set(v):
-		if v == disable: return
+		if v == disable or disable == null: return
 		if not has_entered_program and disable:
 			start_propagate_incoming_connected(true)
 			entered_program(get_editor())
@@ -104,7 +104,7 @@ func _notification(what: int) -> void:
 		var editor = get_editor()
 		# FIXME when the program is closed, the editor becomes unavailable.
 		# We probably have to store it somewhere.
-		if editor and has_entered_program: left_program(editor)
+		if editor: left_program(editor)
 		disconnect_all()
 		for c in cards:
 			if is_instance_valid(c):
@@ -120,22 +120,25 @@ func build_cards_list(custom_build = null):
 	if custom_build: custom_build.call()
 	else: s()
 	pop_active_card_list()
-	cards.append_array(cards_parent.get_children().filter(func(n): return n is Card))
+	#var add = cards_parent.get_children().filter(func(n): return n is Card)
+	#assert(not add.any(func (c): return cards.has(c)))
+	#cards.append_array(add)
 
 ## Return true if your card should not appear in the cards_parent. E.g., the NodeCard
 func is_offscreen(): return false
 
 ## This card or its parent just entered the program
 func entered_program(manager):
+	if has_entered_program: return
+	init_signatures()
 	has_entered_program = true
-	for card in cards:
-		if not card.has_entered_program: card.entered_program(manager)
+	for card in cards: card.entered_program(manager)
 
 ## This card or its parent just left the program
 func left_program(manager):
+	if not has_entered_program: return
 	has_entered_program = false
-	for card in cards:
-		if card.has_entered_program: card.left_program(manager)
+	for card in cards: card.left_program(manager)
 
 func visual_setup(custom_visual_setup = null):
 	visual = preload("res://addons/cards/CardVisual.tscn").instantiate()
@@ -170,8 +173,7 @@ func prepare_for_showing(custom_visual_setup = null):
 	for card in cards:
 		card.setup_finished()
 	
-	init_signatures()
-	if not has_entered_program and not disable: entered_program(get_editor())
+	if not disable: entered_program(get_editor())
 	
 	visual.update_card_ui()
 	if start_expanded(): visual.expanded = true
@@ -195,6 +197,7 @@ func add_card(card: Card):
 	card.parent = self
 	# make sure the card is in the cards list before any potential dispatches for signature updates
 	# are triggered from the card appearing on screen.
+	assert(not _cards.has(card))
 	_cards.push_back(card)
 	if not card.is_offscreen(): cards_parent.add_child(card)
 	return card
@@ -228,7 +231,7 @@ func get_base_scale():
 
 func card_parent_in_world():
 	if not parent: return self
-	if not parent is Card: return parent
+	if parent.parent: return self
 	return parent.card_parent_in_world()
 
 func can_edit(): return true
@@ -376,7 +379,6 @@ func start_propagate_incoming_connected(init = false):
 func propagate_incoming_connected(seen):
 	# if we passed by here from an unrechable input first, explore again
 	if seen.has(self) and seen[self] != &"unreachable": return
-	# print(get_card_path())
 	seen[self] = &"done"
 	initialized_signatures = true
 	var parent_has_no_incoming = get_all_incoming().is_empty()

@@ -31,6 +31,8 @@ func clone():
 @export var data: Variant = null:
 	get: return data
 	set(v):
+		if typeof(data) == TYPE_FLOAT and type != "float":
+			print("a")
 		data = v
 		if out_card: out_card.remember(out_card.static_signature, [data], Invocation.GLOBAL)
 		if update_ui_func: update_ui_func.call(v)

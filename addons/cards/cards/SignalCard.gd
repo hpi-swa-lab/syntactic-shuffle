@@ -17,7 +17,6 @@ func s():
 			if s["name"] == signal_name: sig = s; break
 		if not sig: return
 		
-		print("CONNECT ", obj)
 		card.get_output("out").override_signature([Signature.signature_for_dict(sig)] as Array[Signature])
 		
 		var sub
@@ -28,7 +27,6 @@ func s():
 , ["signal_name"])
 	code_card.position = Vector2(1282.875, 863.4362)
 	var code_card_2 = CodeCard.create([["obj", cmd("disconnect", t("Object"))], ["callable", t("Callable")], ["signal_name", t("String")]], [["out", t("Callable")]], func (card, out, obj, callable, signal_name):
-		print("DISCONNECT ", obj)
 		if callable: obj.disconnect(signal_name, callable)
 		out.call(null)
 , ["callable", "signal_name"])
