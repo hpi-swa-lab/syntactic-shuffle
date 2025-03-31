@@ -15,12 +15,18 @@ func s():
 	var axis_controls_card = AxisControlsCard.new()
 	axis_controls_card.position = Vector2(602.1141, 469.6731)
 	
+	var axis_controls_card_2 = AxisControlsCard.new()
+	axis_controls_card_2.position = Vector2(2097.97, 797.0679)
+	
 	var clock_card = ClockCard.new()
 	clock_card.position = Vector2(-1198.083, 1247.965)
 	clock_card.get_cell("seconds").data = 1.0
 	
 	var move_card = MoveCard.new()
 	move_card.position = Vector2(-69.23253, 313.6645)
+	
+	var move_card_2 = MoveCard.new()
+	move_card_2.position = Vector2(1756.841, 39.89466)
 	
 	var random_axis_card = RandomAxisCard.new()
 	random_axis_card.position = Vector2(353.044, 961.3184)
@@ -39,7 +45,7 @@ func s():
 	scene_object(block)
 	
 	var tree = load("res://game/tree.tscn").instantiate()
-	tree.position = Vector2(-219.5849, 876.2634)
+	tree.position = Vector2(-175.0461, 654.3334)
 	tree.name = "tree"
 	scene_object(tree)
 	

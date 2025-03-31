@@ -13,7 +13,6 @@ func s():
 	cell_card.position = Vector2(931.9357, 228.1784)
 	
 	var code_card = CodeCard.create([["command", cmd("data_edited", t("String"))]], [], func (card, command):
-		print(command)
 		for c in card.parent.cards:
 			if c is CodeCard and c != card:
 				c.get_output("out").override_signature([cmd(command, any())] as Array[Signature])

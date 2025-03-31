@@ -7,5 +7,5 @@
 [node name="Placeholder" type="Node2D" parent="."]
 script = ExtResource("1_d5x6n")
 color = Color(0.54099, 0.54099, 0.54099, 1)
-placeholder_size = Vector2(400, 20)
+placeholder_size = Vector2(800, 80)
 metadata/_custom_type_script = "uid://bvr4vcw3kd72b"
