@@ -62,6 +62,8 @@ func _ready() -> void:
 		var save = JSON.parse_string(FileAccess.get_file_as_string(SAVE_FILE))
 		if save and save["open_paths"]:
 			for p in save["open_paths"]: load_cards(p)
+	if open_cards.is_empty():
+		load_cards("res://addons/cards/cards/GameCard.gd")
 
 func _exit_tree() -> void:
 	var save_file = FileAccess.open(SAVE_FILE, FileAccess.WRITE)
