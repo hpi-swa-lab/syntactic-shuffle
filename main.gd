@@ -70,9 +70,8 @@ func _exit_tree() -> void:
 	save_file.store_string(JSON.stringify({"open_paths": open_cards.map(func(c): return c.get_script().resource_path)}))
 
 func load_cards(path):
-	if FileAccess.file_exists(path):
-		var card = load(path).new()
-		open_toplevel_card(card)
+	var card = load(path).new()
+	open_toplevel_card(card)
 
 func save_card():
 	%Editor._on_save_button_pressed()
