@@ -101,6 +101,17 @@ func draw_label_to(obj: Card, label: String, light_background: bool):
 	draw_set_transform_matrix(a.scaled(Vector2.ONE / global_scale))
 	draw_string(font, Vector2(0, 0), label, HORIZONTAL_ALIGNMENT_CENTER, -1, FONT_SIZE, Color(LIGHT_BACKGROUND_BASE if light_background else Color.WHITE, 1))
 
+func _is_connection_valid(to: CardConnectionsDraw, from: Card):
+	for out in from.cards:
+		if out is OutCard:
+			for input in to.card.cards:
+				if input is InCard:
+					for their_signature in out.output_signatures:
+						for my_signature in input.input_signatures:
+							if their_signature.compatible_with(my_signature):
+								return true
+	return false
+
 func draw_connection(from: CardConnectionsDraw, to: Card, inverted, light_background: bool):
 	if not to: return
 	var fade_out = from.card.locked.has(to) and not from.card.visual.hovered and not to.visual.hovered
@@ -121,6 +132,8 @@ func draw_connection(from: CardConnectionsDraw, to: Card, inverted, light_backgr
 	
 	var orig = LIGHT_BACKGROUND_BASE if light_background else Color.WHITE
 	var base = Color(orig, 0.5).lerp(Color.GREEN, remap(stretch, 0.4, 0, 1, 0)) if Card.always_reconnect() else Color(orig, 1)
+	# For debugging purposes:
+	# if not _is_connection_valid(from, to): base = Color.PINK
 	var color = base.lerp(Color.RED, _tween_values.get(to, 0.0))
 	for i in range(0, distance / GAP):
 		var progress = i / (distance / GAP)

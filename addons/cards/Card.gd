@@ -692,7 +692,7 @@ static func serialize_card_construction(nodes: Array):
 		for them in card.get_outgoing():
 			if cards.has(them):
 				cards_desc += "\t{0}.c({1})\n".format([var_names[node], var_names[them]])
-				if node.locked.has(them): cards_desc += "\t{0}.lock({1})\n".format([var_names[node], var_names[them]])
+				if card.locked.has(them): cards_desc += "\t{0}.lock({1})\n".format([var_names[node], var_names[them]])
 		for name in card.named_outgoing:
 			for their_path in card.named_outgoing[name]:
 				var them = card.lookup_card(their_path)

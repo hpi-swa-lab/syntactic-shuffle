@@ -91,7 +91,7 @@ class CommandSignature extends Signature:
 	func has_iterator(): return arg.has_iterator()
 	func serialize_gdscript(): return "cmd(\"{0}\"{1})".format([command, ", " + arg.serialize_gdscript() if arg else ""])
 	func provides_data(): return arg.provides_data()
-	func eq(other: Signature): return other is CommandSignature and other.arg.eq(arg)
+	func eq(other: Signature): return other is CommandSignature and other.arg.eq(arg) and other.command == command
 	func get_description(): return "{0}![{1}]".format([command, arg.get_description()]) if arg else ">{0}".format([command])
 	func compatible_with(other: Signature): return other.compatible_with_command(self)
 	func compatible_with_command(other: CommandSignature):

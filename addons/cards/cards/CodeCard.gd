@@ -119,14 +119,16 @@ func _get_pending_dict():
 	var r = {}
 	for pair in inputs: r[pair[0]] = []
 	return r
+func clear_pending():
+	pending_invoke.clear()
 
 func invoke(args: Array, signature: Signature, invocation: Invocation, named = "", source_out = null):
 	if pull_only.has(named): return
+	var input = get_input(named)
+	if not signature.compatible_with(input.signature): return
 	
 	if not pending_invoke.has(invocation): pending_invoke.set(invocation, _get_pending_dict())
 	var pending := pending_invoke.get(invocation)
-	var input = get_input(named)
-	if not signature.compatible_with(input.signature): return
 	if not pull_only.has(named): pending[named].push_back(Invocation.Remembered.new(args, signature))
 	
 	var combined_args = []
@@ -136,11 +138,12 @@ func invoke(args: Array, signature: Signature, invocation: Invocation, named = "
 		if pending[pair[0]].is_empty():
 			if not pair[1].provides_data(): continue
 			var card = get_input(pair[0])
-			var remembered = card.get_remembered(invocation)
+			# FIXME using GLOBAL invocation -- see comment in OutCard
+			var remembered = card.get_remembered(Invocation.GLOBAL)
 			# not enough args yet
 			if remembered == null: return
-			combined_args.append_array(remembered.get_remembered_value(invocation))
-			signatures.push_back(remembered.get_remembered_signature(invocation))
+			combined_args.append_array(remembered.get_remembered_value(Invocation.GLOBAL))
+			signatures.push_back(remembered.get_remembered_signature(Invocation.GLOBAL))
 		else:
 			has_at_least_one_non_pull = has_at_least_one_non_pull or not pull_only.has(pair[0])
 			combined_args.append_array(pending[pair[0]][0].args)

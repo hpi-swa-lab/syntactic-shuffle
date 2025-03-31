@@ -15,29 +15,33 @@ func s():
 	var code_card = CodeCard.create([["value", t("bool")], ["trigger", cmd("toggle", trg())]], [["out", t("bool")]], func(card, out, value): out.call(not value), ["value"])
 	code_card.position = Vector2(572.2458, 1388.409)
 	
-	var in_card = InCard.data(cmd("store", t("bool")))
-	in_card.position = Vector2(188.3926, 341.6846)
+	var in_card = InCard.data(cmd("toggle", trg()))
+	in_card.position = Vector2(165.3011, 1415.906)
 	
-	var in_card_2 = InCard.trigger()
-	in_card_2.position = Vector2(242.4098, 1019.76)
+	var in_card_2 = InCard.data(cmd("store", t("bool")))
+	in_card_2.position = Vector2(209.448, 648.2452)
 	
-	var in_card_3 = InCard.data(cmd("toggle", trg()))
-	in_card_3.position = Vector2(165.3011, 1415.906)
+	var in_card_3 = InCard.data(t("bool"))
+	in_card_3.position = Vector2(303.2902, 278.0158)
 	
-	var out_card = OutCard.new(true)
+	var in_card_4 = InCard.trigger()
+	in_card_4.position = Vector2(234.6675, 1038.341)
+	
+	var out_card = OutCard.new()
 	out_card.position = Vector2(1374.487, 421.9353)
 	
 	var store_card = StoreCard.new()
-	store_card.position = Vector2(562.7589, 320.4187)
+	store_card.position = Vector2(986.5932, 1397.264)
 	
 	var store_card_2 = StoreCard.new()
-	store_card_2.position = Vector2(986.5932, 1397.264)
+	store_card_2.position = Vector2(632.8219, 343.0078)
 	
 	cell_card.c(out_card)
 	cell_card.c_named("value", code_card)
-	code_card.c(store_card_2)
-	in_card.c(store_card)
+	code_card.c(store_card)
+	in_card.c_named("trigger", code_card)
 	in_card_2.c(cell_card)
-	in_card_3.c_named("trigger", code_card)
+	in_card_3.c(store_card_2)
+	in_card_4.c(cell_card)
 	store_card.c(cell_card)
 	store_card_2.c(cell_card)

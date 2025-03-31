@@ -20,9 +20,13 @@ func _get_base_signatures():
 	#if parent is InCard: return parent.actual_signatures
 	return overridden_signatures if overridden_signatures else [static_signature]
 
-func override_signature(signatures: Array[Signature]):
+func override_signature(signatures: Array[Signature], apply_direct = false):
 	if overridden_signatures and Signature.signatures_equal(overridden_signatures, signatures): return
 	overridden_signatures = signatures
+	# for example in CellCards, we do not necessarily update the signature during a propagation call, as it may not be have inputs
+	if apply_direct:
+		update_my_signatures()
+	
 	card_parent_in_world().start_propagate_incoming_connected()
 
 func v():

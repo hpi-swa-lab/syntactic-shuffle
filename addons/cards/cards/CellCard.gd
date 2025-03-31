@@ -2,9 +2,10 @@
 extends Card
 class_name CellCard
 
-var out_card: OutCard
+var out_card: StaticOutCard
 var in_card: InCard
-var signature_out_card: OutCard
+var signature_out_card: StaticOutCard
+var edit_out_card: StaticOutCard
 
 static func create_default():
 	return CellCard.new("value", "float", 0.0)
@@ -31,8 +32,6 @@ func clone():
 @export var data: Variant = null:
 	get: return data
 	set(v):
-		if typeof(data) == TYPE_FLOAT and type != "float":
-			print("a")
 		data = v
 		if out_card: out_card.remember(out_card.static_signature, [data], Invocation.GLOBAL)
 		if update_ui_func: update_ui_func.call(v)
@@ -52,7 +51,8 @@ func update_out_type():
 	if in_card and in_card.signature.arg is Signature.TypeSignature and t.type == in_card.signature.arg.type: return
 	
 	if in_card: in_card.signature = Signature.CommandSignature.new("store", t)
-	if out_card: out_card.override_signature([t] as Array[Signature])
+	if out_card: out_card.override_signature([t] as Array[Signature], true)
+	if edit_out_card: edit_out_card.override_signature([cmd("data_edited", t)] as Array[Signature], true)
 	if signature_out_card: signature_out_card.invoke([t], cmd("signature_changed", t("Signature")), Invocation.new())
 	
 	start_propagate_incoming_connected()
@@ -100,6 +100,7 @@ func s():
 	out_card = StaticOutCard.new("out", Signature.TypeSignature.new(type), true)
 	out_card.remember(out_card.static_signature, [data], Invocation.GLOBAL)
 	#signature_out_card = StaticOutCard.new(cmd("signature_changed", t("Signature")))
+	edit_out_card = StaticOutCard.new("data_edited", cmd("data_edited", any()))
 	
 	var code_card = CodeCard.create([["arg", cmd("store", any())]], [["out", any()]], func(card, out, arg):
 		data = arg
@@ -122,10 +123,21 @@ func s():
 func serialize_constructor():
 	return "{0}.create(\"{1}\", \"{2}\", {3})".format([card_name, data_name, type, Signature.data_to_expression(default)])
 
+func entered_program(editor):
+	super.entered_program(editor)
+	notify_data_edit(data)
+
+func after_change(v):
+	notify_data_edit(v)
+	get_editor().card_content_edited(parent)
+
+func notify_data_edit(v):
+	if edit_out_card: edit_out_card.invoke([v], cmd("data_edited", t(type)), Invocation.new())
+
 func change_data_ui(cb):
 	return func(v):
 		cb.call(v)
-		get_editor().card_content_edited(parent)
+		after_change(v)
 
 func get_extra_ui() -> Array[Control]:
 	match type:
@@ -168,7 +180,7 @@ func get_extra_ui() -> Array[Control]:
 			if data != null: e.text = data
 			e.text_changed.connect(func():
 				data = e.text
-				get_editor().card_content_edited(parent))
+				after_change(e.text))
 			update_ui_func = func(v): if e.text != v: e.text = v
 			return [e]
 		_:

@@ -35,12 +35,15 @@ class StubCard:
 	var output_signatures:
 		get: return c.actual_signatures if c.has_connected() else []
 
-func propagate_incoming_connected(seen):
+func update_my_signatures():
 	var sig = _get_base_signatures()
 	var aggregate = _get_aggregate()
 	actual_signatures = [] as Array[Signature]
 	for s in sig: actual_signatures.append_array(_compute_actual_signatures(s, aggregate))
 	if sig.is_empty(): actual_signatures.append_array(_compute_actual_signatures(Signature.OutputAnySignature.new(), aggregate))
+
+func propagate_incoming_connected(seen):
+	update_my_signatures()
 	super.propagate_incoming_connected(seen)
 
 func propagate_unreachable(seen):
@@ -94,7 +97,11 @@ func invoke(args: Array, signature: Signature, invocation: Invocation, named = "
 	if not parent: return
 	if Engine.is_editor_hint(): return
 	
-	if remember_message: remember(signature, args, invocation)
+	if remember_message:
+		# FIXME we always report remembered for the GLOBAL invocation -- I'm unsure whether we use remembered
+		# outside a global context. (certainly we will need it in iterators that involve remembered but here
+		# we need to use the persistent iterator identity as invocation, not the default invocation id)
+		remember(signature, args, Invocation.GLOBAL)
 	if source_out: mark_activated(source_out, args)
 	
 	var n = parent.named_outgoing

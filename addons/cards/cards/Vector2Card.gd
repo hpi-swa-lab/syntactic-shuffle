@@ -37,7 +37,7 @@ func s():
 	var named_in_card_2 = NamedInCard.named_data("y", t("float"))
 	named_in_card_2.position = Vector2(1830.787, 960.4446)
 	
-	var out_card = OutCard.new(true)
+	var out_card = OutCard.new()
 	out_card.position = Vector2(1431.055, 182.1524)
 	
 	var store_card = StoreCard.new()

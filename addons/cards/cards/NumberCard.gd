@@ -9,7 +9,7 @@ func v():
 	container_size(Vector2(2000.0, 1600.0))
 
 func s():
-	var out_card = OutCard.new(true)
+	var out_card = OutCard.new()
 	out_card.position = Vector2(1368.681, 250.4749)
 	
 	var cell_card = CellCard.create("number", "float", 0.0)
