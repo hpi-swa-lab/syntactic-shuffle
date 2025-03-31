@@ -1,58 +1,60 @@
 @tool
 extends Card
+class_name Vector2Card
 
-@export var vector: Vector2 = Vector2.ZERO:
-	get: return vector
-	set(v):
-		if vector == v: return
-		vector = v
-		vector_x.set_value_no_signal(v.x)
-		vector_y.set_value_no_signal(v.y)
-		editor_sync_prop("vector")
+func v():
+	title("Vector2")
+	description("Store or present a vector.")
+	icon_data("iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAADNJREFUOI1jYBhs4D8BPkmGkKWZIpup4gKqhAFVATYXkOyq/zjYJBsy8NFKlsaBj0aCAABn0BLuMpwyWQAAAABJRU5ErkJggg==")
+	container_size(Vector2(2000.0, 1600.0))
 
-var vector_x = SpinBox.new()
-var vector_y = SpinBox.new()
-
-func _init() -> void:
-	vector_x.prefix = "x: "
-	vector_x.set_value_no_signal(vector.x)
-	vector_x.custom_arrow_step = 0.1
-	vector_x.step = 0.01
-	vector_x.min_value = -1e8
-	vector_x.max_value = 1e8
-	vector_x.value_changed.connect(func (v): vector.x = v)
+func s():
+	var cell_card = CellCard.create("vector", "Vector2", Vector2(0.0, 0.0))
+	cell_card.position = Vector2(956.2359, 556.02)
 	
-	vector_y.prefix = "y: "
-	vector_y.set_value_no_signal(vector.y)
-	vector_y.custom_arrow_step = 0.1
-	vector_y.step = 0.01
-	vector_y.min_value = -1e8
-	vector_y.max_value = 1e8
-	vector_y.value_changed.connect(func (v): vector.y = v)
-
-func _ready() -> void:
-	super._ready()
+	var code_card = CodeCard.create([["number", t("float")], ["current", t("Vector2")]], [["out", t("Vector2")]], func(card, out, number, current):
+		current.x = number
+		out.call(current), ["current"])
+	code_card.position = Vector2(695.4229, 1064.738)
 	
-	setup("2D Vector", "Stores a 2D Vector. Continuously outputs it, unless an input is connected.", "vector.png", CardVisual.Type.Trigger,
-		[
-			OutputSlot.new({"vector": ["Vector2"]}),
-			InputSlot.new({
-				"trigger": [],
-				"override": ["Vector2"]
-			})
-		],
-		[vector_x, vector_y])
-
-func override(vector: Vector2):
-	self.vector = vector
-	trigger()
-
-func trigger():
-	invoke_output("vector", [vector])
-
-func _process(delta: float) -> void:
-	super._process(delta)
-	if Engine.is_editor_hint(): return
+	var code_card_2 = CodeCard.create([["number", t("float")], ["current", t("Vector2")]], [["out", t("Vector2")]], func(card, out, number, current):
+		current.y = number
+		out.call(current), ["current"])
+	code_card_2.position = Vector2(1453.33, 953.097)
 	
-	if connections["__input"].is_empty():
-		trigger()
+	var in_card = InCard.trigger()
+	in_card.position = Vector2(370.3648, 577.303)
+	
+	var in_card_2 = InCard.data(t("Vector2"))
+	in_card_2.position = Vector2(351.0504, 174.1982)
+	
+	var in_card_3 = InCard.data(cmd("store", t("Vector2")))
+	in_card_3.position = Vector2(915.8929, -114.7703)
+	
+	var named_in_card = NamedInCard.named_data("x", t("float"))
+	named_in_card.position = Vector2(227.7688, 1034.294)
+	
+	var named_in_card_2 = NamedInCard.named_data("y", t("float"))
+	named_in_card_2.position = Vector2(1830.787, 960.4446)
+	
+	var out_card = OutCard.new()
+	out_card.position = Vector2(1431.055, 182.1524)
+	
+	var store_card = StoreCard.new()
+	store_card.position = Vector2(660.1869, 222.8787)
+	
+	var store_card_2 = StoreCard.new()
+	store_card_2.position = Vector2(1034.13, 1092.902)
+	
+	cell_card.c(out_card)
+	cell_card.c_named("current", code_card)
+	cell_card.c_named("current", code_card_2)
+	code_card.c(store_card_2)
+	code_card_2.c(store_card_2)
+	in_card.c(cell_card)
+	in_card_2.c(store_card)
+	in_card_3.c(cell_card)
+	named_in_card.c_named("number", code_card)
+	named_in_card_2.c_named("number", code_card_2)
+	store_card.c(cell_card)
+	store_card_2.c(cell_card)

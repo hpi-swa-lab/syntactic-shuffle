@@ -1,0 +1,35 @@
+[gd_scene load_steps=3 format=3 uid="uid://bb5np3ibc4rlh"]
+
+[ext_resource type="StyleBox" uid="uid://cjukuw32vfjm2" path="res://addons/cards/card_normal.tres" id="1_lfh0w"]
+[ext_resource type="Script" uid="uid://mgfveutcqx08" path="res://addons/cards/feedback_card.gd" id="2_37vd4"]
+
+[node name="feedback_card" type="Panel"]
+z_index = 1
+custom_minimum_size = Vector2(88, 128)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -1832.0
+offset_bottom = -952.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.5, 0.5)
+theme_override_styles/panel = ExtResource("1_lfh0w")
+script = ExtResource("2_37vd4")
+
+[node name="Label" type="Label" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0.306923, 0.306923, 0.306923, 1)
+text = "(-9.3, 9.2)"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 1
+text_overrun_behavior = 3
+max_lines_visible = 5

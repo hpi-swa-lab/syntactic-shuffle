@@ -11,8 +11,9 @@ config_version=5
 [application]
 
 config/name="cards"
-run/main_scene="uid://dcjpymb1evgp4"
+run/main_scene="uid://bqninusgeuw0i"
 config/features=PackedStringArray("4.4", "Forward Plus")
+run/low_processor_mode=true
 config/icon="res://icon.svg"
 
 [autoload]
@@ -85,3 +86,4 @@ ui_right_click={
 [rendering]
 
 textures/canvas_textures/default_texture_filter=0
+environment/defaults/default_clear_color=Color(1, 1, 1, 1)

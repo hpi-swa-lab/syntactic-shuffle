@@ -1,26 +1,20 @@
-[gd_scene load_steps=7 format=3 uid="uid://deh4uywqorec7"]
+[gd_scene load_steps=8 format=3 uid="uid://deh4uywqorec7"]
 
 [ext_resource type="Script" uid="uid://td86i40sy764" path="res://addons/cards/CardVisual.gd" id="1_7r0de"]
 [ext_resource type="Texture2D" uid="uid://c52trtl0cac7l" path="res://icon.svg" id="1_x38hd"]
-[ext_resource type="Script" uid="uid://cxk63c2k70ijb" path="res://addons/cards/ScalingIcon.gd" id="3_hogqd"]
+[ext_resource type="StyleBox" uid="uid://cjukuw32vfjm2" path="res://addons/cards/card_normal.tres" id="2_s0l1x"]
+[ext_resource type="Texture2D" uid="uid://bhh80pg8s0om5" path="res://addons/cards/icons/trigger.png" id="2_xtshy"]
 [ext_resource type="Texture2D" uid="uid://nf875nia2sti" path="res://addons/cards/icons/padlock.png" id="4_odv1r"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_tbdv3"]
 size = Vector2(194, 274)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_i40e1"]
-bg_color = Color(0.929715, 0.929715, 0.929715, 1)
-border_width_top = 1
-border_color = Color(0.996078, 0.996078, 0.996078, 0.490196)
-border_blend = true
-corner_radius_top_left = 8
-corner_radius_top_right = 8
-corner_radius_bottom_right = 8
-corner_radius_bottom_left = 8
-shadow_color = Color(0, 0, 0, 0.0823529)
-shadow_size = 3
-shadow_offset = Vector2(0, 1.43)
-anti_aliasing_size = 0.1
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xtshy"]
+bg_color = Color(0, 0, 0, 0.556863)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
 
 [node name="Card" type="Node2D"]
 z_index = 2
@@ -28,17 +22,21 @@ script = ExtResource("1_7r0de")
 metadata/_edit_group_ = true
 
 [node name="Area2D" type="Area2D" parent="."]
+metadata/cards_ignore = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 shape = SubResource("RectangleShape2D_tbdv3")
+metadata/cards_ignore = true
 
 [node name="CardControl" type="Panel" parent="."]
+unique_name_in_owner = true
 offset_left = -100.0
 offset_top = -141.0
-offset_right = 100.0
+offset_right = 97.0
 offset_bottom = 141.0
 focus_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_i40e1")
+theme_override_styles/panel = ExtResource("2_s0l1x")
+metadata/cards_ignore = true
 
 [node name="MainColumn" type="VBoxContainer" parent="CardControl"]
 unique_name_in_owner = true
@@ -51,6 +49,7 @@ grow_vertical = 2
 theme_override_constants/separation = 9
 
 [node name="HeaderRow" type="HBoxContainer" parent="CardControl/MainColumn"]
+unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 0
 
@@ -64,9 +63,8 @@ theme_override_constants/margin_bottom = 0
 [node name="TypeIcon" type="TextureRect" parent="CardControl/MainColumn/HeaderRow/TypeIconMargin"]
 unique_name_in_owner = true
 layout_mode = 2
-texture = ExtResource("1_x38hd")
+texture = ExtResource("2_xtshy")
 expand_mode = 3
-script = ExtResource("3_hogqd")
 
 [node name="NameMargin" type="MarginContainer" parent="CardControl/MainColumn/HeaderRow"]
 layout_mode = 2
@@ -82,16 +80,16 @@ theme_override_font_sizes/font_size = 15
 text = "Card Name"
 
 [node name="IconMargin" type="MarginContainer" parent="CardControl/MainColumn"]
+unique_name_in_owner = true
 layout_mode = 2
-theme_override_constants/margin_left = 32
-theme_override_constants/margin_right = 32
+theme_override_constants/margin_left = 48
+theme_override_constants/margin_right = 48
 
 [node name="Icon" type="TextureRect" parent="CardControl/MainColumn/IconMargin"]
 unique_name_in_owner = true
 layout_mode = 2
 texture = ExtResource("1_x38hd")
 expand_mode = 5
-script = ExtResource("3_hogqd")
 
 [node name="DescriptionMargin" type="MarginContainer" parent="CardControl/MainColumn"]
 layout_mode = 2
@@ -99,11 +97,14 @@ theme_override_constants/margin_left = 8
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 8
 
-[node name="extra_ui" type="VBoxContainer" parent="CardControl/MainColumn/DescriptionMargin"]
+[node name="VBoxContainer" type="VBoxContainer" parent="CardControl/MainColumn/DescriptionMargin"]
+layout_mode = 2
+
+[node name="extra_ui" type="VBoxContainer" parent="CardControl/MainColumn/DescriptionMargin/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="Description" type="Label" parent="CardControl/MainColumn/DescriptionMargin/extra_ui"]
+[node name="Description" type="Label" parent="CardControl/MainColumn/DescriptionMargin/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
@@ -111,6 +112,44 @@ theme_override_constants/line_spacing = 0
 theme_override_font_sizes/font_size = 11
 text = "Card Details come here, in all their detailed detail."
 autowrap_mode = 3
+max_lines_visible = 4
+
+[node name="signatures" type="PanelContainer" parent="CardControl"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+offset_left = 6.0
+offset_top = 286.0
+offset_right = 191.0
+offset_bottom = 314.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_xtshy")
+
+[node name="MarginContainer" type="MarginContainer" parent="CardControl/signatures"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="row" type="HBoxContainer" parent="CardControl/signatures/MarginContainer"]
+layout_mode = 2
+
+[node name="inputs" type="Label" parent="CardControl/signatures/MarginContainer/row"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 8
+text = "a"
+
+[node name="outputs" type="Label" parent="CardControl/signatures/MarginContainer/row"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 8
+text = "b"
+horizontal_alignment = 2
 
 [node name="locked" type="Sprite2D" parent="."]
 unique_name_in_owner = true
@@ -119,3 +158,7 @@ position = Vector2(-6, -31)
 rotation = 0.382793
 scale = Vector2(9.91112, 9.91112)
 texture = ExtResource("4_odv1r")
+metadata/cards_ignore = true
+
+[connection signal="mouse_entered" from="CardControl" to="." method="_on_card_control_mouse_entered"]
+[connection signal="mouse_exited" from="CardControl" to="." method="_on_card_control_mouse_exited"]

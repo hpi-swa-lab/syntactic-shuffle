@@ -69,3 +69,15 @@ static func closest_parent_that(node: Node, cond: Callable) -> Node:
 			return node
 		node = node.get_parent()
 	return null
+
+func eval_expression(code: String):
+	return eval_object("extends Object\nfunc build():\n\treturn {0}".format([code])).build()
+
+func eval_object(code: String, instance_object = null):
+	var s = GDScript.new()
+	s.source_code = code
+	if s.reload() != OK:
+		return null
+	var obj = instance_object.call() if instance_object else Object.new()
+	obj.set_script(s)
+	return obj

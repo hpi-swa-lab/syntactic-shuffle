@@ -3,7 +3,6 @@ extends CardBoundary
 class_name Trash
 
 func card_dropped(card: Card):
-	Card.editor_sync("cards:delete", [Card.get_id(card)])
 	card.queue_free()
 
 func _ready() -> void:

@@ -1,14 +1,18 @@
 @tool
 extends Card
+class_name LookAtCard
 
-func _ready() -> void:
-	super._ready()
-	setup("Look At", "Turns the target to look at a position.", "look_at.png", CardVisual.Type.Effect, [
-		ObjectInputSlot.new(),
-		InputSlot.new({"turn_toward": ["Vector2"]})
-	])
+func v():
+	title("Look At")
+	description("Look at the provided position.")
+	icon(preload("res://addons/cards/icons/look_at.png"))
 
-func turn_toward(target: Vector2):
-	var node = get_object_input()
-	if not node or not node is Node2D: return
-	node.look_at(target)
+func s():
+	var code_card = CodeCard.create([["body", t("Node2D")], ["position", t("Vector2")]], [], func(card, body, position):
+		body.look_at(position))
+	
+	var in_card = InCard.data(t("Vector2"))
+	in_card.c_named("position", code_card)
+	
+	var body_in_card = InCard.data(t("Node2D"))
+	body_in_card.c_named("body", code_card)

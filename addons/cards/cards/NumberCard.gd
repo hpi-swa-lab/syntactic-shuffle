@@ -1,53 +1,44 @@
 @tool
 extends Card
+class_name NumberCard
 
-@export var number: float = 0.0:
-	get: return number
-	set(v):
-		if number == v: return
-		number = v
-		number_ui.set_value_no_signal(v)
-		editor_sync_prop("number")
+func v():
+	title("Number")
+	description("Store or present a number.")
+	icon_data("iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAFNJREFUOI3VkkEKgDAQA2fE/385nloEWyuUiu4x7IbJEpMwM9vUdc9AfYy1huBVA4GaN4lw/UESWxrAPlo460VbF+GOpktYmqimhTgk+GaV/2VwAKZ8MQ+Fi34XAAAAAElFTkSuQmCC")
+	container_size(Vector2(2000.0, 1600.0))
 
-var number_ui = SpinBox.new()
-
-func _init() -> void:
-	number_ui.prefix = "x: "
-	number_ui.set_value_no_signal(number)
-	number_ui.custom_arrow_step = 0.1
-	number_ui.step = 0.01
-	number_ui.min_value = -1e8
-	number_ui.max_value = 1e8
-	number_ui.value_changed.connect(func (v): number = v)
-
-func _ready() -> void:
-	super._ready()
+func s():
+	var out_card = OutCard.new()
+	out_card.position = Vector2(1368.681, 250.4749)
 	
-	setup("Number", "Stores a number. Continuously outputs it, unless an input is connected.", "number.png", CardVisual.Type.Trigger,
-		[
-			OutputSlot.new({"number": ["float"]}),
-			InputSlot.new({
-				"trigger": [],
-				"increment": ["increment"],
-				"override": ["float"]
-			})
-		],
-		[number_ui])
-
-func override(num: float):
-	number = num
-	trigger()
-
-func increment():
-	number += 1
-	trigger()
-
-func trigger():
-	invoke_output("number", [number])
-
-func _process(delta: float) -> void:
-	super._process(delta)
-	if Engine.is_editor_hint(): return
+	var cell_card = CellCard.create("number", "float", 0.0)
+	cell_card.position = Vector2(925.335, 635.4128)
 	
-	if connections["__input"].is_empty():
-		trigger()
+	var store_card = StoreCard.new()
+	store_card.position = Vector2(581.2921, 908.7749)
+	
+	var in_card = InCard.data(cmd("store", t("float")))
+	in_card.position = Vector2(242.4098, 504.0967)
+	
+	var in_card_2 = InCard.data(t("float"))
+	in_card_2.position = Vector2(238.5543, 1023.615)
+	
+	var in_card_3 = InCard.data(cmd("increment", trg()))
+	in_card_3.position = Vector2(1553.494, 1162.426)
+	
+	var in_card_4 = InCard.trigger()
+	in_card_4.position = Vector2(622.0853, 66.68216)
+	
+	var code_card = CodeCard.create([["trigger", trg()], ["current", t("float")]], [["out", t("float")]], func(card, out, current):
+		out.call(current + 1), ["current"])
+	code_card.position = Vector2(1111.923, 1198.735)
+	
+	cell_card.c(out_card)
+	cell_card.c_named("current", code_card)
+	store_card.c(cell_card)
+	in_card.c(cell_card)
+	in_card_2.c(store_card)
+	in_card_3.c_named("trigger", code_card)
+	in_card_4.c(cell_card)
+	code_card.c(store_card)
