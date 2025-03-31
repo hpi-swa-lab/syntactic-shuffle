@@ -16,7 +16,7 @@ jobs:
       contents: write
 
     container:
-      image: barichello/godot-ci:4.4.1-stable
+      image: barichello/godot-ci:${GODOT_VERSION}
 
     steps:
       - name: Checkout
