@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://baw70exa6mykk"]
+
+[ext_resource type="Script" uid="uid://bvr4vcw3kd72b" path="res://addons/cards/placeholder/placeholder.gd" id="1_d5x6n"]
+
+[node name="Node2D" type="StaticBody2D"]
+
+[node name="Placeholder" type="Node2D" parent="."]
+script = ExtResource("1_d5x6n")
+color = Color(0.54099, 0.54099, 0.54099, 1)
+placeholder_size = Vector2(400, 20)
+metadata/_custom_type_script = "uid://bvr4vcw3kd72b"

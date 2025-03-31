@@ -680,7 +680,7 @@ static func serialize_card_construction(nodes: Array):
 			cards_desc += "\tvar {0} = load(\"{1}\").instantiate()\n".format([node_name, n.scene_file_path])
 		else:
 			assert(false)
-		var_names[n] = "Card.ensure_card({0})\n".format([node_name])
+		var_names[n] = "Card.ensure_card({0})".format([node_name])
 		# so far, you can only edit position
 		cards_desc += "\t{0}.position = Vector2{1}\n".format([node_name, n.position])
 		cards_desc += "\t{0}.name = \"{1}\"\n".format([node_name, node_name])

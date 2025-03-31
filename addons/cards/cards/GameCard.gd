@@ -9,31 +9,42 @@ func v():
 	container_size(Vector2(380.0, 64.0))
 
 func s():
-	var tree_scene_card = TreeSceneCard.new()
-	tree_scene_card.position = Vector2(336.0899, 665.4766)
-	
-	var move_card = MoveCard.new()
-	move_card.position = Vector2(1436.806, 84.7737)
+	var always_card = AlwaysCard.new()
+	always_card.position = Vector2(677.0099, 1212.294)
 	
 	var axis_controls_card = AxisControlsCard.new()
-	axis_controls_card.position = Vector2(1067.315, -283.8887)
+	axis_controls_card.position = Vector2(602.1141, 469.6731)
 	
 	var clock_card = ClockCard.new()
-	clock_card.position = Vector2(506.0218, -522.2972)
+	clock_card.position = Vector2(-1198.083, 1247.965)
 	clock_card.get_cell("seconds").data = 1.0
 	
-	var spawn_card = SpawnCard.new()
-	spawn_card.position = Vector2(752.2662, 530.6744)
+	var move_card = MoveCard.new()
+	move_card.position = Vector2(-69.23253, 313.6645)
 	
-	var remember_card = RememberCard.new()
-	remember_card.position = Vector2(1152.266, 530.6744)
+	var random_axis_card = RandomAxisCard.new()
+	random_axis_card.position = Vector2(353.044, 961.3184)
+	
+	var vector_2_card = Vector2Card.new()
+	vector_2_card.position = Vector2(-1207.379, 745.4684)
+	vector_2_card.get_cell("vector").data = Vector2(1.0, 0.0)
+	
+	var wrap_command_card = WrapCommandCard.new()
+	wrap_command_card.position = Vector2(-814.2891, 634.0615)
+	wrap_command_card.get_cell("command").data = "direction"
+	
+	var block = load("res://game/block.tscn").instantiate()
+	block.position = Vector2(-168.578, 1387.091)
+	block.name = "block"
+	scene_object(block)
 	
 	var tree = load("res://game/tree.tscn").instantiate()
-	tree.position = Vector2(0.0, 0.0)
+	tree.position = Vector2(-219.5849, 876.2634)
 	tree.name = "tree"
 	scene_object(tree)
 	
-	tree_scene_card.c(spawn_card)
+	always_card.c(random_axis_card)
 	axis_controls_card.c(move_card)
-	spawn_card.c(remember_card)
-	remember_card.c(move_card)
+	clock_card.c(vector_2_card)
+	Card.ensure_card(tree).c(move_card)
+	vector_2_card.c(wrap_command_card)
